@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2018-01-04T14:18:52.439Z</updated>
+  <updated>2018-04-14T23:58:15.294Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -16,11 +16,272 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Linux命令-ls</title>
+    <link href="http://runnerliu.github.io/2018/04/15/linuxls/"/>
+    <id>http://runnerliu.github.io/2018/04/15/linuxls/</id>
+    <published>2018-04-14T23:56:20.000Z</published>
+    <updated>2018-04-14T23:58:15.294Z</updated>
+    
+    <content type="html"><![CDATA[<p>Linux ls命令用于显示指定工作目录下之内容（列出目前工作目录所含之文件及子目录），在Linux中是使用率较高的命令，ls命令的输出信息可以进行彩色加亮显示，以区分不同类型的文件。</p>
+<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls [OPTION]... [FILE]...</div></pre></td></tr></table></figure>
+<h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>列出目标目录中所有的子目录和文件。</p>
+<h4 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>显示所有文件及目录（ls内定将文件名或目录名称开头为”.”的视为隐藏档，不会列出）</td>
+</tr>
+<tr>
+<td>-A</td>
+<td>同 -a ，但不列出 “.”（当前目录）及 “..”（父目录）</td>
+</tr>
+<tr>
+<td>-C</td>
+<td>多列显示输出结果。这是默认选项</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>除文件名称外，亦将文件型态、权限、拥有者、文件大小等资讯详细列出</td>
+</tr>
+<tr>
+<td>-F</td>
+<td>在列出的文件名称后加一符号；例如可执行档则加 “*”, 目录则加 “/“</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>与”-lt”选项连用时，按照文件状态时间排序输出目录内容，排序的依据是文件的索引节点中的ctime字段。与”-l”选项连用时，则排序的一句是文件的状态改变时间</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>仅显示目录名，而不显示目录下的内容列表。显示符号链接文件本身，而不显示其所指向的目录列表</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>此参数的效果和同时指定”aU”参数相同，并关闭”lst”参数的效果；</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>显示文件索引节点号（inode）。一个索引节点代表一个文件</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>以KB（千字节）为单位显示文件大小</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>用”,”号区隔每个文件和目录的名称</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>以用户识别码和群组识别码替代其名称</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>将文件以相反次序显示(原定依英文字母次序)</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>显示文件和目录的大小，以区块为单位</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>将文件依建立时间之先后次序列出</td>
+</tr>
+<tr>
+<td>-L</td>
+<td>如果遇到性质为符号链接的文件或目录，直接列出该链接所指向的原始文件或目录</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>递归列出该目录中的所有文件</td>
+</tr>
+<tr>
+<td>–full-time</td>
+<td>列出完整的日期与时间</td>
+</tr>
+<tr>
+<td>–color[=WHEN] (WHEN=never/always/auto)</td>
+<td>使用不同的颜色高亮显示不同类型的</td>
+</tr>
+<tr>
+<td>-g</td>
+<td>类似 -l，但不列出所有者</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>以容易理解的格式列出文件大小 (例如 1K 234M 2G)</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>根据文件大小排序</td>
+</tr>
+<tr>
+<td>-X</td>
+<td>根据扩展名排序</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>逐行列出项目而不是逐栏列出</td>
+</tr>
+</tbody>
+</table>
+<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><ul>
+<li><code>ls -l ly</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -l ly</div><div class="line">total 48</div><div class="line">drwxr-xr-x  8 root root 4096 Dec 14 11:49 analysisweb</div><div class="line">drwxr-xr-x  9 root root 4096 Dec 28 16:19 atsbtsp</div><div class="line">drwxr-xr-x  2 root root 4096 Sep 12 14:37 auth_server_ratio</div><div class="line">drwxr-xr-x  7 root root 4096 Jan  2 10:10 datawritehbase</div><div class="line">drwxr-xr-x 10 root root 4096 Dec 13 14:54 hbasequeryweb</div><div class="line">drwxr-xr-x  7 root root 4096 Oct  9 18:46 live_alarm_monitor</div><div class="line">drwxr-xr-x  9 root root 4096 Oct 27 11:59 openrestywork</div><div class="line">drwxr-xr-x  9 root root 4096 Dec 27 16:20 prepullvidcs</div><div class="line">drwxr-xr-x  2 root root 4096 Nov 23 20:26 push_ffmpeg</div><div class="line">drwxr-xr-x  3 root root 4096 Jan  4 18:46 testkafka</div><div class="line">drwxr-xr-x  3 root root 4096 Nov 29 14:32 virtualenv</div><div class="line">drwxr-xr-x  5 root root 4096 Oct 12 10:27 xiu_server_stat</div></pre></td></tr></table></figure>
+<p>单列显示某目录。</p>
+<ul>
+<li><code>ls</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls</div><div class="line">ly  zabbix</div></pre></td></tr></table></figure>
+<p>显示当前目录下非影藏文件与目录</p>
+<ul>
+<li><code>ls -a</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -a</div><div class="line">.  ..  ly  zabbix</div></pre></td></tr></table></figure>
+<p>显示当前目录下包括影藏文件在内的所有文件列表</p>
+<ul>
+<li><code>ls -l</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt home]# </div><div class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -l</div><div class="line">total 8</div><div class="line">drwxr-xr-x  15 root   root   4096 Jan  3 18:05 ly</div><div class="line">drwxr-xr-x.  2 zabbix zabbix 4096 Dec 21 18:05 zabbix</div></pre></td></tr></table></figure>
+<p>输出长格式列表</p>
+<ul>
+<li><code>ls -i -l</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -i -l</div><div class="line">total 8</div><div class="line">393222 drwxr-xr-x  15 root   root   4096 Jan  3 18:05 ly</div><div class="line">393219 drwxr-xr-x.  2 zabbix zabbix 4096 Dec 21 18:05 zabbix</div></pre></td></tr></table></figure>
+<p>输出文件的inode信息</p>
+<ul>
+<li><code>ls -m</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -m</div><div class="line">ly, zabbix</div></pre></td></tr></table></figure>
+<p>水平输出文件列表</p>
+<ul>
+<li><code>ls -t -l</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -t -l</div><div class="line">total 303312</div><div class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</div><div class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</div><div class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</div><div class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</div><div class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</div><div class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</div><div class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</div><div class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</div><div class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</div><div class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</div><div class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</div><div class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</div><div class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</div><div class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</div><div class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</div><div class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</div><div class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</div><div class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</div><div class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</div><div class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</div><div class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</div><div class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</div><div class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</div><div class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</div><div class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</div><div class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</div><div class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</div><div class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</div><div class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</div><div class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</div><div class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</div><div class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</div><div class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</div></pre></td></tr></table></figure>
+<p>最近修改的文件显示在最前面</p>
+<ul>
+<li><code>ls -F -l</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -F -l</div><div class="line">total 303312</div><div class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</div><div class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</div><div class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client/</div><div class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6/</div><div class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</div><div class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1/</div><div class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</div><div class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</div><div class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1/</div><div class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</div><div class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3/</div><div class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64/</div><div class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</div><div class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</div><div class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5/</div><div class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</div><div class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38/</div><div class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</div><div class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka/</div><div class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9/</div><div class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</div><div class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13/</div><div class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</div><div class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1/</div><div class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</div><div class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6/</div><div class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</div><div class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama/</div><div class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar/</div><div class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0/</div><div class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</div><div class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0/</div><div class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</div></pre></td></tr></table></figure>
+<p>安装特殊字符对文件进行分类</p>
+<ul>
+<li><code>ls -l --color=auto | ls -l --color=never | ls -l --color=always</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=auto</div><div class="line">total 303312</div><div class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</div><div class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</div><div class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</div><div class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</div><div class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</div><div class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</div><div class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</div><div class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</div><div class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</div><div class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</div><div class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</div><div class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</div><div class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</div><div class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</div><div class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</div><div class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</div><div class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</div><div class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</div><div class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</div><div class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</div><div class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</div><div class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</div><div class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</div><div class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</div><div class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</div><div class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</div><div class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</div><div class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</div><div class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</div><div class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</div><div class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</div><div class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</div><div class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</div><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=never</div><div class="line">total 303312</div><div class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</div><div class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</div><div class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</div><div class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</div><div class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</div><div class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</div><div class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</div><div class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</div><div class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</div><div class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</div><div class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</div><div class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</div><div class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</div><div class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</div><div class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</div><div class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</div><div class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</div><div class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</div><div class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</div><div class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</div><div class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</div><div class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</div><div class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</div><div class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</div><div class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</div><div class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</div><div class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</div><div class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</div><div class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</div><div class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</div><div class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</div><div class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</div><div class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</div><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=always</div><div class="line">total 303312</div><div class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</div><div class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</div><div class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</div><div class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</div><div class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</div><div class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</div><div class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</div><div class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</div><div class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</div><div class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</div><div class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</div><div class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</div><div class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</div><div class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</div><div class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</div><div class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</div><div class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</div><div class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</div><div class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</div><div class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</div><div class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</div><div class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</div><div class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</div><div class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</div><div class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</div><div class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</div><div class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</div><div class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</div><div class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</div><div class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</div><div class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</div><div class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</div><div class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</div></pre></td></tr></table></figure>
+<p>单列列出文件并标记颜色</p>
+<ul>
+<li><code>ls -l n*</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l n*</div><div class="line">-rw-r--r--  1 root root    981093 Jul 11 23:45 nginx-1.12.1.tar.gz</div><div class="line">-rw-r--r--  1 root root  11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</div><div class="line">-rw-r--r--  1 root root  31121503 Dec  8 23:23 node-v8.9.3.tar.gz</div><div class="line"></div><div class="line">nginx-1.12.1:</div><div class="line">total 732</div><div class="line">drwxr-xr-x 6 1001 1001   4096 Aug 30 20:00 auto</div><div class="line">-rw-r--r-- 1 1001 1001 277349 Jul 11 21:24 CHANGES</div><div class="line">-rw-r--r-- 1 1001 1001 422542 Jul 11 21:24 CHANGES.ru</div><div class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 conf</div><div class="line">-rwxr-xr-x 1 1001 1001   2481 Jul 11 21:24 configure</div><div class="line">drwxr-xr-x 4 1001 1001   4096 Aug 30 20:00 contrib</div><div class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 html</div><div class="line">-rw-r--r-- 1 1001 1001   1397 Jul 11 21:24 LICENSE</div><div class="line">-rw-r--r-- 1 root root    376 Aug 30 20:11 Makefile</div><div class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 man</div><div class="line">drwxr-xr-x 3 root root   4096 Aug 30 20:12 objs</div><div class="line">-rw-r--r-- 1 1001 1001     49 Jul 11 21:24 README</div><div class="line">drwxr-xr-x 9 1001 1001   4096 Aug 30 20:00 src</div><div class="line"></div><div class="line">node-v8.9.3:</div><div class="line">total 596</div><div class="line">-rwxr-xr-x  1  502 games  1944 Dec  8 23:22 android-configure</div><div class="line">-rw-r--r--  1  502 games 62552 Dec  8 23:22 AUTHORS</div><div class="line">drwxr-xr-x 32  502 games  4096 Jan  2 11:13 benchmark</div><div class="line">-rw-r--r--  1  502 games   263 Dec  8 23:22 BSDmakefile</div><div class="line">-rw-r--r--  1  502 games 13117 Dec  8 23:22 BUILDING.md</div><div class="line">-rw-r--r--  1  502 games 53576 Dec  8 23:22 CHANGELOG.md</div><div class="line">-rw-r--r--  1  502 games   181 Dec  8 23:22 CODE_OF_CONDUCT.md</div><div class="line">-rw-r--r--  1  502 games 30242 Dec  8 23:22 COLLABORATOR_GUIDE.md</div><div class="line">-rw-r--r--  1  502 games 14659 Dec  8 23:22 common.gypi</div><div class="line">-rw-r--r--  1 root root   2748 Jan  2 11:13 config.gypi</div><div class="line">-rw-r--r--  1 root root    223 Jan  2 11:13 config.mk</div><div class="line">-rwxr-xr-x  1  502 games 50245 Dec  8 23:22 configure</div><div class="line">-rw-r--r--  1  502 games 37017 Dec  8 23:22 CONTRIBUTING.md</div><div class="line">-rw-r--r--  1  502 games  3454 Dec  8 23:22 CPP_STYLE_GUIDE.md</div><div class="line">drwxr-xr-x 13  502 games  4096 Jan  2 11:13 deps</div><div class="line">drwxr-xr-x  6  502 games  4096 Jan  2 11:13 doc</div><div class="line">-rw-r--r--  1  502 games  5832 Dec  8 23:22 GOVERNANCE.md</div><div class="line">-rw-r--r--  1 root root  60153 Jan  2 11:13 icu_config.gypi</div><div class="line">drwxr-xr-x  3  502 games  4096 Jan  2 11:13 lib</div><div class="line">-rw-r--r--  1  502 games 59059 Dec  8 23:22 LICENSE</div><div class="line">-rw-r--r--  1  502 games 37468 Dec  8 23:22 Makefile</div><div class="line">-rw-r--r--  1  502 games 24881 Dec  8 23:23 node.gyp</div><div class="line">-rw-r--r--  1  502 games 10585 Dec  8 23:23 node.gypi</div><div class="line">drwxr-xr-x  5 root root   4096 Jan  2 11:14 out</div><div class="line">-rw-r--r--  1  502 games 26525 Dec  8 23:22 README.md</div><div class="line">drwxr-xr-x  4  502 games  4096 Jan  2 11:13 src</div><div class="line">drwxr-xr-x 22  502 games  4096 Jan  2 11:13 test</div><div class="line">drwxr-xr-x  9  502 games  4096 Jan  2 11:13 tools</div><div class="line">-rw-r--r--  1  502 games 24869 Dec  8 23:23 vcbuild.bat</div><div class="line"></div><div class="line">node-v8.9.3-linux-x64:</div><div class="line">total 164</div><div class="line">drwxrwxr-x 2  500  500  4096 Jan  2 12:14 bin</div><div class="line">-rw-rw-r-- 1  500  500 53576 Dec  8 22:10 CHANGELOG.md</div><div class="line">drwxr-xr-x 2 root root  4096 Jan  2 11:40 etc</div><div class="line">drwxrwxr-x 3  500  500  4096 Dec  8 22:10 include</div><div class="line">drwxrwxr-x 3  500  500  4096 Dec  8 22:10 lib</div><div class="line">-rw-rw-r-- 1  500  500 59059 Dec  8 22:10 LICENSE</div><div class="line">-rw-rw-r-- 1  500  500 26525 Dec  8 22:10 README.md</div><div class="line">drwxrwxr-x 5  500  500  4096 Dec  8 22:10 share</div></pre></td></tr></table></figure>
+<p>单列列出以某个字符开头的文件和目录的详细内容</p>
+<p>Read More: </p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/peida/archive/2012/10/23/2734829.html" target="_blank" rel="external">每天一个linux命令(1)：ls命令</a> <a href="http://www.runoob.com/linux/linux-comm-ls.html" target="_blank" rel="external">Linux ls命令</a> <a href="http://man.linuxde.net/ls" target="_blank" rel="external">ls命令</a>  </p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Linux ls命令用于显示指定工作目录下之内容（列出目前工作目录所含之文件及子目录），在Linux中是使用率较高的命令，ls命令的输出信息可以进行彩色加亮显示，以区分不同类型的文件。&lt;/p&gt;
+&lt;h4 id=&quot;命令格式&quot;&gt;&lt;a href=&quot;#命令格式&quot; class=&quot;hea
+    
+    </summary>
+    
+      <category term="Linux/Unix" scheme="http://runnerliu.github.io/categories/Linux-Unix/"/>
+    
+    
+      <category term="命令" scheme="http://runnerliu.github.io/tags/%E5%91%BD%E4%BB%A4/"/>
+    
+      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
+    
+      <category term="ls" scheme="http://runnerliu.github.io/tags/ls/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux命令-cd</title>
+    <link href="http://runnerliu.github.io/2018/04/15/linuxcd/"/>
+    <id>http://runnerliu.github.io/2018/04/15/linuxcd/</id>
+    <published>2018-04-14T23:48:17.000Z</published>
+    <updated>2018-04-14T23:50:50.402Z</updated>
+    
+    <content type="html"><![CDATA[<p>Linux cd命令用于切换当前工作目录至目标目录。其中目标目录表示法可为绝对路径或相对路径，若目录名称省略，则变换至使用者的 <code>home</code> 目录。</p>
+<p>另外，”~” 也表示为 <code>home</code> 目录的意思，”.” 则是表示当前所在的目录，”..” 则表示目前目录位置的上一层目录。</p>
+<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd [dir](dir表示要切换的目录)</div></pre></td></tr></table></figure>
+<h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>切换当前目录至dir。</p>
+<h4 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h4><p>暂无</p>
+<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><ul>
+<li><code>cd / | cd //</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# pwd</div><div class="line">/root/usr/local</div><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# cd /</div><div class="line">[root@hcdn-others-worker-dev100-bjlt /]# pwd</div><div class="line">/</div></pre></td></tr></table></figure>
+<p>进入系统根目录</p>
+<ul>
+<li><code>cd ..</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# pwd</div><div class="line">/root/usr/local</div><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# cd ..</div><div class="line">[root@hcdn-others-worker-dev100-bjlt usr]# pwd</div><div class="line">/root/usr</div></pre></td></tr></table></figure>
+<p>切换到父目录</p>
+<ul>
+<li><code>cd -</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# pwd</div><div class="line">/root/usr/local</div><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# cd -</div><div class="line">/root/usr</div><div class="line">[root@hcdn-others-worker-dev100-bjlt usr]# cd</div><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# cd -</div><div class="line">/root/usr</div></pre></td></tr></table></figure>
+<p>切换到上次使用的目录</p>
+<ul>
+<li><code>cd</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# pwd</div><div class="line">/root/usr/local</div><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# cd</div><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# pwd</div><div class="line">/root</div></pre></td></tr></table></figure>
+<p>切换到当前用户主目录</p>
+<ul>
+<li><code>cd ~</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# cd /root/usr/local/</div><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# cd ~</div><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# pwd</div><div class="line">/root</div></pre></td></tr></table></figure>
+<p>切换到当前用户主目录</p>
+<ul>
+<li><code>cd /root/usr/local/</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# cd /root/usr/local/</div><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# pwd</div><div class="line">/root/usr/local</div></pre></td></tr></table></figure>
+<p>切换到指定目录</p>
+<ul>
+<li><code>cd !$</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# cd /root/usr/local/</div><div class="line">[root@hcdn-others-worker-dev100-bjlt local]# cd -</div><div class="line">/root</div><div class="line">[root@hcdn-others-worker-dev100-bjlt ~]# cd !$</div><div class="line">cd -</div><div class="line">/root/usr/local</div></pre></td></tr></table></figure>
+<p>将上一命令得参数作为 <code>cd</code> 参数使用</p>
+<p>Read More: </p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/peida/archive/2012/10/24/2736501.html" target="_blank" rel="external">每天一个linux命令(2)：cd命令</a> <a href="http://www.runoob.com/linux/linux-comm-cd.html" target="_blank" rel="external">Linux cd命令</a> </p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Linux cd命令用于切换当前工作目录至目标目录。其中目标目录表示法可为绝对路径或相对路径，若目录名称省略，则变换至使用者的 &lt;code&gt;home&lt;/code&gt; 目录。&lt;/p&gt;
+&lt;p&gt;另外，”~” 也表示为 &lt;code&gt;home&lt;/code&gt; 目录的意思，”.” 则是表示
+    
+    </summary>
+    
+      <category term="Linux/Unix" scheme="http://runnerliu.github.io/categories/Linux-Unix/"/>
+    
+    
+      <category term="命令" scheme="http://runnerliu.github.io/tags/%E5%91%BD%E4%BB%A4/"/>
+    
+      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
+    
+      <category term="cd" scheme="http://runnerliu.github.io/tags/cd/"/>
+    
+  </entry>
+  
+  <entry>
     <title>librdkafka的安装和使用</title>
     <link href="http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/"/>
     <id>http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/</id>
     <published>2018-01-04T14:17:29.000Z</published>
-    <updated>2018-01-04T14:18:52.439Z</updated>
+    <updated>2018-04-14T23:36:08.911Z</updated>
     
     <content type="html"><![CDATA[<p><a href="https://kafka.apache.org/" target="_blank" rel="external">kafka</a> 是一种高吞吐量的分布式发布订阅消息系统。现在它已被 <a href="https://cwiki.apache.org/confluence/display/KAFKA/Powered+By" target="_blank" rel="external">多家不同类型的公司</a> 作为多种类型的数据管道和消息系统使用。Python对kafka的操作库主要有 <a href="https://github.com/Parsely/pykafka" target="_blank" rel="external">pykafka</a> 、<a href="https://github.com/confluentinc/confluent-kafka-python" target="_blank" rel="external">confluent-kafka-python</a> 、<a href="https://github.com/edenhill/librdkafka" target="_blank" rel="external">librdkafka</a> ，pykafka是Python内置的kafka操作模块，纯Python编写，提供 <a href="http://pykafka.readthedocs.io/en/latest/api/simpleconsumer.html" target="_blank" rel="external">simpleconsumer</a> 、<a href="http://pykafka.readthedocs.io/en/latest/api/balancedconsumer.html" target="_blank" rel="external">balancedconsumer</a> 两种消费方式。</p>
 <p>其实严格意义上来说，librdkafka并不是kafka的操作库，它是Apache Kafka协议的C库实现，包含Producer和Consumer支持。</p>
@@ -128,7 +389,7 @@
     <link href="http://runnerliu.github.io/2018/01/04/linuxtar/"/>
     <id>http://runnerliu.github.io/2018/01/04/linuxtar/</id>
     <published>2018-01-04T14:15:40.000Z</published>
-    <updated>2018-01-04T14:16:45.830Z</updated>
+    <updated>2018-04-14T23:36:08.915Z</updated>
     
     <content type="html"><![CDATA[<p>通过SSH访问服务器，难免会要用到压缩、解压缩、打包、解包等操作，这时候<code>tar</code>命令是必不可少的一个功能强大的工具。</p>
 <p>tar命令可以为Linux的文件和目录创建档案。利用<code>tar</code>可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件。<code>tar</code>最初被用来在磁带上创建档案，现在，用户可以在任何设备上创建档案。</p>
@@ -322,7 +583,7 @@
     <link href="http://runnerliu.github.io/2018/01/04/linuxln/"/>
     <id>http://runnerliu.github.io/2018/01/04/linuxln/</id>
     <published>2018-01-04T14:14:10.000Z</published>
-    <updated>2018-01-04T14:15:16.941Z</updated>
+    <updated>2018-04-14T23:36:08.911Z</updated>
     
     <content type="html"><![CDATA[<p>Linux ln命令是一个非常重要命令，它的功能是为某一个文件在另外一个位置建立一个同步的链接。当我们需要在不同的目录，用到相同的文件时，我们不需要在每一个需要的目录下都放一个必须相同的文件，我们只要在某个固定的目录，放上该文件，然后在 其它的目录下用ln命令链接（link）它就可以，不必重复的占用磁盘空间。</p>
 <h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln [参数] [源文件或目录] [目标文件或目录]</div></pre></td></tr></table></figure>
@@ -450,7 +711,7 @@
     <link href="http://runnerliu.github.io/2018/01/04/linuxcp/"/>
     <id>http://runnerliu.github.io/2018/01/04/linuxcp/</id>
     <published>2018-01-04T14:11:57.000Z</published>
-    <updated>2018-01-04T14:13:33.841Z</updated>
+    <updated>2018-04-14T23:36:08.911Z</updated>
     
     <content type="html"><![CDATA[<p>Linux cp命令主要用于复制文件或目录，一般情况下，shell会设置一个别名，在命令行下复制文件时，如果目标文件已经存在，就会询问是否覆盖，不管你是否使用-i参数。但是如果是在shell脚本中执行cp时，没有-i参数时不会询问是否覆盖。这说明命令行和shell脚本的执行方式有些不同。 </p>
 <h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp [options] source dest</div><div class="line">cp [options] source... directory</div></pre></td></tr></table></figure>
@@ -565,7 +826,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/windowskillprocess/"/>
     <id>http://runnerliu.github.io/2018/01/02/windowskillprocess/</id>
     <published>2018-01-02T14:59:25.000Z</published>
-    <updated>2018-01-02T15:03:53.153Z</updated>
+    <updated>2018-04-14T23:36:08.959Z</updated>
     
     <content type="html"><![CDATA[<p>开始–&gt;运行–&gt;cmd，进入命令提示符输入<code>netstat -ano</code> 即可看到所有连接的PID，然后在任务管理器中找到这个PID所对应的程序，如果任务管理器中没有PID这一项，可以在任务管理器中选”查看” -&gt; “选择列”。</p>
 <p>经常，我们在启动应用的时候发现系统需要的端口被别的程序占用，如何知道谁占有了我们需要的端口，下面介绍一种非常简单的方法。</p>
@@ -601,7 +862,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/"/>
     <id>http://runnerliu.github.io/2018/01/02/pythoncontextmanager/</id>
     <published>2018-01-02T14:54:29.000Z</published>
-    <updated>2018-01-02T14:55:41.069Z</updated>
+    <updated>2018-04-14T23:36:08.955Z</updated>
     
     <content type="html"><![CDATA[<h4 id="何为上下文管理器"><a href="#何为上下文管理器" class="headerlink" title="何为上下文管理器"></a>何为上下文管理器</h4><p>上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。</p>
 <p>例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码块执行前准备，代码块执行后收拾。上下文管理器是在Python2.5加入的功能，它能够让你的代码可读性更强并且错误更少。</p>
@@ -662,7 +923,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/linuxnetstat/"/>
     <id>http://runnerliu.github.io/2018/01/02/linuxnetstat/</id>
     <published>2018-01-02T14:49:16.000Z</published>
-    <updated>2018-01-02T14:50:37.224Z</updated>
+    <updated>2018-04-14T23:36:08.911Z</updated>
     
     <content type="html"><![CDATA[<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat [-acCeFghilMnNoprstuvVwx][-A&lt;网络类型&gt;][--ip]</div></pre></td></tr></table></figure>
 <h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>Linux netstat命令用于显示网络状态，一般用于检验本机各端口的网络连接情况。netstat是在内核中访问网络及相关信息的程序，它能提供TCP连接，TCP和UDP监听，进程内存管理的相关报告。</p>
@@ -902,7 +1163,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/linuxping/"/>
     <id>http://runnerliu.github.io/2018/01/02/linuxping/</id>
     <published>2018-01-02T14:45:06.000Z</published>
-    <updated>2018-01-02T14:46:20.146Z</updated>
+    <updated>2018-04-14T23:36:08.915Z</updated>
     
     <content type="html"><![CDATA[<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ping [参数] [主机名称或IP地址]</div></pre></td></tr></table></figure>
 <h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>ping命令用来测试主机之间网络的连通性。执行ping指令会使用ICMP传输协议，发出要求回应的信息，若远端主机的网络功能没有问题，就会回应该信息，因而得知该主机运作正常。</p>
@@ -1031,7 +1292,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/linuxps/"/>
     <id>http://runnerliu.github.io/2018/01/02/linuxps/</id>
     <published>2018-01-02T14:38:35.000Z</published>
-    <updated>2018-01-02T14:41:40.880Z</updated>
+    <updated>2018-04-14T23:36:08.915Z</updated>
     
     <content type="html"><![CDATA[<p>Linux中的ps命令是Process Status的缩写。用来列出系统中当前运行的那些进程。ps命令列出的是当前那些进程的快照，就是执行ps命令的那个时刻的那些进程，如果想要动态的显示进程信息，就可以使用top命令。</p>
 <p>要对进程进行监测和控制，首先必须要了解当前进程的情况，也就是需要查看当前进程，ps 命令是最基本同时也是非常强大的进程查看命令。使用该命令可以确定有哪些进程正在运行和运行的状态、进程是否结束、进程有没有僵死、哪些进程占用了过多的资源等等。总之大部分信息都是可以通过执行该命令得到的。</p>
@@ -1255,7 +1516,7 @@
     <link href="http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/"/>
     <id>http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/</id>
     <published>2017-10-11T11:38:35.000Z</published>
-    <updated>2017-10-11T11:48:46.438Z</updated>
+    <updated>2018-04-14T23:36:08.959Z</updated>
     
     <content type="html"><![CDATA[<p>每次安装 Sublime Text 3 后邮件菜单总是没有，但是 notepad++ 安装后会自动加到邮件菜单，对于 Sublime Text 3 的忠实粉丝来说简直丧心病狂，所以搜罗了一些方法来完成这件事儿。</p>
 <h4 id="方式1"><a href="#方式1" class="headerlink" title="方式1"></a>方式1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[Version]</div><div class="line">Signature=&quot;$Windows NT$&quot;</div><div class="line"></div><div class="line">[DefaultInstall]</div><div class="line">AddReg=SublimeText3</div><div class="line"></div><div class="line">[SublimeText3]</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3&quot;,,,&quot;Edit with Sublime Text 3&quot;</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3\\command&quot;,,,&quot;&quot;&quot;%1%\sublime_text.exe&quot;&quot; &quot;&quot;%%1&quot;&quot; %%*&quot;</div><div class="line">hkcr,&quot;Directory\shell\SublimeText3&quot;,,,&quot;Edit with Sublime Text 3&quot;</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3&quot;,&quot;Icon&quot;,0x20000,&quot;%1%\sublime_text.exe, 0&quot;</div><div class="line">hkcr,&quot;Directory\shell\SublimeText3\command&quot;,,,&quot;&quot;&quot;%1%\sublime_text.exe&quot;&quot; &quot;&quot;%%1&quot;&quot;&quot;</div></pre></td></tr></table></figure>
@@ -1296,7 +1557,7 @@
     <link href="http://runnerliu.github.io/2017/10/09/gitcommand/"/>
     <id>http://runnerliu.github.io/2017/10/09/gitcommand/</id>
     <published>2017-10-09T12:39:43.000Z</published>
-    <updated>2017-10-09T13:25:00.674Z</updated>
+    <updated>2018-04-14T23:36:08.903Z</updated>
     
     <content type="html"><![CDATA[<h3 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h3><p><code>git add</code> 命令将文件内容添加到索引（将修改添加到暂存区）。也就是将要提交的文件的信息添加到索引库中。</p>
 <h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>将要提交的文件的信息添加到索引库中（将修改添加到暂存区），以准备为下一次提交分段的内容。 它通常将现有路径的当前内容作为一个整体添加，但是通过一些选项，它也可以用于添加内容，只对所应用的工作树文件进行一些更改，或删除工作树中不存在的路径了。</p>
@@ -1346,7 +1607,7 @@
     <link href="http://runnerliu.github.io/2017/09/03/nginxtornadosupervisor/"/>
     <id>http://runnerliu.github.io/2017/09/03/nginxtornadosupervisor/</id>
     <published>2017-09-03T08:21:00.000Z</published>
-    <updated>2017-09-03T08:32:31.162Z</updated>
+    <updated>2018-04-14T23:36:08.935Z</updated>
     
     <content type="html"><![CDATA[<p>在项目中应用到了 Tornado 框架，开始时只是单进程裸跑 Tornado 实例，但是在高并发的情况下，单进程无法满足上千的连接请求。Nginx 是我们熟知的反向代理服务器，它可以支持上万的平行连接，在与 PHP、Python 集成后可以应用在大规模的集群上，Nginx 同时也可以用作负载平衡器，以减小单点服务器的压力。</p>
 <p><a href="http://supervisord.org/" target="_blank" rel="external">Supervisor</a> 是一个进程管理工具，我们可以使用它管理多个 Tornado 实例，非常方便。</p>
@@ -1417,7 +1678,7 @@
     <link href="http://runnerliu.github.io/2017/09/03/nginxstartpoweron/"/>
     <id>http://runnerliu.github.io/2017/09/03/nginxstartpoweron/</id>
     <published>2017-09-03T08:18:37.000Z</published>
-    <updated>2017-09-03T08:20:37.579Z</updated>
+    <updated>2018-04-14T23:36:08.935Z</updated>
     
     <content type="html"><![CDATA[<p>Nginx 是一个很强大的高性能 Web 和反向代理服务器。虽然使用命令行可以对 nginx 进行各种操作，比如启动等，但是还是根据不太方便。下面介绍在 Linux 下安装后，如何设置开机自启动。</p>
 <p>首先，在 Linux 系统的 <code>/etc/init.d/</code> 目录下创建 nginx 文件，使用如下命令：</p>
@@ -1460,7 +1721,7 @@
     <link href="http://runnerliu.github.io/2017/08/28/mysqltransaction/"/>
     <id>http://runnerliu.github.io/2017/08/28/mysqltransaction/</id>
     <published>2017-08-28T11:52:05.000Z</published>
-    <updated>2017-08-28T12:05:56.719Z</updated>
+    <updated>2018-04-14T23:36:08.935Z</updated>
     
     <content type="html"><![CDATA[<p>学习 MySQL 、SQL Server 或者 Oracle 这些关系型数据库的时候，必须了解的概念之一就是事务，在各种大中小型项目中，事务的使用非常频繁和广泛。本文简单介绍 MySQL 中事务的四大特性，以及在不考虑事务隔离时，对数据的不同操作会产生的一些影响，同时介绍了事务的四中隔离级别。</p>
 <h3 id="事务-ACID-特性"><a href="#事务-ACID-特性" class="headerlink" title="事务 ACID 特性"></a>事务 ACID 特性</h3><h4 id="原子性：Atomicity"><a href="#原子性：Atomicity" class="headerlink" title="原子性：Atomicity"></a>原子性：Atomicity</h4><p>事务必须是原子工作单元；对于其执行的数据修改操作，要么全都执行，要么全都不执行。通常，与某个事务关联的操作具有共同的目标，并且是相互依赖的。如果系统只执行这些操作的一个子集，则可能会破坏事务的总体目标。原子性消除了系统处理操作子集的可能性。</p>
@@ -1535,7 +1796,7 @@
     <link href="http://runnerliu.github.io/2017/08/27/singleinstancepython/"/>
     <id>http://runnerliu.github.io/2017/08/27/singleinstancepython/</id>
     <published>2017-08-27T04:43:23.000Z</published>
-    <updated>2017-08-28T12:27:58.051Z</updated>
+    <updated>2018-04-14T23:36:08.955Z</updated>
     
     <content type="html"><![CDATA[<p>单例模式属于创建型模式，它提供了一种创建对象的最佳方式。这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。<br>特点：</p>
 <ul>
@@ -1630,7 +1891,7 @@
     <link href="http://runnerliu.github.io/2017/07/20/zsfzsybtb/"/>
     <id>http://runnerliu.github.io/2017/07/20/zsfzsybtb/</id>
     <published>2017-07-20T07:05:19.000Z</published>
-    <updated>2017-07-20T07:15:17.045Z</updated>
+    <updated>2018-04-14T23:36:08.959Z</updated>
     
     <content type="html"><![CDATA[<p>最近一直在看网络编程中同步异步、阻塞与非阻塞方面的东西，发现网上各种说法解释不一，而且有些解释不透彻，感觉解释人自己都没明白。于是在知乎上找到了能让人豁然开朗的答案，如下。</p>
 <p><strong>阻塞</strong> 与 <strong>非阻塞</strong> 、<strong>同步</strong> 与 <strong>异步</strong>不能简单的从字面理解，提供一个从分布式系统角度的回答。</p>
@@ -1672,7 +1933,7 @@
     <link href="http://runnerliu.github.io/2017/07/16/linuxyhtnht/"/>
     <id>http://runnerliu.github.io/2017/07/16/linuxyhtnht/</id>
     <published>2017-07-16T07:18:39.000Z</published>
-    <updated>2017-07-16T07:36:17.821Z</updated>
+    <updated>2018-04-14T23:36:08.915Z</updated>
     
     <content type="html"><![CDATA[<p><strong>内核态</strong>:：CPU 可以访问内存所有数据，包括外围设备：硬盘、网卡。CPU 也可以将自己从一个程序切换到另一个程序。</p>
 <p><strong>用户态</strong>：只能受限的访问内存，且不允许访问外围设备。占用 CPU 的能力被剥夺，CPU 资源可以被其他程序获取。</p>
@@ -1736,7 +1997,7 @@
     <link href="http://runnerliu.github.io/2017/07/16/pythongc/"/>
     <id>http://runnerliu.github.io/2017/07/16/pythongc/</id>
     <published>2017-07-16T06:33:22.000Z</published>
-    <updated>2017-07-16T06:51:27.395Z</updated>
+    <updated>2018-04-14T23:36:08.955Z</updated>
     
     <content type="html"><![CDATA[<p>之前写过一篇文章分析了 PHP 的垃圾回收机制，今天看了一下Python的GC，感觉大同小异，总结如下。</p>
 <h3 id="引用计数"><a href="#引用计数" class="headerlink" title="引用计数"></a>引用计数</h3><p>Python 语言默认采用的垃圾收集机制是『引用计数法 Reference Counting』，该算法最早 George E. Collins 在1960的时候首次提出，50 年后的今天，该算法依然被很多编程语言使用，『引用计数法』的原理是：每个对象维护一个 ob_refcnt 字段，用来记录该对象当前被引用的次数，每当新的引用指向该对象时，它的引用计数 ob_refcnt  加1，每当该对象的引用失效时计数 ob_refcnt 减 1，一旦对象的引用计数为 0，该对象立即被回收，对象占用的内存空间将被释放。它的缺点是需要额外的空间维护引用计数，这个问题是其次的，不过最主要的问题是它不能解决对象的“循环引用”，因此，也有很多语言比如 Java 并没有采用该算法做来垃圾的收集机制。</p>
@@ -1777,87 +2038,6 @@
       <category term="Python" scheme="http://runnerliu.github.io/tags/Python/"/>
     
       <category term="垃圾回收" scheme="http://runnerliu.github.io/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL存储引擎InnoDB与MyISAM的区别</title>
-    <link href="http://runnerliu.github.io/2017/07/15/myisaminnodb/"/>
-    <id>http://runnerliu.github.io/2017/07/15/myisaminnodb/</id>
-    <published>2017-07-15T11:29:44.000Z</published>
-    <updated>2017-08-28T13:04:45.979Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h3><p>MyISAM：每个MyISAM在磁盘上存储成三个文件。第一个文件的名字以表的名字开始，扩展名指出文件类型。.frm文件存储表定义。数据文件的扩展名为 .MYD  (MYData)。索引文件的扩展名是 .MYI  (MYIndex)；</p>
-<p>InnoDB：所有的表都保存在同一个数据文件中（也可能是多个文件，或者是独立的表空间文件），InnoDB表的大小只受限于操作系统文件的大小，一般为2GB。</p>
-<h3 id="存储空间"><a href="#存储空间" class="headerlink" title="存储空间"></a>存储空间</h3><p>MyISAM：可被压缩，存储空间较小。支持三种不同的存储格式：静态表(默认，但是注意数据末尾不能有空格，会被去掉)、动态表、压缩表；</p>
-<p>InnoDB：需要更多的内存和存储，它会在主内存中建立其专用的缓冲池用于高速缓冲数据和索引。</p>
-<h3 id="事务支持"><a href="#事务支持" class="headerlink" title="事务支持"></a>事务支持</h3><p>MyISAM：强调的是性能，每次查询具有原子性，其执行数度比 InnoDB 类型更快，但是不提供事务支持；</p>
-<p>InnoDB：提供事务支持事务，外部键等高级数据库功能。 具有事务、回滚和崩溃修复能力的事务安全型表。</p>
-<h3 id="CURD操作"><a href="#CURD操作" class="headerlink" title="CURD操作"></a>CURD操作</h3><p>MyISAM：如果执行大量的 SELECT，MyISAM 是更好的选择。(因为没有支持行级锁)，在增删的时候需要锁定整个表格，效率会低一些。相关的是 InnoDB 支持行级锁，删除插入的时候只需要锁定该行就行，效率较高；</p>
-<p>InnoDB：如果你的数据执行大量的 INSERT 或 UPDATE，出于性能方面的考虑，应该使用 InnoDB 表。DELETE 从性能上InnoDB 更优，但 DELETE FROM table 时，InnoDB 不会重新建立表，而是一行一行的删除，在 InnoDB 上如果要清空保存有大量数据的表，最好使用<code>truncate table</code> 这个命令。</p>
-<h3 id="外键"><a href="#外键" class="headerlink" title="外键"></a>外键</h3><p>MyISAM：不支持；InnoDB：支持。</p>
-<h3 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h3><p>InnoDB 支持数据行锁定，MyISAM 不支持行锁定，只支持锁定整个表。即 MyISAM 同一个表上的读锁和写锁是互斥的，</p>
-<p>MyISAM 并发读写时如果等待队列中既有读请求又有写请求，默认写请求的优先级高，即使读请求先到，所以 MyISAM 不适合于有大量查询和修改并存的情况，那样查询进程会长时间阻塞。因为 MyISAM 是锁表，所以某项读操作比较耗时会使其他写进程饿死。</p>
-<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>InnoDB 从5.6.4才开始支持全文索引，而 MyISAM 一直支持。全文索引是指对 char、varchar 和 text 中的每个词（停用词除外）建立倒排序索引。MyISAM的全文索引其实很简单，因为它不支持中文分词，必须由使用者分词后加入空格再写到数据表里，而且少于4个汉字的词会和停用词一样被忽略掉。</p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>MyISAM 支持 GIS 数据，InnoDB 不支持。即 MyISAM 支持以下空间数据对象：Point，Line，Polygon，Surface等。</p>
-<p>对于AUTO_INCREMENT 类型的字段，InnoDB 中必须包含只有该字段的索引，但是在 MyISAM 表中，可以和其他字段一起建立联合索引。</p>
-<p>InnoDB 中不保存表的具体行数，也就是说，执行 <code>select count(*) from table</code> 时，InnoDB 要扫描一遍整个表来计算有多少行，但是 MyISAM 只要简单的读出保存好的行数即可。注意的是，当 <code>count(*)</code> 语句包含 where 条件时，两种表的操作是一样的。</p>
-<p>InnoDB 表的行锁也不是绝对的，假如在执行一个 SQL 语句时 MySQL 不能确定要扫描的范围，InnoDB 表同样会锁全表，例如 <code>update table set num=1 where name like &#39;%aaa%&#39;</code> </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;存储结构&quot;&gt;&lt;a href=&quot;#存储结构&quot; class=&quot;headerlink&quot; title=&quot;存储结构&quot;&gt;&lt;/a&gt;存储结构&lt;/h3&gt;&lt;p&gt;MyISAM：每个MyISAM在磁盘上存储成三个文件。第一个文件的名字以表的名字开始，扩展名指出文件类型。.frm文件存储表
-    
-    </summary>
-    
-      <category term="MySQL" scheme="http://runnerliu.github.io/categories/MySQL/"/>
-    
-    
-      <category term="MySQL" scheme="http://runnerliu.github.io/tags/MySQL/"/>
-    
-      <category term="InnoDB" scheme="http://runnerliu.github.io/tags/InnoDB/"/>
-    
-      <category term="MyISAM" scheme="http://runnerliu.github.io/tags/MyISAM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL中UNIQUE KEY与PRIMARY KEY的区别</title>
-    <link href="http://runnerliu.github.io/2017/07/15/uniqueprimarykey/"/>
-    <id>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</id>
-    <published>2017-07-15T09:30:51.000Z</published>
-    <updated>2017-07-15T11:08:56.373Z</updated>
-    
-    <content type="html"><![CDATA[<p>定义了 UNIQUE 约束的字段中不能包含重复值，可以为一个或多个字段定义 UNIQUE 约束。因此，UNIQUE 即可以在字段级也可以在表级定义， 在 UNIQUED 约束的字段上可以包含空值。UNIQUED 可空，可以在一个表里的一个或多个字段定义；</p>
-<p>PRIMARY KEY 不可空不可重复，在一个表里可以定义联合主键；</p>
-<p>一般来说，PRIMARY KEY = UNIQUE KEY +  NOT NULL</p>
-<p>UNIQUE KEY 就是唯一，当你需要限定你的某个表字段每个值都唯一，没有重复值时使用。比如说，如果你有一个person 表，并且表中有个身份证的 column，那么你就可以指定该字段为UNIQUE KEY。 从技术的角度来看，PRIMARY KEY和UNIQUE KEY有很多相似之处。但还是有以下区别： </p>
-<ul>
-<li>作为 PRIMARY KEY 的域/域组不能为NULL，而 UNIQUE KEY 可以。 </li>
-<li>在一个表中只能有一个PRIMARY KEY，而多个 UNIQUE KEY 可以同时存在。 </li>
-</ul>
-<p>更大的区别在逻辑设计上。PRIMARY KEY 一般在逻辑设计中用作记录标识，这也是设置 PRIMARY KEY 的本来用意，而UNIQUE KEY 只是为了保证域/域组的唯一性。 </p>
-<p>PRIMARY KEY 的语法：alter table name add constraint key name primary key( columns); </p>
-<p>UNIQUE KEY 的语法：alter table name add constraint key name unique( columns); </p>
-<p>一个表只能有一个主键，但是可以有好多个UNIQUE KEY，而且 UNIQUE KEY 可以为 NULL 值，如员工的电话号码一般就用UNIQUE KEY，因为电话号码肯定是唯一的，但是有的员工可能没有电话。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;定义了 UNIQUE 约束的字段中不能包含重复值，可以为一个或多个字段定义 UNIQUE 约束。因此，UNIQUE 即可以在字段级也可以在表级定义， 在 UNIQUED 约束的字段上可以包含空值。UNIQUED 可空，可以在一个表里的一个或多个字段定义；&lt;/p&gt;
-&lt;p&gt;PR
-    
-    </summary>
-    
-      <category term="MySQL" scheme="http://runnerliu.github.io/categories/MySQL/"/>
-    
-    
-      <category term="MySQL" scheme="http://runnerliu.github.io/tags/MySQL/"/>
-    
-      <category term="UNIQUE KEY" scheme="http://runnerliu.github.io/tags/UNIQUE-KEY/"/>
-    
-      <category term="PRIMARY KEY" scheme="http://runnerliu.github.io/tags/PRIMARY-KEY/"/>
     
   </entry>
   

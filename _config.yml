@@ -85,7 +85,7 @@ search:
   path: search.xml
   field: post
   format: html
-  limit: 100000
+  limit: 1000000
 
 # 自动生成sitemap
 sitemap:
