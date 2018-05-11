@@ -1,0 +1,1291 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="分布式锁,数据库,redis,zookeeper," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：
+
+高并发情境下数据库的数据重复写入问题
+
+数据的重复写入实际上就是对共享资源的竞争操作，导致数据出现不一致，给线上业务带来影响。解决这种问题，最直接的思路是在数据库层面寻求解决方案，借助数据库的锁机制，或者在业务上通过数据库语句的限">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式锁">
+<meta property="og:url" content="http://runnerliu.github.io/2018/05/06/distlock/index.html">
+<meta property="og:site_name" content="刘小杨的BLOG">
+<meta property="og:description" content="前言进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：
+
+高并发情境下数据库的数据重复写入问题
+
+数据的重复写入实际上就是对共享资源的竞争操作，导致数据出现不一致，给线上业务带来影响。解决这种问题，最直接的思路是在数据库层面寻求解决方案，借助数据库的锁机制，或者在业务上通过数据库语句的限">
+<meta property="og:image" content="http://runnerliu.github.io/images/２０１８－０５－０６　１８：４１：４０.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/２０１８－０５－０６　１９：１８：１３.png">
+<meta property="og:updated_time" content="2018-05-11T14:29:31.796Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式锁">
+<meta name="twitter:description" content="前言进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：
+
+高并发情境下数据库的数据重复写入问题
+
+数据的重复写入实际上就是对共享资源的竞争操作，导致数据出现不一致，给线上业务带来影响。解决这种问题，最直接的思路是在数据库层面寻求解决方案，借助数据库的锁机制，或者在业务上通过数据库语句的限">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/２０１８－０５－０６　１８：４１：４０.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2018/05/06/distlock/"/>
+
+
+
+
+
+  <title> 分布式锁 | 刘小杨的BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">刘小杨的BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2018/05/06/distlock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="liuxiaoyang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="刘小杨的BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                分布式锁
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-06T13:28:07+08:00">
+                2018-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式锁/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式锁</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/05/06/distlock/" class="leancloud_visitors" data-flag-title="分布式锁">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：</p>
+<blockquote>
+<p>高并发情境下数据库的数据重复写入问题</p>
+</blockquote>
+<p>数据的重复写入实际上就是对共享资源的竞争操作，导致数据出现不一致，给线上业务带来影响。解决这种问题，最直接的思路是在数据库层面寻求解决方案，借助数据库的锁机制，或者在业务上通过数据库语句的限制避免重复数据，如：</p>
+<ul>
+<li>insert ignore into 语句；</li>
+<li>on duplicate key update 语句；</li>
+<li>insert … select … where not exist 语句；</li>
+<li>replace into 语句。</li>
+</ul>
+<p>以上语句在简单业务中避免mysql插入重复数据是有一定效果的，但是在复杂场景下并不能满足需求。因为高并发业务除了要求数据一致性外，对性能、稳定性的要求也较高，单纯使用数据库语句很难达到预期效果，因此，从单机锁发展而来的分布式锁提供了一种新的解决方案。</p>
+<h3 id="SQL语句解决方案"><a href="#SQL语句解决方案" class="headerlink" title="SQL语句解决方案"></a>SQL语句解决方案</h3><p>insert ignore into</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">INSERT [LOW_PRIORITY | HIGH_PRIORITY] [IGNORE]</div><div class="line">    [INTO] tbl_name</div><div class="line">    [PARTITION (partition_name [, partition_name] ...)]</div><div class="line">    [(col_name [, col_name] ...)]</div><div class="line">    SELECT ...</div><div class="line">    [ON DUPLICATE KEY UPDATE assignment_list]</div><div class="line"></div><div class="line">value:</div><div class="line">    &#123;expr | DEFAULT&#125;</div><div class="line"></div><div class="line">assignment:</div><div class="line">    col_name = value</div><div class="line"></div><div class="line">assignment_list:</div><div class="line">    assignment [, assignment] ...</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Specify <strong>IGNORE</strong> to ignore rows that would cause duplicate-key violations. </p>
+</blockquote>
+<p>通过mysql给出的官方解释：IGNORE 关键字会忽略重复键的行。当插入数据时，如出现错误（重复数据），将不返回错误，只以警告形式返回。所以使用 IGNORE 请确保语句本身没有问题，否则语句的其他错误也会被忽略掉。如果使用 IGNORE 关键字，则插入的字段必须是主键或唯一索引。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show tables;</div><div class="line">+----------------------------+</div><div class="line">| Tables_in_openlivedb       |</div><div class="line">+----------------------------+</div><div class="line">| admin                      |</div><div class="line">| auth_group                 |</div><div class="line">| auth_group_permissions     |</div><div class="line">| auth_permission            |</div><div class="line">| auth_user                  |</div><div class="line">| auth_user_groups           |</div><div class="line">| auth_user_user_permissions |</div><div class="line">| cmd_template               |</div><div class="line">| cutter_node                |</div><div class="line">| django_admin_log           |</div><div class="line">| django_content_type        |</div><div class="line">| django_migrations          |</div><div class="line">| django_session             |</div><div class="line">| flv_slice                  |</div><div class="line">| mp4_slice                  |</div><div class="line">| test_table                 |</div><div class="line">| ts_slice                   |</div><div class="line">+----------------------------+</div><div class="line">17 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from admin;</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">| id | username          | password                         |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">|  1 | liuxiaoyang       | 96e79218965eb72c92a549dd5a330112 |</div><div class="line">|  4 | liuxiaoyang_test2 |                                  |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">2 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; INSERT IGNORE INTO admin (username) VALUES (&apos;liuxiaoyang_test2&apos;);</div><div class="line">Query OK, 0 rows affected, 2 warnings (0.09 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from admin;</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">| id | username          | password                         |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">|  1 | liuxiaoyang       | 96e79218965eb72c92a549dd5a330112 |</div><div class="line">|  4 | liuxiaoyang_test2 |                                  |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">2 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; INSERT IGNORE INTO admin (username) VALUES (&apos;liuxiaoyang_test3&apos;);</div><div class="line">Query OK, 1 row affected, 1 warning (0.11 sec)</div></pre></td></tr></table></figure>
+<p>以上操作可以看出，插入重复数据时，显示 <code>Query OK, 0 rows affected, 2 warnings (0.09 sec)</code> 表明出现了警告，当在业务中直接执行时：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">am = AdminManager()</div><div class="line">r = am.execute(&quot;select * from admin&quot;)</div><div class="line">for i in r:</div><div class="line">    print(i.username)</div><div class="line">r2 = am.execute(&quot;INSERT IGNORE INTO admin (username, password) VALUES (&apos;liuxiaoyang_test2&apos;, &apos;123&apos;)&quot;)</div></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">liuxiaoyang</div><div class="line">liuxiaoyang_test2</div><div class="line">/usr/local/lib/python3.5/dist-packages/pymysql/cursors.py:165: Warning: (1062, &quot;Duplicate entry &apos;liuxiaoyang_test2&apos; for key &apos;username_unique&apos;&quot;)</div><div class="line">  result = self._query(query)</div></pre></td></tr></table></figure>
+<p>同样返回了警告信息。</p>
+<p>on duplicate key update</p>
+<blockquote>
+<p>If you specify an <strong>ON DUPLICATE KEY UPDATE</strong> clause and a row to be inserted would cause a duplicate value in a UNIQUE index or PRIMARY KEY, an UPDATE of the old row occurs.</p>
+</blockquote>
+<p>当遇到重复键时，对旧行执行 UPDATE 语句，否则插入新行。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select * from admin;</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">| id | username          | password                         |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">|  1 | liuxiaoyang       | 96e79218965eb72c92a549dd5a330112 |</div><div class="line">|  4 | liuxiaoyang_test2 | 123                              |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">2 rows in set (0.02 sec)</div><div class="line"></div><div class="line">mysql&gt; INSERT IGNORE INTO admin (username) VALUES (&apos;liuxiaoyang_test2&apos;) ON DUPLICATE KEY UPDATE password=&apos;345&apos;;</div><div class="line">Query OK, 2 rows affected, 1 warning (0.09 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from admin;</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">| id | username          | password                         |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">|  1 | liuxiaoyang       | 96e79218965eb72c92a549dd5a330112 |</div><div class="line">|  4 | liuxiaoyang_test2 | 345                              |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">2 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
+<p>对于on duplicate key update语句，必需主键或唯一索引。</p>
+<p>insert … select … where not exist</p>
+<p>该方法利用了子查询，写法比较繁琐，性能较差，不推荐使用。</p>
+<p>replace into </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">REPLACE [LOW_PRIORITY | DELAYED]</div><div class="line">    [INTO] tbl_name</div><div class="line">    [PARTITION (partition_name [, partition_name] ...)]</div><div class="line">    [(col_name [, col_name] ...)]</div><div class="line">    &#123;VALUES | VALUE&#125; (value_list) [, (value_list)] ...</div><div class="line"></div><div class="line">value:</div><div class="line">    &#123;expr | DEFAULT&#125;</div><div class="line"></div><div class="line">value_list:</div><div class="line">    value [, value] ...</div><div class="line"></div><div class="line">assignment:</div><div class="line">    col_name = value</div><div class="line"></div><div class="line">assignment_list:</div><div class="line">    assignment [, assignment] ...</div></pre></td></tr></table></figure>
+<blockquote>
+<p>REPLACE works exactly like INSERT, except that if an old row in the table has the same value as a new row for a PRIMARY KEY or a UNIQUE index, the old row is deleted before the new row is inserted. </p>
+</blockquote>
+<p>replace into 语句与insert语句类似，只不过它在插入时，如果存在主键或唯一键相同的记录，则会先删除，然后再插入新记录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select * from admin;</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">| id | username          | password                         |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">|  1 | liuxiaoyang       | 96e79218965eb72c92a549dd5a330112 |</div><div class="line">|  5 | liuxiaoyang_test2 | 789                              |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">2 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; replace into admin(username, password) values(&apos;liuxiaoyang_test2&apos;, &apos;1111&apos;);</div><div class="line">Query OK, 2 rows affected (0.10 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from admin;</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">| id | username          | password                         |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">|  1 | liuxiaoyang       | 96e79218965eb72c92a549dd5a330112 |</div><div class="line">|  6 | liuxiaoyang_test2 | 1111                             |</div><div class="line">+----+-------------------+----------------------------------+</div><div class="line">2 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>MySQL uses the following algorithm for REPLACE:</p>
+<ol>
+<li>try to insert the new row into the table        </li>
+<li>While the insertion fails because a duplicate-key error occurs for a primary key or unique index:<ul>
+<li>Delete from the table the conflicting row that has the duplicate key value;</li>
+<li>try again to insert the new row into the table.</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<p>以上方法也会有些限制，如目前大多数业务的删除只是逻辑删除，并不做物理删除，在这种场景下就需要寻找其他方案。除了以上方法，mysql还提供了共享锁、排他锁等机制，mysql的锁机制会单独进行介绍，在此就不赘述。</p>
+<h3 id="分布式锁解决方案"><a href="#分布式锁解决方案" class="headerlink" title="分布式锁解决方案"></a>分布式锁解决方案</h3><h4 id="何为锁"><a href="#何为锁" class="headerlink" title="何为锁"></a>何为锁</h4><p>在单进程的系统中，当存在多个线程可以同时改变某个变量（可变共享变量）时，就需要对变量或代码块做同步，使其在修改这种变量时能够线性执行消除并发修改变量；</p>
+<p>而同步的本质是通过锁来实现的。为了实现多个线程在一个时刻同一个代码块只能有一个线程可执行，那么需要在某个地方做个标记，这个标记必须每个线程都能看到，当标记不存在时可以设置该标记，其余后续线程发现已经有标记了则等待拥有标记的线程结束同步代码块取消标记后再去尝试设置标记。这个标记可以理解为锁，不同地方实现锁的方式也不一样，只要能满足所有线程都能看得到标记即可；</p>
+<p>除了利用内存数据做锁，其实任何互斥的都能做锁（只考虑互斥情况），如流水表中流水号与时间结合做幂等校验可以看作是一个不会释放的锁，或者使用某个文件是否存在作为锁等。只需要满足在对标记进行修改能保证原子性和内存可见性即可。</p>
+<h4 id="什么是分布式"><a href="#什么是分布式" class="headerlink" title="什么是分布式"></a>什么是分布式</h4><p>分布式的 CAP 理论告诉我们：</p>
+<blockquote>
+<p>任何一个分布式系统都无法同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance），最多只能同时满足两项。</p>
+</blockquote>
+<p>目前很多大型网站及应用都是分布式部署的，分布式场景中的数据一致性问题一直是一个比较重要的话题。基于 CAP理论，很多系统在设计之初就要对这三者做出取舍。在互联网领域的绝大多数的场景中，都需要牺牲强一致性来换取系统的高可用性，系统往往只需要保证最终一致性。</p>
+<p>分布式场景</p>
+<blockquote>
+<p>此处主要指集群模式下，多个相同服务同时运行</p>
+</blockquote>
+<p>在许多的场景中，我们为了保证数据的最终一致性，需要很多的技术方案来支持，比如<strong>分布式事务</strong>、<strong>分布式锁</strong>等。很多时候我们需要保证一个方法在同一时间内只能被同一个线程执行。在单机环境中，通过线程安全队列或者其他方式解决，但是在分布式环境下，这并不是一件容易的事儿。</p>
+<ul>
+<li>分布式与单机情况下最大的不同在于其不是多线程而是<strong>多进程</strong>；</li>
+<li>多线程由于可以共享堆内存，因此可以简单的采取内存作为标记存储位置。而进程之间甚至可能都不在同一台物理机上，因此需要将标记存储在一个所有进程都能看到的地方。</li>
+</ul>
+<p>分布式锁</p>
+<ul>
+<li>当在分布式模型下，数据只有一份（或有限制），此时需要利用锁的技术控制某一时刻修改数据的进程数；</li>
+<li>与单机模式下的锁不仅需要保证进程可见，还需要考虑进程与锁之间的网络问题；</li>
+<li>分布式锁还是可以将标记存在内存，只是该内存不是某个进程分配的内存而是公共内存如 Redis、Memcache。至于利用数据库、文件等做锁与单机的实现是一样的，只要保证标记能互斥就行。</li>
+</ul>
+<h4 id="我们需要怎样的分布式锁"><a href="#我们需要怎样的分布式锁" class="headerlink" title="我们需要怎样的分布式锁"></a>我们需要怎样的分布式锁</h4><ul>
+<li>在分布式系统环境下，一个方法在同一时间只能被一个机器的一个线程执行； </li>
+<li>高可用的获取锁与释放锁； </li>
+<li>高性能的获取锁与释放锁； </li>
+<li>具备可重入特性； </li>
+<li>具备锁失效机制，防止死锁； </li>
+<li>具备非阻塞锁特性，即没有获取到锁将直接返回获取锁失败。</li>
+</ul>
+<h4 id="分布式锁-基于数据库"><a href="#分布式锁-基于数据库" class="headerlink" title="分布式锁-基于数据库"></a>分布式锁-基于数据库</h4><p>乐观锁 - 基于表主键唯一做分布式锁</p>
+<p>利用主键唯一的特性，如果有多个请求同时提交到数据库的话，数据库会保证只有一个操作可以成功，那么我们就可以认为操作成功的那个线程获得了该方法的锁，当方法执行完毕之后，想要释放锁的话，删除这条数据库记录即可。</p>
+<p>这种简单的实现有以下几个问题：</p>
+<ul>
+<li>这把锁强依赖数据库的可用性，数据库是一个单点，一旦数据库挂掉，会导致业务系统不可用；</li>
+<li>这把锁没有失效时间，一旦解锁操作失败，就会导致锁记录一直在数据库中，其他线程无法再获得到锁；</li>
+<li>这把锁只能是非阻塞的，因为数据的 insert 操作，一旦插入失败就会直接报错。没有获得锁的线程并不会进入排队队列，要想再次获得锁就要再次触发获得锁操作；</li>
+<li>这把锁是非重入的，同一个线程在没有释放锁之前无法再次获得该锁。因为数据中数据已经存在了；</li>
+<li>这把锁是非公平锁，所有等待锁的线程凭运气去争夺锁；</li>
+<li>在 mysql 数据库中采用主键冲突防重，在大并发情况下有可能会造成锁表现象。</li>
+</ul>
+<p>当然，我们也可以有其他方式解决上面的问题。</p>
+<ul>
+<li>数据库是单点？搞两个数据库，数据之前双向同步，一旦挂掉快速切换到备库上；</li>
+<li>没有失效时间？只要做一个定时任务，每隔一定时间把数据库中的超时数据清理一遍；</li>
+<li>非阻塞的？搞一个 while 循环，直到 insert 成功再返回成功；</li>
+<li>非重入的？在数据库表中加个字段，记录当前获得锁的机器的主机信息和线程信息，那么下次再获取锁的时候先查询数据库，如果当前机器的主机信息和线程信息在数据库可以查到的话，直接把锁分配给他就可以了；</li>
+<li>非公平的？再建一张中间表，将等待锁的线程全记录下来，并根据创建时间排序，只有最先创建的允许获取锁；</li>
+<li>比较好的办法是在程序中生产主键进行防重。</li>
+</ul>
+<p>乐观锁 - 基于表字段版本号做分布式锁</p>
+<p>这个策略源于 mysql 的 mvcc 机制，使用这个策略其实本身没有什么问题，唯一的问题就是对数据表侵入较大，我们要为每个表设计一个版本号字段，然后写一条判断 sql 每次进行判断，增加了数据库操作的次数，在高并发的要求下，对数据库连接的开销也是无法忍受的。</p>
+<p>悲观锁 - 基于数据库排他锁做分布式锁</p>
+<p>在查询语句后面增加 <code>for update</code>，数据库会在查询过程中给数据库表增加排他锁 （注意： InnoDB 引擎在加锁的时候，只有通过索引进行检索的时候才会使用行级锁，否则会使用表级锁。这里我们希望使用行级锁，就要给要执行的方法字段名添加索引，值得注意的是，这个索引一定要创建成唯一索引，否则会出现多个重载方法之间无法同时被访问的问题。重载方法的话建议把参数类型也加上）。当某条记录被加上排他锁之后，其他线程无法再在该行记录上增加排他锁。</p>
+<p>我们可以认为获得排他锁的线程即可获得分布式锁，当获取到锁之后，可以执行方法的业务逻辑，执行完方法之后，通过 <code>connection.commit()</code> 操作来释放锁。</p>
+<p>这种方法可以有效的解决上面提到的无法释放锁和阻塞锁的问题。</p>
+<ul>
+<li>阻塞锁？ <code>for update</code>语句会在执行成功后立即返回，在执行失败时一直处于阻塞状态，直到成功；</li>
+<li>锁定之后服务宕机，无法释放？使用这种方式，服务宕机之后数据库会自己把锁释放掉。</li>
+</ul>
+<p>但是还是无法直接解决数据库单点和可重入问题。虽然我们对方法字段名使用了唯一索引，并且显示使用 <code>for update</code>来使用行级锁。但是，MySQL 会对查询进行优化，即便在条件中使用了索引字段，但是否使用索引来检索数据是由 MySQL 通过判断不同执行计划的代价来决定的，如果 MySQL 认为全表扫效率更高，比如对一些很小的表，它就不会使用索引，这种情况下 InnoDB 将使用表锁，而不是行锁。</p>
+<p>还有一个问题，就是我们要使用排他锁来进行分布式锁的 lock，那么一个排他锁长时间不提交，就会占用数据库连接。一旦类似的连接变得多了，就可能把数据库连接池撑爆。</p>
+<h4 id="分布式锁-基于Redis"><a href="#分布式锁-基于Redis" class="headerlink" title="分布式锁-基于Redis"></a>分布式锁-基于Redis</h4><p>Redis分布式锁主要使用其SETNX()、EXPIRE() 方法实现。</p>
+<blockquote>
+<p>SETNX key value : 将 <code>key</code> 的值设为 <code>value</code> ，当且仅当 <code>key</code> 不存在。若给定的 <code>key</code> 已经存在，则 ＳETNX 不做任何动作。SETNX 是『SET if Not eXists』(如果不存在，则 SET)的简写。</p>
+<p>EXPIRE key seconds : 为给定 <code>key</code> 设置生存时间，当 <code>key</code> 过期时(生存时间为 <code>0</code> )，它会被自动删除。</p>
+</blockquote>
+<p>但是从 Redis 2.6.12 版本开始， SET 命令的行为可以通过一系列参数来修改：</p>
+<ul>
+<li><code>EX second</code> ：设置键的过期时间为 <code>second</code> 秒。 <code>SET key value EX second</code> 效果等同于 <code>SETEX key second value</code> 。</li>
+<li><code>PX millisecond</code> ：设置键的过期时间为 <code>millisecond</code> 毫秒。 <code>SET key value PX millisecond</code> 效果等同于 <code>PSETEX key millisecondvalue</code> 。</li>
+<li><code>NX</code> ：只在键不存在时，才对键进行设置操作。 <code>SET key value NX</code> 效果等同于 <code>SETNX key value</code> 。</li>
+<li><code>XX</code> ：只在键已经存在时，才对键进行设置操作。</li>
+</ul>
+<p>所以SETNX()、EXPIRE() 方法被融合进了SET方法，而<a href="http://redisdoc.com/string/set.html" target="_blank" rel="external">官网</a> 给出</p>
+<blockquote>
+<p>因为 <a href="http://redisdoc.com/string/set.html#set" target="_blank" rel="external">SET</a> 命令可以通过参数来实现和 <a href="http://redisdoc.com/string/setnx.html#setnx" target="_blank" rel="external">SETNX</a> 、 <a href="http://redisdoc.com/string/setex.html#setex" target="_blank" rel="external">SETEX</a> 和 <a href="http://redisdoc.com/string/psetex.html#psetex" target="_blank" rel="external">PSETEX</a> 三个命令的效果，所以将来的 Redis 版本可能会废弃并最终移除<a href="http://redisdoc.com/string/setnx.html#setnx" target="_blank" rel="external">SETNX</a> 、 <a href="http://redisdoc.com/string/setex.html#setex" target="_blank" rel="external">SETEX</a> 和 <a href="http://redisdoc.com/string/psetex.html#psetex" target="_blank" rel="external">PSETEX</a> 这三个命令。</p>
+</blockquote>
+<p>在使用Redis实现分布式锁时，我们可以通过SET来实现。</p>
+<p>设计思路</p>
+<blockquote>
+<p>获取锁：</p>
+<ul>
+<li>调用 set 尝试获取锁，如果设置成功，表示获取到了锁；</li>
+<li>设置失败，<ul>
+<li>等待一定时间后，再次尝试获取锁；</li>
+<li>若已达到最大获取锁时间未获取到锁，获取锁失败。</li>
+</ul>
+</li>
+</ul>
+<p>释放锁：</p>
+<ul>
+<li>确保每个客户端释放的是自己的锁；</li>
+<li>确保释放锁操作的原子性。</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">import time</div><div class="line">import traceback</div><div class="line"></div><div class="line">from contextlib import contextmanager</div><div class="line">from lib.utils import get_logger</div><div class="line">from tornado import gen</div><div class="line"></div><div class="line">DEFAULT_EXPIRES = 3</div><div class="line">ACQUIRE_TIMEOUT = 1</div><div class="line"></div><div class="line">lock_logger = get_logger(&quot;redis_netlock&quot;)</div><div class="line"></div><div class="line">@contextmanager</div><div class="line">def dist_lock(key, client, unique_id acquire_timeout=ACQUIRE_TIMEOUT):</div><div class="line">    key = &apos;lock_%s&apos; % key</div><div class="line">    try:</div><div class="line">        t = _acquire_lock(key, client, unique_id, acquire_timeout)</div><div class="line">        yield t</div><div class="line">    finally:</div><div class="line">        _release_lock(key, client, t)</div><div class="line"></div><div class="line"></div><div class="line">def _acquire_lock(key, client, unique_id, acquire_timeout):</div><div class="line">    end = time.time() + acquire_timeout</div><div class="line">    while time.time() &lt; end:</div><div class="line">        if client.set(key, unique_id, ex=DEFAULT_EXPIRES, nx=True):</div><div class="line">            return unique_id</div><div class="line">        else:</div><div class="line">            gen.sleep(.01)</div><div class="line">    return None</div><div class="line"></div><div class="line"></div><div class="line">def _release_lock(key, client, t):</div><div class="line">    try:</div><div class="line">        lua_command = &quot;&quot;&quot;</div><div class="line">            if redis.call(&quot;get&quot;,KEYS[1]) == ARGV[1]</div><div class="line">            then</div><div class="line">                return redis.call(&quot;del&quot;,KEYS[1])</div><div class="line">            else</div><div class="line">                return 0</div><div class="line">            end</div><div class="line">        &quot;&quot;&quot;</div><div class="line">        lua_script = client.register_script(lua_command)</div><div class="line">        lock_logger.debug(lua_script(keys=[key], args=[t]))</div><div class="line">    except Exception as e:</div><div class="line">        lock_logger.error(traceback.format_exc())</div></pre></td></tr></table></figure>
+<p>unique_id：uuid1() 提供的全球唯一值，保证每个客户端释放的是自己的锁。</p>
+<p>使用lua脚本释放锁是为了保证释放锁操作的原子性：</p>
+<blockquote>
+<p><strong>Atomicity of scripts</strong></p>
+<p>Redis uses the same Lua interpreter to run all the commands. Also Redis guarantees that a script is executed in an atomic way: no other script or Redis command will be executed while a script is being executed. This semantic is similar to the one of MULTI / EXEC. From the point of view of all the other clients the effects of a script are either still not visible or already completed.</p>
+<p>However this also means that executing slow scripts is not a good idea. It is not hard to create fast scripts, as the script overhead is very low, but if you are going to use slow scripts you should be aware that while the script is running no other client can execute commands.</p>
+</blockquote>
+<p>获取锁时，给定超时时间是１s，避免出现死锁现象。</p>
+<p>使用redis分布式锁的问题是，失效时间的设置。如果设置的失效时间太短，方法没等执行完，锁就自动释放了，那么就会产生并发问题。</p>
+<h4 id="分布式锁-基于RedLock"><a href="#分布式锁-基于RedLock" class="headerlink" title="分布式锁-基于RedLock"></a>分布式锁-基于RedLock</h4><p>Redlock 是 Redis 的作者 antirez 给出的集群模式的 Redis 分布式锁，它基于 N 个完全独立的 Redis 节点（通常情况下 N 可以设置成 5）。</p>
+<p>算法的步骤如下：</p>
+<ol>
+<li>客户端获取当前时间，以毫秒为单位；</li>
+<li>客户端尝试获取 N 个节点的锁，（每个节点获取锁的方式和前面说的缓存锁一样），N 个节点以相同的 key 和 value 获取锁。客户端需要设置接口访问超时，接口超时时间需要远远小于锁超时时间，比如锁自动释放的时间是 10s，那么接口超时大概设置 5-50ms。这样可以在有 redis 节点宕机后，访问该节点时能尽快超时，而减小锁的正常使用；</li>
+<li>客户端计算在获得锁的时候花费了多少时间，方法是用当前时间减去在步骤一获取的时间，只有客户端获得了超过 3 个节点的锁，而且获取锁的时间小于锁的超时时间，客户端才获得了分布式锁；</li>
+<li>客户端获取的锁的时间为设置的锁超时时间减去步骤三计算出的获取锁花费时间；</li>
+<li>如果客户端获取锁失败了，客户端会依次删除所有的锁。</li>
+</ol>
+<p>使用 Redlock 算法，可以保证在挂掉最多 2 个节点的时候，分布式锁服务仍然能工作，这相比之前的数据库锁和缓存锁大大提高了可用性，由于 redis 的高效性能，分布式缓存锁性能并不比数据库锁差。</p>
+<h4 id="分布式锁-基于Zookeeper"><a href="#分布式锁-基于Zookeeper" class="headerlink" title="分布式锁-基于Zookeeper"></a>分布式锁-基于Zookeeper</h4><p>ZooKeeper的架构通过冗余服务实现高可用性。因此，如果第一次无应答，客户端就可以询问另一台ZooKeeper主机。ZooKeeper节点将它们的数据存储于一个分层的命名空间，非常类似于一个文件系统或一个前缀树结构。客户端可以在节点读写，从而以这种方式拥有一个共享的配置服务，更新是全序的。</p>
+<p><img src="/images/２０１８－０５－０６　１８：４１：４０.png" alt="２０１８－０５－０６　１８：４１：４０"></p>
+<p>上图为系统架构，左边区域表示一个ZooKeeper集群，locker是ZooKeeper的一个持久节点，node_1、node_2、node_3是locker这个持久节点下面的临时顺序节点。client_1、client_2、client_3表示多个客户端，Share_Service表示需要互斥访问的共享资源。</p>
+<p>Zookeeper实现分布式锁的思路：</p>
+<ol>
+<li>多个客户端竞争创建 lock 临时节点；</li>
+<li>其中某个客户端成功创建 lock 节点，其他客户端对 lock 节点设置 watcher；</li>
+<li>持有锁的客户端删除 lock 节点或该客户端崩溃，由 Zookeeper 删除 lock 节点；</li>
+<li>其他客户端获得 lock 节点被删除的通知；</li>
+<li>重复上述4个步骤，直至无客户端在等待获取锁了。</li>
+</ol>
+<p><img src="/images/２０１８－０５－０６　１９：１８：１３.png" alt="２０１８－０５－０６　１９：０２：２３"></p>
+<p>Zookeeper方式性能上可能并没有缓存服务那么高，因为每次在创建锁和释放锁的过程中，都要动态创建、销毁临时节点来实现锁功能。ZK 中创建和删除节点只能通过 Leader 服务器来执行，然后将数据同步到所有的 Follower 机器上。</p>
+<p>由于目前理解有限，一些细节需要进一步确定和实践，不当之处请指正。</p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://www.cnblogs.com/austinspark-jessylu/p/8043726.html" target="_blank" rel="external">分布式锁的几种实现方式</a> <a href="http://www.importnew.com/27477.html" target="_blank" rel="external">Redis分布式锁的正确实现方式（Java版）</a> <a href="https://mp.weixin.qq.com/s/JTsJCDuasgIJ0j95K8Ay8w" target="_blank" rel="external">基于Redis的分布式锁到底安全吗（上）？</a> <a href="http://www.54tianzhisheng.cn/2018/04/24/Distributed_lock/#%E5%9F%BA%E4%BA%8E-Redlock-%E5%81%9A%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81" target="_blank" rel="external">分布式锁看这篇就够了</a> <a href="https://segmentfault.com/a/1190000010895869" target="_blank" rel="external">基于 Zookeeper 的分布式锁实现</a> <a href="http://redisdoc.com/" target="_blank" rel="external">Redis命令参考</a> <a href="https://redis.io/commands/eval" target="_blank" rel="external">Redis Lua scripting</a> <a href="https://dev.mysql.com/doc/" target="_blank" rel="external">mysql document</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/分布式锁/" rel="tag"># 分布式锁</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/30/kafkasave/" rel="next" title="Kafka文件存储机制">
+                <i class="fa fa-chevron-left"></i> Kafka文件存储机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="liuxiaoyang" />
+          <p class="site-author-name" itemprop="name">liuxiaoyang</p>
+           
+              <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">98</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL语句解决方案"><span class="nav-number">2.</span> <span class="nav-text">SQL语句解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式锁解决方案"><span class="nav-number">3.</span> <span class="nav-text">分布式锁解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#何为锁"><span class="nav-number">3.1.</span> <span class="nav-text">何为锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是分布式"><span class="nav-number">3.2.</span> <span class="nav-text">什么是分布式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#我们需要怎样的分布式锁"><span class="nav-number">3.3.</span> <span class="nav-text">我们需要怎样的分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁-基于数据库"><span class="nav-number">3.4.</span> <span class="nav-text">分布式锁-基于数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁-基于Redis"><span class="nav-number">3.5.</span> <span class="nav-text">分布式锁-基于Redis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁-基于RedLock"><span class="nav-number">3.6.</span> <span class="nav-text">分布式锁-基于RedLock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁-基于Zookeeper"><span class="nav-number">3.7.</span> <span class="nav-text">分布式锁-基于Zookeeper</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">liuxiaoyang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
