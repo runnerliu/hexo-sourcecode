@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://runnerliu.github.io/2018/05/13/sqlalchemybug1/</loc>
+    
+    <lastmod>2018-05-13T08:09:25.654Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2018/05/13/httppostmethod/</loc>
+    
+    <lastmod>2018-05-13T06:49:32.122Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://runnerliu.github.io/2018/05/06/distlock/</loc>
     
     <lastmod>2018-05-11T14:29:31.796Z</lastmod>
@@ -51,35 +65,7 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/05/26/transitionstranslate/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.959Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.959Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/06/22/urlrequestprocess/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.959Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.959Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/03/tcpip/</loc>
     
     <lastmod>2018-04-14T23:36:08.959Z</lastmod>
     
@@ -93,7 +79,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/07/20/zsfzsybtb/</loc>
+    <loc>http://runnerliu.github.io/2017/05/26/transitionstranslate/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.959Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</loc>
     
     <lastmod>2018-04-14T23:36:08.959Z</lastmod>
     
@@ -107,28 +100,28 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/15/phpvarinternstore1/</loc>
+    <loc>http://runnerliu.github.io/2017/06/22/urlrequestprocess/</loc>
     
-    <lastmod>2018-04-14T23:36:08.955Z</lastmod>
+    <lastmod>2018-04-14T23:36:08.959Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/03/tcpip/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.959Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/20/zsfzsybtb/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.959Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://runnerliu.github.io/2017/07/16/pythongc/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.955Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/08/27/singleinstancepython/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.955Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/02/processscheduling/</loc>
     
     <lastmod>2018-04-14T23:36:08.955Z</lastmod>
     
@@ -149,6 +142,13 @@
   </url>
   
   <url>
+    <loc>http://runnerliu.github.io/2017/04/02/processscheduling/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.955Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://runnerliu.github.io/2018/01/02/pythoncontextmanager/</loc>
     
     <lastmod>2018-04-14T23:36:08.955Z</lastmod>
@@ -163,14 +163,28 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/15/phpnewgc/</loc>
+    <loc>http://runnerliu.github.io/2017/04/15/phpvarinternstore1/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.955Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/08/27/singleinstancepython/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.955Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/11/phpsortalgorithm/</loc>
     
     <lastmod>2018-04-14T23:36:08.951Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/11/phpsortalgorithm/</loc>
+    <loc>http://runnerliu.github.io/2017/04/15/phpnewgc/</loc>
     
     <lastmod>2018-04-14T23:36:08.951Z</lastmod>
     
@@ -191,13 +205,6 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/09/03/nginxtornadosupervisor/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.935Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://runnerliu.github.io/2017/08/28/mysqltransaction/</loc>
     
     <lastmod>2018-04-14T23:36:08.935Z</lastmod>
@@ -212,16 +219,9 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/06/07/linuxtop/</loc>
+    <loc>http://runnerliu.github.io/2017/09/03/nginxtornadosupervisor/</loc>
     
-    <lastmod>2018-04-14T23:36:08.915Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2018/01/04/linuxtar/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.915Z</lastmod>
+    <lastmod>2018-04-14T23:36:08.935Z</lastmod>
     
   </url>
   
@@ -247,7 +247,21 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/01/02/linuxnetstat/</loc>
+    <loc>http://runnerliu.github.io/2018/01/04/linuxtar/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.915Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/06/07/linuxtop/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.915Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2018/01/04/linuxln/</loc>
     
     <lastmod>2018-04-14T23:36:08.911Z</lastmod>
     
@@ -261,13 +275,6 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/01/04/linuxln/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.911Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://runnerliu.github.io/2018/01/04/linuxcp/</loc>
     
     <lastmod>2018-04-14T23:36:08.911Z</lastmod>
@@ -275,14 +282,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/05/05/laraveluserlogin/</loc>
+    <loc>http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/</loc>
     
     <lastmod>2018-04-14T23:36:08.911Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/</loc>
+    <loc>http://runnerliu.github.io/2017/05/05/laraveluserlogin/</loc>
     
     <lastmod>2018-04-14T23:36:08.911Z</lastmod>
     
@@ -303,7 +310,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/01/hexogithub/</loc>
+    <loc>http://runnerliu.github.io/2018/01/02/linuxnetstat/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.911Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/06/josephring/</loc>
     
     <lastmod>2018-04-14T23:36:08.907Z</lastmod>
     
@@ -324,14 +338,7 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/01/hexoNexT/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.907Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/06/josephring/</loc>
+    <loc>http://runnerliu.github.io/2017/04/01/hexogithub/</loc>
     
     <lastmod>2018-04-14T23:36:08.907Z</lastmod>
     
@@ -339,6 +346,13 @@
   
   <url>
     <loc>http://runnerliu.github.io/2017/04/01/hexoOthers/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.907Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/01/hexoNexT/</loc>
     
     <lastmod>2018-04-14T23:36:08.907Z</lastmod>
     
@@ -380,20 +394,6 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/02/aboutHexo/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.863Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/18/apachevirtualhost/</loc>
-    
-    <lastmod>2018-04-14T23:36:08.863Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://runnerliu.github.io/2017/06/07/sharesession/</loc>
     
     <lastmod>2018-04-14T23:36:08.863Z</lastmod>
@@ -401,7 +401,21 @@
   </url>
   
   <url>
+    <loc>http://runnerliu.github.io/2017/04/02/aboutHexo/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.863Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://runnerliu.github.io/2017/06/10/abstractinterface/</loc>
+    
+    <lastmod>2018-04-14T23:36:08.863Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/18/apachevirtualhost/</loc>
     
     <lastmod>2018-04-14T23:36:08.863Z</lastmod>
     
