@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2018-05-27T15:39:37.662Z</updated>
+  <updated>2018-06-06T14:36:42.002Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -20,14 +20,14 @@
     <link href="http://runnerliu.github.io/2018/05/27/datatables1/"/>
     <id>http://runnerliu.github.io/2018/05/27/datatables1/</id>
     <published>2018-05-27T08:48:21.000Z</published>
-    <updated>2018-05-27T15:39:37.662Z</updated>
+    <updated>2018-06-06T14:36:42.002Z</updated>
     
     <content type="html"><![CDATA[<p><a href="https://datatables.net/" target="_blank" rel="external">Datatables</a> 为是 <a href="https://jquery.com/" target="_blank" rel="external">JQuery</a> 的一款表格插件库，是一个高度灵活的工具，可以将任何 HTML 表格添加高级的交互功能。特别是后台开发者，对前端相关框架或知识并不是很熟悉，在做一些内部使用的工具时，总会涉及到页面展示的功能，<a href="http://www.bootcss.com/p/buttons/" target="_blank" rel="external">Buttons</a> 同样是一个高度可定制的、免费并且开源的按钮 CSS 样式库。类似插件对于后台开发者来说，简直是福音。本文主要介绍 <a href="https://datatables.net/" target="_blank" rel="external">Datatables</a> 的基本配置和使用。</p>
 <h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>从 <a href="https://datatables.net/download/" target="_blank" rel="external">Download</a> 页面可下载需要使用的 JS 文件和其他的插件，可以根据需求选择不同的样式、包文件和扩展文件，如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Step 1. Choose a styling framework</div><div class="line">    Bootstrap 4</div><div class="line">Step 2. Select packages</div><div class="line">    jQuery 3</div><div class="line">    Bootstrap 4</div><div class="line">    DataTables</div><div class="line">Extensions</div><div class="line">    可选</div><div class="line">Step 3. Pick a download method</div><div class="line">    Minify</div><div class="line">    Concatenate</div><div class="line">    下载方式常用是CDN和本地文件方式（推荐）</div></pre></td></tr></table></figure>
 <p>然后我们下载打包好的文件到本地就可以了。</p>
 <h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><p>将文件打包下载后，因为一般页面都是在 web 应用中使用，所以笔者创建了一个简单的 <a href="http://www.tornadoweb.org/en/stable/" target="_blank" rel="external">Tornado</a> 应用，将所有的静态文件放到了 <code>/static</code> 目录下：</p>
-<p><img src="/images/2018-05-27 22:21:32.png" alt="2018-05-27 22:21:32"></p>
+<p> <img src="/images/2018-05-27T222132.png" alt="2018-05-27T222132"></p>
 <p><strong>注意：</strong> <code>jquery.js</code> 文件是必需的，目前使用 <code>3.0</code> 版本。</p>
 <p>然后我们可以创建一个简单的 HTML 静态页面，引入基本的 <code>js</code>  文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Datatables&lt;/title&gt;</div><div class="line"></div><div class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;static/js/Bootstrap-4-4.0.0/css/bootstrap.css&quot;/&gt;</div><div class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;static/js/DataTables-1.10.16/css/dataTables.bootstrap4.css&quot;/&gt;</div><div class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;static/css/datatables.min.css&quot;/&gt;</div><div class="line"></div><div class="line">    &lt;script src=&quot;static/js/jquery.js&quot;&gt;&lt;/script&gt;</div><div class="line">    &lt;script src=&quot;static/js/Bootstrap-4-4.0.0/js/bootstrap.js&quot;&gt;&lt;/script&gt;</div><div class="line">    &lt;script src=&quot;static/js/DataTables-1.10.16/js/jquery.dataTables.js&quot;&gt;&lt;/script&gt;</div><div class="line">    &lt;script src=&quot;static/js/DataTables-1.10.16/js/dataTables.bootstrap4.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
@@ -40,7 +40,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">function init_table()&#123;</div><div class="line">    $(&apos;#test_dt&apos;).DataTable(&#123;</div><div class="line">        order: [[ 0, &quot;desc&quot;]],</div><div class="line">        searching: true,</div><div class="line">        stateSave: true,</div><div class="line">        paging: true,</div><div class="line">        pagingType: &apos;full_numbers&apos;,</div><div class="line">        autoWidth: true,</div><div class="line">        responsive: false,</div><div class="line">        pageLength: 10,</div><div class="line">        destroy: true,</div><div class="line">        ajax: &#123;</div><div class="line">            &apos;url&apos;: &apos;/index&apos;,</div><div class="line">            &apos;dataSrc&apos;: handle_data_src,</div><div class="line">            &apos;type&apos;: &apos;POST&apos;,</div><div class="line">            &apos;async&apos;: false,</div><div class="line">            &apos;data&apos;: &#123;&#125;</div><div class="line">        &#125;,</div><div class="line">        columns:[</div><div class="line">            &#123;</div><div class="line">                &quot;data&quot;:&quot;id&quot;,</div><div class="line">                &quot;width&quot;: &quot;10%&quot;</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">                &quot;data&quot;:&quot;username&quot;,</div><div class="line">                &quot;width&quot;: &quot;10%&quot;</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">                &quot;data&quot;:&quot;sex&quot;,</div><div class="line">                &quot;width&quot;: &quot;10%&quot;</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">                &quot;data&quot;:&quot;address&quot;,</div><div class="line">                &quot;width&quot;: &quot;10%&quot;</div><div class="line">            &#125;,</div><div class="line">            &#123;</div><div class="line">                &quot;data&quot;:&quot;age&quot;,</div><div class="line">                &quot;width&quot;: &quot;10%&quot;</div><div class="line">            &#125;,</div><div class="line">        ],</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>通过 <code>POST</code> 方式获取表格数据，方便表格的刷新操作。其中 <code>dataSrc</code> 参数可以对请求的数据在显示到表格前做其他处理。</p>
 <p>效果图基本如下：</p>
-<p><img src="/images/2018-05-27 22:32:27.png" alt="2018-05-27 22:32:27"></p>
+<p><img src="/images/2018-05-27T223227.png" alt="2018-05-27T223227"></p>
 <h3 id="配置参数"><a href="#配置参数" class="headerlink" title="配置参数"></a>配置参数</h3><p>Datatables 支持参数配置方式以提供各种场景下对表格的需求，目前笔者主要使用的参数如下：</p>
 <table>
 <thead>
@@ -149,7 +149,7 @@
     <link href="http://runnerliu.github.io/2018/05/13/sqlalchemybug1/"/>
     <id>http://runnerliu.github.io/2018/05/13/sqlalchemybug1/</id>
     <published>2018-05-13T07:13:50.000Z</published>
-    <updated>2018-05-13T08:09:25.654Z</updated>
+    <updated>2018-06-06T14:28:22.587Z</updated>
     
     <content type="html"><![CDATA[<p>项目框架采用 Tornado ，SQLAlchemy 作为数据库ORM，简陋的代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">def query(self, filters, orders=&apos;&apos;):</div><div class="line">    try:</div><div class="line">        if not isinstance(filters, str) or not isinstance(orders, str):</div><div class="line">            return False</div><div class="line">        if not len(orders):</div><div class="line">            return self.s.query(Node).filter(filters).first()</div><div class="line">        else:</div><div class="line">            r = self.s.query(Node).filter(filters).order_by(orders).all()</div><div class="line">            if len(r):</div><div class="line">                return r[0]</div><div class="line">            return None</div><div class="line">    except Exception as e:</div><div class="line">        self.logger.error(traceback.format_exc())</div><div class="line">        return None</div><div class="line">    finally:</div><div class="line">        Session.remove()</div></pre></td></tr></table></figure>
@@ -196,7 +196,7 @@
     <link href="http://runnerliu.github.io/2018/05/13/httppostmethod/"/>
     <id>http://runnerliu.github.io/2018/05/13/httppostmethod/</id>
     <published>2018-05-13T06:17:00.000Z</published>
-    <updated>2018-05-13T06:49:32.122Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<p><a href="http://www.ietf.org/rfc/rfc2616.txt" target="_blank" rel="external">HTTP/1.1协议</a> 规定的 HTTP 请求方法有 OPTIONS、GET、HEAD、POST、PUT、DELETE、TRACE、CONNECT这几种。其中 POST 一般用来向服务端提交数据，我们在写类似接口文档这种被业务方调用的服务时，涉及到 POST 的默认提交方式基本都是：<code>application/x-www-form-urlencoded</code> 。本 文主要讨论 POST 提交数据的几种方式。</p>
 <p>我们知道，HTTP 协议是以 <strong>ASCII</strong> 码传输，建立在 TCP/IP 协议之上的应用层规范。规范把 HTTP 请求分为三个部分：状态行、请求头、消息主体。类似于下面这样：</p>
@@ -249,7 +249,7 @@
     <link href="http://runnerliu.github.io/2018/05/06/distlock/"/>
     <id>http://runnerliu.github.io/2018/05/06/distlock/</id>
     <published>2018-05-06T05:28:07.000Z</published>
-    <updated>2018-05-11T14:29:31.796Z</updated>
+    <updated>2018-06-06T14:34:32.973Z</updated>
     
     <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：</p>
 <blockquote>
@@ -421,7 +421,7 @@
 </ol>
 <p>使用 Redlock 算法，可以保证在挂掉最多 2 个节点的时候，分布式锁服务仍然能工作，这相比之前的数据库锁和缓存锁大大提高了可用性，由于 redis 的高效性能，分布式缓存锁性能并不比数据库锁差。</p>
 <h4 id="分布式锁-基于Zookeeper"><a href="#分布式锁-基于Zookeeper" class="headerlink" title="分布式锁-基于Zookeeper"></a>分布式锁-基于Zookeeper</h4><p>ZooKeeper的架构通过冗余服务实现高可用性。因此，如果第一次无应答，客户端就可以询问另一台ZooKeeper主机。ZooKeeper节点将它们的数据存储于一个分层的命名空间，非常类似于一个文件系统或一个前缀树结构。客户端可以在节点读写，从而以这种方式拥有一个共享的配置服务，更新是全序的。</p>
-<p><img src="/images/２０１８－０５－０６　１８：４１：４０.png" alt="２０１８－０５－０６　１８：４１：４０"></p>
+<p> <img src="/images/2018-05-06T184140.png" alt="2018-05-06T184140"></p>
 <p>上图为系统架构，左边区域表示一个ZooKeeper集群，locker是ZooKeeper的一个持久节点，node_1、node_2、node_3是locker这个持久节点下面的临时顺序节点。client_1、client_2、client_3表示多个客户端，Share_Service表示需要互斥访问的共享资源。</p>
 <p>Zookeeper实现分布式锁的思路：</p>
 <ol>
@@ -429,9 +429,10 @@
 <li>其中某个客户端成功创建 lock 节点，其他客户端对 lock 节点设置 watcher；</li>
 <li>持有锁的客户端删除 lock 节点或该客户端崩溃，由 Zookeeper 删除 lock 节点；</li>
 <li>其他客户端获得 lock 节点被删除的通知；</li>
-<li>重复上述4个步骤，直至无客户端在等待获取锁了。</li>
+<li><p>重复上述4个步骤，直至无客户端在等待获取锁了。</p>
+<p><img src="/images/2018-05-06T190223.png" alt="2018-05-06T190223"></p>
+</li>
 </ol>
-<p><img src="/images/２０１８－０５－０６　１９：１８：１３.png" alt="２０１８－０５－０６　１９：０２：２３"></p>
 <p>Zookeeper方式性能上可能并没有缓存服务那么高，因为每次在创建锁和释放锁的过程中，都要动态创建、销毁临时节点来实现锁功能。ZK 中创建和删除节点只能通过 Leader 服务器来执行，然后将数据同步到所有的 Follower 机器上。</p>
 <p>由于目前理解有限，一些细节需要进一步确定和实践，不当之处请指正。</p>
 <p>Read More:</p>
@@ -464,7 +465,7 @@
     <link href="http://runnerliu.github.io/2018/04/30/kafkasave/"/>
     <id>http://runnerliu.github.io/2018/04/30/kafkasave/</id>
     <published>2018-04-30T12:05:02.000Z</published>
-    <updated>2018-05-04T14:43:31.043Z</updated>
+    <updated>2018-06-06T14:32:57.381Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><blockquote>
 <p>Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多副本的、多订阅者，基于 zookeeper 协调的分布式日志系统（也可以当做 MQ 系统），常见可以用于 web/nginx 日志、访问日志，消息服务等等，  Linkedin 于2010年贡献给了 Apache 基金会并成为顶级开源项目。</p>
@@ -491,7 +492,7 @@
 <p>在Kafka文件存储中，同一个topic下有多个不同partition，每个partition为一个目录，partiton命名规则为topic名称+有序序号，第一个partiton序号从0开始，序号最大值为partitions数量减1。</p>
 <p>如果是多broker分布情况，请参考<a href="http://blog.csdn.net/lizhitao/article/details/41778193" target="_blank" rel="external">kafka集群partition分布原理分析</a></p>
 <h4 id="partiton中文件存储方式"><a href="#partiton中文件存储方式" class="headerlink" title="partiton中文件存储方式"></a>partiton中文件存储方式</h4><p>下面示意图形象说明了partition中文件存储方式：</p>
-<p><img src="/images/２０１８－０４－３０　２０：３８：３５.png" alt="２０１８－０４－３０　２０：３８：３５"></p>
+<p> <img src="/images/2018-04-30T203835.png" alt="2018-04-30T203835"></p>
 <ul>
 <li>每个partion(目录)相当于一个巨型文件被平均分配到多个大小相等segment(段)数据文件中。但每个段segment file消息数量不一定相等，这种特性方便old segment file快速被删除；</li>
 <li>每个partiton只需要支持顺序读写就行了，segment文件生命周期由服务端配置参数决定。</li>
@@ -502,13 +503,13 @@
 <li>segment文件命名规则：partion全局的第一个segment从0开始，后续每个segment文件名为上一个segment文件最后一条消息的offset值。数值最大为64位long大小，19位数字字符长度，没有数字用0填充。</li>
 </ul>
 <p>下面文件列表是笔者在Kafka broker上做的一个实验，创建一个topicXXX包含1 partition，设置每个segment大小为500MB，并启动producer向Kafka broker写入大量数据，如下图所示segment文件列表形象说明了上述2个规则：</p>
-<p><img src="/images/２０１８－０４－３０　２０：４１：１１.png" alt="２０１８－０４－３０　２０：４１：１１"></p>
+<p> <img src="/images/2018-04-30T204111.png" alt="2018-04-30T204111"></p>
 <p>以上述图2中一对segment file文件为例，说明segment中index&lt;—&gt;data file对应关系物理结构如下：</p>
-<p><img src="/images/２０１８－０４－３０　２０：４２：１３.png" alt="２０１８－０４－３０　２０：４２：１３"></p>
+<p> <img src="/images/2018-04-30T204213.png" alt="2018-04-30T204213"></p>
 <p>上述图3中索引文件存储大量元数据，数据文件存储大量消息，索引文件中元数据指向对应数据文件中message的物理偏移地址。</p>
 <p>其中以索引文件中元数据3,497为例，依次在数据文件中表示第3个message(在全局partiton表示第368772个message)、以及该消息的物理偏移地址为497。</p>
 <p>从上图了解到segment data file由许多message组成，下面详细说明message物理结构如下：</p>
-<p><img src="/images/２０１８－０４－３０　２０：４３：２７.png" alt="２０１８－０４－３０　２０：４３：２７"></p>
+<p> <img src="/images/2018-04-30T204327.png" alt="2018-04-30T204327"></p>
 <table>
 <thead>
 <tr>
@@ -564,9 +565,10 @@
 <li>物理内存：8GB</li>
 <li>网卡：千兆网卡</li>
 <li>jvm heap: 4GB</li>
-<li>详细Kafka服务端配置及其优化请参考：<a href="http://blog.csdn.net/lizhitao/article/details/25667831" target="_blank" rel="external">kafka server.properties配置详解</a></li>
+<li><p>详细Kafka服务端配置及其优化请参考：<a href="http://blog.csdn.net/lizhitao/article/details/25667831" target="_blank" rel="external">kafka server.properties配置详解</a></p>
+<p><img src="/images/2018-04-30T205037.png" alt="2018-04-30T205037"></p>
+</li>
 </ul>
-<p><img src="/images/２０１８－０４－３０　２０：５０：３７.png" alt="２０１８－０４－３０　２０：５０：３７"></p>
 <p>从上图可以看出，Kafka运行时很少有大量读磁盘的操作，主要是定期批量写磁盘操作，因此操作磁盘很高效。这跟Kafka文件存储中读写message的设计是息息相关的。Kafka中读写message有如下特点:</p>
 <p>写message</p>
 <ul>
@@ -612,7 +614,7 @@
     <link href="http://runnerliu.github.io/2018/04/15/linuxls/"/>
     <id>http://runnerliu.github.io/2018/04/15/linuxls/</id>
     <published>2018-04-14T23:56:20.000Z</published>
-    <updated>2018-04-14T23:58:15.294Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<p>Linux ls命令用于显示指定工作目录下之内容（列出目前工作目录所含之文件及子目录），在Linux中是使用率较高的命令，ls命令的输出信息可以进行彩色加亮显示，以区分不同类型的文件。</p>
 <h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls [OPTION]... [FILE]...</div></pre></td></tr></table></figure>
@@ -802,7 +804,7 @@
     <link href="http://runnerliu.github.io/2018/04/15/linuxcd/"/>
     <id>http://runnerliu.github.io/2018/04/15/linuxcd/</id>
     <published>2018-04-14T23:48:17.000Z</published>
-    <updated>2018-04-14T23:50:50.402Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<p>Linux cd命令用于切换当前工作目录至目标目录。其中目标目录表示法可为绝对路径或相对路径，若目录名称省略，则变换至使用者的 <code>home</code> 目录。</p>
 <p>另外，”~” 也表示为 <code>home</code> 目录的意思，”.” 则是表示当前所在的目录，”..” 则表示目前目录位置的上一层目录。</p>
@@ -873,7 +875,7 @@
     <link href="http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/"/>
     <id>http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/</id>
     <published>2018-01-04T14:17:29.000Z</published>
-    <updated>2018-04-14T23:36:08.911Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<p><a href="https://kafka.apache.org/" target="_blank" rel="external">kafka</a> 是一种高吞吐量的分布式发布订阅消息系统。现在它已被 <a href="https://cwiki.apache.org/confluence/display/KAFKA/Powered+By" target="_blank" rel="external">多家不同类型的公司</a> 作为多种类型的数据管道和消息系统使用。Python对kafka的操作库主要有 <a href="https://github.com/Parsely/pykafka" target="_blank" rel="external">pykafka</a> 、<a href="https://github.com/confluentinc/confluent-kafka-python" target="_blank" rel="external">confluent-kafka-python</a> 、<a href="https://github.com/edenhill/librdkafka" target="_blank" rel="external">librdkafka</a> ，pykafka是Python内置的kafka操作模块，纯Python编写，提供 <a href="http://pykafka.readthedocs.io/en/latest/api/simpleconsumer.html" target="_blank" rel="external">simpleconsumer</a> 、<a href="http://pykafka.readthedocs.io/en/latest/api/balancedconsumer.html" target="_blank" rel="external">balancedconsumer</a> 两种消费方式。</p>
 <p>其实严格意义上来说，librdkafka并不是kafka的操作库，它是Apache Kafka协议的C库实现，包含Producer和Consumer支持。</p>
@@ -981,7 +983,7 @@
     <link href="http://runnerliu.github.io/2018/01/04/linuxtar/"/>
     <id>http://runnerliu.github.io/2018/01/04/linuxtar/</id>
     <published>2018-01-04T14:15:40.000Z</published>
-    <updated>2018-04-14T23:36:08.915Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<p>通过SSH访问服务器，难免会要用到压缩、解压缩、打包、解包等操作，这时候<code>tar</code>命令是必不可少的一个功能强大的工具。</p>
 <p>tar命令可以为Linux的文件和目录创建档案。利用<code>tar</code>可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件。<code>tar</code>最初被用来在磁带上创建档案，现在，用户可以在任何设备上创建档案。</p>
@@ -1175,7 +1177,7 @@
     <link href="http://runnerliu.github.io/2018/01/04/linuxln/"/>
     <id>http://runnerliu.github.io/2018/01/04/linuxln/</id>
     <published>2018-01-04T14:14:10.000Z</published>
-    <updated>2018-04-14T23:36:08.911Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<p>Linux ln命令是一个非常重要命令，它的功能是为某一个文件在另外一个位置建立一个同步的链接。当我们需要在不同的目录，用到相同的文件时，我们不需要在每一个需要的目录下都放一个必须相同的文件，我们只要在某个固定的目录，放上该文件，然后在 其它的目录下用ln命令链接（link）它就可以，不必重复的占用磁盘空间。</p>
 <h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln [参数] [源文件或目录] [目标文件或目录]</div></pre></td></tr></table></figure>
@@ -1303,7 +1305,7 @@
     <link href="http://runnerliu.github.io/2018/01/04/linuxcp/"/>
     <id>http://runnerliu.github.io/2018/01/04/linuxcp/</id>
     <published>2018-01-04T14:11:57.000Z</published>
-    <updated>2018-04-14T23:36:08.911Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<p>Linux cp命令主要用于复制文件或目录，一般情况下，shell会设置一个别名，在命令行下复制文件时，如果目标文件已经存在，就会询问是否覆盖，不管你是否使用-i参数。但是如果是在shell脚本中执行cp时，没有-i参数时不会询问是否覆盖。这说明命令行和shell脚本的执行方式有些不同。 </p>
 <h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp [options] source dest</div><div class="line">cp [options] source... directory</div></pre></td></tr></table></figure>
@@ -1418,7 +1420,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/windowskillprocess/"/>
     <id>http://runnerliu.github.io/2018/01/02/windowskillprocess/</id>
     <published>2018-01-02T14:59:25.000Z</published>
-    <updated>2018-04-14T23:36:08.959Z</updated>
+    <updated>2018-06-06T14:28:22.587Z</updated>
     
     <content type="html"><![CDATA[<p>开始–&gt;运行–&gt;cmd，进入命令提示符输入<code>netstat -ano</code> 即可看到所有连接的PID，然后在任务管理器中找到这个PID所对应的程序，如果任务管理器中没有PID这一项，可以在任务管理器中选”查看” -&gt; “选择列”。</p>
 <p>经常，我们在启动应用的时候发现系统需要的端口被别的程序占用，如何知道谁占有了我们需要的端口，下面介绍一种非常简单的方法。</p>
@@ -1454,7 +1456,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/"/>
     <id>http://runnerliu.github.io/2018/01/02/pythoncontextmanager/</id>
     <published>2018-01-02T14:54:29.000Z</published>
-    <updated>2018-04-14T23:36:08.955Z</updated>
+    <updated>2018-06-06T14:28:22.571Z</updated>
     
     <content type="html"><![CDATA[<h4 id="何为上下文管理器"><a href="#何为上下文管理器" class="headerlink" title="何为上下文管理器"></a>何为上下文管理器</h4><p>上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。</p>
 <p>例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码块执行前准备，代码块执行后收拾。上下文管理器是在Python2.5加入的功能，它能够让你的代码可读性更强并且错误更少。</p>
@@ -1515,7 +1517,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/linuxnetstat/"/>
     <id>http://runnerliu.github.io/2018/01/02/linuxnetstat/</id>
     <published>2018-01-02T14:49:16.000Z</published>
-    <updated>2018-04-14T23:36:08.911Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat [-acCeFghilMnNoprstuvVwx][-A&lt;网络类型&gt;][--ip]</div></pre></td></tr></table></figure>
 <h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>Linux netstat命令用于显示网络状态，一般用于检验本机各端口的网络连接情况。netstat是在内核中访问网络及相关信息的程序，它能提供TCP连接，TCP和UDP监听，进程内存管理的相关报告。</p>
@@ -1755,7 +1757,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/linuxping/"/>
     <id>http://runnerliu.github.io/2018/01/02/linuxping/</id>
     <published>2018-01-02T14:45:06.000Z</published>
-    <updated>2018-04-14T23:36:08.915Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ping [参数] [主机名称或IP地址]</div></pre></td></tr></table></figure>
 <h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>ping命令用来测试主机之间网络的连通性。执行ping指令会使用ICMP传输协议，发出要求回应的信息，若远端主机的网络功能没有问题，就会回应该信息，因而得知该主机运作正常。</p>
@@ -1884,7 +1886,7 @@
     <link href="http://runnerliu.github.io/2018/01/02/linuxps/"/>
     <id>http://runnerliu.github.io/2018/01/02/linuxps/</id>
     <published>2018-01-02T14:38:35.000Z</published>
-    <updated>2018-04-14T23:36:08.915Z</updated>
+    <updated>2018-06-06T14:28:22.555Z</updated>
     
     <content type="html"><![CDATA[<p>Linux中的ps命令是Process Status的缩写。用来列出系统中当前运行的那些进程。ps命令列出的是当前那些进程的快照，就是执行ps命令的那个时刻的那些进程，如果想要动态的显示进程信息，就可以使用top命令。</p>
 <p>要对进程进行监测和控制，首先必须要了解当前进程的情况，也就是需要查看当前进程，ps 命令是最基本同时也是非常强大的进程查看命令。使用该命令可以确定有哪些进程正在运行和运行的状态、进程是否结束、进程有没有僵死、哪些进程占用了过多的资源等等。总之大部分信息都是可以通过执行该命令得到的。</p>
@@ -2108,7 +2110,7 @@
     <link href="http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/"/>
     <id>http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/</id>
     <published>2017-10-11T11:38:35.000Z</published>
-    <updated>2018-04-14T23:36:08.959Z</updated>
+    <updated>2018-06-06T14:28:22.587Z</updated>
     
     <content type="html"><![CDATA[<p>每次安装 Sublime Text 3 后邮件菜单总是没有，但是 notepad++ 安装后会自动加到邮件菜单，对于 Sublime Text 3 的忠实粉丝来说简直丧心病狂，所以搜罗了一些方法来完成这件事儿。</p>
 <h4 id="方式1"><a href="#方式1" class="headerlink" title="方式1"></a>方式1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[Version]</div><div class="line">Signature=&quot;$Windows NT$&quot;</div><div class="line"></div><div class="line">[DefaultInstall]</div><div class="line">AddReg=SublimeText3</div><div class="line"></div><div class="line">[SublimeText3]</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3&quot;,,,&quot;Edit with Sublime Text 3&quot;</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3\\command&quot;,,,&quot;&quot;&quot;%1%\sublime_text.exe&quot;&quot; &quot;&quot;%%1&quot;&quot; %%*&quot;</div><div class="line">hkcr,&quot;Directory\shell\SublimeText3&quot;,,,&quot;Edit with Sublime Text 3&quot;</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3&quot;,&quot;Icon&quot;,0x20000,&quot;%1%\sublime_text.exe, 0&quot;</div><div class="line">hkcr,&quot;Directory\shell\SublimeText3\command&quot;,,,&quot;&quot;&quot;%1%\sublime_text.exe&quot;&quot; &quot;&quot;%%1&quot;&quot;&quot;</div></pre></td></tr></table></figure>
@@ -2149,7 +2151,7 @@
     <link href="http://runnerliu.github.io/2017/10/09/gitcommand/"/>
     <id>http://runnerliu.github.io/2017/10/09/gitcommand/</id>
     <published>2017-10-09T12:39:43.000Z</published>
-    <updated>2018-04-14T23:36:08.903Z</updated>
+    <updated>2018-06-06T14:28:22.540Z</updated>
     
     <content type="html"><![CDATA[<h3 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h3><p><code>git add</code> 命令将文件内容添加到索引（将修改添加到暂存区）。也就是将要提交的文件的信息添加到索引库中。</p>
 <h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>将要提交的文件的信息添加到索引库中（将修改添加到暂存区），以准备为下一次提交分段的内容。 它通常将现有路径的当前内容作为一个整体添加，但是通过一些选项，它也可以用于添加内容，只对所应用的工作树文件进行一些更改，或删除工作树中不存在的路径了。</p>
@@ -2199,7 +2201,7 @@
     <link href="http://runnerliu.github.io/2017/09/03/nginxtornadosupervisor/"/>
     <id>http://runnerliu.github.io/2017/09/03/nginxtornadosupervisor/</id>
     <published>2017-09-03T08:21:00.000Z</published>
-    <updated>2018-04-14T23:36:08.935Z</updated>
+    <updated>2018-06-06T14:28:22.571Z</updated>
     
     <content type="html"><![CDATA[<p>在项目中应用到了 Tornado 框架，开始时只是单进程裸跑 Tornado 实例，但是在高并发的情况下，单进程无法满足上千的连接请求。Nginx 是我们熟知的反向代理服务器，它可以支持上万的平行连接，在与 PHP、Python 集成后可以应用在大规模的集群上，Nginx 同时也可以用作负载平衡器，以减小单点服务器的压力。</p>
 <p><a href="http://supervisord.org/" target="_blank" rel="external">Supervisor</a> 是一个进程管理工具，我们可以使用它管理多个 Tornado 实例，非常方便。</p>
@@ -2270,7 +2272,7 @@
     <link href="http://runnerliu.github.io/2017/09/03/nginxstartpoweron/"/>
     <id>http://runnerliu.github.io/2017/09/03/nginxstartpoweron/</id>
     <published>2017-09-03T08:18:37.000Z</published>
-    <updated>2018-04-14T23:36:08.935Z</updated>
+    <updated>2018-06-06T14:28:22.571Z</updated>
     
     <content type="html"><![CDATA[<p>Nginx 是一个很强大的高性能 Web 和反向代理服务器。虽然使用命令行可以对 nginx 进行各种操作，比如启动等，但是还是根据不太方便。下面介绍在 Linux 下安装后，如何设置开机自启动。</p>
 <p>首先，在 Linux 系统的 <code>/etc/init.d/</code> 目录下创建 nginx 文件，使用如下命令：</p>
