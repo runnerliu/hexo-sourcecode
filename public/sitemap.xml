@@ -2,21 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://runnerliu.github.io/2017/07/15/jsmjiomj/</loc>
+    <loc>http://runnerliu.github.io/about/index.html</loc>
     
-    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2018/04/30/kafkasave/</loc>
-    
-    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    <lastmod>2018-06-09T03:21:59.486Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/05/06/distlock/</loc>
+    <loc>http://runnerliu.github.io/2018/04/15/linuxls/</loc>
     
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     
@@ -37,7 +30,7 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/04/15/linuxcd/</loc>
+    <loc>http://runnerliu.github.io/2018/04/30/kafkasave/</loc>
     
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     
@@ -51,7 +44,21 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/04/15/linuxls/</loc>
+    <loc>http://runnerliu.github.io/2018/05/06/distlock/</loc>
+    
+    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2018/04/15/linuxcd/</loc>
+    
+    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/15/jsmjiomj/</loc>
     
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     
@@ -180,13 +187,6 @@
     <loc>http://runnerliu.github.io/2017/08/28/mysqltransaction/</loc>
     
     <lastmod>2017-08-28T12:05:56.719Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/about/index.html</loc>
-    
-    <lastmod>2017-08-27T06:30:54.995Z</lastmod>
     
   </url>
   
