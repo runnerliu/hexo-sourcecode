@@ -99,7 +99,7 @@
 <meta property="og:description" content="Datatables 为是 JQuery 的一款表格插件库，是一个高度灵活的工具，可以将任何 HTML 表格添加高级的交互功能。特别是后台开发者，对前端相关框架或知识并不是很熟悉，在做一些内部使用的工具时，总会涉及到页面展示的功能，Buttons 同样是一个高度可定制的、免费并且开源的按钮 CSS 样式库。类似插件对于后台开发者来说，简直是福音。本文主要介绍 Datatables 的基本配置和使用">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-05-27T222132.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-05-27T223227.png">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:updated_time" content="2018-06-09T03:44:37.128Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Datatables使用系列-基础配置">
 <meta name="twitter:description" content="Datatables 为是 JQuery 的一款表格插件库，是一个高度灵活的工具，可以将任何 HTML 表格添加高级的交互功能。特别是后台开发者，对前端相关框架或知识并不是很熟悉，在做一些内部使用的工具时，总会涉及到页面展示的功能，Buttons 同样是一个高度可定制的、免费并且开源的按钮 CSS 样式库。类似插件对于后台开发者来说，简直是福音。本文主要介绍 Datatables 的基本配置和使用">
@@ -502,18 +502,30 @@
 </tbody>
 </table>
 <p>其他参数设置可参考 <a href="https://datatables.net/manual/options" target="_blank" rel="external">Options</a> 。</p>
-<h3 id="Tips-持续更新"><a href="#Tips-持续更新" class="headerlink" title="Tips[持续更新]"></a>Tips[持续更新]</h3><p>ajax.reload()</p>
+<h3 id="Tips-持续更新"><a href="#Tips-持续更新" class="headerlink" title="Tips[持续更新]"></a>Tips[持续更新]</h3><p><strong>ajax.reload()</strong></p>
 <p>场景：间隔一定时间进行局部刷新。</p>
 <p>该场景下如果每次都初始化 datatables ，则会使表格在刷新时失去鼠标控制，用户体验较差。使用 <code>ajax.reload(callback, resetPaging)</code> 方式可以在重复初始化 <code>datatables</code> 下重新加载数据，如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(&apos;#test_dt&apos;).DataTable().ajax.reload(null, false);</div></pre></td></tr></table></figure>
 <p>当使用该方式时，如果 <code>ajax</code> 提交的请求 <code>data</code> 字段带的参数值需要动态更新的话，可以使用：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&apos;data&apos;: function(d)&#123;</div><div class="line">    d.test_name = test_name;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>通过 <code>js</code> 函数动态更新参数值，这样在 <code>reload</code> 表格时，提交的参数就是动态获取的了。</p>
-<p>render</p>
+<p><strong>render</strong></p>
 <p>场景：获取数据后，需要根据某列值对数据进行预处理。</p>
 <p>我们可以在 <code>dataSrc</code> 中对数据进行处理，但是 <code>Datatables</code> 提供了另外一种更加方便的处理方式，即 <a href="https://datatables.net/reference/option/columns.render" target="_blank" rel="external">columns.render</a> 方法，如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    &quot;data&quot;:&quot;address&quot;,</div><div class="line">    render: function (data, type, row, meta) &#123;</div><div class="line">        var node = &quot;&lt;span &quot;;</div><div class="line">        if (data &lt;= bw_warn) &#123;</div><div class="line">            node += &quot;style=&apos;color:red;font-weight: bold;&apos;&quot;</div><div class="line">        &#125;</div><div class="line">        node += &quot;&gt;&quot; + data + &quot;&lt;/span&gt;&quot;</div><div class="line">        return node;</div><div class="line">    &#125;,</div><div class="line">    &quot;width&quot;: &quot;10%&quot;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
 <p>可以根据列值，对该列的显示添加其他的 <code>css</code> 属性。</p>
+<p><strong>自定义排序</strong></p>
+<p>Datatables 可以根据指定的列进行排序，但是实际场景中某列值可能较为复杂，而我们只需使用其中的一部分进行排序，例如：去掉前缀。Datatables 的扩展插件提供了很多较为强大的<a href="https://datatables.net/plug-ins/sorting/" target="_blank" rel="external">自定义排序功能</a>。</p>
+<p>例如：去掉前缀字符 <code>prefix</code> ，将剩下字符作为整型排序，可以参考 <a href="https://datatables.net/plug-ins/sorting/anti-the" target="_blank" rel="external">Anti-the</a>。</p>
+<p>首先新建一个名为 jquery.datatable.sort.plugin.js 文件，将以下 copy 到文件中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">jQuery.extend( jQuery.fn.dataTableExt.oSort, &#123;</div><div class="line">    &quot;anti-prefix-pre&quot;: function ( a ) &#123;</div><div class="line">        var x = a.replace(/^prefix /i, &quot;&quot;);</div><div class="line">        return parseInt(x);</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    &quot;anti-prefix-asc&quot;: function ( a, b ) &#123;</div><div class="line">        return ((a &lt; b) ? -1 : ((a &gt; b) ? 1 : 0));</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    &quot;anti-prefix-desc&quot;: function ( a, b ) &#123;</div><div class="line">        return ((a &lt; b) ? 1 : ((a &gt; b) ? -1 : 0));</div><div class="line">    &#125;</div><div class="line">&#125; );</div></pre></td></tr></table></figure>
+<p>然后在页面中按照如下方式引用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/path/jquery.datatable.sort.plugin.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure>
+<p>最后在 Datatables 中加入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">columnDefs: [</div><div class="line">    &#123; type: &apos;anti-prefix&apos;, targets: 0 &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>其中：targets 表示列编号，从0开始。</p>
+<p>Example：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$(&apos;#example&apos;).dataTable( &#123;</div><div class="line">    columnDefs: [</div><div class="line">        &#123; type: &apos;anti-the&apos;, targets: 0 &#125;</div><div class="line">    ]</div><div class="line">&#125; );</div></pre></td></tr></table></figure>
 <p>Read More:</p>
 <blockquote>
 <p><a href="https://datatables.net/" target="_blank" rel="external">Datatables</a> </p>

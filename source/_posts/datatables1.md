@@ -162,7 +162,7 @@ Datatables 支持参数配置方式以提供各种场景下对表格的需求，
 
 ### Tips[持续更新]
 
-ajax.reload()
+**ajax.reload()**
 
 场景：间隔一定时间进行局部刷新。
 
@@ -182,7 +182,7 @@ $('#test_dt').DataTable().ajax.reload(null, false);
 
 通过 `js` 函数动态更新参数值，这样在 `reload` 表格时，提交的参数就是动态获取的了。
 
-render
+**render**
 
 场景：获取数据后，需要根据某列值对数据进行预处理。
 
@@ -204,6 +204,57 @@ render
 ```
 
 可以根据列值，对该列的显示添加其他的 `css` 属性。
+
+**自定义排序**
+
+Datatables 可以根据指定的列进行排序，但是实际场景中某列值可能较为复杂，而我们只需使用其中的一部分进行排序，例如：去掉前缀。Datatables 的扩展插件提供了很多较为强大的[自定义排序功能](https://datatables.net/plug-ins/sorting/)。
+
+例如：去掉前缀字符 `prefix` ，将剩下字符作为整型排序，可以参考 [Anti-the](https://datatables.net/plug-ins/sorting/anti-the)。
+
+首先新建一个名为 jquery.datatable.sort.plugin.js 文件，将以下 copy 到文件中。
+
+```
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "anti-prefix-pre": function ( a ) {
+        var x = a.replace(/^prefix /i, "");
+        return parseInt(x);
+    },
+ 
+    "anti-prefix-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+ 
+    "anti-prefix-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
+```
+
+然后在页面中按照如下方式引用
+
+```
+<script type="text/javascript" src="/path/jquery.datatable.sort.plugin.js"></script>
+```
+
+最后在 Datatables 中加入
+
+```
+columnDefs: [
+    { type: 'anti-prefix', targets: 0 }
+]
+```
+
+其中：targets 表示列编号，从0开始。
+
+Example：
+
+```
+$('#example').dataTable( {
+    columnDefs: [
+        { type: 'anti-the', targets: 0 }
+    ]
+} );
+```
 
 
 
