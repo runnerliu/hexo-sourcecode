@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>http://runnerliu.github.io/2018/06/10/requests-session/</loc>
+    <lastmod>2018-06-10T14:27:49.834Z</lastmod>
+    <data>
+        <display>
+        <title>Requests库 - 会话对象</title>
+        <pubTime>2018-06-10T14:01:44.000Z</pubTime>
+        
+        <tag>requests</tag>
+         
+        <tag>session</tag>
+         
+        <tag>会话对象</tag>
+         
+         
+           
+             
+              <breadCrumb title="requests" url="http://runnerliu.github.io/categories/requests/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://runnerliu.github.io/2018/06/03/tornado502_start/</loc>
     <lastmod>2018-06-10T13:51:14.171Z</lastmod>
     <data>
@@ -117,45 +141,23 @@
     
     
   <url>
-    <loc>http://runnerliu.github.io/2017/07/16/linuxyhtnht/</loc>
+    <loc>http://runnerliu.github.io/2017/07/15/myisaminnodb/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
         <display>
-        <title>Linux的用户态和内核态</title>
-        <pubTime>2017-07-16T07:18:39.000Z</pubTime>
+        <title>MySQL存储引擎InnoDB与MyISAM的区别</title>
+        <pubTime>2017-07-15T11:29:44.000Z</pubTime>
         
-        <tag>Linux</tag>
+        <tag>MySQL</tag>
          
-        <tag>用户态</tag>
+        <tag>InnoDB</tag>
          
-        <tag>内核态</tag>
+        <tag>MyISAM</tag>
          
          
            
              
-              <breadCrumb title="Linux/Unix" url="http://runnerliu.github.io/categories/Linux-Unix/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://runnerliu.github.io/2017/06/10/abstractinterface/</loc>
-    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
-    <data>
-        <display>
-        <title>抽象类和接口的区别</title>
-        <pubTime>2017-06-10T09:27:45.000Z</pubTime>
-        
-        <tag>抽象类</tag>
-         
-        <tag>接口</tag>
-         
-         
-           
-             
-              <breadCrumb title="基本概念" url="http://runnerliu.github.io/categories/%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"/>
+              <breadCrumb title="MySQL" url="http://runnerliu.github.io/categories/MySQL/"/>
           
         </display>
     </data>
@@ -747,23 +749,23 @@
 
     
   <url>
-    <loc>http://runnerliu.github.io/2017/04/02/aboutHexo/</loc>
+    <loc>http://runnerliu.github.io/2017/07/16/linuxyhtnht/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
         <display>
-        <title>Hexo原理及其常用命令</title>
-        <pubTime>2017-04-02T02:35:08.000Z</pubTime>
+        <title>Linux的用户态和内核态</title>
+        <pubTime>2017-07-16T07:18:39.000Z</pubTime>
         
-        <tag>Hexo</tag>
+        <tag>Linux</tag>
          
-        <tag>原理</tag>
+        <tag>用户态</tag>
          
-        <tag>命令</tag>
+        <tag>内核态</tag>
          
          
            
              
-              <breadCrumb title="Hexo" url="http://runnerliu.github.io/categories/Hexo/"/>
+              <breadCrumb title="Linux/Unix" url="http://runnerliu.github.io/categories/Linux-Unix/"/>
           
         </display>
     </data>
@@ -771,23 +773,21 @@
 
     
   <url>
-    <loc>http://runnerliu.github.io/2017/07/15/myisaminnodb/</loc>
+    <loc>http://runnerliu.github.io/2017/06/10/abstractinterface/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
         <display>
-        <title>MySQL存储引擎InnoDB与MyISAM的区别</title>
-        <pubTime>2017-07-15T11:29:44.000Z</pubTime>
+        <title>抽象类和接口的区别</title>
+        <pubTime>2017-06-10T09:27:45.000Z</pubTime>
         
-        <tag>MySQL</tag>
+        <tag>抽象类</tag>
          
-        <tag>InnoDB</tag>
-         
-        <tag>MyISAM</tag>
+        <tag>接口</tag>
          
          
            
              
-              <breadCrumb title="MySQL" url="http://runnerliu.github.io/categories/MySQL/"/>
+              <breadCrumb title="基本概念" url="http://runnerliu.github.io/categories/%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"/>
           
         </display>
     </data>
@@ -1101,6 +1101,28 @@
 
     
   <url>
+    <loc>http://runnerliu.github.io/2017/04/18/apachevirtualhost/</loc>
+    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>Apache2.4配置虚拟主机</title>
+        <pubTime>2017-04-18T08:10:04.000Z</pubTime>
+        
+        <tag>Apache</tag>
+         
+        <tag>虚拟主机</tag>
+         
+         
+           
+             
+              <breadCrumb title="Web" url="http://runnerliu.github.io/categories/Web/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://runnerliu.github.io/2017/06/07/sharesession/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
@@ -1233,50 +1255,6 @@
 
     
   <url>
-    <loc>http://runnerliu.github.io/2017/07/15/threadsubprocess/</loc>
-    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
-    <data>
-        <display>
-        <title>子进程和线程的区别</title>
-        <pubTime>2017-07-15T06:37:35.000Z</pubTime>
-        
-        <tag>线程</tag>
-         
-        <tag>子进程</tag>
-         
-         
-           
-             
-              <breadCrumb title="进程/线程" url="http://runnerliu.github.io/categories/%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/18/apachevirtualhost/</loc>
-    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
-    <data>
-        <display>
-        <title>Apache2.4配置虚拟主机</title>
-        <pubTime>2017-04-18T08:10:04.000Z</pubTime>
-        
-        <tag>Apache</tag>
-         
-        <tag>虚拟主机</tag>
-         
-         
-           
-             
-              <breadCrumb title="Web" url="http://runnerliu.github.io/categories/Web/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://runnerliu.github.io/2017/05/20/badtasteofcode/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
@@ -1336,6 +1314,54 @@
            
              
               <breadCrumb title="算法" url="http://runnerliu.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/15/threadsubprocess/</loc>
+    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>子进程和线程的区别</title>
+        <pubTime>2017-07-15T06:37:35.000Z</pubTime>
+        
+        <tag>线程</tag>
+         
+        <tag>子进程</tag>
+         
+         
+           
+             
+              <breadCrumb title="进程/线程" url="http://runnerliu.github.io/categories/%E8%BF%9B%E7%A8%8B-%E7%BA%BF%E7%A8%8B/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://runnerliu.github.io/2017/06/07/cgifcgiphpfpm/</loc>
+    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>浅析FCGI与PHP-FPM</title>
+        <pubTime>2017-06-07T08:33:43.000Z</pubTime>
+        
+        <tag>CGI</tag>
+         
+        <tag>FCGI</tag>
+         
+        <tag>PHP-FPM</tag>
+         
+        <tag>PHP-CGI</tag>
+         
+         
+           
+             
+              <breadCrumb title="PHP" url="http://runnerliu.github.io/categories/PHP/"/>
           
         </display>
     </data>
@@ -1465,25 +1491,23 @@
 
     
   <url>
-    <loc>http://runnerliu.github.io/2017/06/07/cgifcgiphpfpm/</loc>
+    <loc>http://runnerliu.github.io/2017/04/02/aboutHexo/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
         <display>
-        <title>浅析FCGI与PHP-FPM</title>
-        <pubTime>2017-06-07T08:33:43.000Z</pubTime>
+        <title>Hexo原理及其常用命令</title>
+        <pubTime>2017-04-02T02:35:08.000Z</pubTime>
         
-        <tag>CGI</tag>
+        <tag>Hexo</tag>
          
-        <tag>FCGI</tag>
+        <tag>原理</tag>
          
-        <tag>PHP-FPM</tag>
-         
-        <tag>PHP-CGI</tag>
+        <tag>命令</tag>
          
          
            
              
-              <breadCrumb title="PHP" url="http://runnerliu.github.io/categories/PHP/"/>
+              <breadCrumb title="Hexo" url="http://runnerliu.github.io/categories/Hexo/"/>
           
         </display>
     </data>
