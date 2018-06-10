@@ -73,7 +73,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Tornado,翻译文档," />
 
 
 
@@ -91,15 +91,22 @@
 
 
 
-<meta name="description" content="初级Coder的求生之路">
-<meta property="og:type" content="website">
-<meta property="og:title" content="刘小杨的BLOG">
-<meta property="og:url" content="http://runnerliu.github.io/tags/重构/index.html">
+<meta name="description" content="实时web功能需要为每个用户提供一个多数时间被闲置的长连接，在传统的同步 web 服务器中，这意味着要为每个用户提供一个线程，当然每个线程的开销都是很昂贵的。
+为了尽量减少并发连接造成的开销，Tornado 使用了一种单线程事件循环的方式。这就意味着所有的应用代码都应该是异步非阻塞的，因为在同一时间只有一个操作是有效的。
+异步和非阻塞是非常相关的并且这两个术语经常交换使用，但它们不是完全相同的事情">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tornado5.0.2翻译文档 - 异步和非阻塞I/O">
+<meta property="og:url" content="http://runnerliu.github.io/2018/06/10/tornado502-asnon/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="初级Coder的求生之路">
+<meta property="og:description" content="实时web功能需要为每个用户提供一个多数时间被闲置的长连接，在传统的同步 web 服务器中，这意味着要为每个用户提供一个线程，当然每个线程的开销都是很昂贵的。
+为了尽量减少并发连接造成的开销，Tornado 使用了一种单线程事件循环的方式。这就意味着所有的应用代码都应该是异步非阻塞的，因为在同一时间只有一个操作是有效的。
+异步和非阻塞是非常相关的并且这两个术语经常交换使用，但它们不是完全相同的事情">
+<meta property="og:updated_time" content="2018-06-10T13:47:32.017Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="刘小杨的BLOG">
-<meta name="twitter:description" content="初级Coder的求生之路">
+<meta name="twitter:title" content="Tornado5.0.2翻译文档 - 异步和非阻塞I/O">
+<meta name="twitter:description" content="实时web功能需要为每个用户提供一个多数时间被闲置的长连接，在传统的同步 web 服务器中，这意味着要为每个用户提供一个线程，当然每个线程的开销都是很昂贵的。
+为了尽量减少并发连接造成的开销，Tornado 使用了一种单线程事件循环的方式。这就意味着所有的应用代码都应该是异步非阻塞的，因为在同一时间只有一个操作是有效的。
+异步和非阻塞是非常相关的并且这两个术语经常交换使用，但它们不是完全相同的事情">
 
 
 
@@ -127,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/tags/重构/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2018/06/10/tornado502-asnon/"/>
 
 
 
 
 
-  <title> 标签: 重构 | 刘小杨的BLOG </title>
+  <title> Tornado5.0.2翻译文档 - 异步和非阻塞I/O | 刘小杨的BLOG </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -158,7 +165,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -296,46 +303,216 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        重构
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2018/06/10/tornado502-asnon/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="liuxiaoyang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="刘小杨的BLOG">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Tornado5.0.2翻译文档 - 异步和非阻塞I/O
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-10T21:09:37+08:00">
+                2018-06-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tornado/" itemprop="url" rel="index">
+                    <span itemprop="name">Tornado</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/10/tornado502-asnon/" class="leancloud_visitors" data-flag-title="Tornado5.0.2翻译文档 - 异步和非阻塞I/O">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>实时web功能需要为每个用户提供一个多数时间被闲置的长连接，在传统的同步 web 服务器中，这意味着要为每个用户提供一个线程，当然每个线程的开销都是很昂贵的。</p>
+<p>为了尽量减少并发连接造成的开销，Tornado 使用了一种单线程事件循环的方式。这就意味着所有的应用代码都应该是异步非阻塞的，因为在同一时间只有一个操作是有效的。</p>
+<p>异步和非阻塞是非常相关的并且这两个术语经常交换使用，但它们不是完全相同的事情。</p>
+<h3 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h3><p>一个函数在等待某些事情返回值的时候会被阻塞，导致函数阻塞的原因有很多：网络 I/O，磁盘 I/O，互斥锁等。事实上每个函数在运行和使用 CPU 的时候都或多或少被阻塞(举个极端的例子来说明为什么对待 CPU 阻塞要和对待一般阻塞一样的严肃：比如密码哈希函数 <a href="http://bcrypt.sourceforge.net/" target="_blank" rel="external">bcrypt</a> ，需要消耗几百毫秒的 CPU 时间，这已 经远远超过了一般的网络或者磁盘请求时间了)。</p>
+<p>一个函数可以在某个方面被阻塞但在其他方面不被阻塞，在 Tornado 的上下文中，我们一般讨论网络 I/O 上下文的阻塞，尽管各种阻塞已经被最小化。</p>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>异步函数在会在其完成之前返回，在应用中触发下一个动作之前通常会在后台执行一些工作(和正常的同步函数在返回前就执行完所有的事情不同)。这里列举了几种不同的异步接口：</p>
+<ul>
+<li>回调参数；</li>
+<li>返回一个占位符(<a href=""><code>Future</code></a> <a href=""><code>Promise</code></a> <a href=""><code>Deferred</code></a>)；</li>
+<li>传送给一个队列；</li>
+<li>回调注册表(POSIX 信号)。</li>
+</ul>
+<p>不论使用哪种类型的接口，按照定义，异步函数与他们的调用者都有着不同的交互方式；也没有什么对调用者透明的方式使得同步函数变得异步(类似 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 使用轻量级线程的系统性能虽然堪比异步系统，但它们并没有真正的让事情异步)。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>这是一个简单的同步函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">from tornado.httpclient import HTTPClient</div><div class="line"></div><div class="line">def synchronous_fetch(url):</div><div class="line">    http_client = HTTPClient()</div><div class="line">    response = http_client.fetch(url)</div><div class="line">    return response.body</div></pre></td></tr></table></figure>
+<p>下面是使用回调参数重写的具有同样功能的异步函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">from tornado.httpclient import AsyncHTTPClient</div><div class="line"></div><div class="line">def asynchronous_fetch(url, callback):</div><div class="line">    http_client = AsyncHTTPClient()</div><div class="line">    def handle_response(response):</div><div class="line">        callback(response.body)</div><div class="line">    http_client.fetch(url, callback=handle_response)</div></pre></td></tr></table></figure>
+<p>使用 <a href=""><code>Future</code></a> 代替回调：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">from tornado.concurrent import Future</div><div class="line">from tornado.httpclient import AsyncHTTPClient</div><div class="line"></div><div class="line">def async_fetch_future(url):</div><div class="line">    http_client = AsyncHTTPClient()</div><div class="line">    my_future = Future()</div><div class="line">    fetch_future = http_client.fetch(url)</div><div class="line">    fetch_future.add_done_callback(</div><div class="line">        lambda f: my_future.set_result(f.result()))</div><div class="line">    return my_future</div></pre></td></tr></table></figure>
+<p><a href=""><code>Future</code></a> 版本更加复杂，但是 <a href=""><code>Futures</code></a> 却是 Tornado 中推荐的写法，因为它有两个主要的优势：一是错误处理更加一致，<a href=""><code>Future.result</code></a> 方法可以简单的抛出异常(相较于常见的回调函数接口中需特别指定错误处理方式)，二是 <a href=""><code>Futures</code></a> 很适合与协程一起使用。我们稍后会更加深入的讨论协程，以下是例子的协程版本，类似原始的同步版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">from tornado import gen</div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def fetch_coroutine(url):</div><div class="line">    http_client = AsyncHTTPClient()</div><div class="line">    response = yield http_client.fetch(url)</div><div class="line">    raise gen.Return(response.body)</div></pre></td></tr></table></figure>
+<p><code>raise gen.Return(response.body)</code> 声明是在 Python 2 环境下人为执行的，因为生成器不允许有返回值，为了解决这个问题，Tornado 的协程抛出了一种称为 <code>Return</code> 的异常，协程捕获这个异常并将其作为返回值。在 Python 3.3+版本，使用 <code>return response.body</code> 可以得到相同的结果。</p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="http://www.tornadoweb.org/en/stable/guide/async.html" target="_blank" rel="external">Asynchronous and non-Blocking I/O</a></p>
+</blockquote>
 
-      <h1 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2017/05/20/badtasteofcode/" itemprop="url">
-              
-                <span itemprop="name">重构改善既有代码的设计-代码的坏味道</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-20T18:16:38+08:00"
-              content="2017-05-20" >
-          05-20
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Tornado/" rel="tag"># Tornado</a>
+          
+            <a href="/tags/翻译文档/" rel="tag"># 翻译文档</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/10/tornado502-introduction/" rel="next" title="Tornado5.0.2翻译文档 - 介绍">
+                <i class="fa fa-chevron-left"></i> Tornado5.0.2翻译文档 - 介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -343,6 +520,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
 
         </div>
         
@@ -362,8 +545,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.png"
@@ -475,6 +667,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#阻塞"><span class="nav-number">1.</span> <span class="nav-text">阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步"><span class="nav-number">2.</span> <span class="nav-text">异步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">3.</span> <span class="nav-text">例子</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -602,6 +810,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 

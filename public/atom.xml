@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2018-06-10T13:01:34.398Z</updated>
+  <updated>2018-06-10T13:47:32.017Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -16,11 +16,62 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Tornado5.0.2翻译文档 - 异步和非阻塞I/O</title>
+    <link href="http://runnerliu.github.io/2018/06/10/tornado502-asnon/"/>
+    <id>http://runnerliu.github.io/2018/06/10/tornado502-asnon/</id>
+    <published>2018-06-10T13:09:37.000Z</published>
+    <updated>2018-06-10T13:47:32.017Z</updated>
+    
+    <content type="html"><![CDATA[<p>实时web功能需要为每个用户提供一个多数时间被闲置的长连接，在传统的同步 web 服务器中，这意味着要为每个用户提供一个线程，当然每个线程的开销都是很昂贵的。</p>
+<p>为了尽量减少并发连接造成的开销，Tornado 使用了一种单线程事件循环的方式。这就意味着所有的应用代码都应该是异步非阻塞的，因为在同一时间只有一个操作是有效的。</p>
+<p>异步和非阻塞是非常相关的并且这两个术语经常交换使用，但它们不是完全相同的事情。</p>
+<h3 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h3><p>一个函数在等待某些事情返回值的时候会被阻塞，导致函数阻塞的原因有很多：网络 I/O，磁盘 I/O，互斥锁等。事实上每个函数在运行和使用 CPU 的时候都或多或少被阻塞(举个极端的例子来说明为什么对待 CPU 阻塞要和对待一般阻塞一样的严肃：比如密码哈希函数 <a href="http://bcrypt.sourceforge.net/" target="_blank" rel="external">bcrypt</a> ，需要消耗几百毫秒的 CPU 时间，这已 经远远超过了一般的网络或者磁盘请求时间了)。</p>
+<p>一个函数可以在某个方面被阻塞但在其他方面不被阻塞，在 Tornado 的上下文中，我们一般讨论网络 I/O 上下文的阻塞，尽管各种阻塞已经被最小化。</p>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>异步函数在会在其完成之前返回，在应用中触发下一个动作之前通常会在后台执行一些工作(和正常的同步函数在返回前就执行完所有的事情不同)。这里列举了几种不同的异步接口：</p>
+<ul>
+<li>回调参数；</li>
+<li>返回一个占位符(<a href=""><code>Future</code></a> <a href=""><code>Promise</code></a> <a href=""><code>Deferred</code></a>)；</li>
+<li>传送给一个队列；</li>
+<li>回调注册表(POSIX 信号)。</li>
+</ul>
+<p>不论使用哪种类型的接口，按照定义，异步函数与他们的调用者都有着不同的交互方式；也没有什么对调用者透明的方式使得同步函数变得异步(类似 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 使用轻量级线程的系统性能虽然堪比异步系统，但它们并没有真正的让事情异步)。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>这是一个简单的同步函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">from tornado.httpclient import HTTPClient</div><div class="line"></div><div class="line">def synchronous_fetch(url):</div><div class="line">    http_client = HTTPClient()</div><div class="line">    response = http_client.fetch(url)</div><div class="line">    return response.body</div></pre></td></tr></table></figure>
+<p>下面是使用回调参数重写的具有同样功能的异步函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">from tornado.httpclient import AsyncHTTPClient</div><div class="line"></div><div class="line">def asynchronous_fetch(url, callback):</div><div class="line">    http_client = AsyncHTTPClient()</div><div class="line">    def handle_response(response):</div><div class="line">        callback(response.body)</div><div class="line">    http_client.fetch(url, callback=handle_response)</div></pre></td></tr></table></figure>
+<p>使用 <a href=""><code>Future</code></a> 代替回调：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">from tornado.concurrent import Future</div><div class="line">from tornado.httpclient import AsyncHTTPClient</div><div class="line"></div><div class="line">def async_fetch_future(url):</div><div class="line">    http_client = AsyncHTTPClient()</div><div class="line">    my_future = Future()</div><div class="line">    fetch_future = http_client.fetch(url)</div><div class="line">    fetch_future.add_done_callback(</div><div class="line">        lambda f: my_future.set_result(f.result()))</div><div class="line">    return my_future</div></pre></td></tr></table></figure>
+<p><a href=""><code>Future</code></a> 版本更加复杂，但是 <a href=""><code>Futures</code></a> 却是 Tornado 中推荐的写法，因为它有两个主要的优势：一是错误处理更加一致，<a href=""><code>Future.result</code></a> 方法可以简单的抛出异常(相较于常见的回调函数接口中需特别指定错误处理方式)，二是 <a href=""><code>Futures</code></a> 很适合与协程一起使用。我们稍后会更加深入的讨论协程，以下是例子的协程版本，类似原始的同步版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">from tornado import gen</div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def fetch_coroutine(url):</div><div class="line">    http_client = AsyncHTTPClient()</div><div class="line">    response = yield http_client.fetch(url)</div><div class="line">    raise gen.Return(response.body)</div></pre></td></tr></table></figure>
+<p><code>raise gen.Return(response.body)</code> 声明是在 Python 2 环境下人为执行的，因为生成器不允许有返回值，为了解决这个问题，Tornado 的协程抛出了一种称为 <code>Return</code> 的异常，协程捕获这个异常并将其作为返回值。在 Python 3.3+版本，使用 <code>return response.body</code> 可以得到相同的结果。</p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="http://www.tornadoweb.org/en/stable/guide/async.html" target="_blank" rel="external">Asynchronous and non-Blocking I/O</a></p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;实时web功能需要为每个用户提供一个多数时间被闲置的长连接，在传统的同步 web 服务器中，这意味着要为每个用户提供一个线程，当然每个线程的开销都是很昂贵的。&lt;/p&gt;
+&lt;p&gt;为了尽量减少并发连接造成的开销，Tornado 使用了一种单线程事件循环的方式。这就意味着所有的应用
+    
+    </summary>
+    
+      <category term="Tornado" scheme="http://runnerliu.github.io/categories/Tornado/"/>
+    
+    
+      <category term="Tornado" scheme="http://runnerliu.github.io/tags/Tornado/"/>
+    
+      <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Tornado5.0.2翻译文档 - 介绍</title>
     <link href="http://runnerliu.github.io/2018/06/10/tornado502-introduction/"/>
     <id>http://runnerliu.github.io/2018/06/10/tornado502-introduction/</id>
     <published>2018-06-10T12:48:11.000Z</published>
-    <updated>2018-06-10T13:01:34.398Z</updated>
+    <updated>2018-06-10T13:05:51.883Z</updated>
     
     <content type="html"><![CDATA[<p><a href="http://www.tornadoweb.org/" target="_blank" rel="external">Tornado</a> 是一个 Python web 框架和异步网络库，起初由 <a href="http://friendfeed.com/" target="_blank" rel="external">FriendFeed</a> 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理<a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling" target="_blank" rel="external">长连接</a> <a href="http://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="external">WebSockets</a> 和其他需要与每个用户保持长久连接的应用。</p>
 <p>Tornado 大体上可以被分为4个主要的部分：</p>
@@ -57,14 +108,14 @@
     <link href="http://runnerliu.github.io/2018/06/10/tornado502-userguide/"/>
     <id>http://runnerliu.github.io/2018/06/10/tornado502-userguide/</id>
     <published>2018-06-10T10:50:44.000Z</published>
-    <updated>2018-06-10T13:05:33.836Z</updated>
+    <updated>2018-06-10T13:51:04.761Z</updated>
     
     <content type="html"><![CDATA[<h3 id="用户指南"><a href="#用户指南" class="headerlink" title="用户指南"></a>用户指南</h3><ul>
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-introduction/">介绍</a></li>
-<li><a href="">异步和非阻塞I/O</a><ul>
-<li><a href="">阻塞</a></li>
-<li><a href="">异步</a></li>
-<li><a href="">例子</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">异步和非阻塞I/O</a><ul>
+<li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">阻塞</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">异步</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">例子</a></li>
 </ul>
 </li>
 <li><a href="">协程</a><ul>
@@ -143,7 +194,7 @@
     <link href="http://runnerliu.github.io/2018/06/03/tornado502_start/"/>
     <id>http://runnerliu.github.io/2018/06/03/tornado502_start/</id>
     <published>2018-06-03T09:27:51.000Z</published>
-    <updated>2018-06-10T13:05:39.931Z</updated>
+    <updated>2018-06-10T13:51:14.171Z</updated>
     
     <content type="html"><![CDATA[<p><a href="http://www.tornadoweb.org/" target="_blank" rel="external">Tornado</a> 是一个 Python 的 Web 框架和异步网络库，最初由 <a href="http://friendfeed.com/" target="_blank" rel="external">FriendFeed </a>开发。通过使用非阻塞网络I/O，Tornado 可以支持数以万计的连接，非常适合<a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling" target="_blank" rel="external">长轮询</a>、<a href="http://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="external">WebSockets</a> 和其他需要与每个用户建立长连接的应用程序。</p>
 <h3 id="快速链接"><a href="#快速链接" class="headerlink" title="快速链接"></a>快速链接</h3><ul>
@@ -172,7 +223,7 @@
 <h3 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h3><ul>
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-userguide/#more">用户指南</a><ul>
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-introduction/">介绍</a></li>
-<li><a href="">异步和非阻塞 I/O</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">异步和非阻塞 I/O</a></li>
 <li><a href="">协程</a></li>
 <li><a href="">Queue 示例-一个并发的爬虫程序</a></li>
 <li><a href="">Tornado 的 web 应用程序结构</a></li>
@@ -2352,47 +2403,6 @@
       <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
     
       <category term="ps" scheme="http://runnerliu.github.io/tags/ps/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Sublime Text 3 添加右键菜单</title>
-    <link href="http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/"/>
-    <id>http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/</id>
-    <published>2017-10-11T11:38:35.000Z</published>
-    <updated>2018-06-05T23:50:56.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>每次安装 Sublime Text 3 后邮件菜单总是没有，但是 notepad++ 安装后会自动加到邮件菜单，对于 Sublime Text 3 的忠实粉丝来说简直丧心病狂，所以搜罗了一些方法来完成这件事儿。</p>
-<h4 id="方式1"><a href="#方式1" class="headerlink" title="方式1"></a>方式1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[Version]</div><div class="line">Signature=&quot;$Windows NT$&quot;</div><div class="line"></div><div class="line">[DefaultInstall]</div><div class="line">AddReg=SublimeText3</div><div class="line"></div><div class="line">[SublimeText3]</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3&quot;,,,&quot;Edit with Sublime Text 3&quot;</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3\\command&quot;,,,&quot;&quot;&quot;%1%\sublime_text.exe&quot;&quot; &quot;&quot;%%1&quot;&quot; %%*&quot;</div><div class="line">hkcr,&quot;Directory\shell\SublimeText3&quot;,,,&quot;Edit with Sublime Text 3&quot;</div><div class="line">hkcr,&quot;*\\shell\\SublimeText3&quot;,&quot;Icon&quot;,0x20000,&quot;%1%\sublime_text.exe, 0&quot;</div><div class="line">hkcr,&quot;Directory\shell\SublimeText3\command&quot;,,,&quot;&quot;&quot;%1%\sublime_text.exe&quot;&quot; &quot;&quot;%%1&quot;&quot;&quot;</div></pre></td></tr></table></figure>
-<p>把以上代码，复制到 Sublime Text 3 的安装目录，然后重命名为：sublime_addright.inf，注意文件编码方式为ANSI，右击安装就可以了。</p>
-<blockquote>
-<p>重命名文件之前，需要先在 工具-&gt;文件夹选项-&gt;查看，把隐藏已知文件类型的扩展名前边的复选框不勾选。</p>
-</blockquote>
-<h4 id="方式2"><a href="#方式2" class="headerlink" title="方式2"></a>方式2</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Windows Registry Editor Version 5.00</div><div class="line">[HKEY_CLASSES_ROOT\*\shell\SublimeText3]</div><div class="line">@=&quot;Edit with Sublime Text 3&quot;</div><div class="line">&quot;Icon&quot;=&quot;D:\\Sublime Text 3\\sublime_text.exe,0&quot;</div><div class="line"></div><div class="line">[HKEY_CLASSES_ROOT\*\shell\SublimeText3\command]</div><div class="line">@=&quot;D:\\Sublime Text 3\\sublime_text.exe %1&quot;</div><div class="line"></div><div class="line"></div><div class="line">[HKEY_CLASSES_ROOT\Directory\shell\SublimeText3]</div><div class="line">@=&quot;Edit with Sublime Text 3&quot;</div><div class="line">&quot;Icon&quot;=&quot;D:\\Sublime Text 3\\sublime_text.exe,0&quot;</div><div class="line"></div><div class="line">[HKEY_CLASSES_ROOT\Directory\shell\SublimeText3\command]</div><div class="line">@=&quot;D:\\Sublime Text 3\\sublime_text.exe %1&quot;</div></pre></td></tr></table></figure>
-<p>把以上代码，复制到 Sublime Text 3 的安装目录，然后重命名为：sublime_addright.reg，注意文件编码方式为ANSI，然后双击就可以了。</p>
-<blockquote>
-<p>需要把里边的 Sublime 的安装目录，替换成实际的 Sublime 安装目录。</p>
-</blockquote>
-<p>删除右键菜单脚本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Windows Registry Editor Version 5.00</div><div class="line">[-HKEY_CLASSES_ROOT\*\shell\SublimeText3]</div><div class="line">[-HKEY_CLASSES_ROOT\Directory\shell\SublimeText3]</div></pre></td></tr></table></figure>
-<p>把以上代码，复制到 Sublime Text 3 的安装目录，然后重命名为：sublime_delright.reg，文件编码方式依然为ANSI，然后双击就可以了。</p>
-<p>Read More：</p>
-<blockquote>
-<p><a href="https://my.oschina.net/adairs/blog/466777" target="_blank" rel="external">将Sublime Text3添加到右键菜单中</a></p>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;每次安装 Sublime Text 3 后邮件菜单总是没有，但是 notepad++ 安装后会自动加到邮件菜单，对于 Sublime Text 3 的忠实粉丝来说简直丧心病狂，所以搜罗了一些方法来完成这件事儿。&lt;/p&gt;
-&lt;h4 id=&quot;方式1&quot;&gt;&lt;a href=&quot;#方式1&quot;
-    
-    </summary>
-    
-      <category term="辅助研发杂记" scheme="http://runnerliu.github.io/categories/%E8%BE%85%E5%8A%A9%E7%A0%94%E5%8F%91%E6%9D%82%E8%AE%B0/"/>
-    
-    
-      <category term="Sublime Text 3" scheme="http://runnerliu.github.io/tags/Sublime-Text-3/"/>
     
   </entry>
   

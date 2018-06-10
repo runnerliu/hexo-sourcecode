@@ -5,7 +5,7 @@
     
   <url>
     <loc>http://runnerliu.github.io/2018/06/03/tornado502_start/</loc>
-    <lastmod>2018-06-10T13:05:39.931Z</lastmod>
+    <lastmod>2018-06-10T13:51:14.171Z</lastmod>
     <data>
         <display>
         <title>Tornado5.0.2翻译文档 - Tornado</title>
@@ -27,7 +27,7 @@
     
   <url>
     <loc>http://runnerliu.github.io/2018/06/10/tornado502-userguide/</loc>
-    <lastmod>2018-06-10T13:05:33.836Z</lastmod>
+    <lastmod>2018-06-10T13:51:04.761Z</lastmod>
     <data>
         <display>
         <title>Tornado5.0.2翻译文档 - 用户指南</title>
@@ -48,8 +48,30 @@
 
     
   <url>
+    <loc>http://runnerliu.github.io/2018/06/10/tornado502-asnon/</loc>
+    <lastmod>2018-06-10T13:47:32.017Z</lastmod>
+    <data>
+        <display>
+        <title>Tornado5.0.2翻译文档 - 异步和非阻塞I/O</title>
+        <pubTime>2018-06-10T13:09:37.000Z</pubTime>
+        
+        <tag>Tornado</tag>
+         
+        <tag>翻译文档</tag>
+         
+         
+           
+             
+              <breadCrumb title="Tornado" url="http://runnerliu.github.io/categories/Tornado/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://runnerliu.github.io/2018/06/10/tornado502-introduction/</loc>
-    <lastmod>2018-06-10T13:01:34.398Z</lastmod>
+    <lastmod>2018-06-10T13:05:51.883Z</lastmod>
     <data>
         <display>
         <title>Tornado5.0.2翻译文档 - 介绍</title>
@@ -112,32 +134,6 @@
            
              
               <breadCrumb title="Linux/Unix" url="http://runnerliu.github.io/categories/Linux-Unix/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://runnerliu.github.io/2017/06/07/cgifcgiphpfpm/</loc>
-    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
-    <data>
-        <display>
-        <title>浅析FCGI与PHP-FPM</title>
-        <pubTime>2017-06-07T08:33:43.000Z</pubTime>
-        
-        <tag>CGI</tag>
-         
-        <tag>FCGI</tag>
-         
-        <tag>PHP-FPM</tag>
-         
-        <tag>PHP-CGI</tag>
-         
-         
-           
-             
-              <breadCrumb title="PHP" url="http://runnerliu.github.io/categories/PHP/"/>
           
         </display>
     </data>
@@ -1259,28 +1255,6 @@
 
     
   <url>
-    <loc>http://runnerliu.github.io/2017/05/20/badtasteofcode/</loc>
-    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
-    <data>
-        <display>
-        <title>重构改善既有代码的设计-代码的坏味道</title>
-        <pubTime>2017-05-20T10:16:38.000Z</pubTime>
-        
-        <tag>重构</tag>
-         
-        <tag>代码的坏味道</tag>
-         
-         
-           
-             
-              <breadCrumb title="重构" url="http://runnerliu.github.io/categories/%E9%87%8D%E6%9E%84/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://runnerliu.github.io/2017/04/18/apachevirtualhost/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
@@ -1303,12 +1277,56 @@
 
     
   <url>
+    <loc>http://runnerliu.github.io/2017/05/20/badtasteofcode/</loc>
+    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>重构改善既有代码的设计-代码的坏味道</title>
+        <pubTime>2017-05-20T10:16:38.000Z</pubTime>
+        
+        <tag>重构</tag>
+         
+        <tag>代码的坏味道</tag>
+         
+         
+           
+             
+              <breadCrumb title="重构" url="http://runnerliu.github.io/categories/%E9%87%8D%E6%9E%84/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://runnerliu.github.io/2017/06/21/bdphp1/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
         <display>
         <title>PHP初级算法系列 - 1</title>
         <pubTime>2017-06-21T03:18:56.000Z</pubTime>
+        
+        <tag>PHP</tag>
+         
+        <tag>算法</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="http://runnerliu.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://runnerliu.github.io/2017/06/21/bdphp2/</loc>
+    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>PHP初级算法系列 - 2</title>
+        <pubTime>2017-06-21T06:40:13.000Z</pubTime>
         
         <tag>PHP</tag>
          
@@ -1349,6 +1367,30 @@
 
     
   <url>
+    <loc>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</loc>
+    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL中UNIQUE KEY与PRIMARY KEY的区别</title>
+        <pubTime>2017-07-15T09:30:51.000Z</pubTime>
+        
+        <tag>MySQL</tag>
+         
+        <tag>UNIQUE KEY</tag>
+         
+        <tag>PRIMARY KEY</tag>
+         
+         
+           
+             
+              <breadCrumb title="MySQL" url="http://runnerliu.github.io/categories/MySQL/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://runnerliu.github.io/2017/06/22/urlrequestprocess/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
@@ -1368,30 +1410,6 @@
            
              
               <breadCrumb title="Web" url="http://runnerliu.github.io/categories/Web/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</loc>
-    <lastmod>2018-06-05T23:50:56.000Z</lastmod>
-    <data>
-        <display>
-        <title>MySQL中UNIQUE KEY与PRIMARY KEY的区别</title>
-        <pubTime>2017-07-15T09:30:51.000Z</pubTime>
-        
-        <tag>MySQL</tag>
-         
-        <tag>UNIQUE KEY</tag>
-         
-        <tag>PRIMARY KEY</tag>
-         
-         
-           
-             
-              <breadCrumb title="MySQL" url="http://runnerliu.github.io/categories/MySQL/"/>
           
         </display>
     </data>
@@ -1447,21 +1465,25 @@
 
     
   <url>
-    <loc>http://runnerliu.github.io/2017/06/21/bdphp2/</loc>
+    <loc>http://runnerliu.github.io/2017/06/07/cgifcgiphpfpm/</loc>
     <lastmod>2018-06-05T23:50:56.000Z</lastmod>
     <data>
         <display>
-        <title>PHP初级算法系列 - 2</title>
-        <pubTime>2017-06-21T06:40:13.000Z</pubTime>
+        <title>浅析FCGI与PHP-FPM</title>
+        <pubTime>2017-06-07T08:33:43.000Z</pubTime>
         
-        <tag>PHP</tag>
+        <tag>CGI</tag>
          
-        <tag>算法</tag>
+        <tag>FCGI</tag>
+         
+        <tag>PHP-FPM</tag>
+         
+        <tag>PHP-CGI</tag>
          
          
            
              
-              <breadCrumb title="算法" url="http://runnerliu.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+              <breadCrumb title="PHP" url="http://runnerliu.github.io/categories/PHP/"/>
           
         </display>
     </data>
