@@ -105,7 +105,7 @@
 当前版本：5.0.2(download from PyPi release notes)
 源代码
 邮件列表：discussion 和 an">
-<meta property="og:updated_time" content="2018-06-09T03:28:22.840Z">
+<meta property="og:updated_time" content="2018-06-10T13:05:39.931Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tornado5.0.2翻译文档 - Tornado">
 <meta name="twitter:description" content="Tornado 是一个 Python 的 Web 框架和异步网络库，最初由 FriendFeed 开发。通过使用非阻塞网络I/O，Tornado 可以支持数以万计的连接，非常适合长轮询、WebSockets 和其他需要与每个用户建立长连接的应用程序。
@@ -449,8 +449,8 @@
 </ul>
 <p><strong>平台</strong>：尽管为了获得最佳性能和可扩展性，Tornado 应该可以在任何类Unix平台上运行，但对于生产部署，建议只使用Linux（with <code>epoll</code>）和 BSD（with <code>kqueue</code>）（尽管 Mac OS X 源自 BSD 并支持 kqueue，但其网络 性能一般很差，所以建议仅用于开发使用）。Tornado 也可以在 Windows 上运行，这种配置没有官方的支持，只推荐用于开发。 如果不修改 Tornado IOLoop 接口，就不可能添加本地 Tornado Windows IOLoop 实现，且不能利用像 AsyncIO 或 Twisted 等框架的 Windows 的 IOCP 支持。</p>
 <h3 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h3><ul>
-<li><a href="">用户手册</a><ul>
-<li><a href="">简介</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/10/tornado502-userguide/#more">用户指南</a><ul>
+<li><a href="https://runnerliu.github.io/2018/06/10/tornado502-introduction/">介绍</a></li>
 <li><a href="">异步和非阻塞 I/O</a></li>
 <li><a href="">协程</a></li>
 <li><a href="">Queue 示例-一个并发的爬虫程序</a></li>
@@ -491,7 +491,7 @@
 <li><a href="">tornado.process - 多进程的实用程序</a></li>
 </ul>
 </li>
-<li><a href="">服务集成</a><ul>
+<li><a href="">与其他服务集成</a><ul>
 <li><a href="">tornado.auth - 集成 OpenID 和 OAuth 的第三方登录服务</a></li>
 <li><a href="">tornado.wsgi - 与其他 Python 框架和服务器的互操作性</a></li>
 <li><a href="">tornado.platform.caresresolver - 使用 C-Ares 的异步DNS解析器</a></li>
@@ -499,7 +499,7 @@
 <li><a href="">tornado.asyncio - 兼容 Tornado 和 asyncio</a></li>
 </ul>
 </li>
-<li><a href="">其他</a><ul>
+<li><a href="">通用工具</a><ul>
 <li><a href="">tornado.authoreload - 开发环境中自动检测代码变化</a></li>
 <li><a href="">tornado.concrrent - 与 Future 对象交互</a></li>
 <li><a href="">tornado.log - 日志支持</a></li>
@@ -568,6 +568,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/10/tornado502-userguide/" rel="prev" title="Tornado5.0.2翻译文档 - 用户指南">
+                Tornado5.0.2翻译文档 - 用户指南 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -641,7 +645,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">63</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

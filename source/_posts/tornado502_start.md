@@ -70,8 +70,8 @@ Tornado 在 [PyPi](http://pypi.python.org/pypi/tornado) 可获取安装列表中
 
 ### 文档
 
-- [用户手册]()
-  - [简介]()
+- [用户指南](https://runnerliu.github.io/2018/06/10/tornado502-userguide/#more)
+  - [介绍](https://runnerliu.github.io/2018/06/10/tornado502-introduction/)
   - [异步和非阻塞 I/O]()
   - [协程]()
   - [Queue 示例-一个并发的爬虫程序]()
@@ -102,13 +102,13 @@ Tornado 在 [PyPi](http://pypi.python.org/pypi/tornado) 可获取安装列表中
   - [tornado.locks - 同步原语]()
   - [tornado.queues - 协程队列]()
   - [tornado.process - 多进程的实用程序]()
-- [服务集成]()
+- [与其他服务集成]()
   - [tornado.auth - 集成 OpenID 和 OAuth 的第三方登录服务]()
   - [tornado.wsgi - 与其他 Python 框架和服务器的互操作性]()
   - [tornado.platform.caresresolver - 使用 C-Ares 的异步DNS解析器]()
   - [tornado.platform.twisted - 兼容 Tornado 和 Twisted]()
   - [tornado.asyncio - 兼容 Tornado 和 asyncio]()
-- [其他]()
+- [通用工具]()
   - [tornado.authoreload - 开发环境中自动检测代码变化]()
   - [tornado.concrrent - 与 Future 对象交互]()
   - [tornado.log - 日志支持]()
