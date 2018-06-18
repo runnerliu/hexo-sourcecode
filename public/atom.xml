@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2018-06-10T14:27:49.834Z</updated>
+  <updated>2018-06-18T07:59:11.422Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -14,6 +14,107 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Tornado5.0.2翻译文档 - Queue示例:一个并发网络爬虫</title>
+    <link href="http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/"/>
+    <id>http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/</id>
+    <published>2018-06-18T06:59:43.000Z</published>
+    <updated>2018-06-18T07:59:11.422Z</updated>
+    
+    <content type="html"><![CDATA[<p>Tornado的 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#module-tornado.queues" target="_blank" rel="external"><code>tornado.queues</code></a> 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 <a href="https://docs.python.org/3.4/library/queue.html#module-queue" target="_blank" rel="external"><code>queue</code></a> 实现线程模式。</p>
+<p>一个yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.get" target="_blank" rel="external"><code>Queue.get</code></a> 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="external"><code>Queue.put</code></a> 的协程直到队列中有空间才会暂停。</p>
+<p>一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue" target="_blank" rel="external"><code>Queue</code></a> 从0开始对未完成的任务进行计数， <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="external"><code>put</code></a> 加计数； <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="external"><code>task_done</code></a> 减少计数。</p>
+<p>这里的网络爬虫的例子，队列开始的时候只包含 base_url。当一个 worker 抓取到一个页面它会解析链接并把它添加到队列中，然后调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="external"><code>task_done</code></a> 减少计数一次。最后，当一个 worker 抓取到的页面 URL 都是之前抓取到过的并且队列中没有任务了。于是 worker 调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="external"><code>task_done</code></a> 把计数减到0。等待 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.join" target="_blank" rel="external"><code>join</code></a> 的主协程取消暂停并且完成。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"></div><div class="line">import time</div><div class="line">from datetime import timedelta</div><div class="line"></div><div class="line">try:</div><div class="line">    from HTMLParser import HTMLParser</div><div class="line">    from urlparse import urljoin, urldefrag</div><div class="line">except ImportError:</div><div class="line">    from html.parser import HTMLParser</div><div class="line">    from urllib.parse import urljoin, urldefrag</div><div class="line"></div><div class="line">from tornado import httpclient, gen, ioloop, queues</div><div class="line"></div><div class="line">base_url = &apos;http://www.tornadoweb.org/en/stable/&apos;</div><div class="line">concurrency = 10</div><div class="line"></div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def get_links_from_url(url):</div><div class="line">    &quot;&quot;&quot;Download the page at `url` and parse it for links.</div><div class="line"></div><div class="line">    Returned links have had the fragment after `#` removed, and have been made</div><div class="line">    absolute so, e.g. the URL &apos;gen.html#tornado.gen.coroutine&apos; becomes</div><div class="line">    &apos;http://www.tornadoweb.org/en/stable/gen.html&apos;.</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    try:</div><div class="line">        response = yield httpclient.AsyncHTTPClient().fetch(url)</div><div class="line">        print(&apos;fetched %s&apos; % url)</div><div class="line"></div><div class="line">        html = response.body if isinstance(response.body, str) \</div><div class="line">            else response.body.decode(errors=&apos;ignore&apos;)</div><div class="line">        urls = [urljoin(url, remove_fragment(new_url))</div><div class="line">                for new_url in get_links(html)]</div><div class="line">    except Exception as e:</div><div class="line">        print(&apos;Exception: %s %s&apos; % (e, url))</div><div class="line">        raise gen.Return([])</div><div class="line"></div><div class="line">    raise gen.Return(urls)</div><div class="line"></div><div class="line"></div><div class="line">def remove_fragment(url):</div><div class="line">    pure_url, frag = urldefrag(url)</div><div class="line">    return pure_url</div><div class="line"></div><div class="line"></div><div class="line">def get_links(html):</div><div class="line">    class URLSeeker(HTMLParser):</div><div class="line">        def __init__(self):</div><div class="line">            HTMLParser.__init__(self)</div><div class="line">            self.urls = []</div><div class="line"></div><div class="line">        def handle_starttag(self, tag, attrs):</div><div class="line">            href = dict(attrs).get(&apos;href&apos;)</div><div class="line">            if href and tag == &apos;a&apos;:</div><div class="line">                self.urls.append(href)</div><div class="line"></div><div class="line">    url_seeker = URLSeeker()</div><div class="line">    url_seeker.feed(html)</div><div class="line">    return url_seeker.urls</div><div class="line"></div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def main():</div><div class="line">    q = queues.Queue()</div><div class="line">    start = time.time()</div><div class="line">    fetching, fetched = set(), set()</div><div class="line"></div><div class="line">    @gen.coroutine</div><div class="line">    def fetch_url():</div><div class="line">        current_url = yield q.get()</div><div class="line">        try:</div><div class="line">            if current_url in fetching:</div><div class="line">                return</div><div class="line"></div><div class="line">            print(&apos;fetching %s&apos; % current_url)</div><div class="line">            fetching.add(current_url)</div><div class="line">            urls = yield get_links_from_url(current_url)</div><div class="line">            fetched.add(current_url)</div><div class="line"></div><div class="line">            for new_url in urls:</div><div class="line">                # Only follow links beneath the base URL</div><div class="line">                if new_url.startswith(base_url):</div><div class="line">                    yield q.put(new_url)</div><div class="line"></div><div class="line">        finally:</div><div class="line">            q.task_done()</div><div class="line"></div><div class="line">    @gen.coroutine</div><div class="line">    def worker():</div><div class="line">        while True:</div><div class="line">            yield fetch_url()</div><div class="line"></div><div class="line">    q.put(base_url)</div><div class="line"></div><div class="line">    # Start workers, then wait for the work queue to be empty.</div><div class="line">    for _ in range(concurrency):</div><div class="line">        worker()</div><div class="line">    yield q.join(timeout=timedelta(seconds=300))</div><div class="line">    assert fetching == fetched</div><div class="line">    print(&apos;Done in %d seconds, fetched %s URLs.&apos; % (</div><div class="line">        time.time() - start, len(fetched)))</div><div class="line"></div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    io_loop = ioloop.IOLoop.current()</div><div class="line">    io_loop.run_sync(main)</div></pre></td></tr></table></figure>
+<p>Read More:</p>
+<blockquote>
+<p><a href="http://www.tornadoweb.org/en/stable/guide/queues.html" target="_blank" rel="external"><code>Queue</code> example - a concurrent web spider</a> </p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Tornado的 &lt;a href=&quot;http://tornado-zh.readthedocs.io/zh/latest/queues.html#module-tornado.queues&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;&lt;code&gt;torn
+    
+    </summary>
+    
+      <category term="Tornado" scheme="http://runnerliu.github.io/categories/Tornado/"/>
+    
+    
+      <category term="Tornado" scheme="http://runnerliu.github.io/tags/Tornado/"/>
+    
+      <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
+    
+      <category term="并发网络爬虫" scheme="http://runnerliu.github.io/tags/%E5%B9%B6%E5%8F%91%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Tornado5.0.2翻译文档 - 协程</title>
+    <link href="http://runnerliu.github.io/2018/06/18/tornado502-coroutines/"/>
+    <id>http://runnerliu.github.io/2018/06/18/tornado502-coroutines/</id>
+    <published>2018-06-18T05:36:42.000Z</published>
+    <updated>2018-06-18T06:46:09.829Z</updated>
+    
+    <content type="html"><![CDATA[<p>Tornado中推荐使用 <strong>协程</strong> 编写异步代码，协程使用了Python的 <code>yield</code> 关键字代替链式回调来将程序挂起和恢复执行(像在 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 中出现的轻量级线程合作方式有时也被称为协程，但是在Tornado中所有的协程使用明确的上下文切换，并被称为异步函数)。</p>
+<p>使用协程几乎像写同步代码一样简单，并且不需要浪费额外的线程。它们还通过减少上下文切换来 <a href="https://glyph.twistedmatrix.com/2014/02/unyielding.html" target="_blank" rel="external">使并发编程更简单</a> 。</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">from tornado import gen</div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def fetch_coroutine(url):</div><div class="line">    http_client = AsyncHTTPClient()</div><div class="line">    response = yield http_client.fetch(url)</div><div class="line">    # In Python versions prior to 3.3, returning a value from</div><div class="line">    # a generator is not allowed and you must use</div><div class="line">    #   raise gen.Return(response.body)</div><div class="line">    # instead.</div><div class="line">    return response.body</div></pre></td></tr></table></figure>
+<h3 id="Python-3-5-async-和-await"><a href="#Python-3-5-async-和-await" class="headerlink" title="Python 3.5: async 和 await"></a>Python 3.5: <code>async</code> 和 <code>await</code></h3><p>Python 3.5 引入了 <code>async</code> 和 <code>await</code> 关键字(使用这些关键字的函数也被称为”原生协程”)。从Tornado 4.3，你可以用它们代替 <code>yield</code> 为基础的协程。只需要简单的使用 <code>async def foo()</code> 在函数定义的时候代替 <code>@gen.coroutine</code> 装饰器，用 <code>await</code> 代替 yield。本文档的其他部分会继续使用 <code>yield</code> 的风格来和旧版本的Python兼容，但是如果 <code>async</code> 和 <code>await</code> 可用的话，它们运行起来会更快：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">async def fetch_coroutine(url):</div><div class="line">    http_client = AsyncHTTPClient()</div><div class="line">    response = await http_client.fetch(url)</div><div class="line">    return response.body</div></pre></td></tr></table></figure>
+<p><code>await</code> 关键字比 <code>yield</code> 关键字功能要少一些。例如，在一个使用 <code>yield</code> 的协程中，你可以得到 <code>Futures</code> 列表，但是在原生协程中，你必须把列表用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.multi" target="_blank" rel="external"><code>tornado.gen.multi</code></a> 包起来。同时也去掉了与 <a href="https://docs.python.org/3.6/library/concurrent.futures.html#module-concurrent.futures" target="_blank" rel="external"><code>concurrent.futures</code></a> 的集成。你也可以使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.convert_yielded" target="_blank" rel="external"><code>tornado.gen.convert_yielded</code></a> 来把任何使用 <code>yield</code> 工作的代码转换成使用 <code>await</code> 的形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">async def f():</div><div class="line">    executor = concurrent.futures.ThreadPoolExecutor()</div><div class="line">    await tornado.gen.convert_yielded(executor.submit(g))</div></pre></td></tr></table></figure>
+<h3 id="它如何工作"><a href="#它如何工作" class="headerlink" title="它如何工作"></a>它如何工作</h3><p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong> 。所有的生成器都是异步的；当调用它们的时候，会返回一个生成器对象，而不是一个执行完的结果。 <code>@gen.coroutine</code> 装饰器通过 <code>yield</code> 表达式和生成器进行交流，而且通过返回一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 与协程的调用方进行交互。</p>
+<p>下面是一个协程装饰器内部循环的简单版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># Simplified inner loop of tornado.gen.Runner</div><div class="line">def run(self):</div><div class="line">    # send(x) makes the current yield return x.</div><div class="line">    # It returns when the next yield is reached</div><div class="line">    future = self.gen.send(self.next)</div><div class="line">    def callback(f):</div><div class="line">        self.next = f.result()</div><div class="line">        self.run()</div><div class="line">    future.add_done_callback(callback)</div></pre></td></tr></table></figure>
+<p>装饰器从生成器接收一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 对象，等待(非阻塞的)这个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 对象执行完成，然后“解开(unwraps)” 这个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 对象，并把结果作为 <code>yield</code> 表达式的结果传回给生成器。大多数异步代码从来不会直接接触 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 类 除非 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 立即通过异步函数返回给 <code>yield</code> 表达式。</p>
+<h3 id="如何调用协程"><a href="#如何调用协程" class="headerlink" title="如何调用协程"></a>如何调用协程</h3><p>协程一般不会抛出异常：它们抛出的任何异常将被 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 捕获直到它被得到，这意味着用正确的方式调用协程是重要的，否则你可能有被忽略的错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@gen.coroutine</div><div class="line">def divide(x, y):</div><div class="line">    return x / y</div><div class="line"></div><div class="line">def bad_call():</div><div class="line">    # This should raise a ZeroDivisionError, but it won&apos;t because</div><div class="line">    # the coroutine is called incorrectly.</div><div class="line">    divide(1, 0)</div></pre></td></tr></table></figure>
+<p>几乎所有的情况下，任何一个调用协程的函数都必须是协程它自身，并且在调用的时候使用 <code>yield</code> 关键字。当你重写超类中的方法，请参阅文档，看看协程是否支持(文档应该会写该方法 “可能是一个协程” 或者 “可能返回 一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> ”)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@gen.coroutine</div><div class="line">def good_call():</div><div class="line">    # yield will unwrap the Future returned by divide() and raise</div><div class="line">    # the exception.</div><div class="line">    yield divide(1, 0)</div></pre></td></tr></table></figure>
+<p>有时你可能想要对一个协程”一劳永逸”而且不等待它的结果。在这种情况下，建议使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/ioloop.html#tornado.ioloop.IOLoop.spawn_callback" target="_blank" rel="external"><code>IOLoop.spawn_callback</code></a> ，它使得 <a href="http://tornado-zh.readthedocs.io/zh/latest/ioloop.html#tornado.ioloop.IOLoop" target="_blank" rel="external"><code>IOLoop</code></a> 负责调用。如果它失败了， <a href="http://tornado-zh.readthedocs.io/zh/latest/ioloop.html#tornado.ioloop.IOLoop" target="_blank" rel="external"><code>IOLoop</code></a> 会在日志中把调用栈记录下来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># The IOLoop will catch the exception and print a stack trace in</div><div class="line"># the logs. Note that this doesn&apos;t look like a normal call, since</div><div class="line"># we pass the function object to be called by the IOLoop.</div><div class="line">IOLoop.current().spawn_callback(divide, 1, 0)</div></pre></td></tr></table></figure>
+<p>如果函数使用了 <code>@gen.coroutine</code> ，则推荐以上方式使用 <a href="http://www.tornadoweb.org/en/stable/ioloop.html#tornado.ioloop.IOLoop.spawn_callback" target="_blank" rel="external"><code>IOLoop.spawn_callback</code></a> ，但如果函数使用 <code>async def</code> ，则必须使用以上方式(否则协程不会运行)。</p>
+<p>最后，在程序顶层，如果 IOLoop 尚未运行，你可以启动 <a href="http://tornado-zh.readthedocs.io/zh/latest/ioloop.html#tornado.ioloop.IOLoop" target="_blank" rel="external"><code>IOLoop</code></a> 执行协程，然后使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/ioloop.html#tornado.ioloop.IOLoop.run_sync" target="_blank" rel="external"><code>IOLoop.run_sync</code></a> 方法停止 <a href="http://tornado-zh.readthedocs.io/zh/latest/ioloop.html#tornado.ioloop.IOLoop" target="_blank" rel="external"><code>IOLoop</code></a> 。这通常被用来启动面向批处理程序的 <code>main</code> 函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># run_sync() doesn&apos;t take arguments, so we must wrap the</div><div class="line"># call in a lambda.</div><div class="line">IOLoop.current().run_sync(lambda: divide(1, 0))</div></pre></td></tr></table></figure>
+<h3 id="协程模式"><a href="#协程模式" class="headerlink" title="协程模式"></a>协程模式</h3><h4 id="调用阻塞函数"><a href="#调用阻塞函数" class="headerlink" title="调用阻塞函数"></a>调用阻塞函数</h4><p>从一个协程调用阻塞函数最简单的方式是使用 <code>IOLoop.run_in_executor</code> ，它将返回和协程兼容的<code>Futures</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@gen.coroutine</div><div class="line">def call_blocking():</div><div class="line">    yield IOLoop.current().run_in_executor(blocking_func, args)</div></pre></td></tr></table></figure>
+<h4 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h4><p>协程装饰器能识别列表或者字典对象中各自的 <code>Futures</code> ，并且并行的等待这些 <code>Futures</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@gen.coroutine</div><div class="line">def parallel_fetch(url1, url2):</div><div class="line">    resp1, resp2 = yield [http_client.fetch(url1),</div><div class="line">                          http_client.fetch(url2)]</div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def parallel_fetch_many(urls):</div><div class="line">    responses = yield [http_client.fetch(url) for url in urls]</div><div class="line">    # responses is a list of HTTPResponses in the same order</div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def parallel_fetch_dict(urls):</div><div class="line">    responses = yield &#123;url: http_client.fetch(url)</div><div class="line">                        for url in urls&#125;</div><div class="line">    # responses is a dict &#123;url: HTTPResponse&#125;</div></pre></td></tr></table></figure>
+<p>如果使用 <code>await</code> 关键字，列表和字典必须使用 <a href="http://www.tornadoweb.org/en/stable/gen.html#tornado.gen.multi" target="_blank" rel="external"><code>tornado.gen.multi</code></a> 包装起来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">async def parallel_fetch(url1, url2):</div><div class="line">    resp1, resp2 = await gen.multi([http_client.fetch(url1),</div><div class="line">                                    http_client.fetch(url2)])</div></pre></td></tr></table></figure>
+<h4 id="交叉存取"><a href="#交叉存取" class="headerlink" title="交叉存取"></a>交叉存取</h4><p>有时候我们需要保存<code>Future</code> 而不是立即返回，所以可以在等待之前执行其他操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@gen.coroutine</div><div class="line">def get(self):</div><div class="line">    fetch_future = self.fetch_next_chunk()</div><div class="line">    while True:</div><div class="line">        chunk = yield fetch_future</div><div class="line">        if chunk is None: break</div><div class="line">        self.write(chunk)</div><div class="line">        fetch_future = self.fetch_next_chunk()</div><div class="line">        yield self.flush()</div></pre></td></tr></table></figure>
+<p>这种模式最适用于 <code>@gen.coroutine</code> ，如果 <code>fetch_next_chunk()</code> 使用 <code>async def</code> ，则必须如下调用： <code>fetch_future = tornado.gen.convert_yielded(self.fetch_next_chunk())</code>才能启动后台进程。</p>
+<h4 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h4><p>在原生协程中，可以使用<code>aysnc for</code> 。在老版本的Python中，协程的循环是棘手的，因为没有办法在 <code>for</code> 循环或者 <code>while</code> 循环 <code>yield</code> 迭代器，并且捕获 yield 的结果。相反，你需要将循环条件从访问结果中分离出来，下面是一个使用 <a href="http://motor.readthedocs.org/en/stable/" target="_blank" rel="external">Motor</a> 的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import motor</div><div class="line">db = motor.MotorClient().test</div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def loop_example(collection):</div><div class="line">    cursor = db.collection.find()</div><div class="line">    while (yield cursor.fetch_next):</div><div class="line">        doc = cursor.next_object()</div></pre></td></tr></table></figure>
+<h4 id="在后台运行"><a href="#在后台运行" class="headerlink" title="在后台运行"></a>在后台运行</h4><p><a href="http://tornado-zh.readthedocs.io/zh/latest/ioloop.html#tornado.ioloop.PeriodicCallback" target="_blank" rel="external"><code>PeriodicCallback</code></a> 通常不使用协程。相反，一个协程可以包含一个 <code>while True:</code> 循环并使用<a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.sleep" target="_blank" rel="external"><code>tornado.gen.sleep</code></a> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">@gen.coroutine</div><div class="line">def minute_loop():</div><div class="line">    while True:</div><div class="line">        yield do_something()</div><div class="line">        yield gen.sleep(60)</div><div class="line"></div><div class="line"># Coroutines that loop forever are generally started with</div><div class="line"># spawn_callback().</div><div class="line">IOLoop.current().spawn_callback(minute_loop)</div></pre></td></tr></table></figure>
+<p>有时可能会遇到一个更复杂的循环。例如，上一个循环运行每次花费 <code>60+N</code> 秒，其中 <code>N</code> 是 <code>do_something()</code> 花费的时间。为了 准确的每60秒运行，使用上面的交叉模式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@gen.coroutine</div><div class="line">def minute_loop2():</div><div class="line">    while True:</div><div class="line">        nxt = gen.sleep(60)   # Start the clock.</div><div class="line">        yield do_something()  # Run while the clock is ticking.</div><div class="line">        yield nxt             # Wait for the timer to run out.</div></pre></td></tr></table></figure>
+<p>Read More:</p>
+<blockquote>
+<p><a href="http://www.tornadoweb.org/en/stable/guide/coroutines.html" target="_blank" rel="external">Coroutines</a> </p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Tornado中推荐使用 &lt;strong&gt;协程&lt;/strong&gt; 编写异步代码，协程使用了Python的 &lt;code&gt;yield&lt;/code&gt; 关键字代替链式回调来将程序挂起和恢复执行(像在 &lt;a href=&quot;http://www.gevent.org/&quot; target=&quot;
+    
+    </summary>
+    
+      <category term="Tornado" scheme="http://runnerliu.github.io/categories/Tornado/"/>
+    
+    
+      <category term="Tornado" scheme="http://runnerliu.github.io/tags/Tornado/"/>
+    
+      <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
+    
+      <category term="协程" scheme="http://runnerliu.github.io/tags/%E5%8D%8F%E7%A8%8B/"/>
+    
+  </entry>
   
   <entry>
     <title>Requests库 - 会话对象</title>
@@ -148,7 +249,7 @@
     <link href="http://runnerliu.github.io/2018/06/10/tornado502-userguide/"/>
     <id>http://runnerliu.github.io/2018/06/10/tornado502-userguide/</id>
     <published>2018-06-10T10:50:44.000Z</published>
-    <updated>2018-06-10T13:51:04.761Z</updated>
+    <updated>2018-06-18T07:59:32.077Z</updated>
     
     <content type="html"><![CDATA[<h3 id="用户指南"><a href="#用户指南" class="headerlink" title="用户指南"></a>用户指南</h3><ul>
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-introduction/">介绍</a></li>
@@ -158,11 +259,11 @@
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">例子</a></li>
 </ul>
 </li>
-<li><a href="">协程</a><ul>
-<li><a href="">Python3.5: async 和 await </a></li>
-<li><a href="">它是如何工作的</a></li>
-<li><a href="">如何调用协程</a></li>
-<li><a href="">协程模式</a><ul>
+<li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">协程</a><ul>
+<li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">Python3.5: async 和 await </a></li>
+<li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">它如何工作</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">如何调用协程</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">协程模式</a><ul>
 <li><a href="">调用阻塞函数</a></li>
 <li><a href="">并行</a></li>
 <li><a href="">交叉存取</a></li>
@@ -172,7 +273,7 @@
 </li>
 </ul>
 </li>
-<li><a href="">Queue 示例-一个并发网络爬虫</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/#more">Queue 示例-一个并发网络爬虫</a></li>
 <li><a href="">Tornado Web应用的结构</a><ul>
 <li><a href="">Application 对象</a></li>
 <li><a href="">RequestHandler 子类</a></li>
@@ -227,6 +328,8 @@
     
       <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
     
+      <category term="用户指南" scheme="http://runnerliu.github.io/tags/%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/"/>
+    
   </entry>
   
   <entry>
@@ -234,7 +337,7 @@
     <link href="http://runnerliu.github.io/2018/06/03/tornado502_start/"/>
     <id>http://runnerliu.github.io/2018/06/03/tornado502_start/</id>
     <published>2018-06-03T09:27:51.000Z</published>
-    <updated>2018-06-10T13:51:14.171Z</updated>
+    <updated>2018-06-18T07:59:23.648Z</updated>
     
     <content type="html"><![CDATA[<p><a href="http://www.tornadoweb.org/" target="_blank" rel="external">Tornado</a> 是一个 Python 的 Web 框架和异步网络库，最初由 <a href="http://friendfeed.com/" target="_blank" rel="external">FriendFeed </a>开发。通过使用非阻塞网络I/O，Tornado 可以支持数以万计的连接，非常适合<a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling" target="_blank" rel="external">长轮询</a>、<a href="http://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="external">WebSockets</a> 和其他需要与每个用户建立长连接的应用程序。</p>
 <h3 id="快速链接"><a href="#快速链接" class="headerlink" title="快速链接"></a>快速链接</h3><ul>
@@ -264,8 +367,8 @@
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-userguide/#more">用户指南</a><ul>
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-introduction/">介绍</a></li>
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">异步和非阻塞 I/O</a></li>
-<li><a href="">协程</a></li>
-<li><a href="">Queue 示例-一个并发的爬虫程序</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">协程</a></li>
+<li><a href="https://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/#more">Queue 示例-一个并发网络爬虫</a></li>
 <li><a href="">Tornado 的 web 应用程序结构</a></li>
 <li><a href="">模板和UI</a></li>
 <li><a href="">认证和安全</a></li>
@@ -1313,9 +1416,9 @@
       <category term="kafka" scheme="http://runnerliu.github.io/categories/kafka/"/>
     
     
-      <category term="kafka" scheme="http://runnerliu.github.io/tags/kafka/"/>
-    
       <category term="librdkafka" scheme="http://runnerliu.github.io/tags/librdkafka/"/>
+    
+      <category term="kafka" scheme="http://runnerliu.github.io/tags/kafka/"/>
     
   </entry>
   
@@ -1850,375 +1953,6 @@
       <category term="Python" scheme="http://runnerliu.github.io/tags/Python/"/>
     
       <category term="上下文管理器" scheme="http://runnerliu.github.io/tags/%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux命令-netstat</title>
-    <link href="http://runnerliu.github.io/2018/01/02/linuxnetstat/"/>
-    <id>http://runnerliu.github.io/2018/01/02/linuxnetstat/</id>
-    <published>2018-01-02T14:49:16.000Z</published>
-    <updated>2018-06-05T23:50:56.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat [-acCeFghilMnNoprstuvVwx][-A&lt;网络类型&gt;][--ip]</div></pre></td></tr></table></figure>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>Linux netstat命令用于显示网络状态，一般用于检验本机各端口的网络连接情况。netstat是在内核中访问网络及相关信息的程序，它能提供TCP连接，TCP和UDP监听，进程内存管理的相关报告。</p>
-<h3 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h3><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-a / -all</td>
-<td>显示所有连接中的Socket</td>
-</tr>
-<tr>
-<td>-A&lt;网络类型&gt; / –&lt;网络类型&gt;</td>
-<td>列出该网络类型连接中的相关地址</td>
-</tr>
-<tr>
-<td>-c / –continuous</td>
-<td>持续列出网络状态</td>
-</tr>
-<tr>
-<td>-C / –cache</td>
-<td>显示路由器配置的快取信息</td>
-</tr>
-<tr>
-<td>-e / –extend</td>
-<td>显示网络其他相关信息</td>
-</tr>
-<tr>
-<td>-F / –fib</td>
-<td>显示FIB</td>
-</tr>
-<tr>
-<td>-g / –groups</td>
-<td>显示多重广播功能群组组员名单</td>
-</tr>
-<tr>
-<td>-h / –help</td>
-<td>在线帮助</td>
-</tr>
-<tr>
-<td>-i / –interfaces</td>
-<td>显示网络界面信息表单</td>
-</tr>
-<tr>
-<td>-l / –listening</td>
-<td>显示监控中的服务器的Socket</td>
-</tr>
-<tr>
-<td>-M / –masquerade</td>
-<td>显示伪装的网络连线</td>
-</tr>
-<tr>
-<td>-n / –numeric</td>
-<td>直接使用IP地址，而不通过域名服务器</td>
-</tr>
-<tr>
-<td>-N / –netlink / –symbolic</td>
-<td>显示网络硬件外围设备的符号连接名称</td>
-</tr>
-<tr>
-<td>-o / –timers</td>
-<td>显示计时器</td>
-</tr>
-<tr>
-<td>-p / –programs</td>
-<td>显示正在使用Socket的程序识别码和程序名称</td>
-</tr>
-<tr>
-<td>-r / –route</td>
-<td>显示路由表</td>
-</tr>
-<tr>
-<td>-s / –statistice</td>
-<td>显示网络工作信息统计表</td>
-</tr>
-<tr>
-<td>-t / –tcp</td>
-<td>显示TCP传输协议的连线状况</td>
-</tr>
-<tr>
-<td>-u / –udp</td>
-<td>显示UDP传输协议的连线状况</td>
-</tr>
-<tr>
-<td>-v / –verbose</td>
-<td>显示指令执行过程</td>
-</tr>
-<tr>
-<td>-V / –version</td>
-<td>显示版本信息</td>
-</tr>
-<tr>
-<td>-w / –raw</td>
-<td>显示RAW传输协议的连线状况</td>
-</tr>
-<tr>
-<td>-x / –unix</td>
-<td>此参数的效果和指定”-A unix”参数相同</td>
-</tr>
-<tr>
-<td>–ip / –inet</td>
-<td>此参数的效果和指定”-A inet”参数相同</td>
-</tr>
-</tbody>
-</table>
-<h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><ul>
-<li>netstat</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Active Internet connections (w/o servers)</div><div class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State      </div><div class="line">tcp        0      0 hcdn-others-worker-de:62710 10.15.207.143:8433          ESTABLISHED </div><div class="line">tcp        0      0 hcdn-others-worker-de:30881 openlive-hbase-online:websm ESTABLISHED </div><div class="line">tcp        0      0 hcdn-others-worker-dev:9546 10.153.149.218:XmlIpcRegSvc ESTABLISHED </div><div class="line">tcp        0      0 hcdn-others-worker-de:53486 10.153.149.192:XmlIpcRegSvc ESTABLISHED </div><div class="line">tcp        0      0 hcdn-others-worker-de:38198 10.153.149.213:XmlIpcRegSvc ESTABLISHED </div><div class="line">tcp        0      0 hcdn-others-worker-de:24007 10.153.149.214:XmlIpcRegSvc ESTABLISHED </div><div class="line">Active UNIX domain sockets (w/o servers)</div><div class="line">Proto RefCnt Flags       Type       State         I-Node Path</div><div class="line">unix  2      [ ]         DGRAM                    17227  @/org/freedesktop/hal/udev_event</div><div class="line">unix  2      [ ]         DGRAM                    12672370 @/org/kernel/udev/udevd</div><div class="line">unix  3      [ ]         STREAM     CONNECTED     253334334 </div><div class="line">unix  3      [ ]         STREAM     CONNECTED     253334333</div></pre></td></tr></table></figure>
-<p><code>netstat</code> 命令的输出结果可以分为两个部分：Active Internet connections（有源TCP连接），其中”Recv-Q”和”Send-Q”指的是接收队列和发送队列，这些数字一般都应该是0，如果不是则表示软件包正在队列中堆积；Active UNIX domain sockets（有源Unix域套接口），和网络套接字一样，但只能用于本机通信，性能可以提高一倍。</p>
-<p>Proto显示连接使用的协议，RefCnt显示连接到本套接口上的进程号，Type显示套接口的类型，State显示套接口当前的状态，Path表示连接到套接口的其它进程使用的路径名。</p>
-<table>
-<thead>
-<tr>
-<th>状态</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>LISTEN</td>
-<td>侦听来自远方的TCP端口的连接请求</td>
-</tr>
-<tr>
-<td>SYN-SENT</td>
-<td>在发送连接请求后等待匹配的连接请求</td>
-</tr>
-<tr>
-<td>SYN-RECEIVED</td>
-<td>在收到和发送一个连接请求后等待对方对连接请求的确认</td>
-</tr>
-<tr>
-<td>ESTABLISHED</td>
-<td>一个打开的连接</td>
-</tr>
-<tr>
-<td>FIN-WAIT-1</td>
-<td>等待远程TCP连接中断请求，或先前的连接中断请求的确认</td>
-</tr>
-<tr>
-<td>FIN-WAIT-2</td>
-<td>从远程TCP等待连接中断请求</td>
-</tr>
-<tr>
-<td>CLOSE-WAIT</td>
-<td>等待从本地用户发来的连接中断请求</td>
-</tr>
-<tr>
-<td>CLOSING</td>
-<td>等待远程TCP对连接中断的确认</td>
-</tr>
-<tr>
-<td>LAST-ACK</td>
-<td>等待原来的发向远程TCP的连接中断请求的确认</td>
-</tr>
-<tr>
-<td>TIME-WAIT</td>
-<td>等待足够的时间以确保远程TCP接收到连接中断请求的确认</td>
-</tr>
-<tr>
-<td>CLOSED</td>
-<td>没有任何连接状态</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>netstat -a</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State      </div><div class="line">tcp        0      0 *:tproxy                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:us-cli                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:us-srv                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:intu-ec-svcdisc           *:*                         LISTEN      </div><div class="line">Active UNIX domain sockets (servers and established)</div><div class="line">Proto RefCnt Flags       Type       State         I-Node Path</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     12688527 /var/run/abrt/abrt.socket</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     288268830 /tmp/supervisor.sock.3241</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     7341   @/com/ubuntu/upstart</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     17201  @/var/run/hald/dbus-vA2CSxY4CU</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     17196  @/var/run/hald/dbus-5pcejJb6np</div><div class="line">unix  2      [ ]         DGRAM                    17227  @/org/freedesktop/hal/udev_event</div></pre></td></tr></table></figure>
-<p>显示所有有效连接的列表，包括ESTABLISHED、LISTENING的连接。</p>
-<ul>
-<li>netstat -nu</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Active Internet connections (w/o servers)</div><div class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State</div></pre></td></tr></table></figure>
-<p>显示当前UDP的连接情况</p>
-<ul>
-<li>netstat -apu</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Active Internet connections (servers and established)</div><div class="line">Proto Recv-Q Send-Q Local Address       Foreign Address             State       PID/Program name </div><div class="line">udp        0      0 *:947               *:*                                     1200/rpcbind     </div><div class="line">udp        0      0 *:domain            *:*                                     9306/dnsmasq     </div><div class="line">udp        0      0 *:983               *:*                                     1231/rpc.statd   </div><div class="line">udp        0      0 *:sunrpc            *:*                                     1200/rpcbind     </div><div class="line">udp        0      0 *:ipp               *:*                                     1141/portreserve </div><div class="line">udp        0      0 hcdn-others-worker-dev10:ntp *:*                            4247/ntpd       </div><div class="line">udp        0      0 localhost:ntp       *:*                                     4247/ntpd       </div><div class="line">udp        0      0 *:ntp               *:*                                     4247/ntpd       </div><div class="line">udp        0      0 *:62630             *:*                                     1231/rpc.statd</div></pre></td></tr></table></figure>
-<p>显示UDP端口号的使用情况</p>
-<ul>
-<li>netstat -i</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Kernel Interface table</div><div class="line">Iface       MTU Met    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg</div><div class="line">eth0       1500   0 2334710561      0      0      0 2493027803      0      0      0 BMRU</div><div class="line">lo        65536   0 199796252      0      0      0 199796252      0      0      0 LRU</div></pre></td></tr></table></figure>
-<p>显示网卡列表</p>
-<ul>
-<li>netstat -g</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">IPv6/IPv4 Group Memberships</div><div class="line">Interface       RefCnt Group</div><div class="line">--------------- ------ ---------------------</div><div class="line">lo              1      all-systems.mcast.net</div><div class="line">eth0            1      all-systems.mcast.net</div></pre></td></tr></table></figure>
-<p>显示组播组的关系</p>
-<ul>
-<li>netstat -s</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line">Ip:</div><div class="line">    2402314477 total packets received</div><div class="line">    0 forwarded</div><div class="line">    0 incoming packets discarded</div><div class="line">    2331780718 incoming packets delivered</div><div class="line">    2692824123 requests sent out</div><div class="line">Icmp:</div><div class="line">    484304 ICMP messages received</div><div class="line">    0 input ICMP message failed.</div><div class="line">    ICMP input histogram:</div><div class="line">        destination unreachable: 159</div><div class="line">        timeout in transit: 3</div><div class="line">        echo requests: 83130</div><div class="line">        echo replies: 400987</div><div class="line">        timestamp request: 25</div><div class="line">    505861 ICMP messages sent</div><div class="line">    0 ICMP messages failed</div><div class="line">    ICMP output histogram:</div><div class="line">        destination unreachable: 21437</div><div class="line">        echo request: 401269</div><div class="line">        echo replies: 83130</div><div class="line">        timestamp replies: 25</div><div class="line">IcmpMsg:</div><div class="line">        InType0: 400987</div><div class="line">        InType3: 159</div><div class="line">        InType8: 83130</div><div class="line">        InType11: 3</div><div class="line">        InType13: 25</div><div class="line">        OutType0: 83130</div><div class="line">        OutType3: 21437</div><div class="line">        OutType8: 401269</div><div class="line">        OutType14: 25</div><div class="line">Tcp:</div><div class="line">    62593872 active connections openings</div><div class="line">    177834 passive connection openings</div><div class="line">    153086 failed connection attempts</div><div class="line">    999 connection resets received</div><div class="line">    89 connections established</div><div class="line">    2250692557 segments received</div><div class="line">    2608392230 segments send out</div><div class="line">    3325843 segments retransmited</div><div class="line">    132 bad segments received.</div><div class="line">    610130 resets sent</div><div class="line">Udp:</div><div class="line">    80565656 packets received</div><div class="line">    21451 packets to unknown port received.</div><div class="line">    0 packet receive errors</div><div class="line">    80600189 packets sent</div><div class="line">UdpLite:</div><div class="line">TcpExt:</div><div class="line">    1100 invalid SYN cookies received</div><div class="line">    361 resets received for embryonic SYN_RECV sockets</div><div class="line">    466 packets pruned from receive queue because of socket buffer overrun</div><div class="line">    61819153 TCP sockets finished time wait in fast timer</div><div class="line">    2987 TCP sockets finished time wait in slow timer</div><div class="line">    660268 delayed acks sent</div><div class="line">    260 delayed acks further delayed because of locked socket</div><div class="line">    Quick ack mode was activated 1051984 times</div><div class="line">    25934905 packets directly queued to recvmsg prequeue.</div><div class="line">    911172308 packets directly received from backlog</div><div class="line">    3173278514 packets directly received from prequeue</div><div class="line">    1186216864 packets header predicted</div><div class="line">    3170682 packets header predicted and directly queued to user</div><div class="line">    357381509 acknowledgments not containing data received</div><div class="line">    411743100 predicted acknowledgments</div><div class="line">    1093102 times recovered from packet loss due to SACK data</div><div class="line">    Detected reordering 12642 times using FACK</div><div class="line">    Detected reordering 14884 times using SACK</div><div class="line">    Detected reordering 11 times using time stamp</div><div class="line">    13885 congestion windows fully recovered</div><div class="line">    252 congestion windows partially recovered using Hoe heuristic</div><div class="line">    TCPDSACKUndo: 193430</div><div class="line">    51009 congestion windows recovered after partial ack</div><div class="line">    168112 TCP data loss events</div><div class="line">    TCPLostRetransmit: 14829</div><div class="line">    108524 timeouts after SACK recovery</div><div class="line">    4274 timeouts in loss state</div><div class="line">    2496500 fast retransmits</div><div class="line">    158451 forward retransmits</div><div class="line">    230933 retransmits in slow start</div><div class="line">    280735 other TCP timeouts</div><div class="line">    38730 sack retransmits failed</div><div class="line">    23520 packets collapsed in receive queue due to low socket buffer</div><div class="line">    1051963 DSACKs sent for old packets</div><div class="line">    20 DSACKs sent for out of order packets</div><div class="line">    365231 DSACKs received</div><div class="line">    692 DSACKs for out of order packets received</div><div class="line">    414 connections reset due to unexpected data</div><div class="line">    896 connections reset due to early user close</div><div class="line">    761 connections aborted due to timeout</div><div class="line">    TCPDSACKIgnoredOld: 509</div><div class="line">    TCPDSACKIgnoredNoUndo: 425</div><div class="line">    TCPSackShiftFallback: 22772083</div><div class="line">    TCPBacklogDrop: 2192</div><div class="line">    TCPChallengeACK: 125</div><div class="line">    TCPSYNChallenge: 125</div><div class="line">    TCPFromZeroWindowAdv: 85</div><div class="line">    TCPToZeroWindowAdv: 85</div><div class="line">    TCPWantZeroWindowAdv: 163030</div><div class="line">IpExt:</div><div class="line">    InBcastPkts: 1232</div><div class="line">    InOctets: 1540584137119</div><div class="line">    OutOctets: 1474239597014</div><div class="line">    InBcastOctets: 191368</div></pre></td></tr></table></figure>
-<p>显示网络统计信息</p>
-<ul>
-<li>netstat -l</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">Active Internet connections (only servers)</div><div class="line">Proto Recv-Q Send-Q Local Address               Foreign Address             State      </div><div class="line">tcp        0      0 *:tproxy                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:us-cli                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:us-srv                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:intu-ec-svcdisc           *:*                         LISTEN      </div><div class="line">tcp        0      0 *:intu-ec-client            *:*                         LISTEN      </div><div class="line">tcp        0      0 *:domain                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:oa-system                 *:*                         LISTEN      </div><div class="line">tcp        0      0 *:ssh                       *:*                         LISTEN      </div><div class="line">tcp        0      0 *:8023                      *:*                         LISTEN      </div><div class="line">tcp        0      0 localhost:smtp              *:*                         LISTEN      </div><div class="line">tcp        0      0 *:12602                     *:*                         LISTEN      </div><div class="line">tcp        0      0 hcdn-others-worker-de:27162 *:*                         LISTEN      </div><div class="line">tcp        0      0 *:30050                     *:*                         LISTEN      </div><div class="line">tcp        0      0 *:xmltec-xmlmail            *:*                         LISTEN      </div><div class="line">tcp        0      0 hcdn-others-worker-de:21988 *:*                         LISTEN      </div><div class="line">tcp        0      0 *:eforward                  *:*                         LISTEN      </div><div class="line">tcp        0      0 *:svn                       *:*                         LISTEN      </div><div class="line">tcp        0      0 *:16010                     *:*                         LISTEN      </div><div class="line">tcp        0      0 *:6379                      *:*                         LISTEN      </div><div class="line">tcp        0      0 *:23212                     *:*                         LISTEN      </div><div class="line">tcp        0      0 hcdn-others-worker-de:28271 *:*                         LISTEN      </div><div class="line">tcp        0      0 *:sunrpc                    *:*                         LISTEN      </div><div class="line">tcp        0      0 *:http                      *:*                         LISTEN      </div><div class="line">udp        0      0 *:947                       *:*                                     </div><div class="line">udp        0      0 *:domain                    *:*                                     </div><div class="line">udp        0      0 *:983                       *:*                                     </div><div class="line">udp        0      0 *:sunrpc                    *:*                                     </div><div class="line">udp        0      0 *:ipp                       *:*                                     </div><div class="line">udp        0      0 hcdn-others-worker-dev10:ntp *:*                                     </div><div class="line">udp        0      0 localhost:ntp               *:*                                     </div><div class="line">udp        0      0 *:ntp                       *:*                                     </div><div class="line">udp        0      0 *:62630                     *:*                                     </div><div class="line">Active UNIX domain sockets (only servers)</div><div class="line">Proto RefCnt Flags       Type       State         I-Node Path</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     12688527 /var/run/abrt/abrt.socket</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     288268830 /tmp/supervisor.sock.3241</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     7341   @/com/ubuntu/upstart</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     17201  @/var/run/hald/dbus-vA2CSxY4CU</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     17196  @/var/run/hald/dbus-5pcejJb6np</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     9429   /var/run/rpcbind.sock</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     9644   /var/run/cgred.socket</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     16960  /var/run/dbus/system_bus_socket</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     17142  /var/run/acpid.socket</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     17754  /var/run/mcelog-client</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18360  public/cleanup</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18367  private/tlsmgr</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18376  private/rewrite</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18384  private/bounce</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18388  private/defer</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18392  private/trace</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18397  private/verify</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18401  public/flush</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18405  private/proxymap</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18409  private/proxywrite</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18413  private/smtp</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18417  private/relay</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18421  public/showq</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18425  private/error</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18429  private/retry</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18433  private/discard</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18437  private/local</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18441  private/virtual</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18445  private/lmtp</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18449  private/anvil</div><div class="line">unix  2      [ ACC ]     STREAM     LISTENING     18453  private/scache</div></pre></td></tr></table></figure>
-<p>显示监听的套接口</p>
-<ul>
-<li>netstat -ap | grep python3</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">tcp        0      0 *:us-srv            *:*                         LISTEN      15484/python3   </div><div class="line">tcp        0      0 *:xmltec-xmlmail    *:*                         LISTEN      14886/python3</div></pre></td></tr></table></figure>
-<p>显示程序运行的端口</p>
-<p>然后利用<code>ps -ef | grep &#39;15484&#39;</code> 命令可查找该端口运行的程序</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root      6262   946  0 15:45 pts/0    00:00:00 grep 15484</div><div class="line">root     15484     1  0  2017 ?        00:00:01 python3 /home/ly/atsbtsp/app.py</div></pre></td></tr></table></figure>
-<p>Read More：</p>
-<blockquote>
-<p><a href="http://www.cnblogs.com/peida/archive/2013/03/08/2949194.html" target="_blank" rel="external">每天一个linux命令（56）：netstat命令</a> <a href="http://www.runoob.com/linux/linux-comm-netstat.html" target="_blank" rel="external">Linux netstat命令</a> </p>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;命令格式&quot;&gt;&lt;a href=&quot;#命令格式&quot; class=&quot;headerlink&quot; title=&quot;命令格式&quot;&gt;&lt;/a&gt;命令格式&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pr
-    
-    </summary>
-    
-      <category term="Linux/Unix" scheme="http://runnerliu.github.io/categories/Linux-Unix/"/>
-    
-    
-      <category term="命令" scheme="http://runnerliu.github.io/tags/%E5%91%BD%E4%BB%A4/"/>
-    
-      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
-    
-      <category term="netstat" scheme="http://runnerliu.github.io/tags/netstat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux命令-ping</title>
-    <link href="http://runnerliu.github.io/2018/01/02/linuxping/"/>
-    <id>http://runnerliu.github.io/2018/01/02/linuxping/</id>
-    <published>2018-01-02T14:45:06.000Z</published>
-    <updated>2018-06-05T23:50:56.000Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ping [参数] [主机名称或IP地址]</div></pre></td></tr></table></figure>
-<h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>ping命令用来测试主机之间网络的连通性。执行ping指令会使用ICMP传输协议，发出要求回应的信息，若远端主机的网络功能没有问题，就会回应该信息，因而得知该主机运作正常。</p>
-<p>ping 命令每秒发送一个数据报并且为每个接收到的响应打印一行输出。ping 命令计算信号往返时间和（信息）包丢失情况的统计信息，并且在完成之后显示一个简要总结。</p>
-<h4 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h4><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-d</td>
-<td>使用Socket的SO_DEBUG功能</td>
-</tr>
-<tr>
-<td>-c &lt;完成次数&gt;</td>
-<td>设置完成要求回应的次数</td>
-</tr>
-<tr>
-<td>-f</td>
-<td>极限检测</td>
-</tr>
-<tr>
-<td>-i &lt;间隔秒数&gt;</td>
-<td>指定收发信息的间隔时间</td>
-</tr>
-<tr>
-<td>-l &lt;网络界面&gt;</td>
-<td>使用指定的网络界面送出数据包</td>
-</tr>
-<tr>
-<td>-l &lt;前置载入&gt;</td>
-<td>设置在送出要求信息之前，先行发出的数据包</td>
-</tr>
-<tr>
-<td>-n</td>
-<td>只输出数值</td>
-</tr>
-<tr>
-<td>-p</td>
-<td>设置填满数据包的范本样式</td>
-</tr>
-<tr>
-<td>-q</td>
-<td>不显示指令执行过程，开头和结尾的相关信息除外</td>
-</tr>
-<tr>
-<td>-r</td>
-<td>忽略普通的Routing Table，直接将数据包送到远端主机上</td>
-</tr>
-<tr>
-<td>-R</td>
-<td>记录路由过程</td>
-</tr>
-<tr>
-<td>-s &lt;数据包大小&gt;</td>
-<td>设置数据包的大小</td>
-</tr>
-<tr>
-<td>-t &lt;存活时间&gt;</td>
-<td>设置存活数值TTL的大小</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>详细显示指令的执行过程</td>
-</tr>
-</tbody>
-</table>
-<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><ul>
-<li>ping 10.3.14.6</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">PING 10.3.14.62 (10.3.14.62) 56(84) bytes of data.</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=1 ttl=119 time=1.00 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=2 ttl=119 time=0.921 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=3 ttl=119 time=0.848 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=4 ttl=119 time=0.862 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=5 ttl=119 time=0.912 ms</div><div class="line">^C</div><div class="line">--- 10.3.14.62 ping statistics ---</div><div class="line">5 packets transmitted, 5 received, 0% packet loss, time 4990ms</div><div class="line">rtt min/avg/max/mdev = 0.848/0.909/1.004/0.061 ms</div><div class="line"></div><div class="line">需要手动Ctrl+c终止</div></pre></td></tr></table></figure>
-<p>ping通主机</p>
-<ul>
-<li>ping 10.3.14.6</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">PING 10.3.14.6 (10.3.14.6) 56(84) bytes of data.</div><div class="line">From 10.13.41.63 icmp_seq=1 Destination Host Unreachable</div><div class="line">From 10.13.41.634 icmp_seq=2 Destination Host Unreachable</div><div class="line">From 10.13.41.63 icmp_seq=3 Destination Host Unreachable</div><div class="line">From 10.13.41.63 icmp_seq=4 Destination Host Unreachable</div><div class="line">From 10.13.41.63 icmp_seq=5 Destination Host Unreachable</div><div class="line">From 10.13.41.63 icmp_seq=6 Destination Host Unreachable</div><div class="line"></div><div class="line">--- 10.3.14.6 ping statistics ---</div><div class="line">8 packets transmitted, 0 received, +6 errors, 100% packet loss, time 7005ms</div><div class="line">, pipe 4</div></pre></td></tr></table></figure>
-<p>ping不通主机</p>
-<ul>
-<li>ping -c 10 10.3.14.62</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">PING 10.3.14.62 (10.3.14.62) 56(84) bytes of data.</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=1 ttl=119 time=0.914 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=2 ttl=119 time=0.525 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=3 ttl=119 time=1.09 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=4 ttl=119 time=1.01 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=5 ttl=119 time=0.956 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=6 ttl=119 time=1.11 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=7 ttl=119 time=0.870 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=8 ttl=119 time=0.891 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=9 ttl=119 time=0.922 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=10 ttl=119 time=1.02 ms</div><div class="line"></div><div class="line">--- 10.3.14.62 ping statistics ---</div><div class="line">10 packets transmitted, 10 received, 0% packet loss, time 9005ms</div><div class="line">rtt min/avg/max/mdev = 0.525/0.932/1.115/0.158 ms</div></pre></td></tr></table></figure>
-<p>ping指定次数</p>
-<ul>
-<li>ping -c 10 -i 0.5 10.3.14.62</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">PING 10.3.14.62 (10.3.14.62) 56(84) bytes of data.</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=1 ttl=119 time=1.00 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=2 ttl=119 time=0.889 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=3 ttl=119 time=0.893 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=4 ttl=119 time=0.865 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=5 ttl=119 time=0.893 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=6 ttl=119 time=0.868 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=7 ttl=119 time=0.881 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=8 ttl=119 time=0.885 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=9 ttl=119 time=0.605 ms</div><div class="line">64 bytes from 10.3.14.62: icmp_seq=10 ttl=119 time=0.569 ms</div><div class="line"></div><div class="line">--- 10.3.14.62 ping statistics ---</div><div class="line">10 packets transmitted, 10 received, 0% packet loss, time 4506ms</div><div class="line">rtt min/avg/max/mdev = 0.569/0.835/1.003/0.130 ms</div></pre></td></tr></table></figure>
-<p>ping指定次数和时间间隔</p>
-<ul>
-<li>ping -c 5 www.zhihu.com</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">PING 6ej19t5k0le6q937.alicloudlayer.com (47.95.51.100) 56(84) bytes of data.</div><div class="line">64 bytes from 47.95.51.100: icmp_seq=1 ttl=45 time=3.08 ms</div><div class="line">64 bytes from 47.95.51.100: icmp_seq=2 ttl=45 time=3.02 ms</div><div class="line">64 bytes from 47.95.51.100: icmp_seq=3 ttl=45 time=3.01 ms</div><div class="line">64 bytes from 47.95.51.100: icmp_seq=4 ttl=45 time=3.05 ms</div><div class="line">64 bytes from 47.95.51.100: icmp_seq=5 ttl=45 time=3.03 ms</div><div class="line"></div><div class="line">--- 6ej19t5k0le6q937.alicloudlayer.com ping statistics ---</div><div class="line">5 packets transmitted, 5 received, 0% packet loss, time 4006ms</div><div class="line">rtt min/avg/max/mdev = 3.012/3.042/3.088/0.074 ms</div></pre></td></tr></table></figure>
-<p>通过域名ping公网地址</p>
-<ul>
-<li>ping -i 3 -s 1024 -t 255 10.3.14.62</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">PING 10.3.14.62 (10.3.14.62) 1024(1052) bytes of data.</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=1 ttl=119 time=1.18 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=2 ttl=119 time=1.21 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=3 ttl=119 time=1.22 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=4 ttl=119 time=1.19 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=5 ttl=119 time=1.20 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=6 ttl=119 time=1.23 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=7 ttl=119 time=1.22 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=8 ttl=119 time=1.22 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=9 ttl=119 time=1.21 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=10 ttl=119 time=1.21 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=11 ttl=119 time=1.19 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=12 ttl=119 time=1.28 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=13 ttl=119 time=1.20 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=14 ttl=119 time=1.23 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=15 ttl=119 time=1.21 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=16 ttl=119 time=1.21 ms</div><div class="line">1032 bytes from 10.3.14.62: icmp_seq=17 ttl=119 time=1.18 ms</div><div class="line">^C</div><div class="line">--- 10.3.14.62 ping statistics ---</div><div class="line">17 packets transmitted, 17 received, 0% packet loss, time 48798ms</div><div class="line">rtt min/avg/max/mdev = 1.187/1.215/1.285/0.038 ms</div></pre></td></tr></table></figure>
-<p>ping多参数使用</p>
-<p>Read More：</p>
-<blockquote>
-<p><a href="http://www.cnblogs.com/peida/archive/2013/03/06/2945407.html" target="_blank" rel="external">每天一个linux命令（54）：ping命令</a> <a href="http://www.runoob.com/linux/linux-comm-ping.html" target="_blank" rel="external">Linux ping命令</a> </p>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h4 id=&quot;命令格式&quot;&gt;&lt;a href=&quot;#命令格式&quot; class=&quot;headerlink&quot; title=&quot;命令格式&quot;&gt;&lt;/a&gt;命令格式&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pr
-    
-    </summary>
-    
-      <category term="Linux/Unix" scheme="http://runnerliu.github.io/categories/Linux-Unix/"/>
-    
-    
-      <category term="命令" scheme="http://runnerliu.github.io/tags/%E5%91%BD%E4%BB%A4/"/>
-    
-      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
-    
-      <category term="ping" scheme="http://runnerliu.github.io/tags/ping/"/>
     
   </entry>
   
