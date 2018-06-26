@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2018-06-18T07:59:11.422Z</updated>
+  <updated>2018-06-26T14:53:46.581Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -14,6 +14,59 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CentOS编译安装Python3</title>
+    <link href="http://runnerliu.github.io/2018/06/26/centosinstallpython3/"/>
+    <id>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</id>
+    <published>2018-06-26T14:25:22.000Z</published>
+    <updated>2018-06-26T14:53:46.581Z</updated>
+    
+    <content type="html"><![CDATA[<p>Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题。如果需要使用最新的 Python3 那么我们可以编译安装源码包到独立目录，这和系统默认环境之间是没有任何影响的，Python3 和 Python2 两个环境并存即可。</p>
+<p>首先去 Python 官网下载 Python3 的源码包，<a href="https://www.python.org/" target="_blank" rel="external">传送门</a> </p>
+<p>进去之后点击导航栏的 Downloads，也可以鼠标放到 Downloads 上弹出菜单选择 Source code，表示源码包，这里选择最新版本 3.6.5，当然下面也有很多其他历史版本，点进去之后页面下方可以看到下载链接，包括源码包、Mac OSX 安装包、Windows 安装包等。Linux 系统可以直接使用以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz</div></pre></td></tr></table></figure>
+<p>接下来，如果是全新的 Linux 系统，可能需要安装一些 Python 的依赖，如 openssl、readline等模块。需要的依赖主要如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">yum -y install zlib zlib-devel</div><div class="line">yum -y install bzip2 bzip2-devel</div><div class="line">yum -y install ncurses ncurses-devel</div><div class="line">yum -y install readline readline-devel</div><div class="line">yum -y install openssl openssl-devel</div><div class="line">yum -y install openssl-static</div><div class="line">yum -y install xz lzma xz-devel</div><div class="line">yum -y install sqlite sqlite-devel</div><div class="line">yum -y install gdbm gdbm-devel</div><div class="line">yum -y install tk tk-devel</div></pre></td></tr></table></figure>
+<p>如果不是全新的 Linux 系统，可以查看是否安装了以上依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">yum list installed | grep zlib</div><div class="line">yum list installed | grep zlib-devel</div><div class="line">yum list installed | grep bzip2</div><div class="line">yum list installed | grep bzip2-devel</div><div class="line">......</div></pre></td></tr></table></figure>
+<p>解压文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf Python-3.6.5.tgz</div></pre></td></tr></table></figure>
+<p>进入目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd Python-3.6.5/</div></pre></td></tr></table></figure>
+<p>配置编译：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/usr/local/python3.6.5 --enable-shared CFLAGS=-fPIC</div></pre></td></tr></table></figure>
+<p>因为上面依赖包是用 yum 安装而不是自己编译的，所以都是安装在系统默认目录下，因此各种选项不用加默认即可生效。<code>--enable-shared</code> 和 <code>-fPIC</code> 之后可以将 Python3 的动态链接库编译出来，默认情况编译完 lib 下面只有 Python3.xm.a 这样的文件，python本身可以正常使用，但是如果编译第三方库需要python 接口的比如 caffe 等，则会报错；所以这里建议按照上面的方式配置。</p>
+<p>然后编译并安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<p>整个过程大约5分钟，安装成功之后，安装目录就在 <code>/usr/local/python3.6.5/</code> 。</p>
+<p>一般为了系统环境的干净，不需要将 python3、pip3 加入到系统环境变量中，使用全路径运行 Python 文件或安装第三方库即可，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/python3.6.5/bin/python3.6 xxx.py</div><div class="line">/usr/local/python3.6.5/bin/pip3.6 install twisted</div></pre></td></tr></table></figure>
+<p>但是一般在开发机上时，加入环境变量会更加方便，建立软连接如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln -s /usr/python3.6.5/bin/python3.6 /usr/bin/python36</div><div class="line">ln -s /usr/python3.6.5/bin/pip3 /usr/bin/pip3</div></pre></td></tr></table></figure>
+<p>然后可以直接使用软连接运行 Python 文件或安装第三方库：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">python36 xxx.py</div><div class="line">pip3 install twisted</div></pre></td></tr></table></figure>
+<p>如上在 CentOS 上安装 Python3 就完成了，安装其他版本的 Python 解释器同理。</p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://www.cnblogs.com/freeweb/p/5181764.html" target="_blank" rel="external">Linux下编译安装python3</a></p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题
+    
+    </summary>
+    
+      <category term="Linux/Unix" scheme="http://runnerliu.github.io/categories/Linux-Unix/"/>
+    
+    
+      <category term="Linux/Unix" scheme="http://runnerliu.github.io/tags/Linux-Unix/"/>
+    
+      <category term="Python3" scheme="http://runnerliu.github.io/tags/Python3/"/>
+    
+  </entry>
   
   <entry>
     <title>Tornado5.0.2翻译文档 - Queue示例:一个并发网络爬虫</title>
@@ -1892,67 +1945,6 @@
       <category term="Windows" scheme="http://runnerliu.github.io/tags/Windows/"/>
     
       <category term="端口占用" scheme="http://runnerliu.github.io/tags/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python上下文管理器</title>
-    <link href="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/"/>
-    <id>http://runnerliu.github.io/2018/01/02/pythoncontextmanager/</id>
-    <published>2018-01-02T14:54:29.000Z</published>
-    <updated>2018-06-05T23:50:56.000Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="何为上下文管理器"><a href="#何为上下文管理器" class="headerlink" title="何为上下文管理器"></a>何为上下文管理器</h4><p>上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。</p>
-<p>例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码块执行前准备，代码块执行后收拾。上下文管理器是在Python2.5加入的功能，它能够让你的代码可读性更强并且错误更少。</p>
-<h4 id="需求的产生"><a href="#需求的产生" class="headerlink" title="需求的产生"></a>需求的产生</h4><p>在正常的管理各种系统资源（文件、锁定和连接），在涉及到异常时通常是个棘手的问题。异常很可能导致控制流跳过负责释放关键资源的语句。例如打开一个文件进行操作时，如果意外情况发生（磁盘已满、特殊的终端信号让其终止等），就会抛出异常，这样可能最后的文件关闭操作就不会执行。如果这样的问题频繁出现，则可能耗尽系统资源。</p>
-<p>在没有接触到上下文管理器之前，我们可以用”try/finally”语句来解决这样的问题。或许在有些人看来，”try/finally”语句显得有些繁琐。上下文管理器就是被设计用来简化”try/finally”语句的，这样可以让程序更加简洁。</p>
-<h4 id="上下文管理协议"><a href="#上下文管理协议" class="headerlink" title="上下文管理协议"></a>上下文管理协议</h4><p>那么在Python中怎么实现一个上下文管理器呢？主要依靠<code>__enter__</code>、<code>__exit__</code>这两个”魔术方法”。</p>
-<blockquote>
-<p><code>__enter__(self)</code> </p>
-<p>Defines what the context manager should do at the beginning of the block created by the with statement. Note that the return value of __enter__ is bound to the target of the with statement, or the name after the as.</p>
-<p><code>__exit__(self, exception_type, exception_value, traceback)</code> </p>
-<p>Defines what the context manager should do after its block has been executed (or terminates). It can be used to handle exceptions, perform cleanup, or do something always done immediately after the action in the block. If the block executes successfully, exception_type, exception<em>value, and traceback will be None. Otherwise, you can choose to handle the exception or let the user handle it; if you want to handle it, make sure </em>_exit__ returns True after all is said and done. If you don’t want the exception to be handled by the context manager, just let it happen.</p>
-</blockquote>
-<p>也就是说，当我们需要创建一个上下文管理器类型的时候，就需要实现<code>__enter__</code>和<code>__exit__</code>方法，这对方法就称为上下文管理协议（Context Manager Protocol），定义了一种运行时上下文环境。</p>
-<h4 id="with语句"><a href="#with语句" class="headerlink" title="with语句"></a>with语句</h4><p>在Python中，可以通过with语句来方便的使用上下文管理器，with语句可以在代码块运行前进入一个运行时上下文（执行__enter__方法），并在代码块结束后退出该上下文（执行__exit__方法）。</p>
-<p>with语句的语法如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">with context_expr [as var]:</div><div class="line">    with_suite</div></pre></td></tr></table></figure>
-<ul>
-<li>context_expr: 支持上下文管理协议的对象，也就是上下文管理器对象，负责维护上下文环境</li>
-<li>as var: 可选部分，通过变量方式保存上下文管理器对象</li>
-<li>with_suite: 需要放在上下文环境中执行的语句块</li>
-</ul>
-<p>在Python的内置类型中，很多类型都是支持上下文管理协议的，例如file、thread.LockType、threading.Lock等等。这里我们就以file类型为例，看看with语句的使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">with File(&apos;demo.txt&apos;, &apos;w&apos;) as opened_file:</div><div class="line">    opened_file.write(&apos;Hola!&apos;)</div></pre></td></tr></table></figure>
-<p> with语句先暂存了File类的<code>__exit__()</code>方法，然后它调用File类的<code>__enter__()</code>方方法，<code>__enter__</code>方法打开文件并返回给with语句，打开的文件句柄被传递给<code>opened_file</code>参数，然后使用<code>.write()</code>来写文件，with语句调用之前暂存的<code>__exit__</code>方法关闭了文件。</p>
-<h4 id="自定义上下文管理器"><a href="#自定义上下文管理器" class="headerlink" title="自定义上下文管理器"></a>自定义上下文管理器</h4><p>了解上下文管理器的执行流程和方法后，我们可以通过实现<code>__enter__()</code>、<code>__exit__()</code>函数来自定义上下文管理器，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">filename = &apos;my_file.txt&apos;</div><div class="line">mode = &apos;w&apos; # Mode that allows to write to the file</div><div class="line">writer = open(filename, mode)</div><div class="line"></div><div class="line">class PypixOpen(object):</div><div class="line">    def __init__(self, filename, mode):</div><div class="line">        self.filename = filename</div><div class="line">        self.mode = mode</div><div class="line"></div><div class="line">    def __enter__(self):</div><div class="line">        self.openedFile = open(self.filename, self.mode)</div><div class="line">        return self.openedFile</div><div class="line"></div><div class="line">    def __exit__(self, *unused):</div><div class="line">        self.openedFile.close()</div><div class="line"></div><div class="line"># Script starts from here</div><div class="line"></div><div class="line">with PypixOpen(filename, mode) as writer:</div><div class="line">    writer.write(&quot;Hello World from our new Context Manager!&quot;)</div></pre></td></tr></table></figure>
-<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><p>上下文管理器根据<code>__exit__()</code> 方法的返回值来决定是否抛出异常，如果没有返回值或者返回值为 False ，则异常由上下文管理器处理，如果为 True 则由用户自己处理。</p>
-<p><code>__exit__ ()</code>接受三个参数，exception_type、exception_value、traceback，我们可以根据这些值来决定是否处理异常</p>
-<p>下面这个例子，捕捉了 AttributeError 的异常，并打印出警告: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class Open:</div><div class="line">    def __init__(self, file, mode):</div><div class="line">        self.open_file = open(file, mode)</div><div class="line">    def __enter__(self):</div><div class="line">        return self.open_file</div><div class="line">    def __exit__(self, type, value, tb):</div><div class="line">        self.open_file.close()</div><div class="line">        if type is AttributeError:</div><div class="line">            print(&apos;handing some exception&apos;)</div><div class="line">            return True</div><div class="line">            </div><div class="line">with Open(&apos;aaa&apos;, &apos;w&apos;) as f:</div><div class="line">    f.writeee(&apos;aaaa&apos;)</div><div class="line">    </div><div class="line">    </div><div class="line">&gt;&gt;&gt; handing some exception</div></pre></td></tr></table></figure>
-<h4 id="contextmanager"><a href="#contextmanager" class="headerlink" title="contextmanager"></a>contextmanager</h4><p>由于上下文管理非常有用，Python 中有一个专门用于实现上下文管理的标准库，这就是 contextlib。</p>
-<p>有了 contextlib 创建上下文管理的最好方式就是使用 contextmanager 装饰器，通过 contextmanager 装饰一个生成器函数，<code>yield</code> 语句前面的部分被认为是<code>__enter__()</code> 方法的代码，后面的部分被认为是 <code>__exit__()</code>方法的代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">from contextlib import contextmanager</div><div class="line">@contextmanager</div><div class="line">def file(path, mode):</div><div class="line">    open_file = open(path, mode)</div><div class="line">    yield open_file</div><div class="line">    open_file.close()</div></pre></td></tr></table></figure>
-<p>Python解释器遇到了<code>yield</code>关键字。因为这个缘故它创建了一个生成器而不是一个普通的函数。因为这个装饰器，contextmanager会被调用并传入函数名（<code>file</code>）作为参数。contextmanager函数返回一个以GeneratorContextManager对象封装过的生成器。这个GeneratorContextManager被赋值给<code>file</code>函数，我们实际上是在调用GeneratorContextManager对象。</p>
-<p>Read More: </p>
-<blockquote>
-<p><a href="https://eastlakeside.gitbooks.io/interpy-zh/content/context_managers/" target="_blank" rel="external">上下文管理器(Context managers)</a> <a href="http://kuanghy.github.io/2015/08/08/python-with" target="_blank" rel="external">Python上下文管理器与with语句</a> <a href="http://www.cnblogs.com/wilber2013/p/4638967.html" target="_blank" rel="external">Python上下文管理器</a> <a href="https://anyisalin.github.io/anyisalin.github.io/2017/03/07/python-context-manager/" target="_blank" rel="external">Python - 上下文管理</a> </p>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h4 id=&quot;何为上下文管理器&quot;&gt;&lt;a href=&quot;#何为上下文管理器&quot; class=&quot;headerlink&quot; title=&quot;何为上下文管理器&quot;&gt;&lt;/a&gt;何为上下文管理器&lt;/h4&gt;&lt;p&gt;上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的
-    
-    </summary>
-    
-      <category term="Python" scheme="http://runnerliu.github.io/categories/Python/"/>
-    
-    
-      <category term="Python" scheme="http://runnerliu.github.io/tags/Python/"/>
-    
-      <category term="上下文管理器" scheme="http://runnerliu.github.io/tags/%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8/"/>
     
   </entry>
   
