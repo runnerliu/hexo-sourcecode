@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://runnerliu.github.io/about/index.html</loc>
+    
+    <lastmod>2020-10-25T08:49:31.438Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/01/hexogithub/</loc>
+    
+    <lastmod>2020-10-25T08:34:11.685Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://runnerliu.github.io/2020/10/25/tcpdiff/</loc>
     
     <lastmod>2020-10-25T08:04:02.844Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>http://runnerliu.github.io/categories/index.html</loc>
     
     <lastmod>2020-10-25T06:43:32.287Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/about/index.html</loc>
-    
-    <lastmod>2020-10-25T06:43:32.286Z</lastmod>
     
   </url>
   
@@ -404,13 +411,6 @@
     <loc>http://runnerliu.github.io/2017/04/01/heyliuxiaoyang/</loc>
     
     <lastmod>2020-10-25T06:43:32.219Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/01/hexogithub/</loc>
-    
-    <lastmod>2020-10-25T06:43:32.218Z</lastmod>
     
   </url>
   
