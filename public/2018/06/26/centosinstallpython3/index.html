@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,23 +68,23 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Linux/Unix,Python3," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
+  <meta name="keywords" content="Linux/Unix,Python3,">
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
@@ -92,12 +92,14 @@
 
 
 <meta name="description" content="Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题。如果需要使用最新的 Python3 那么我们可以编译安装源码包到独立目录，这和系统默认环境之间是没有任何影响的，Python">
+<meta name="keywords" content="Linux&#x2F;Unix,Python3">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS编译安装Python3">
 <meta property="og:url" content="http://runnerliu.github.io/2018/06/26/centosinstallpython3/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
 <meta property="og:description" content="Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题。如果需要使用最新的 Python3 那么我们可以编译安装源码包到独立目录，这和系统默认环境之间是没有任何影响的，Python">
-<meta property="og:updated_time" content="2018-06-26T14:53:46.581Z">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.210Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CentOS编译安装Python3">
 <meta name="twitter:description" content="Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题。如果需要使用最新的 Python3 那么我们可以编译安装源码包到独立目录，这和系统默认环境之间是没有任何影响的，Python">
@@ -128,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2018/06/26/centosinstallpython3/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2018/06/26/centosinstallpython3/">
 
 
 
@@ -168,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -198,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -208,7 +210,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -218,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -228,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -238,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -251,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -272,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -311,7 +311,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -354,7 +354,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -413,33 +413,33 @@
 
       
         <p>Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题。如果需要使用最新的 Python3 那么我们可以编译安装源码包到独立目录，这和系统默认环境之间是没有任何影响的，Python3 和 Python2 两个环境并存即可。</p>
-<p>首先去 Python 官网下载 Python3 的源码包，<a href="https://www.python.org/" target="_blank" rel="external">传送门</a> </p>
+<p>首先去 Python 官网下载 Python3 的源码包，<a href="https://www.python.org/" target="_blank" rel="noopener">传送门</a> </p>
 <p>进去之后点击导航栏的 Downloads，也可以鼠标放到 Downloads 上弹出菜单选择 Source code，表示源码包，这里选择最新版本 3.6.5，当然下面也有很多其他历史版本，点进去之后页面下方可以看到下载链接，包括源码包、Mac OSX 安装包、Windows 安装包等。Linux 系统可以直接使用以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz</span><br></pre></td></tr></table></figure>
 <p>接下来，如果是全新的 Linux 系统，可能需要安装一些 Python 的依赖，如 openssl、readline等模块。需要的依赖主要如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">yum -y install zlib zlib-devel</div><div class="line">yum -y install bzip2 bzip2-devel</div><div class="line">yum -y install ncurses ncurses-devel</div><div class="line">yum -y install readline readline-devel</div><div class="line">yum -y install openssl openssl-devel</div><div class="line">yum -y install openssl-static</div><div class="line">yum -y install xz lzma xz-devel</div><div class="line">yum -y install sqlite sqlite-devel</div><div class="line">yum -y install gdbm gdbm-devel</div><div class="line">yum -y install tk tk-devel</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">yum -y install zlib zlib-devel</span><br><span class="line">yum -y install bzip2 bzip2-devel</span><br><span class="line">yum -y install ncurses ncurses-devel</span><br><span class="line">yum -y install readline readline-devel</span><br><span class="line">yum -y install openssl openssl-devel</span><br><span class="line">yum -y install openssl-static</span><br><span class="line">yum -y install xz lzma xz-devel</span><br><span class="line">yum -y install sqlite sqlite-devel</span><br><span class="line">yum -y install gdbm gdbm-devel</span><br><span class="line">yum -y install tk tk-devel</span><br></pre></td></tr></table></figure>
 <p>如果不是全新的 Linux 系统，可以查看是否安装了以上依赖：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">yum list installed | grep zlib</div><div class="line">yum list installed | grep zlib-devel</div><div class="line">yum list installed | grep bzip2</div><div class="line">yum list installed | grep bzip2-devel</div><div class="line">......</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum list installed | grep zlib</span><br><span class="line">yum list installed | grep zlib-devel</span><br><span class="line">yum list installed | grep bzip2</span><br><span class="line">yum list installed | grep bzip2-devel</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
 <p>解压文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxvf Python-3.6.5.tgz</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf Python-3.6.5.tgz</span><br></pre></td></tr></table></figure>
 <p>进入目录：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd Python-3.6.5/</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd Python-3.6.5/</span><br></pre></td></tr></table></figure>
 <p>配置编译：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/usr/local/python3.6.5 --enable-shared CFLAGS=-fPIC</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/python3.6.5 --enable-shared CFLAGS=-fPIC</span><br></pre></td></tr></table></figure>
 <p>因为上面依赖包是用 yum 安装而不是自己编译的，所以都是安装在系统默认目录下，因此各种选项不用加默认即可生效。<code>--enable-shared</code> 和 <code>-fPIC</code> 之后可以将 Python3 的动态链接库编译出来，默认情况编译完 lib 下面只有 Python3.xm.a 这样的文件，python本身可以正常使用，但是如果编译第三方库需要python 接口的比如 caffe 等，则会报错；所以这里建议按照上面的方式配置。</p>
 <p>然后编译并安装：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
 <p>整个过程大约5分钟，安装成功之后，安装目录就在 <code>/usr/local/python3.6.5/</code> 。</p>
 <p>一般为了系统环境的干净，不需要将 python3、pip3 加入到系统环境变量中，使用全路径运行 Python 文件或安装第三方库即可，如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/python3.6.5/bin/python3.6 xxx.py</div><div class="line">/usr/local/python3.6.5/bin/pip3.6 install twisted</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/python3.6.5/bin/python3.6 xxx.py</span><br><span class="line">/usr/local/python3.6.5/bin/pip3.6 install twisted</span><br></pre></td></tr></table></figure>
 <p>但是一般在开发机上时，加入环境变量会更加方便，建立软连接如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln -s /usr/python3.6.5/bin/python3.6 /usr/bin/python36</div><div class="line">ln -s /usr/python3.6.5/bin/pip3 /usr/bin/pip3</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/python3.6.5/bin/python3.6 /usr/bin/python36</span><br><span class="line">ln -s /usr/python3.6.5/bin/pip3 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
 <p>然后可以直接使用软连接运行 Python 文件或安装第三方库：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">python36 xxx.py</div><div class="line">pip3 install twisted</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python36 xxx.py</span><br><span class="line">pip3 install twisted</span><br></pre></td></tr></table></figure>
 <p>如上在 CentOS 上安装 Python3 就完成了，安装其他版本的 Python 解释器同理。</p>
 <p>Read More:</p>
 <blockquote>
-<p><a href="https://www.cnblogs.com/freeweb/p/5181764.html" target="_blank" rel="external">Linux下编译安装python3</a></p>
+<p><a href="https://www.cnblogs.com/freeweb/p/5181764.html" target="_blank" rel="noopener">Linux下编译安装python3</a></p>
 </blockquote>
 
       
@@ -495,6 +495,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/10/25/tcpdiff/" rel="prev" title="HTTP1.0、HTTP1.1、HTTP2.0的区别">
+                HTTP1.0、HTTP1.1、HTTP2.0的区别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -545,9 +549,7 @@
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -558,7 +560,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -669,10 +671,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,49 +68,48 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="网络编程,TCP/IP," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="网络编程,TCP/IP,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="写这篇文章的主要动机是，自己在做项目的时候用到了网络编程的内容，然后自己简单学习了一下TCP/IP的东西，属于很基础的那种，在实习面试中，面试官也是问到了这块内容，但是自己理解比较浅，所以回答的也不是很好。想着系统的学习一下网络编程中TCP/IP协议这块，本篇作为入门，简单介绍一下TCP/IP协议。
-名词解释TCP/IP：Transmission Control Protocol/Internet">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="写这篇文章的主要动机是，自己在做项目的时候用到了网络编程的内容，然后自己简单学习了一下TCP/IP的东西，属于很基础的那种，在实习面试中，面试官也是问到了这块内容，但是自己理解比较浅，所以回答的也不是很好。想着系统的学习一下网络编程中TCP/IP协议这块，本篇作为入门，简单介绍一下TCP/IP协议。 名词解释TCP/IP：Transmission Control Protocol/Internet">
+<meta name="keywords" content="网络编程,TCP&#x2F;IP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TCP/IP协议入门篇">
+<meta property="og:title" content="TCP&#x2F;IP协议入门篇">
 <meta property="og:url" content="http://runnerliu.github.io/2017/04/03/tcpip/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="写这篇文章的主要动机是，自己在做项目的时候用到了网络编程的内容，然后自己简单学习了一下TCP/IP的东西，属于很基础的那种，在实习面试中，面试官也是问到了这块内容，但是自己理解比较浅，所以回答的也不是很好。想着系统的学习一下网络编程中TCP/IP协议这块，本篇作为入门，简单介绍一下TCP/IP协议。
-名词解释TCP/IP：Transmission Control Protocol/Internet">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3 140143.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3 141518.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3 143008.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3 145434.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3 145924.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3 150129.png">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="写这篇文章的主要动机是，自己在做项目的时候用到了网络编程的内容，然后自己简单学习了一下TCP/IP的东西，属于很基础的那种，在实习面试中，面试官也是问到了这块内容，但是自己理解比较浅，所以回答的也不是很好。想着系统的学习一下网络编程中TCP/IP协议这块，本篇作为入门，简单介绍一下TCP/IP协议。 名词解释TCP/IP：Transmission Control Protocol/Internet">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20140143.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20141518.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20143008.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20145434.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20145924.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20150129.png">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.273Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TCP/IP协议入门篇">
-<meta name="twitter:description" content="写这篇文章的主要动机是，自己在做项目的时候用到了网络编程的内容，然后自己简单学习了一下TCP/IP的东西，属于很基础的那种，在实习面试中，面试官也是问到了这块内容，但是自己理解比较浅，所以回答的也不是很好。想着系统的学习一下网络编程中TCP/IP协议这块，本篇作为入门，简单介绍一下TCP/IP协议。
-名词解释TCP/IP：Transmission Control Protocol/Internet">
-<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-4-3 140143.png">
+<meta name="twitter:title" content="TCP&#x2F;IP协议入门篇">
+<meta name="twitter:description" content="写这篇文章的主要动机是，自己在做项目的时候用到了网络编程的内容，然后自己简单学习了一下TCP/IP的东西，属于很基础的那种，在实习面试中，面试官也是问到了这块内容，但是自己理解比较浅，所以回答的也不是很好。想着系统的学习一下网络编程中TCP/IP协议这块，本篇作为入门，简单介绍一下TCP/IP协议。 名词解释TCP/IP：Transmission Control Protocol/Internet">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-4-3%20140143.png">
 
 
 
@@ -138,7 +137,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/04/03/tcpip/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/04/03/tcpip/">
 
 
 
@@ -178,7 +177,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -208,7 +207,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -218,7 +217,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -228,7 +227,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -238,7 +237,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -248,7 +247,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -261,7 +260,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -282,9 +281,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -321,7 +318,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -364,7 +361,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -501,7 +498,11 @@
 <h4 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h4><p>负责相邻计算机之间的通信。其功能包括三方面。</p>
 <blockquote>
 <p> 处理来自传输层的分组发送请求，收到请求后，将分组装入IP数据报，填充报头，选择去往信宿机的路径，然后将数据报发往适当的网络接口。</p>
+</blockquote>
+<blockquote>
 <p> 处理输入数据报：首先检查其合法性，然后进行寻径–假如该数据报已到达信宿机，则去掉报头，将剩下部分交给适当的传输协议；假如该数据报尚未到达信宿，则转发该数据报。</p>
+</blockquote>
+<blockquote>
 <p> 处理路径、流控、拥塞等问题。</p>
 </blockquote>
 <h4 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h4><p>提供应用程序间的通信。其功能包括：格式化信息流；提供可靠传输。</p>
@@ -551,7 +552,7 @@
 <h4 id="TCP连接为什么需要三次握手"><a href="#TCP连接为什么需要三次握手" class="headerlink" title="TCP连接为什么需要三次握手"></a>TCP连接为什么需要三次握手</h4><p>在谢希仁著《计算机网络》第四版中讲“三次握手”的目的是“为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误”。在另一部经典的《计算机网络》一书中讲“三次握手”的目的是为了解决“网络中存在延迟的重复分组”的问题。这两种不用的表述其实阐明的是同一个问题。</p>
 <p>谢希仁版《计算机网络》中的例子是这样的，“已失效的连接请求报文段”的产生在这样一种情况下：client发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，以致延误到连接释放以后的某个时间才到达server。本来这是一个早已失效的报文段。但server收到此失效的连接请求报文段后，就误认为是client再次发出的一个新的连接请求。于是就向client发出确认报文段，同意建立连接。假设不采用“三次握手”，那么只要server发出确认，新的连接就建立了。由于现在client并没有发出建立连接的请求，因此不会理睬server的确认，也不会向server发送数据。但server却以为新的运输连接已经建立，并一直等待client发来数据。这样，server的很多资源就白白浪费掉了。采用“三次握手”的办法可以防止上述现象发生。例如刚才那种情况，client不会向server的确认发出确认。server由于收不到确认，就知道client并没有要求建立连接。”</p>
 <p>在Google Groups的TopLanguage中看到一帖讨论TCP“三次握手”觉得很有意思。贴主提出“TCP建立连接为什么是三次握手？”的问题，在众多回复中，有一条回复写道：“这个问题的本质是, 信道不可靠, 但是通信双发需要就某个问题达成一致. 而要解决这个问题,  无论你在消息中包含什么信息, 三次通信是理论上的最小值. 所以三次握手不是TCP本身的要求, 而是为了满足”在不可靠信道上可靠地传输信息”这一需求所导致的. 请注意这里的本质需求,信道不可靠, 数据传输要可靠. 三次达到了, 那后面你想接着握手也好, 发数据也好, 跟进行可靠信息传输的需求就没关系了. 因此,如果信道是可靠的, 即无论什么时候发出消息, 对方一定能收到, 或者你不关心是否要保证对方收到你的消息, 那就能像UDP那样直接发送消息就可以了.”。这可视为对“三次握手”目的的另一种解答思路。</p>
-<p>原文地址：<a href="http://www.cnblogs.com/TechZi/archive/2011/10/18/2216751.html" target="_blank" rel="external">TCP连接建立过程中为什么需要三次握手</a></p>
+<p>原文地址：<a href="http://www.cnblogs.com/TechZi/archive/2011/10/18/2216751.html" target="_blank" rel="noopener">TCP连接建立过程中为什么需要三次握手</a></p>
 <h4 id="四次挥手释放连接"><a href="#四次挥手释放连接" class="headerlink" title="四次挥手释放连接"></a>四次挥手释放连接</h4><p>由于TCP连接时全双工的，因此，每个方向都必须要单独进行关闭，这一原则是当一方完成数据发送任务后，发送一个FIN来终止这一方向的连接，收到一个FIN只是意味着这一方向上没有数据流动了，即不会再收到数据了，但是在这个TCP连接上仍然能够发送数据，直到这一方向也发送了FIN。首先进行关闭的一方将执行主动关闭，而另一方则执行被动关闭。</p>
 <p><img src="/images/2017-4-3 145434.png" alt="2017-4-3 145434"></p>
 <p><strong>第一次挥手</strong>：Client发送一个FIN，用来关闭Client到Server的数据传送，Client进入FIN_WAIT_1状态。</p>
@@ -618,12 +619,12 @@
 <p>TCP充分实现了数据传输时各种控制功能，可以进行丢包的重发控制，还可以对次序乱掉的分包进行顺序控制。而这些在UDP中都没有。此外，TCP作为一种面向有连接的协议，只有在确认通信对端存在时才会发送数据，从而可以控制通信流量的浪费。TCP通过检验和、序列号、确认应答、重发控制、连接管理以及窗口控制等机制实现可靠性传输。</p>
 <blockquote>
 <p>参考：</p>
-<p><a href="http://blog.csdn.net/li_ning_/article/details/52117463" target="_blank" rel="external">TCP和UDP的最完整的区别</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/22516664" target="_blank" rel="external">计算机网络入门基础篇</a></p>
-<p><a href="http://baike.baidu.com/link?url=XlOHwI18XnbZTaGjg2WLtpmrwq2IsMVyoEggNVDOW6jaU-3qOLaoLleiSan-SBod0GTS8cAyOz99BAplna-wd3khoGaLvNPcniIX0dMGkg_oS2JsNmLR74DqcVoS5TgS#3" target="_blank" rel="external">TCP/IP协议</a></p>
-<p><a href="https://www.zhihu.com/question/49619919/answer/116941333" target="_blank" rel="external">tcp 编程中，connect 连接成功的标准是什么？</a></p>
-<p><a href="https://www.zhihu.com/question/20583641" target="_blank" rel="external">如何通俗地解释一下 TCP/UDP 协议和 HTTP、FTP、SMTP 等协议之间的区别？</a></p>
-<p><a href="http://blog.chinaunix.net/uid-26833883-id-3627644.html" target="_blank" rel="external">TCP、UDP、IP 协议分析</a> </p>
+<p><a href="http://blog.csdn.net/li_ning_/article/details/52117463" target="_blank" rel="noopener">TCP和UDP的最完整的区别</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/22516664" target="_blank" rel="noopener">计算机网络入门基础篇</a></p>
+<p><a href="http://baike.baidu.com/link?url=XlOHwI18XnbZTaGjg2WLtpmrwq2IsMVyoEggNVDOW6jaU-3qOLaoLleiSan-SBod0GTS8cAyOz99BAplna-wd3khoGaLvNPcniIX0dMGkg_oS2JsNmLR74DqcVoS5TgS#3" target="_blank" rel="noopener">TCP/IP协议</a></p>
+<p><a href="https://www.zhihu.com/question/49619919/answer/116941333" target="_blank" rel="noopener">tcp 编程中，connect 连接成功的标准是什么？</a></p>
+<p><a href="https://www.zhihu.com/question/20583641" target="_blank" rel="noopener">如何通俗地解释一下 TCP/UDP 协议和 HTTP、FTP、SMTP 等协议之间的区别？</a></p>
+<p><a href="http://blog.chinaunix.net/uid-26833883-id-3627644.html" target="_blank" rel="noopener">TCP、UDP、IP 协议分析</a> </p>
 </blockquote>
 
       
@@ -731,7 +732,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -742,9 +743,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -755,7 +754,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -882,10 +881,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

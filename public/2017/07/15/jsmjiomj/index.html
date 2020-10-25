@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,48 +68,44 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="计算密集型任务,I/O密集型任务,Python," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="计算密集型任务,I/O密集型任务,Python,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="I/O密集型任务 VS 计算密集型任务所谓 I/O 密集型任务，是指磁盘 I/O、网络 I/O 占主要的任务，计算量很小。比如请求网页、读写文件等。当然我们在Python中可以利用 sleep 达到 I/O 密集型任务的目的。
-所谓计算密集型任务，是指 CPU 计算占主要的任务，CPU 一直处于满负荷状态。比如在一个很大的列表中查找元素（当然这不合理），复杂的加减乘除等。
-多线程 VS 多进程Py">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="I/O密集型任务 VS 计算密集型任务所谓 I/O 密集型任务，是指磁盘 I/O、网络 I/O 占主要的任务，计算量很小。比如请求网页、读写文件等。当然我们在Python中可以利用 sleep 达到 I/O 密集型任务的目的。 所谓计算密集型任务，是指 CPU 计算占主要的任务，CPU 一直处于满负荷状态。比如在一个很大的列表中查找元素（当然这不合理），复杂的加减乘除等。 多线程 VS 多进程Py">
+<meta name="keywords" content="计算密集型任务,I&#x2F;O密集型任务,Python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python:计算密集型任务和I/O密集型任务">
+<meta property="og:title" content="Python:计算密集型任务和I&#x2F;O密集型任务">
 <meta property="og:url" content="http://runnerliu.github.io/2017/07/15/jsmjiomj/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="I/O密集型任务 VS 计算密集型任务所谓 I/O 密集型任务，是指磁盘 I/O、网络 I/O 占主要的任务，计算量很小。比如请求网页、读写文件等。当然我们在Python中可以利用 sleep 达到 I/O 密集型任务的目的。
-所谓计算密集型任务，是指 CPU 计算占主要的任务，CPU 一直处于满负荷状态。比如在一个很大的列表中查找元素（当然这不合理），复杂的加减乘除等。
-多线程 VS 多进程Py">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-7-15 160518.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-7-15 160641.png">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="I/O密集型任务 VS 计算密集型任务所谓 I/O 密集型任务，是指磁盘 I/O、网络 I/O 占主要的任务，计算量很小。比如请求网页、读写文件等。当然我们在Python中可以利用 sleep 达到 I/O 密集型任务的目的。 所谓计算密集型任务，是指 CPU 计算占主要的任务，CPU 一直处于满负荷状态。比如在一个很大的列表中查找元素（当然这不合理），复杂的加减乘除等。 多线程 VS 多进程Py">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-7-15%20160518.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-7-15%20160641.png">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.223Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python:计算密集型任务和I/O密集型任务">
-<meta name="twitter:description" content="I/O密集型任务 VS 计算密集型任务所谓 I/O 密集型任务，是指磁盘 I/O、网络 I/O 占主要的任务，计算量很小。比如请求网页、读写文件等。当然我们在Python中可以利用 sleep 达到 I/O 密集型任务的目的。
-所谓计算密集型任务，是指 CPU 计算占主要的任务，CPU 一直处于满负荷状态。比如在一个很大的列表中查找元素（当然这不合理），复杂的加减乘除等。
-多线程 VS 多进程Py">
-<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-7-15 160518.png">
+<meta name="twitter:title" content="Python:计算密集型任务和I&#x2F;O密集型任务">
+<meta name="twitter:description" content="I/O密集型任务 VS 计算密集型任务所谓 I/O 密集型任务，是指磁盘 I/O、网络 I/O 占主要的任务，计算量很小。比如请求网页、读写文件等。当然我们在Python中可以利用 sleep 达到 I/O 密集型任务的目的。 所谓计算密集型任务，是指 CPU 计算占主要的任务，CPU 一直处于满负荷状态。比如在一个很大的列表中查找元素（当然这不合理），复杂的加减乘除等。 多线程 VS 多进程Py">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-7-15%20160518.png">
 
 
 
@@ -137,7 +133,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/07/15/jsmjiomj/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/07/15/jsmjiomj/">
 
 
 
@@ -177,7 +173,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -207,7 +203,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -217,7 +213,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -227,7 +223,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -237,7 +233,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -247,7 +243,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -260,7 +256,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -281,9 +277,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -320,7 +314,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -363,7 +357,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -441,17 +435,17 @@
 <p>Python 中的进程模块为 mutliprocess 模块，提供了很多容易使用的基于对象的接口。另外它提供了封装好的管道和队列，可以方便的在进程间传递消息。Python 还提供了进程池 Pool 对象，可以方便的管理和控制线程。</p>
 <h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>这里通过一个实例，说明多线程适合IO密集型任务，多进程适合计算密集型任务。</p>
 <p>首先定义一个队列，并定义初始化队列的函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># 定义全局变量Queue，与Queue.Queue()的不同之处在于，multiprocessing.Queue()支持跨进程使用</div><div class="line">g_queue = multiprocessing.Queue()</div><div class="line"></div><div class="line">def init_queue():</div><div class="line">    print(&quot;init g_queue start&quot;)</div><div class="line">    while not g_queue.empty():</div><div class="line">        g_queue.get()</div><div class="line">    for _index in range(10):</div><div class="line">        g_queue.put(_index)</div><div class="line">    print(&quot;init g_queue end&quot;)</div><div class="line">    return</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 定义全局变量Queue，与Queue.Queue()的不同之处在于，multiprocessing.Queue()支持跨进程使用</span><br><span class="line">g_queue = multiprocessing.Queue()</span><br><span class="line"></span><br><span class="line">def init_queue():</span><br><span class="line">    print(&quot;init g_queue start&quot;)</span><br><span class="line">    while not g_queue.empty():</span><br><span class="line">        g_queue.get()</span><br><span class="line">    for _index in range(10):</span><br><span class="line">        g_queue.put(_index)</span><br><span class="line">    print(&quot;init g_queue end&quot;)</span><br><span class="line">    return</span><br></pre></td></tr></table></figure>
 <p>然后定义 I/O 密集型任务和计算密集型任务，分别从队列中获取任务数据：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"># 定义一个IO密集型任务：利用time.sleep()</div><div class="line">def task_io(task_id):</div><div class="line">    print(&quot;IOTask[%s] start&quot; % task_id)</div><div class="line">    while not g_queue.empty():</div><div class="line">        time.sleep(1)</div><div class="line">        try:</div><div class="line">            data = g_queue.get(block=True, timeout=1)</div><div class="line">            print(&quot;IOTask[%s] get data: %s&quot; % (task_id, data))</div><div class="line">        except Exception as ex:</div><div class="line">            print(&quot;IOTask[%s] error: %s&quot; % (task_id, str(ex)))</div><div class="line">    print(&quot;IOTask[%s] end&quot; % task_id)</div><div class="line">    return</div><div class="line"></div><div class="line"></div><div class="line">g_search_list = list(range(10000))</div><div class="line"></div><div class="line"></div><div class="line"># 定义一个计算密集型任务：利用一些复杂加减乘除、列表查找等</div><div class="line">def task_cpu(task_id):</div><div class="line">    print(&quot;CPUTask[%s] start&quot; % task_id)</div><div class="line">    while not g_queue.empty():</div><div class="line">        count = 0</div><div class="line">        for i in range(10000):</div><div class="line">            count += pow(3 * 2, 3 * 2) if i in g_search_list else 0</div><div class="line">        try:</div><div class="line">            data = g_queue.get(block=True, timeout=1)</div><div class="line">            print(&quot;CPUTask[%s] get data: %s&quot; % (task_id, data))</div><div class="line">        except Exception as excep:</div><div class="line">            print(&quot;CPUTask[%s] error: %s&quot; % (task_id, str(excep)))</div><div class="line">    print(&quot;CPUTask[%s] end&quot; % task_id)</div><div class="line">    return task_id</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># 定义一个IO密集型任务：利用time.sleep()</span><br><span class="line">def task_io(task_id):</span><br><span class="line">    print(&quot;IOTask[%s] start&quot; % task_id)</span><br><span class="line">    while not g_queue.empty():</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        try:</span><br><span class="line">            data = g_queue.get(block=True, timeout=1)</span><br><span class="line">            print(&quot;IOTask[%s] get data: %s&quot; % (task_id, data))</span><br><span class="line">        except Exception as ex:</span><br><span class="line">            print(&quot;IOTask[%s] error: %s&quot; % (task_id, str(ex)))</span><br><span class="line">    print(&quot;IOTask[%s] end&quot; % task_id)</span><br><span class="line">    return</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">g_search_list = list(range(10000))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 定义一个计算密集型任务：利用一些复杂加减乘除、列表查找等</span><br><span class="line">def task_cpu(task_id):</span><br><span class="line">    print(&quot;CPUTask[%s] start&quot; % task_id)</span><br><span class="line">    while not g_queue.empty():</span><br><span class="line">        count = 0</span><br><span class="line">        for i in range(10000):</span><br><span class="line">            count += pow(3 * 2, 3 * 2) if i in g_search_list else 0</span><br><span class="line">        try:</span><br><span class="line">            data = g_queue.get(block=True, timeout=1)</span><br><span class="line">            print(&quot;CPUTask[%s] get data: %s&quot; % (task_id, data))</span><br><span class="line">        except Exception as excep:</span><br><span class="line">            print(&quot;CPUTask[%s] error: %s&quot; % (task_id, str(excep)))</span><br><span class="line">    print(&quot;CPUTask[%s] end&quot; % task_id)</span><br><span class="line">    return task_id</span><br></pre></td></tr></table></figure>
 <p>准备完上述代码之后，进行试验：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    print(&quot;cpu count:&quot;, multiprocessing.cpu_count(), &quot;\n&quot;)</div><div class="line"></div><div class="line">    print(&quot;========== 直接执行IO密集型任务 ==========&quot;)</div><div class="line">    init_queue()</div><div class="line">    time_0 = time.time()</div><div class="line">    task_io(0)</div><div class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</div><div class="line"></div><div class="line">    print(&quot;========== 多线程执行IO密集型任务 ==========&quot;)</div><div class="line">    init_queue()</div><div class="line">    time_0 = time.time()</div><div class="line">    thread_list = [threading.Thread(target=task_io, args=(i,)) for i in range(4)]</div><div class="line">    for t in thread_list:</div><div class="line">        t.start()</div><div class="line">    for t in thread_list:</div><div class="line">        if t.is_alive():</div><div class="line">            t.join()</div><div class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</div><div class="line"></div><div class="line">    print(&quot;========== 多进程执行IO密集型任务 ==========&quot;)</div><div class="line">    init_queue()</div><div class="line">    time_0 = time.time()</div><div class="line">    process_list = [multiprocessing.Process(target=task_io, args=(i,)) for i in range(multiprocessing.cpu_count())]</div><div class="line">    for p in process_list:</div><div class="line">        p.start()</div><div class="line">    for p in process_list:</div><div class="line">        if p.is_alive():</div><div class="line">            p.join()</div><div class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</div><div class="line"></div><div class="line">    print(&quot;========== 直接执行计算密集型任务 ==========&quot;)</div><div class="line">    init_queue()</div><div class="line">    time_0 = time.time()</div><div class="line">    task_cpu(0)</div><div class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</div><div class="line"></div><div class="line">    print(&quot;========== 多线程执行计算密集型任务 ==========&quot;)</div><div class="line">    init_queue()</div><div class="line">    time_0 = time.time()</div><div class="line">    thread_list = [threading.Thread(target=task_cpu, args=(i,)) for i in range(4)]</div><div class="line">    for t in thread_list:</div><div class="line">        t.start()</div><div class="line">    for t in thread_list:</div><div class="line">        if t.is_alive():</div><div class="line">            t.join()</div><div class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</div><div class="line"></div><div class="line">    print(&quot;========== 多进程执行计算密集型任务 ==========&quot;)</div><div class="line">    init_queue()</div><div class="line">    time_0 = time.time()</div><div class="line">    process_list = [multiprocessing.Process(target=task_cpu, args=(i,)) for i in range(multiprocessing.cpu_count())]</div><div class="line">    for p in process_list:</div><div class="line">        p.start()</div><div class="line">    for p in process_list:</div><div class="line">        if p.is_alive():</div><div class="line">            p.join()</div><div class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    print(&quot;cpu count:&quot;, multiprocessing.cpu_count(), &quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    print(&quot;========== 直接执行IO密集型任务 ==========&quot;)</span><br><span class="line">    init_queue()</span><br><span class="line">    time_0 = time.time()</span><br><span class="line">    task_io(0)</span><br><span class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    print(&quot;========== 多线程执行IO密集型任务 ==========&quot;)</span><br><span class="line">    init_queue()</span><br><span class="line">    time_0 = time.time()</span><br><span class="line">    thread_list = [threading.Thread(target=task_io, args=(i,)) for i in range(4)]</span><br><span class="line">    for t in thread_list:</span><br><span class="line">        t.start()</span><br><span class="line">    for t in thread_list:</span><br><span class="line">        if t.is_alive():</span><br><span class="line">            t.join()</span><br><span class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    print(&quot;========== 多进程执行IO密集型任务 ==========&quot;)</span><br><span class="line">    init_queue()</span><br><span class="line">    time_0 = time.time()</span><br><span class="line">    process_list = [multiprocessing.Process(target=task_io, args=(i,)) for i in range(multiprocessing.cpu_count())]</span><br><span class="line">    for p in process_list:</span><br><span class="line">        p.start()</span><br><span class="line">    for p in process_list:</span><br><span class="line">        if p.is_alive():</span><br><span class="line">            p.join()</span><br><span class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    print(&quot;========== 直接执行计算密集型任务 ==========&quot;)</span><br><span class="line">    init_queue()</span><br><span class="line">    time_0 = time.time()</span><br><span class="line">    task_cpu(0)</span><br><span class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    print(&quot;========== 多线程执行计算密集型任务 ==========&quot;)</span><br><span class="line">    init_queue()</span><br><span class="line">    time_0 = time.time()</span><br><span class="line">    thread_list = [threading.Thread(target=task_cpu, args=(i,)) for i in range(4)]</span><br><span class="line">    for t in thread_list:</span><br><span class="line">        t.start()</span><br><span class="line">    for t in thread_list:</span><br><span class="line">        if t.is_alive():</span><br><span class="line">            t.join()</span><br><span class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">    print(&quot;========== 多进程执行计算密集型任务 ==========&quot;)</span><br><span class="line">    init_queue()</span><br><span class="line">    time_0 = time.time()</span><br><span class="line">    process_list = [multiprocessing.Process(target=task_cpu, args=(i,)) for i in range(multiprocessing.cpu_count())]</span><br><span class="line">    for p in process_list:</span><br><span class="line">        p.start()</span><br><span class="line">    for p in process_list:</span><br><span class="line">        if p.is_alive():</span><br><span class="line">            p.join()</span><br><span class="line">    print(&quot;结束：&quot;, time.time() - time_0, &quot;\n&quot;)</span><br></pre></td></tr></table></figure>
 <p>结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">========== 直接执行IO密集型任务 ==========</div><div class="line">结束： 10.041141033172607 </div><div class="line">========== 多线程执行IO密集型任务 ==========</div><div class="line">结束： 5.073023557662964 </div><div class="line">========== 多进程执行IO密集型任务 ==========</div><div class="line">结束： 1.1165637969970703 </div><div class="line"></div><div class="line">========== 直接执行计算密集型任务 ==========</div><div class="line">结束： 36.41951608657837 </div><div class="line">========== 多线程执行计算密集型任务 ==========</div><div class="line">结束： 47.48710823059082 </div><div class="line">========== 多进程执行计算密集型任务 ==========</div><div class="line">结束： 0.82016921043396</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">========== 直接执行IO密集型任务 ==========</span><br><span class="line">结束： 10.041141033172607 </span><br><span class="line">========== 多线程执行IO密集型任务 ==========</span><br><span class="line">结束： 5.073023557662964 </span><br><span class="line">========== 多进程执行IO密集型任务 ==========</span><br><span class="line">结束： 1.1165637969970703 </span><br><span class="line"></span><br><span class="line">========== 直接执行计算密集型任务 ==========</span><br><span class="line">结束： 36.41951608657837 </span><br><span class="line">========== 多线程执行计算密集型任务 ==========</span><br><span class="line">结束： 47.48710823059082 </span><br><span class="line">========== 多进程执行计算密集型任务 ==========</span><br><span class="line">结束： 0.82016921043396</span><br></pre></td></tr></table></figure>
 <p>在执行计算密集型任务时，多进程的方式明显比多线程更好。</p>
 <blockquote>
 <p>参考文章：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/24283040" target="_blank" rel="external">Python进阶：聊聊IO密集型任务、计算密集型任务，以及多线程、多进程</a>  <a href="http://blog.chinaunix.net/uid-12014716-id-5691776.html" target="_blank" rel="external">为什么在python里推荐使用多进程而不是多线程？–转同事的一篇文章</a>  <a href="https://zhuanlan.zhihu.com/p/20167077?columnSlug=auxten" target="_blank" rel="external">Python编程（二）：Python进程、线程那点事儿</a>  </p>
+<p><a href="https://zhuanlan.zhihu.com/p/24283040" target="_blank" rel="noopener">Python进阶：聊聊IO密集型任务、计算密集型任务，以及多线程、多进程</a>  <a href="http://blog.chinaunix.net/uid-12014716-id-5691776.html" target="_blank" rel="noopener">为什么在python里推荐使用多进程而不是多线程？–转同事的一篇文章</a>  <a href="https://zhuanlan.zhihu.com/p/20167077?columnSlug=auxten" target="_blank" rel="noopener">Python编程（二）：Python进程、线程那点事儿</a>  </p>
 </blockquote>
 
       
@@ -561,7 +555,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -572,9 +566,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -585,7 +577,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -712,10 +704,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

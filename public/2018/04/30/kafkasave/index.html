@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,53 +68,46 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="kafka,文件存储," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="kafka,文件存储,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="Kafka
-Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多副本的、多订阅者，基于 zookeeper 协调的分布式日志系统（也可以当做 MQ 系统），常见可以用于 web/nginx 日志、访问日志，消息服务等等，  Linkedin 于2010年贡献给了 Apache 基金会并成为顶级开源项目。
 
-一个商业化消息队列的性能好坏，其文件存储机制设计是衡量一个消息队列服务技">
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Kafka Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多副本的、多订阅者，基于 zookeeper 协调的分布式日志系统（也可以当做 MQ 系统），常见可以用于 web/nginx 日志、访问日志，消息服务等等，  Linkedin 于2010年贡献给了 Apache 基金会并成为顶级开源项目。  一个商业化消息队列的性能好坏，其文件存储机制设计是衡量一个消息队列服务技">
+<meta name="keywords" content="kafka,文件存储">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka文件存储机制">
 <meta property="og:url" content="http://runnerliu.github.io/2018/04/30/kafkasave/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="Kafka
-Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多副本的、多订阅者，基于 zookeeper 协调的分布式日志系统（也可以当做 MQ 系统），常见可以用于 web/nginx 日志、访问日志，消息服务等等，  Linkedin 于2010年贡献给了 Apache 基金会并成为顶级开源项目。
-
-一个商业化消息队列的性能好坏，其文件存储机制设计是衡量一个消息队列服务技">
+<meta property="og:description" content="Kafka Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多副本的、多订阅者，基于 zookeeper 协调的分布式日志系统（也可以当做 MQ 系统），常见可以用于 web/nginx 日志、访问日志，消息服务等等，  Linkedin 于2010年贡献给了 Apache 基金会并成为顶级开源项目。  一个商业化消息队列的性能好坏，其文件存储机制设计是衡量一个消息队列服务技">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-04-30T203835.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-04-30T204111.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-04-30T204213.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-04-30T204327.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-04-30T205037.png">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.224Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka文件存储机制">
-<meta name="twitter:description" content="Kafka
-Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多副本的、多订阅者，基于 zookeeper 协调的分布式日志系统（也可以当做 MQ 系统），常见可以用于 web/nginx 日志、访问日志，消息服务等等，  Linkedin 于2010年贡献给了 Apache 基金会并成为顶级开源项目。
-
-一个商业化消息队列的性能好坏，其文件存储机制设计是衡量一个消息队列服务技">
+<meta name="twitter:description" content="Kafka Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多副本的、多订阅者，基于 zookeeper 协调的分布式日志系统（也可以当做 MQ 系统），常见可以用于 web/nginx 日志、访问日志，消息服务等等，  Linkedin 于2010年贡献给了 Apache 基金会并成为顶级开源项目。  一个商业化消息队列的性能好坏，其文件存储机制设计是衡量一个消息队列服务技">
 <meta name="twitter:image" content="http://runnerliu.github.io/images/2018-04-30T203835.png">
 
 
@@ -143,7 +136,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2018/04/30/kafkasave/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2018/04/30/kafkasave/">
 
 
 
@@ -183,7 +176,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -213,7 +206,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -223,7 +216,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -233,7 +226,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -243,7 +236,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -253,7 +246,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -266,7 +259,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -287,9 +280,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -326,7 +317,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -369,7 +360,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -448,9 +439,9 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 </ul>
 <p>通过上述4过程详细分析，我们就可以清楚认识到kafka文件存储机制的奥秘。</p>
 <h4 id="topic中partition存储分布"><a href="#topic中partition存储分布" class="headerlink" title="topic中partition存储分布"></a>topic中partition存储分布</h4><p>假设实验环境中Kafka集群只有一个broker，xxx/message-folder为数据文件存储根目录，在Kafka broker中server.properties文件配置（参数log.dirs=xxx/message-folder），例如创建2个topic名称分别为report_push、launch_info, partitions数量都为partitions=4，存储路径和目录规则为：xxx/message-folder。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">|--report_push-0</div><div class="line">|--report_push-1</div><div class="line">|--report_push-2</div><div class="line">|--report_push-3</div><div class="line">|--launch_info-0</div><div class="line">|--launch_info-1</div><div class="line">|--launch_info-2</div><div class="line">|--launch_info-3</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">|--report_push-0</span><br><span class="line">|--report_push-1</span><br><span class="line">|--report_push-2</span><br><span class="line">|--report_push-3</span><br><span class="line">|--launch_info-0</span><br><span class="line">|--launch_info-1</span><br><span class="line">|--launch_info-2</span><br><span class="line">|--launch_info-3</span><br></pre></td></tr></table></figure>
 <p>在Kafka文件存储中，同一个topic下有多个不同partition，每个partition为一个目录，partiton命名规则为topic名称+有序序号，第一个partiton序号从0开始，序号最大值为partitions数量减1。</p>
-<p>如果是多broker分布情况，请参考<a href="http://blog.csdn.net/lizhitao/article/details/41778193" target="_blank" rel="external">kafka集群partition分布原理分析</a></p>
+<p>如果是多broker分布情况，请参考<a href="http://blog.csdn.net/lizhitao/article/details/41778193" target="_blank" rel="noopener">kafka集群partition分布原理分析</a></p>
 <h4 id="partiton中文件存储方式"><a href="#partiton中文件存储方式" class="headerlink" title="partiton中文件存储方式"></a>partiton中文件存储方式</h4><p>下面示意图形象说明了partition中文件存储方式：</p>
 <p> <img src="/images/2018-04-30T203835.png" alt="2018-04-30T203835"></p>
 <ul>
@@ -464,7 +455,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 </ul>
 <p>下面文件列表是笔者在Kafka broker上做的一个实验，创建一个topicXXX包含1 partition，设置每个segment大小为500MB，并启动producer向Kafka broker写入大量数据，如下图所示segment文件列表形象说明了上述2个规则：</p>
 <p> <img src="/images/2018-04-30T204111.png" alt="2018-04-30T204111"></p>
-<p>以上述图2中一对segment file文件为例，说明segment中index&lt;—&gt;data file对应关系物理结构如下：</p>
+<p>以上述图2中一对segment file文件为例，说明segment中index<--->data file对应关系物理结构如下：</---></p>
 <p> <img src="/images/2018-04-30T204213.png" alt="2018-04-30T204213"></p>
 <p>上述图3中索引文件存储大量元数据，数据文件存储大量消息，索引文件中元数据指向对应数据文件中message的物理偏移地址。</p>
 <p>其中以索引文件中元数据3,497为例，依次在数据文件中表示第3个message(在全局partiton表示第368772个message)、以及该消息的物理偏移地址为497。</p>
@@ -525,7 +516,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 <li>物理内存：8GB</li>
 <li>网卡：千兆网卡</li>
 <li>jvm heap: 4GB</li>
-<li><p>详细Kafka服务端配置及其优化请参考：<a href="http://blog.csdn.net/lizhitao/article/details/25667831" target="_blank" rel="external">kafka server.properties配置详解</a></p>
+<li><p>详细Kafka服务端配置及其优化请参考：<a href="http://blog.csdn.net/lizhitao/article/details/25667831" target="_blank" rel="noopener">kafka server.properties配置详解</a></p>
 <p><img src="/images/2018-04-30T205037.png" alt="2018-04-30T205037"></p>
 </li>
 </ul>
@@ -549,7 +540,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 </ul>
 <p>Read More:</p>
 <blockquote>
-<p><a href="https://tech.meituan.com/kafka-fs-design-theory.html" target="_blank" rel="external">Kafka文件存储机制那些事</a></p>
+<p><a href="https://tech.meituan.com/kafka-fs-design-theory.html" target="_blank" rel="noopener">Kafka文件存储机制那些事</a></p>
 </blockquote>
 
       
@@ -657,7 +648,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -668,9 +659,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -681,7 +670,7 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -808,10 +797,10 @@ Kafka是最初由 Linkedin 公司开发，是一个分布式、分区的、多�
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

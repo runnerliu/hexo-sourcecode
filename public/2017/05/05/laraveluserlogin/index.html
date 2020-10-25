@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,46 +68,45 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Laravel,多用户登录,验证原理," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="Laravel,多用户登录,验证原理,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="简介在底层代码中，Laravel 的认证组件由 guards 和 providers 组成，Guard 定义了用户在每个请求中如何实现认证，例如，Laravel 通过 session guard来维护 Session 存储的状态、Cookie 以及 token guard，token guard 是认证用户发送请求时带的API token。
-Provider 定义了如何从持久化存储中获取用户信息，">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="简介在底层代码中，Laravel 的认证组件由 guards 和 providers 组成，Guard 定义了用户在每个请求中如何实现认证，例如，Laravel 通过 session guard来维护 Session 存储的状态、Cookie 以及 token guard，token guard 是认证用户发送请求时带的API token。 Provider 定义了如何从持久化存储中获取用户信息，">
+<meta name="keywords" content="Laravel,多用户登录,验证原理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Laravel学习笔记-Laravel5.3用户登录实现及注册源码初探">
 <meta property="og:url" content="http://runnerliu.github.io/2017/05/05/laraveluserlogin/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="简介在底层代码中，Laravel 的认证组件由 guards 和 providers 组成，Guard 定义了用户在每个请求中如何实现认证，例如，Laravel 通过 session guard来维护 Session 存储的状态、Cookie 以及 token guard，token guard 是认证用户发送请求时带的API token。
-Provider 定义了如何从持久化存储中获取用户信息，">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-5-5 194722.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-5-5 194823.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-5-5 195940.png">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="简介在底层代码中，Laravel 的认证组件由 guards 和 providers 组成，Guard 定义了用户在每个请求中如何实现认证，例如，Laravel 通过 session guard来维护 Session 存储的状态、Cookie 以及 token guard，token guard 是认证用户发送请求时带的API token。 Provider 定义了如何从持久化存储中获取用户信息，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-5-5%20194722.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-5-5%20194823.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-5-5%20195940.png">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.227Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel学习笔记-Laravel5.3用户登录实现及注册源码初探">
-<meta name="twitter:description" content="简介在底层代码中，Laravel 的认证组件由 guards 和 providers 组成，Guard 定义了用户在每个请求中如何实现认证，例如，Laravel 通过 session guard来维护 Session 存储的状态、Cookie 以及 token guard，token guard 是认证用户发送请求时带的API token。
-Provider 定义了如何从持久化存储中获取用户信息，">
-<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-5-5 194722.png">
+<meta name="twitter:description" content="简介在底层代码中，Laravel 的认证组件由 guards 和 providers 组成，Guard 定义了用户在每个请求中如何实现认证，例如，Laravel 通过 session guard来维护 Session 存储的状态、Cookie 以及 token guard，token guard 是认证用户发送请求时带的API token。 Provider 定义了如何从持久化存储中获取用户信息，">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-5-5%20194722.png">
 
 
 
@@ -135,7 +134,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/05/05/laraveluserlogin/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/05/05/laraveluserlogin/">
 
 
 
@@ -175,7 +174,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -205,7 +204,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -215,7 +214,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -225,7 +224,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -235,7 +234,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -245,7 +244,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -258,7 +257,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -279,9 +278,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -318,7 +315,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -361,7 +358,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -423,65 +420,65 @@ Provider 定义了如何从持久化存储中获取用户信息，">
 <p><code>Provider</code> 定义了如何从持久化存储中获取用户信息，<code>Laravel</code> 底层支持通过 <code>Eloquent</code> 和数据库查询构建器两种方式来获取用户，如果需要的话，你还可以定义额外的 <code>Provider</code>。</p>
 <p>相对于 <code>Laravel5.2</code> 而言，<code>Laravel5.3</code> 在底层代码中做了很多修改，方法更加简洁。虽然代码改了很多，但是原理都是一样的，我们只需要重写不同的方法而已。</p>
 <h3 id="默认认证"><a href="#默认认证" class="headerlink" title="默认认证"></a>默认认证</h3><p>首先我们使用<code>Laravel 5.3</code>提供的开箱即用的认证：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan make:auth</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:auth</span><br></pre></td></tr></table></figure>
 <p>该Artisan命令会生成用户认证所需的路由、视图以及<code>HomeController</code></p>
 <p>认证的路由也一并生成好了，查看路由文件<code>routes/web.php</code>，会发现该文件已经被更新</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Auth::routes();</div><div class="line"></div><div class="line">Route::get(&apos;/home&apos;, &apos;HomeController@index&apos;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Auth::routes();</span><br><span class="line"></span><br><span class="line">Route::get(&apos;/home&apos;, &apos;HomeController@index&apos;);</span><br></pre></td></tr></table></figure>
 <p>其中<code>Auth::routes()</code>定义了登录注册及找回密码路由，<code>/home</code> 为用户认证成功后跳转的路由。</p>
 <h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>接下来我们先实现前台用户登录，也就是Laravel自带的Users用户表登录。通过生成的默认登录认证，已经写好了所有代码，剩下要做的就是使用迁移命令创建用户认证相关表：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan migrate</div></pre></td></tr></table></figure>
-<p>执行命令后会生成 <code>users</code> 表和 <code>password_resets</code> 表，分别为用户表和密码重置表。然后我们就可以在浏览器中输入<a href="http://myapp.com/register" target="_blank" rel="external">http://myapp.com/register</a> 来注册新用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan migrate</span><br></pre></td></tr></table></figure>
+<p>执行命令后会生成 <code>users</code> 表和 <code>password_resets</code> 表，分别为用户表和密码重置表。然后我们就可以在浏览器中输入<a href="http://myapp.com/register" target="_blank" rel="noopener">http://myapp.com/register</a> 来注册新用户</p>
 <p><img src="/images/2017-5-5 194722.png" alt="2017-5-5 194722"></p>
 <p>我们创建一个用户，注册成功后直接跳转 <code>/home</code>，并且刚注册的用户名也已经显示出来了</p>
 <p><img src="/images/2017-5-5 194823.png" alt="2017-5-5 194823"></p>
 <h3 id="发送邮件重置密码"><a href="#发送邮件重置密码" class="headerlink" title="发送邮件重置密码"></a>发送邮件重置密码</h3><p>Laravel 已经为我们提供了邮件重置密码的方式，只需要简单的设置即可。</p>
 <p>在<code>config/mail.php</code> 中配置邮件发送方</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&apos;from&apos; =&gt; [</div><div class="line">        &apos;address&apos; =&gt; &apos;liuyangplus@163.com&apos;,</div><div class="line">        &apos;name&apos; =&gt; &apos;Laravel Reset Password&apos;,</div><div class="line">    ],</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&apos;from&apos; =&gt; [</span><br><span class="line">        &apos;address&apos; =&gt; &apos;liuyangplus@163.com&apos;,</span><br><span class="line">        &apos;name&apos; =&gt; &apos;Laravel Reset Password&apos;,</span><br><span class="line">    ],</span><br></pre></td></tr></table></figure>
 <p>在根目录的<code>.env</code> 文件中配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">MAIL_DRIVER=smtp</div><div class="line">MAIL_HOST=smtp.163.com</div><div class="line">MAIL_PORT=587</div><div class="line">MAIL_USERNAME=youremail@163.com</div><div class="line">MAIL_PASSWORD=youremailpassword</div><div class="line">MAIL_ENCRYPTION=ssl</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MAIL_DRIVER=smtp</span><br><span class="line">MAIL_HOST=smtp.163.com</span><br><span class="line">MAIL_PORT=587</span><br><span class="line">MAIL_USERNAME=youremail@163.com</span><br><span class="line">MAIL_PASSWORD=youremailpassword</span><br><span class="line">MAIL_ENCRYPTION=ssl</span><br></pre></td></tr></table></figure>
 <p><strong>注意：</strong>如果想使用其他邮箱，最好将<code>&#39;from&#39;</code>中的<code>address</code>和<code>MAIL_HOST</code> <code>MAIL_USERNAME</code> 邮箱类型一致。</p>
 <p><img src="/images/2017-5-5 195940.png" alt="2017-5-5 195940"></p>
 <p>以上就是发送邮件重置密码成功的邮件，其实我们也可以通过添加邮件发送类来自定义邮件的主题、内容等，这部分内容以后再添加。</p>
 <h3 id="用户认证源码初探"><a href="#用户认证源码初探" class="headerlink" title="用户认证源码初探"></a>用户认证源码初探</h3><p>我们知道 Laravel 提供了开箱即用的用户认证过程，下面为了深入了解具体的用户认证实现，我们将深入 Laravel 的源码，探究用户验证是怎么处理的。</p>
 <p>在实现用户认证过程中，我们首先执行了如下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan make:auth</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:auth</span><br></pre></td></tr></table></figure>
 <p>该命令会在项目里添加以下文件（目录）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">app/Http/Controller/HomeController.PHP </div><div class="line">resources/views/auth/ </div><div class="line">resources/views/auth/login.blade.php </div><div class="line">resources/views/auth/passwords/ </div><div class="line">resources/views/auth/passwords/email.blade.php </div><div class="line">resources/views/auth/passwords/reset.blade.php </div><div class="line">resources/views/auth/register.blade.php </div><div class="line">resources/views/home.blade.php </div><div class="line">resources/views/layouts/ </div><div class="line">resources/views/layouts/app.blade.php</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">app/Http/Controller/HomeController.PHP </span><br><span class="line">resources/views/auth/ </span><br><span class="line">resources/views/auth/login.blade.php </span><br><span class="line">resources/views/auth/passwords/ </span><br><span class="line">resources/views/auth/passwords/email.blade.php </span><br><span class="line">resources/views/auth/passwords/reset.blade.php </span><br><span class="line">resources/views/auth/register.blade.php </span><br><span class="line">resources/views/home.blade.php </span><br><span class="line">resources/views/layouts/ </span><br><span class="line">resources/views/layouts/app.blade.php</span><br></pre></td></tr></table></figure>
 <p>除了一个 <code>HomeController</code> 是处理用户登陆之后的逻辑，其他都是一些视图，用于显示相应的页面。</p>
 <p>在 <code>routes/web.php</code> 里添加了以下内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Auth::routes();</div><div class="line"></div><div class="line">Route::get(&apos;/home&apos;, &apos;HomeController@index&apos;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Auth::routes();</span><br><span class="line"></span><br><span class="line">Route::get(&apos;/home&apos;, &apos;HomeController@index&apos;);</span><br></pre></td></tr></table></figure>
 <p><code>Auth::routes()</code> 是登陆、注册需要的一些路由；下面是定义一个 <code>/home</code> 路由，交给 <code>HomeController@index</code> 处理。</p>
 <p>那么，就从路由开始我们的探究之旅吧。</p>
 <h4 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h4><p> <code>Auth::routes()</code>定义在 <code>vendor/laravel/framework/src/Illuminate/Support/Facades/Auth.php</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public static function routes()</div><div class="line">    &#123;</div><div class="line">        static::$app-&gt;make(&apos;router&apos;)-&gt;auth();</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static function routes()</span><br><span class="line">    &#123;</span><br><span class="line">        static::$app-&gt;make(&apos;router&apos;)-&gt;auth();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>这里由 IOC 容器解析了一个 Illuminate\Routing\Router 类的实例，再调用里面的 <code>auth()</code> 方法。</p>
 <p>我们再来看看 auth() 方法，定义在 <code>vendor/laravel/framework/src/Illuminate/Routing/Router.php</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public function auth()</div><div class="line">    &#123;</div><div class="line">        // Authentication Routes...</div><div class="line">        $this-&gt;get(&apos;login&apos;, &apos;Auth\LoginController@showLoginForm&apos;)-&gt;name(&apos;login&apos;);</div><div class="line">        $this-&gt;post(&apos;login&apos;, &apos;Auth\LoginController@login&apos;);</div><div class="line">        $this-&gt;post(&apos;logout&apos;, &apos;Auth\LoginController@logout&apos;);</div><div class="line"></div><div class="line">        // Registration Routes...</div><div class="line">        $this-&gt;get(&apos;register&apos;, &apos;Auth\RegisterController@showRegistrationForm&apos;);</div><div class="line">        $this-&gt;post(&apos;register&apos;, &apos;Auth\RegisterController@register&apos;);</div><div class="line"></div><div class="line">        // Password Reset Routes...</div><div class="line">        $this-&gt;get(&apos;password/reset&apos;, &apos;Auth\ForgotPasswordController@showLinkRequestForm&apos;);</div><div class="line">        $this-&gt;post(&apos;password/email&apos;, &apos;Auth\ForgotPasswordController@sendResetLinkEmail&apos;);</div><div class="line">        $this-&gt;get(&apos;password/reset/&#123;token&#125;&apos;, &apos;Auth\ResetPasswordController@showResetForm&apos;);</div><div class="line">        $this-&gt;post(&apos;password/reset&apos;, &apos;Auth\ResetPasswordController@reset&apos;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public function auth()</span><br><span class="line">    &#123;</span><br><span class="line">        // Authentication Routes...</span><br><span class="line">        $this-&gt;get(&apos;login&apos;, &apos;Auth\LoginController@showLoginForm&apos;)-&gt;name(&apos;login&apos;);</span><br><span class="line">        $this-&gt;post(&apos;login&apos;, &apos;Auth\LoginController@login&apos;);</span><br><span class="line">        $this-&gt;post(&apos;logout&apos;, &apos;Auth\LoginController@logout&apos;);</span><br><span class="line"></span><br><span class="line">        // Registration Routes...</span><br><span class="line">        $this-&gt;get(&apos;register&apos;, &apos;Auth\RegisterController@showRegistrationForm&apos;);</span><br><span class="line">        $this-&gt;post(&apos;register&apos;, &apos;Auth\RegisterController@register&apos;);</span><br><span class="line"></span><br><span class="line">        // Password Reset Routes...</span><br><span class="line">        $this-&gt;get(&apos;password/reset&apos;, &apos;Auth\ForgotPasswordController@showLinkRequestForm&apos;);</span><br><span class="line">        $this-&gt;post(&apos;password/email&apos;, &apos;Auth\ForgotPasswordController@sendResetLinkEmail&apos;);</span><br><span class="line">        $this-&gt;get(&apos;password/reset/&#123;token&#125;&apos;, &apos;Auth\ResetPasswordController@showResetForm&apos;);</span><br><span class="line">        $this-&gt;post(&apos;password/reset&apos;, &apos;Auth\ResetPasswordController@reset&apos;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>这里定义了 登陆 、 注销 、注册 和密码重置的路由。我们先看注册部分。</p>
 <h4 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h4><p><code>App\Http\Controllers\Auth\RegisterController</code> 负责注册的逻辑，这里 use 了<code>Illuminate\Foundation\Auth\RegistersUsers</code> 这个 trait ，包含注册时通用的一些逻辑。</p>
 <p>路由 <code>get(&#39;/register&#39;)</code> 所绑定的方法 <code>Auth\RegisterController@showRegistrationForm</code> 就定义在这个 trait 里</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public function showRegistrationForm()</div><div class="line">    &#123;</div><div class="line">        return view(&apos;auth.register&apos;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public function showRegistrationForm()</span><br><span class="line">    &#123;</span><br><span class="line">        return view(&apos;auth.register&apos;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>很简单，返回一个 <code>auth.register</code> 视图。</p>
 <p><code>auth.register</code> 视图获取用户的输入： <code>name</code>，<code>email</code>，<code>password</code>，然后 POST 提交到<code>/register</code>。</p>
 <p>再来看看路由 <code>post(&#39;/register&#39;)</code> 所绑定的方法 <code>Auth\RegisterController@register</code>。</p>
 <p>同样， <code>register</code> 方法定义在 <code>Illuminate\Foundation\Auth\RegistersUsers</code> 里</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public function register(Request $request)</div><div class="line">    &#123;</div><div class="line">        $this-&gt;validator($request-&gt;all())-&gt;validate();</div><div class="line"></div><div class="line">        $this-&gt;guard()-&gt;login($this-&gt;create($request-&gt;all()));</div><div class="line"></div><div class="line">        return redirect($this-&gt;redirectPath());</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public function register(Request $request)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;validator($request-&gt;all())-&gt;validate();</span><br><span class="line"></span><br><span class="line">        $this-&gt;guard()-&gt;login($this-&gt;create($request-&gt;all()));</span><br><span class="line"></span><br><span class="line">        return redirect($this-&gt;redirectPath());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>首先使用请求传入的表单调用 <code>validator()</code> ，返回一个验证对象，再调用 <code>validate()</code> 验证表单内容的合法性。</p>
 <p><code>validator()</code> 定义在 <code>App\Http\Controllers\Auth\RegisterController</code> 里</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">protected function validator(array $data)</div><div class="line">    &#123;</div><div class="line">        return Validator::make($data, [</div><div class="line">            &apos;name&apos; =&gt; &apos;required|max:255&apos;,</div><div class="line">            &apos;email&apos; =&gt; &apos;required|email|max:255|unique:users&apos;,</div><div class="line">            &apos;password&apos; =&gt; &apos;required|min:6|confirmed&apos;,</div><div class="line">        ]);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">protected function validator(array $data)</span><br><span class="line">    &#123;</span><br><span class="line">        return Validator::make($data, [</span><br><span class="line">            &apos;name&apos; =&gt; &apos;required|max:255&apos;,</span><br><span class="line">            &apos;email&apos; =&gt; &apos;required|email|max:255|unique:users&apos;,</span><br><span class="line">            &apos;password&apos; =&gt; &apos;required|min:6|confirmed&apos;,</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>在这里给出了输入表单的验证规则，如果我们的用户注册需要的表单与这几个字段不一致（例如需要添加一个手机号），就在这里修改。</p>
 </blockquote>
 <p>返回的 <code>Validator</code> 对象会在 <code>register()</code> 方法里验证。</p>
 <p>再回到 <code>register()</code> 方法， 往下走 <code>$this-&gt;guard()-&gt;login($this-&gt;create($request-&gt;all()));</code>。</p>
 <p><code>$this-&gt;guard()</code> 这里会调用 <code>Illuminate\Foundation\Auth\RegistersUsers</code> 里的 <code>guard()</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">protected function guard()</div><div class="line">    &#123;</div><div class="line">        return Auth::guard();</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">protected function guard()</span><br><span class="line">    &#123;</span><br><span class="line">        return Auth::guard();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>这里无参数调用 <code>Auth::guard()</code> 返回一个默认的 guard，看一下 <code>config/auth.php</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&apos;guards&apos; =&gt; [</div><div class="line">        &apos;web&apos; =&gt; [</div><div class="line">            &apos;driver&apos; =&gt; &apos;session&apos;,</div><div class="line">            &apos;provider&apos; =&gt; &apos;users&apos;,</div><div class="line">        ],</div><div class="line"></div><div class="line">        &apos;admin&apos; =&gt; [</div><div class="line">            &apos;driver&apos; =&gt; &apos;session&apos;,</div><div class="line">            &apos;provider&apos; =&gt; &apos;admins&apos;,</div><div class="line">        ],</div><div class="line"></div><div class="line">        &apos;api&apos; =&gt; [</div><div class="line">            &apos;driver&apos; =&gt; &apos;token&apos;,</div><div class="line">            &apos;provider&apos; =&gt; &apos;users&apos;,</div><div class="line">        ],</div><div class="line">    ],</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&apos;guards&apos; =&gt; [</span><br><span class="line">        &apos;web&apos; =&gt; [</span><br><span class="line">            &apos;driver&apos; =&gt; &apos;session&apos;,</span><br><span class="line">            &apos;provider&apos; =&gt; &apos;users&apos;,</span><br><span class="line">        ],</span><br><span class="line"></span><br><span class="line">        &apos;admin&apos; =&gt; [</span><br><span class="line">            &apos;driver&apos; =&gt; &apos;session&apos;,</span><br><span class="line">            &apos;provider&apos; =&gt; &apos;admins&apos;,</span><br><span class="line">        ],</span><br><span class="line"></span><br><span class="line">        &apos;api&apos; =&gt; [</span><br><span class="line">            &apos;driver&apos; =&gt; &apos;token&apos;,</span><br><span class="line">            &apos;provider&apos; =&gt; &apos;users&apos;,</span><br><span class="line">        ],</span><br><span class="line">    ],</span><br></pre></td></tr></table></figure>
 <p>默认的 guard 是 web ； web 这个 guard 采用 session 驱动， 数据提供者是 users ；users 数据提供者使用 eloquent 驱动， 使用 <code>App\User::class</code> 模型。</p>
 <p>接下来调用 guard 的 <code>login($this-&gt;create($request-&gt;all()))</code>。</p>
 <p>首先是 <code>$this-&gt;create()</code> ，这个方法定义在 <code>App\Http\Controllers\Auth\RegisterController</code> 里</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">protected function create(array $data)</div><div class="line">    &#123;</div><div class="line">        return User::create([</div><div class="line">            &apos;name&apos; =&gt; $data[&apos;name&apos;],</div><div class="line">            &apos;email&apos; =&gt; $data[&apos;email&apos;],</div><div class="line">            &apos;password&apos; =&gt; bcrypt($data[&apos;password&apos;]),</div><div class="line">        ]);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">protected function create(array $data)</span><br><span class="line">    &#123;</span><br><span class="line">        return User::create([</span><br><span class="line">            &apos;name&apos; =&gt; $data[&apos;name&apos;],</span><br><span class="line">            &apos;email&apos; =&gt; $data[&apos;email&apos;],</span><br><span class="line">            &apos;password&apos; =&gt; bcrypt($data[&apos;password&apos;]),</span><br><span class="line">        ]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>使用 <code>User</code> 模型对输入的内容新增一条记录，并返回这个模型的对象。</p>
 <blockquote>
 <p>同样，如果需要修改注册时使用的字段，也是改写这个方法。</p>
@@ -489,12 +486,14 @@ Provider 定义了如何从持久化存储中获取用户信息，">
 <p>生成的 <code>User</code> 对象交给 guard 的 <code>login()</code> 方法，做一系列登录的操作，具体怎么做的，还是放到登陆验证里再详细说明。</p>
 <p>最后， <code>return redirect($this-&gt;redirectPath());</code> 完成了注册、登陆的操作，最后跳转到我们在 <code>App\Http\Controllers\Auth\RegisterController</code> 里设置的 <code>protected $redirectTo = &#39;/home&#39;;</code> 目标URL。</p>
 <p>可以看一下 <code>$this-&gt;redirectPath()</code> 方法怎么写的，在 <code>Illuminate\Foundation\Auth\RedirectsUsers</code> 这个 trait 里</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public function redirectPath()</div><div class="line">    &#123;</div><div class="line">        return property_exists($this, &apos;redirectTo&apos;) ? $this-&gt;redirectTo : &apos;/home&apos;;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public function redirectPath()</span><br><span class="line">    &#123;</span><br><span class="line">        return property_exists($this, &apos;redirectTo&apos;) ? $this-&gt;redirectTo : &apos;/home&apos;;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>如果定义了 <code>$redirectTo</code> 这个属性，就按照这个属性返回；如果没有，返回 <code>&#39;/home&#39;</code>。</p>
 <blockquote>
 <p>这里把这个方法写成 trait 是因为这个方法还会在 <code>App\Http\Controllers\Auth\LoginController</code> 登陆控制器里使用，所以就把 <code>redirectPath()</code> 这个方法提出来做成一个 trait，严格遵守 DRY 原则。</p>
+</blockquote>
+<blockquote>
 <p>参考文章：</p>
-<p><a href="http://blog.csdn.net/realghost/article/details/52558962" target="_blank" rel="external">Laravel 5.3 用户验证源码探究 （一） 路由与注册</a>  <a href="http://laravelacademy.org/post/5925.html" target="_blank" rel="external">Laravel 5.3 多用户表登录实现</a></p>
+<p><a href="http://blog.csdn.net/realghost/article/details/52558962" target="_blank" rel="noopener">Laravel 5.3 用户验证源码探究 （一） 路由与注册</a>  <a href="http://laravelacademy.org/post/5925.html" target="_blank" rel="noopener">Laravel 5.3 多用户表登录实现</a></p>
 </blockquote>
 
       
@@ -604,7 +603,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -615,9 +614,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -628,7 +625,7 @@ Provider 定义了如何从持久化存储中获取用户信息，">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -755,10 +752,10 @@ Provider 定义了如何从持久化存储中获取用户信息，">
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

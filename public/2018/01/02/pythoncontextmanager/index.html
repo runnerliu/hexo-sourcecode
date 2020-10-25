@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,42 +68,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Python,上下文管理器," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="Python,上下文管理器,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。
-例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。 例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
+<meta name="keywords" content="Python,上下文管理器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python上下文管理器">
 <meta property="og:url" content="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。
-例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。 例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python上下文管理器">
-<meta name="twitter:description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。
-例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
+<meta name="twitter:description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。 例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
 
 
 
@@ -131,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/">
 
 
 
@@ -171,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -201,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -211,7 +210,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -221,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -231,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -241,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -254,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -275,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -314,7 +311,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -357,7 +354,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -424,33 +421,33 @@
 <p><code>__enter__(self)</code> </p>
 <p>Defines what the context manager should do at the beginning of the block created by the with statement. Note that the return value of __enter__ is bound to the target of the with statement, or the name after the as.</p>
 <p><code>__exit__(self, exception_type, exception_value, traceback)</code> </p>
-<p>Defines what the context manager should do after its block has been executed (or terminates). It can be used to handle exceptions, perform cleanup, or do something always done immediately after the action in the block. If the block executes successfully, exception_type, exception<em>value, and traceback will be None. Otherwise, you can choose to handle the exception or let the user handle it; if you want to handle it, make sure </em>_exit__ returns True after all is said and done. If you don’t want the exception to be handled by the context manager, just let it happen.</p>
+<p>Defines what the context manager should do after its block has been executed (or terminates). It can be used to handle exceptions, perform cleanup, or do something always done immediately after the action in the block. If the block executes successfully, exception_type, exception_value, and traceback will be None. Otherwise, you can choose to handle the exception or let the user handle it; if you want to handle it, make sure __exit__ returns True after all is said and done. If you don’t want the exception to be handled by the context manager, just let it happen.</p>
 </blockquote>
 <p>也就是说，当我们需要创建一个上下文管理器类型的时候，就需要实现<code>__enter__</code>和<code>__exit__</code>方法，这对方法就称为上下文管理协议（Context Manager Protocol），定义了一种运行时上下文环境。</p>
 <h4 id="with语句"><a href="#with语句" class="headerlink" title="with语句"></a>with语句</h4><p>在Python中，可以通过with语句来方便的使用上下文管理器，with语句可以在代码块运行前进入一个运行时上下文（执行__enter__方法），并在代码块结束后退出该上下文（执行__exit__方法）。</p>
 <p>with语句的语法如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">with context_expr [as var]:</div><div class="line">    with_suite</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">with context_expr [as var]:</span><br><span class="line">    with_suite</span><br></pre></td></tr></table></figure>
 <ul>
 <li>context_expr: 支持上下文管理协议的对象，也就是上下文管理器对象，负责维护上下文环境</li>
 <li>as var: 可选部分，通过变量方式保存上下文管理器对象</li>
 <li>with_suite: 需要放在上下文环境中执行的语句块</li>
 </ul>
 <p>在Python的内置类型中，很多类型都是支持上下文管理协议的，例如file、thread.LockType、threading.Lock等等。这里我们就以file类型为例，看看with语句的使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">with File(&apos;demo.txt&apos;, &apos;w&apos;) as opened_file:</div><div class="line">    opened_file.write(&apos;Hola!&apos;)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">with File(&apos;demo.txt&apos;, &apos;w&apos;) as opened_file:</span><br><span class="line">    opened_file.write(&apos;Hola!&apos;)</span><br></pre></td></tr></table></figure>
 <p> with语句先暂存了File类的<code>__exit__()</code>方法，然后它调用File类的<code>__enter__()</code>方方法，<code>__enter__</code>方法打开文件并返回给with语句，打开的文件句柄被传递给<code>opened_file</code>参数，然后使用<code>.write()</code>来写文件，with语句调用之前暂存的<code>__exit__</code>方法关闭了文件。</p>
 <h4 id="自定义上下文管理器"><a href="#自定义上下文管理器" class="headerlink" title="自定义上下文管理器"></a>自定义上下文管理器</h4><p>了解上下文管理器的执行流程和方法后，我们可以通过实现<code>__enter__()</code>、<code>__exit__()</code>函数来自定义上下文管理器，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">filename = &apos;my_file.txt&apos;</div><div class="line">mode = &apos;w&apos; # Mode that allows to write to the file</div><div class="line">writer = open(filename, mode)</div><div class="line"></div><div class="line">class PypixOpen(object):</div><div class="line">    def __init__(self, filename, mode):</div><div class="line">        self.filename = filename</div><div class="line">        self.mode = mode</div><div class="line"></div><div class="line">    def __enter__(self):</div><div class="line">        self.openedFile = open(self.filename, self.mode)</div><div class="line">        return self.openedFile</div><div class="line"></div><div class="line">    def __exit__(self, *unused):</div><div class="line">        self.openedFile.close()</div><div class="line"></div><div class="line"># Script starts from here</div><div class="line"></div><div class="line">with PypixOpen(filename, mode) as writer:</div><div class="line">    writer.write(&quot;Hello World from our new Context Manager!&quot;)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">filename = &apos;my_file.txt&apos;</span><br><span class="line">mode = &apos;w&apos; # Mode that allows to write to the file</span><br><span class="line">writer = open(filename, mode)</span><br><span class="line"></span><br><span class="line">class PypixOpen(object):</span><br><span class="line">    def __init__(self, filename, mode):</span><br><span class="line">        self.filename = filename</span><br><span class="line">        self.mode = mode</span><br><span class="line"></span><br><span class="line">    def __enter__(self):</span><br><span class="line">        self.openedFile = open(self.filename, self.mode)</span><br><span class="line">        return self.openedFile</span><br><span class="line"></span><br><span class="line">    def __exit__(self, *unused):</span><br><span class="line">        self.openedFile.close()</span><br><span class="line"></span><br><span class="line"># Script starts from here</span><br><span class="line"></span><br><span class="line">with PypixOpen(filename, mode) as writer:</span><br><span class="line">    writer.write(&quot;Hello World from our new Context Manager!&quot;)</span><br></pre></td></tr></table></figure>
 <h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><p>上下文管理器根据<code>__exit__()</code> 方法的返回值来决定是否抛出异常，如果没有返回值或者返回值为 False ，则异常由上下文管理器处理，如果为 True 则由用户自己处理。</p>
 <p><code>__exit__ ()</code>接受三个参数，exception_type、exception_value、traceback，我们可以根据这些值来决定是否处理异常</p>
 <p>下面这个例子，捕捉了 AttributeError 的异常，并打印出警告: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">class Open:</div><div class="line">    def __init__(self, file, mode):</div><div class="line">        self.open_file = open(file, mode)</div><div class="line">    def __enter__(self):</div><div class="line">        return self.open_file</div><div class="line">    def __exit__(self, type, value, tb):</div><div class="line">        self.open_file.close()</div><div class="line">        if type is AttributeError:</div><div class="line">            print(&apos;handing some exception&apos;)</div><div class="line">            return True</div><div class="line">            </div><div class="line">with Open(&apos;aaa&apos;, &apos;w&apos;) as f:</div><div class="line">    f.writeee(&apos;aaaa&apos;)</div><div class="line">    </div><div class="line">    </div><div class="line">&gt;&gt;&gt; handing some exception</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Open:</span><br><span class="line">    def __init__(self, file, mode):</span><br><span class="line">        self.open_file = open(file, mode)</span><br><span class="line">    def __enter__(self):</span><br><span class="line">        return self.open_file</span><br><span class="line">    def __exit__(self, type, value, tb):</span><br><span class="line">        self.open_file.close()</span><br><span class="line">        if type is AttributeError:</span><br><span class="line">            print(&apos;handing some exception&apos;)</span><br><span class="line">            return True</span><br><span class="line">            </span><br><span class="line">with Open(&apos;aaa&apos;, &apos;w&apos;) as f:</span><br><span class="line">    f.writeee(&apos;aaaa&apos;)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&gt;&gt;&gt; handing some exception</span><br></pre></td></tr></table></figure>
 <h4 id="contextmanager"><a href="#contextmanager" class="headerlink" title="contextmanager"></a>contextmanager</h4><p>由于上下文管理非常有用，Python 中有一个专门用于实现上下文管理的标准库，这就是 contextlib。</p>
 <p>有了 contextlib 创建上下文管理的最好方式就是使用 contextmanager 装饰器，通过 contextmanager 装饰一个生成器函数，<code>yield</code> 语句前面的部分被认为是<code>__enter__()</code> 方法的代码，后面的部分被认为是 <code>__exit__()</code>方法的代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">from contextlib import contextmanager</div><div class="line">@contextmanager</div><div class="line">def file(path, mode):</div><div class="line">    open_file = open(path, mode)</div><div class="line">    yield open_file</div><div class="line">    open_file.close()</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from contextlib import contextmanager</span><br><span class="line">@contextmanager</span><br><span class="line">def file(path, mode):</span><br><span class="line">    open_file = open(path, mode)</span><br><span class="line">    yield open_file</span><br><span class="line">    open_file.close()</span><br></pre></td></tr></table></figure>
 <p>Python解释器遇到了<code>yield</code>关键字。因为这个缘故它创建了一个生成器而不是一个普通的函数。因为这个装饰器，contextmanager会被调用并传入函数名（<code>file</code>）作为参数。contextmanager函数返回一个以GeneratorContextManager对象封装过的生成器。这个GeneratorContextManager被赋值给<code>file</code>函数，我们实际上是在调用GeneratorContextManager对象。</p>
 <p>Read More: </p>
 <blockquote>
-<p><a href="https://eastlakeside.gitbooks.io/interpy-zh/content/context_managers/" target="_blank" rel="external">上下文管理器(Context managers)</a> <a href="http://kuanghy.github.io/2015/08/08/python-with" target="_blank" rel="external">Python上下文管理器与with语句</a> <a href="http://www.cnblogs.com/wilber2013/p/4638967.html" target="_blank" rel="external">Python上下文管理器</a> <a href="https://anyisalin.github.io/anyisalin.github.io/2017/03/07/python-context-manager/" target="_blank" rel="external">Python - 上下文管理</a> </p>
+<p><a href="https://eastlakeside.gitbooks.io/interpy-zh/content/context_managers/" target="_blank" rel="noopener">上下文管理器(Context managers)</a> <a href="http://kuanghy.github.io/2015/08/08/python-with" target="_blank" rel="noopener">Python上下文管理器与with语句</a> <a href="http://www.cnblogs.com/wilber2013/p/4638967.html" target="_blank" rel="noopener">Python上下文管理器</a> <a href="https://anyisalin.github.io/anyisalin.github.io/2017/03/07/python-context-manager/" target="_blank" rel="noopener">Python - 上下文管理</a> </p>
 </blockquote>
 
       
@@ -558,7 +555,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -569,9 +566,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -582,7 +577,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -709,10 +704,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

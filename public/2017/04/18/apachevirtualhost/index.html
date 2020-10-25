@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,63 +68,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Apache,虚拟主机," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="Apache,虚拟主机,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="在开发项目的时候，每个项目对应的工程目录是不同的，想直接用一个自定义主机名来分别对应，这样就不用每次敲目录名了。Apache的虚拟主机可以实现这种功能。
-配置虚拟主机有三种方式：
 
-基于IP地址
-基于主机名
-基于端口号
 
-本文主要介绍 基于主机名 和 基于端口号 这两种方式。
-基于主机名我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache">
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="在开发项目的时候，每个项目对应的工程目录是不同的，想直接用一个自定义主机名来分别对应，这样就不用每次敲目录名了。Apache的虚拟主机可以实现这种功能。 配置虚拟主机有三种方式：  基于IP地址 基于主机名 基于端口号  本文主要介绍 基于主机名 和 基于端口号 这两种方式。 基于主机名我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache">
+<meta name="keywords" content="Apache,虚拟主机">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Apache2.4配置虚拟主机">
 <meta property="og:url" content="http://runnerliu.github.io/2017/04/18/apachevirtualhost/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="在开发项目的时候，每个项目对应的工程目录是不同的，想直接用一个自定义主机名来分别对应，这样就不用每次敲目录名了。Apache的虚拟主机可以实现这种功能。
-配置虚拟主机有三种方式：
-
-基于IP地址
-基于主机名
-基于端口号
-
-本文主要介绍 基于主机名 和 基于端口号 这两种方式。
-基于主机名我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="在开发项目的时候，每个项目对应的工程目录是不同的，想直接用一个自定义主机名来分别对应，这样就不用每次敲目录名了。Apache的虚拟主机可以实现这种功能。 配置虚拟主机有三种方式：  基于IP地址 基于主机名 基于端口号  本文主要介绍 基于主机名 和 基于端口号 这两种方式。 基于主机名我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.206Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Apache2.4配置虚拟主机">
-<meta name="twitter:description" content="在开发项目的时候，每个项目对应的工程目录是不同的，想直接用一个自定义主机名来分别对应，这样就不用每次敲目录名了。Apache的虚拟主机可以实现这种功能。
-配置虚拟主机有三种方式：
-
-基于IP地址
-基于主机名
-基于端口号
-
-本文主要介绍 基于主机名 和 基于端口号 这两种方式。
-基于主机名我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache">
+<meta name="twitter:description" content="在开发项目的时候，每个项目对应的工程目录是不同的，想直接用一个自定义主机名来分别对应，这样就不用每次敲目录名了。Apache的虚拟主机可以实现这种功能。 配置虚拟主机有三种方式：  基于IP地址 基于主机名 基于端口号  本文主要介绍 基于主机名 和 基于端口号 这两种方式。 基于主机名我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache">
 
 
 
@@ -152,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/04/18/apachevirtualhost/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/04/18/apachevirtualhost/">
 
 
 
@@ -192,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -222,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -232,7 +210,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -242,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -252,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -262,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -275,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -296,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -335,7 +311,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -378,7 +354,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -446,18 +422,18 @@
 <p>本文主要介绍 <strong>基于主机名</strong> 和 <strong>基于端口号</strong> 这两种方式。</p>
 <h3 id="基于主机名"><a href="#基于主机名" class="headerlink" title="基于主机名"></a>基于主机名</h3><p>我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache 默认的监听端口是80端口，这里不用输入80端口号就可以。</p>
 <p>首先修改 <em>C:\Windows\System32\drivers\etc</em> 目录下的 hosts 文件，如果修改时保存失败，第一种方式是可以修改 hosts 文件的安全属性，右键-&gt;属性-&gt;安全，赋予相应用户的权限即可；第二种方式是，使用管理员身份打开记事本，然后在记事本中打开 hosts 文件，进行如下修改：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"># Copyright (c) 1993-2009 Microsoft Corp.</div><div class="line">#</div><div class="line"># This is a sample HOSTS file used by Microsoft TCP/IP for Windows.</div><div class="line">#</div><div class="line"># This file contains the mappings of IP addresses to host names. Each</div><div class="line"># entry should be kept on an individual line. The IP address should</div><div class="line"># be placed in the first column followed by the corresponding host name.</div><div class="line"># The IP address and the host name should be separated by at least one</div><div class="line"># space.</div><div class="line">#</div><div class="line"># Additionally, comments (such as these) may be inserted on individual</div><div class="line"># lines or following the machine name denoted by a &apos;#&apos; symbol.</div><div class="line">#</div><div class="line"># For example:</div><div class="line">#</div><div class="line">#      102.54.94.97     rhino.acme.com          # source server</div><div class="line">#       38.25.63.10     x.acme.com              # x client host</div><div class="line"></div><div class="line"># localhost name resolution is handled within DNS itself.</div><div class="line">#	127.0.0.1       localhost</div><div class="line">#	::1             localhost</div><div class="line">192.168.1.105 windows10.microdone.cn</div><div class="line">127.0.0.1       myapp.com			// 自定义的主机名，名称不能与网上的域名冲突</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># Copyright (c) 1993-2009 Microsoft Corp.</span><br><span class="line">#</span><br><span class="line"># This is a sample HOSTS file used by Microsoft TCP/IP for Windows.</span><br><span class="line">#</span><br><span class="line"># This file contains the mappings of IP addresses to host names. Each</span><br><span class="line"># entry should be kept on an individual line. The IP address should</span><br><span class="line"># be placed in the first column followed by the corresponding host name.</span><br><span class="line"># The IP address and the host name should be separated by at least one</span><br><span class="line"># space.</span><br><span class="line">#</span><br><span class="line"># Additionally, comments (such as these) may be inserted on individual</span><br><span class="line"># lines or following the machine name denoted by a &apos;#&apos; symbol.</span><br><span class="line">#</span><br><span class="line"># For example:</span><br><span class="line">#</span><br><span class="line">#      102.54.94.97     rhino.acme.com          # source server</span><br><span class="line">#       38.25.63.10     x.acme.com              # x client host</span><br><span class="line"></span><br><span class="line"># localhost name resolution is handled within DNS itself.</span><br><span class="line">#	127.0.0.1       localhost</span><br><span class="line">#	::1             localhost</span><br><span class="line">192.168.1.105 windows10.microdone.cn</span><br><span class="line">127.0.0.1       myapp.com			// 自定义的主机名，名称不能与网上的域名冲突</span><br></pre></td></tr></table></figure>
 <p>hosts 文件配置好后，打开 <em>\Apache24\conf</em> 目录下的 httpd.conf 文件，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># Virtual hosts</div><div class="line"># Include conf/extra/httpd-vhosts.conf</div><div class="line"></div><div class="line">将 # 去掉</div><div class="line"></div><div class="line"># Virtual hosts</div><div class="line">Include conf/extra/httpd-vhosts.conf</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Virtual hosts</span><br><span class="line"># Include conf/extra/httpd-vhosts.conf</span><br><span class="line"></span><br><span class="line">将 # 去掉</span><br><span class="line"></span><br><span class="line"># Virtual hosts</span><br><span class="line">Include conf/extra/httpd-vhosts.conf</span><br></pre></td></tr></table></figure>
 <p>然后打开 <em>\Apache24\conf\extra</em> 目录下的 httpd-vhosts.conf 文件，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:80&gt;</div><div class="line">    ServerAdmin YourName</div><div class="line">    DocumentRoot &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;</div><div class="line">    ServerName myapp.com</div><div class="line">    ErrorLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-error.log&quot;</div><div class="line">    CustomLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-access.log&quot; common</div><div class="line">    &lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;&gt;</div><div class="line">    	Options Indexes FollowSymLinks MultiViews</div><div class="line">		AllowOverride None</div><div class="line">		Require all granted</div><div class="line">	&lt;/Directory&gt;</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    ServerAdmin YourName</span><br><span class="line">    DocumentRoot &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;</span><br><span class="line">    ServerName myapp.com</span><br><span class="line">    ErrorLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-error.log&quot;</span><br><span class="line">    CustomLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-access.log&quot; common</span><br><span class="line">    &lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;&gt;</span><br><span class="line">    	Options Indexes FollowSymLinks MultiViews</span><br><span class="line">		AllowOverride None</span><br><span class="line">		Require all granted</span><br><span class="line">	&lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
 <p>DocumentRoot 对应虚拟主机主目录；<br>ServerName 对应主机名；<br>ErrorLog 对应错误日志存放路径；<br>CustomLog 对应访问日志存放路径；<br>其中的&lt; Directory &gt;&lt; Directory /&gt;对应相应地设置信息。</p>
 <p>最后，在浏览器中输入 mapp.com/index.php 就可以访问不同目录了。</p>
 <h3 id="基于端口号"><a href="#基于端口号" class="headerlink" title="基于端口号"></a>基于端口号</h3><p>打开 <em>\Apache24\conf</em> 目录下的 httpd.conf 文件，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#</div><div class="line"># Listen: Allows you to bind Apache to specific IP addresses and/or</div><div class="line"># ports, instead of the default. See also the &lt;VirtualHost&gt;</div><div class="line"># directive.</div><div class="line">#</div><div class="line"># Change this to Listen on specific IP addresses as shown below to </div><div class="line"># prevent Apache from glomming onto all bound IP addresses.</div><div class="line">#</div><div class="line">#Listen 12.34.56.78:80</div><div class="line">Listen 80</div><div class="line">Listen 8090		// 添加的apache监听的另一端口号，确保未被占用</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line"># Listen: Allows you to bind Apache to specific IP addresses and/or</span><br><span class="line"># ports, instead of the default. See also the &lt;VirtualHost&gt;</span><br><span class="line"># directive.</span><br><span class="line">#</span><br><span class="line"># Change this to Listen on specific IP addresses as shown below to </span><br><span class="line"># prevent Apache from glomming onto all bound IP addresses.</span><br><span class="line">#</span><br><span class="line">#Listen 12.34.56.78:80</span><br><span class="line">Listen 80</span><br><span class="line">Listen 8090		// 添加的apache监听的另一端口号，确保未被占用</span><br></pre></td></tr></table></figure>
 <p>然后打开 <em>\Apache24\conf\extra</em> 目录下的 httpd-vhosts.conf 文件，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:8090&gt;</div><div class="line">    ServerAdmin YourName</div><div class="line">    DocumentRoot &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;</div><div class="line">    ServerName myapp.com</div><div class="line">    ErrorLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-error.log&quot;</div><div class="line">    CustomLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-access.log&quot; common</div><div class="line">    &lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;&gt;</div><div class="line">    	Options Indexes FollowSymLinks MultiViews</div><div class="line">		AllowOverride None</div><div class="line">		Require all granted</div><div class="line">	&lt;/Directory&gt;</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure>
-<p>以上通过两种方式实现了通过访问不同的主机名来访问不同目录，基于IP地址的方式请访问  <a href="http://www.cnblogs.com/hi-bazinga/archive/2012/04/23/2466605.html" target="_blank" rel="external">Apache 配置虚拟主机三种方式</a>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:8090&gt;</span><br><span class="line">    ServerAdmin YourName</span><br><span class="line">    DocumentRoot &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;</span><br><span class="line">    ServerName myapp.com</span><br><span class="line">    ErrorLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-error.log&quot;</span><br><span class="line">    CustomLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-access.log&quot; common</span><br><span class="line">    &lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;&gt;</span><br><span class="line">    	Options Indexes FollowSymLinks MultiViews</span><br><span class="line">		AllowOverride None</span><br><span class="line">		Require all granted</span><br><span class="line">	&lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+<p>以上通过两种方式实现了通过访问不同的主机名来访问不同目录，基于IP地址的方式请访问  <a href="http://www.cnblogs.com/hi-bazinga/archive/2012/04/23/2466605.html" target="_blank" rel="noopener">Apache 配置虚拟主机三种方式</a>  </p>
 
       
     </div>
@@ -564,7 +540,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -575,9 +551,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -588,7 +562,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -715,10 +689,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

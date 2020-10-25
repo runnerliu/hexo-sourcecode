@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,45 +68,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="重构,代码的坏味道," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="重构,代码的坏味道,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="《重构，改善既有代码的设计》一书中，将重构时机用味道来形容，“代码的坏味道”顾名思义就是我们的程序中存在一些不合理、难以理解、难以扩展的设计，本文参考书中的“坏味道条款”列举程序设计中可能遇到的可重构代码。
-Alternative Class with Different Interfaces说明：异曲同工的类。如果两个函数做同一件事儿，却有着不同的签名。
-拟可重构方法：Rename Method">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="《重构，改善既有代码的设计》一书中，将重构时机用味道来形容，“代码的坏味道”顾名思义就是我们的程序中存在一些不合理、难以理解、难以扩展的设计，本文参考书中的“坏味道条款”列举程序设计中可能遇到的可重构代码。 Alternative Class with Different Interfaces说明：异曲同工的类。如果两个函数做同一件事儿，却有着不同的签名。 拟可重构方法：Rename Method">
+<meta name="keywords" content="重构,代码的坏味道">
 <meta property="og:type" content="article">
 <meta property="og:title" content="重构改善既有代码的设计-代码的坏味道">
 <meta property="og:url" content="http://runnerliu.github.io/2017/05/20/badtasteofcode/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="《重构，改善既有代码的设计》一书中，将重构时机用味道来形容，“代码的坏味道”顾名思义就是我们的程序中存在一些不合理、难以理解、难以扩展的设计，本文参考书中的“坏味道条款”列举程序设计中可能遇到的可重构代码。
-Alternative Class with Different Interfaces说明：异曲同工的类。如果两个函数做同一件事儿，却有着不同的签名。
-拟可重构方法：Rename Method">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="《重构，改善既有代码的设计》一书中，将重构时机用味道来形容，“代码的坏味道”顾名思义就是我们的程序中存在一些不合理、难以理解、难以扩展的设计，本文参考书中的“坏味道条款”列举程序设计中可能遇到的可重构代码。 Alternative Class with Different Interfaces说明：异曲同工的类。如果两个函数做同一件事儿，却有着不同的签名。 拟可重构方法：Rename Method">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.207Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="重构改善既有代码的设计-代码的坏味道">
-<meta name="twitter:description" content="《重构，改善既有代码的设计》一书中，将重构时机用味道来形容，“代码的坏味道”顾名思义就是我们的程序中存在一些不合理、难以理解、难以扩展的设计，本文参考书中的“坏味道条款”列举程序设计中可能遇到的可重构代码。
-Alternative Class with Different Interfaces说明：异曲同工的类。如果两个函数做同一件事儿，却有着不同的签名。
-拟可重构方法：Rename Method">
+<meta name="twitter:description" content="《重构，改善既有代码的设计》一书中，将重构时机用味道来形容，“代码的坏味道”顾名思义就是我们的程序中存在一些不合理、难以理解、难以扩展的设计，本文参考书中的“坏味道条款”列举程序设计中可能遇到的可重构代码。 Alternative Class with Different Interfaces说明：异曲同工的类。如果两个函数做同一件事儿，却有着不同的签名。 拟可重构方法：Rename Method">
 
 
 
@@ -134,7 +130,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/05/20/badtasteofcode/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/05/20/badtasteofcode/">
 
 
 
@@ -174,7 +170,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -204,7 +200,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -214,7 +210,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -224,7 +220,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -234,7 +230,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -244,7 +240,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -257,7 +253,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -278,9 +274,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -317,7 +311,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -360,7 +354,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -573,7 +567,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -584,9 +578,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -597,7 +589,7 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -724,10 +716,10 @@ Alternative Class with Different Interfaces说明：异曲同工的类。如果�
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

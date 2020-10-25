@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,48 +68,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="HTTP,session共享,网络编程," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="HTTP,session共享,网络编程,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下：
-12session.save_handler = filessession.save_path = &amp;quot;N;/path&amp;quot;
-第一个配置项是指定使用 files(文件形式) 存储session数据。
-第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下： 12session.save_handler = filessession.save_path = &amp;quot;N;/path&amp;quot; 第一个配置项是指定使用 files(文件形式) 存储session数据。 第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁">
+<meta name="keywords" content="HTTP,session共享,网络编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="跨服务器Session共享">
 <meta property="og:url" content="http://runnerliu.github.io/2017/06/07/sharesession/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下：
-12session.save_handler = filessession.save_path = &amp;quot;N;/path&amp;quot;
-第一个配置项是指定使用 files(文件形式) 存储session数据。
-第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下： 12session.save_handler = filessession.save_path = &amp;quot;N;/path&amp;quot; 第一个配置项是指定使用 files(文件形式) 存储session数据。 第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.267Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="跨服务器Session共享">
-<meta name="twitter:description" content="默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下：
-12session.save_handler = filessession.save_path = &amp;quot;N;/path&amp;quot;
-第一个配置项是指定使用 files(文件形式) 存储session数据。
-第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁">
+<meta name="twitter:description" content="默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下： 12session.save_handler = filessession.save_path = &amp;quot;N;/path&amp;quot; 第一个配置项是指定使用 files(文件形式) 存储session数据。 第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁">
 
 
 
@@ -137,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/06/07/sharesession/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/06/07/sharesession/">
 
 
 
@@ -177,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -207,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -217,7 +210,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -227,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -237,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -247,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -260,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -281,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -320,7 +311,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -363,7 +354,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -422,7 +413,7 @@
 
       
         <p>默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">session.save_handler = files</div><div class="line">session.save_path = &quot;N;/path&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">session.save_handler = files</span><br><span class="line">session.save_path = &quot;N;/path&quot;</span><br></pre></td></tr></table></figure>
 <p>第一个配置项是指定使用 files(文件形式) 存储session数据。</p>
 <p>第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁盘目录中去)</p>
 <p>所以我们可以知道，session 的数据默认是保存在磁盘文件中。</p>
@@ -439,7 +430,7 @@
 <h4 id="利用组播实现-Session-共享"><a href="#利用组播实现-Session-共享" class="headerlink" title="利用组播实现 Session 共享"></a>利用组播实现 Session 共享</h4><p>通过组播的方式进行集群间的共享，比如 tomcat 目前就具备这样的功能，优点是 web 容器自身支持，配置简单，适合小型网站。缺点是当一台机器的上的 session 变更后会将变更的数据以组播的形式分发给集群间的所有节点，对网络和所有的web 容器都是存在开销。集群越大浪费越严重。不能做到线性的扩展。</p>
 <blockquote>
 <p>参考文章：</p>
-<p><a href="http://blog.csdn.net/lamp_yang_3533/article/details/51984201" target="_blank" rel="external">如何在多台web服务器上共享session？</a>  <a href="http://www.cnblogs.com/imhaiyang/articles/4949459.html" target="_blank" rel="external">多服务器之间Session共享</a>  <a href="https://www.zhihu.com/question/19651970/answer/12534778" target="_blank" rel="external">如何解决 cluster 中应用中 session 共享问题？都有那些方案，各有什么优缺点？</a></p>
+<p><a href="http://blog.csdn.net/lamp_yang_3533/article/details/51984201" target="_blank" rel="noopener">如何在多台web服务器上共享session？</a>  <a href="http://www.cnblogs.com/imhaiyang/articles/4949459.html" target="_blank" rel="noopener">多服务器之间Session共享</a>  <a href="https://www.zhihu.com/question/19651970/answer/12534778" target="_blank" rel="noopener">如何解决 cluster 中应用中 session 共享问题？都有那些方案，各有什么优缺点？</a></p>
 </blockquote>
 
       
@@ -549,7 +540,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -560,9 +551,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -573,7 +562,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -700,10 +689,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

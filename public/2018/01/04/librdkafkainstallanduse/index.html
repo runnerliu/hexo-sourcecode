@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,23 +68,23 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="librdkafka,kafka," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
+  <meta name="keywords" content="kafka,librdkafka,">
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
 
 
 
@@ -92,12 +92,14 @@
 
 
 <meta name="description" content="kafka 是一种高吞吐量的分布式发布订阅消息系统。现在它已被 多家不同类型的公司 作为多种类型的数据管道和消息系统使用。Python对kafka的操作库主要有 pykafka 、confluent-kafka-python 、librdkafka ，pykafka是Python内置的kafka操作模块，纯Python编写，提供 simpleconsumer 、balancedconsumer 两">
+<meta name="keywords" content="kafka,librdkafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="librdkafka的安装和使用">
 <meta property="og:url" content="http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
 <meta property="og:description" content="kafka 是一种高吞吐量的分布式发布订阅消息系统。现在它已被 多家不同类型的公司 作为多种类型的数据管道和消息系统使用。Python对kafka的操作库主要有 pykafka 、confluent-kafka-python 、librdkafka ，pykafka是Python内置的kafka操作模块，纯Python编写，提供 simpleconsumer 、balancedconsumer 两">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.228Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="librdkafka的安装和使用">
 <meta name="twitter:description" content="kafka 是一种高吞吐量的分布式发布订阅消息系统。现在它已被 多家不同类型的公司 作为多种类型的数据管道和消息系统使用。Python对kafka的操作库主要有 pykafka 、confluent-kafka-python 、librdkafka ，pykafka是Python内置的kafka操作模块，纯Python编写，提供 simpleconsumer 、balancedconsumer 两">
@@ -128,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/">
 
 
 
@@ -168,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -198,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -208,7 +210,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -218,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -228,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -238,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -251,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -272,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -311,7 +311,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -354,7 +354,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -412,65 +412,65 @@
       
 
       
-        <p><a href="https://kafka.apache.org/" target="_blank" rel="external">kafka</a> 是一种高吞吐量的分布式发布订阅消息系统。现在它已被 <a href="https://cwiki.apache.org/confluence/display/KAFKA/Powered+By" target="_blank" rel="external">多家不同类型的公司</a> 作为多种类型的数据管道和消息系统使用。Python对kafka的操作库主要有 <a href="https://github.com/Parsely/pykafka" target="_blank" rel="external">pykafka</a> 、<a href="https://github.com/confluentinc/confluent-kafka-python" target="_blank" rel="external">confluent-kafka-python</a> 、<a href="https://github.com/edenhill/librdkafka" target="_blank" rel="external">librdkafka</a> ，pykafka是Python内置的kafka操作模块，纯Python编写，提供 <a href="http://pykafka.readthedocs.io/en/latest/api/simpleconsumer.html" target="_blank" rel="external">simpleconsumer</a> 、<a href="http://pykafka.readthedocs.io/en/latest/api/balancedconsumer.html" target="_blank" rel="external">balancedconsumer</a> 两种消费方式。</p>
+        <p><a href="https://kafka.apache.org/" target="_blank" rel="noopener">kafka</a> 是一种高吞吐量的分布式发布订阅消息系统。现在它已被 <a href="https://cwiki.apache.org/confluence/display/KAFKA/Powered+By" target="_blank" rel="noopener">多家不同类型的公司</a> 作为多种类型的数据管道和消息系统使用。Python对kafka的操作库主要有 <a href="https://github.com/Parsely/pykafka" target="_blank" rel="noopener">pykafka</a> 、<a href="https://github.com/confluentinc/confluent-kafka-python" target="_blank" rel="noopener">confluent-kafka-python</a> 、<a href="https://github.com/edenhill/librdkafka" target="_blank" rel="noopener">librdkafka</a> ，pykafka是Python内置的kafka操作模块，纯Python编写，提供 <a href="http://pykafka.readthedocs.io/en/latest/api/simpleconsumer.html" target="_blank" rel="noopener">simpleconsumer</a> 、<a href="http://pykafka.readthedocs.io/en/latest/api/balancedconsumer.html" target="_blank" rel="noopener">balancedconsumer</a> 两种消费方式。</p>
 <p>其实严格意义上来说，librdkafka并不是kafka的操作库，它是Apache Kafka协议的C库实现，包含Producer和Consumer支持。</p>
 <blockquote>
-<p><strong>librdkafka</strong> is a C library implementation of the <a href="http://kafka.apache.org/" target="_blank" rel="external">Apache Kafka</a> protocol, containing both Producer and Consumer support. It was designed with message delivery reliability and high performance in mind, current figures exceed 1 million msgs/second for the producer and 3 million msgs/second for the consumer.</p>
+<p><strong>librdkafka</strong> is a C library implementation of the <a href="http://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a> protocol, containing both Producer and Consumer support. It was designed with message delivery reliability and high performance in mind, current figures exceed 1 million msgs/second for the producer and 3 million msgs/second for the consumer.</p>
 </blockquote>
 <p>由于项目的需要，原本使用pykafka作为数据的读取库，但是可能是达到了Python的读瓶颈，pykafka无法满足目前的要求，所以准备采用librdkafka来提高从kafka中读数据的效率。网上对Python环境中librdkafka的安装并没有详细的教程，通过自己的摸索和踩坑，终于是安装成功了。</p>
 <h4 id="安装librdkafka"><a href="#安装librdkafka" class="headerlink" title="安装librdkafka"></a>安装librdkafka</h4><p>执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/edenhill/librdkafka.git</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/edenhill/librdkafka.git</span><br></pre></td></tr></table></figure>
 <p>将librdkafka源码库下载到本地，如果没有安装git，请自行搜索安装。</p>
-<p>如果github上无法下载，请转到百度网盘：链接: <a href="https://pan.baidu.com/s/1sl0uj2d" target="_blank" rel="external">https://pan.baidu.com/s/1sl0uj2d</a> 密码: af7k</p>
+<p>如果github上无法下载，请转到百度网盘：链接: <a href="https://pan.baidu.com/s/1sl0uj2d" target="_blank" rel="noopener">https://pan.baidu.com/s/1sl0uj2d</a> 密码: af7k</p>
 <p>下载的是0.11.1版本，本文安装的也是这个版本。</p>
 <p>本文直接下载到/root/目录下，执行<code>cd librdkafka-0.11.1</code>进行目录</p>
 <p>依次执行一下命令进行安装：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./configure</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
 <p>librdkafka依赖的环境如下，如果未安装请自行安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">The GNU toolchain</div><div class="line">GNU make</div><div class="line">pthreads</div><div class="line">zlib (optional, for gzip compression support)</div><div class="line">libssl-dev (optional, for SSL and SASL SCRAM support)</div><div class="line">libsasl2-dev (optional, for SASL GSSAPI support)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The GNU toolchain</span><br><span class="line">GNU make</span><br><span class="line">pthreads</span><br><span class="line">zlib (optional, for gzip compression support)</span><br><span class="line">libssl-dev (optional, for SSL and SASL SCRAM support)</span><br><span class="line">libsasl2-dev (optional, for SASL GSSAPI support)</span><br></pre></td></tr></table></figure>
 <p>如果安装成功，会在<code>/usr/local/lib</code>目录中出现以下文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt librdkafka-0.11.1]# cd /usr/local/lib</div><div class="line">[root@hcdn-others-worker-dev100-bjlt lib]# ll</div><div class="line">total 15200</div><div class="line">-rwxr-xr-x 1 root root 8122982 Jan  4 15:21 librdkafka.a</div><div class="line">-rwxr-xr-x 1 root root 2305704 Jan  4 15:21 librdkafka++.a</div><div class="line">lrwxrwxrwx 1 root root      15 Jan  4 15:21 librdkafka.so -&gt; librdkafka.so.1</div><div class="line">lrwxrwxrwx 1 root root      17 Jan  4 15:21 librdkafka++.so -&gt; librdkafka++.so.1</div><div class="line">-rwxr-xr-x 1 root root 4225307 Jan  4 15:21 librdkafka.so.1</div><div class="line">-rwxr-xr-x 1 root root  899617 Jan  4 15:21 librdkafka++.so.1</div><div class="line">drwxr-xr-x 2 root root    4096 Jan  4 15:21 pkgconfig</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt librdkafka-0.11.1]# cd /usr/local/lib</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt lib]# ll</span><br><span class="line">total 15200</span><br><span class="line">-rwxr-xr-x 1 root root 8122982 Jan  4 15:21 librdkafka.a</span><br><span class="line">-rwxr-xr-x 1 root root 2305704 Jan  4 15:21 librdkafka++.a</span><br><span class="line">lrwxrwxrwx 1 root root      15 Jan  4 15:21 librdkafka.so -&gt; librdkafka.so.1</span><br><span class="line">lrwxrwxrwx 1 root root      17 Jan  4 15:21 librdkafka++.so -&gt; librdkafka++.so.1</span><br><span class="line">-rwxr-xr-x 1 root root 4225307 Jan  4 15:21 librdkafka.so.1</span><br><span class="line">-rwxr-xr-x 1 root root  899617 Jan  4 15:21 librdkafka++.so.1</span><br><span class="line">drwxr-xr-x 2 root root    4096 Jan  4 15:21 pkgconfig</span><br></pre></td></tr></table></figure>
 <p>librdkafka.so、librdkafka.so.1是librdkafka的动态链接库，因为Linux默认的动态链接库路径是<code>/lib</code>、<code>/usr/lib</code>，而librdkafka默认安装到了<code>/usr/local/lib</code>，为了使Python解释器可以找到librdkafka的动态链接库，本文采取的方法是修改系统文件<code>/etc/ld.so.conf</code>，这个文件中指定了默认的动态链接库查找路径，默认只有一行配置，如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">include ld.so.conf.d/*.conf</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include ld.so.conf.d/*.conf</span><br></pre></td></tr></table></figure>
 <p>可以看到，<code>/etc/ld.so.conf</code>包含了ld.so.conf.d目录中的所有<code>.conf</code>文件，所以我们新建一个配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt ld.so.conf.d]# ll</div><div class="line">total 24</div><div class="line">...</div><div class="line">-rw-r--r--  1 root root  15 Jan  4 11:02 librdkafka.conf</div><div class="line">...</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ld.so.conf.d]# ll</span><br><span class="line">total 24</span><br><span class="line">...</span><br><span class="line">-rw-r--r--  1 root root  15 Jan  4 11:02 librdkafka.conf</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>在<code>librdkafka.conf</code>文件中将<code>/usr/local/lib</code>路径包含进去</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/local/lib</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/lib</span><br></pre></td></tr></table></figure>
 <p>保存退出后执行以下命令更新动态链接库的搜索配置文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ldconfig</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
 <p>通过以上操作，Python解释器就可以找到刚才安装的librdkafka的动态链接库了。</p>
 <h4 id="安装pykafka"><a href="#安装pykafka" class="headerlink" title="安装pykafka"></a>安装pykafka</h4><p>Python可以通过pip工具安装pykafka</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install pykafka</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pykafka</span><br></pre></td></tr></table></figure>
 <p>但是我们需要使用librdkafka扩展，使用pip工具是无法安装librdkafka的，所以我们需要源码编译安装pykafka。</p>
 <p>执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/Parsely/pykafka.git</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Parsely/pykafka.git</span><br></pre></td></tr></table></figure>
 <p>下载pykafka的源码包到本地，这时别着急执行<code>./configure</code>，文档中介绍：要使用librdkafka扩展，需要确保头文件和共享库是Python可以找到它们的地方，无论是在构建扩展还是在运行时。</p>
 <blockquote>
 <p>PyKafka includes a C extension that makes use of librdkafka to speed up producer and consumer operation. To use the librdkafka extension, you need to make sure the header files and shared library are somewhere where python can find them, both when you build the extension (which is taken care of by <code>setup.py develop</code>) and at run time. Typically, this means that you need to either install librdkafka in a place conventional for your system, or declare <code>C_INCLUDE_PATH</code>, <code>LIBRARY_PATH</code>, and <code>LD_LIBRARY_PATH</code> in your shell environment to point to the installation location of the librdkafka shared objects. You can find this location with locate librdkafka.so.</p>
 </blockquote>
 <p>我们已经将librdkafka的动态链接库加载到系统的搜索路径中，所以这个没问题，但是头文件在哪里？</p>
 <p>在<code>pykafka/pykafka/rdkafka/_rd_kafkamodule.c</code>文件中有这样一行代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">#include &lt;librdkafka/rdkafka.h&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;librdkafka/rdkafka.h&gt;</span><br></pre></td></tr></table></figure>
 <p>所以我们需要在刚才下载的pykafka源码包中新建一个目录，将<code>rdkafka.h</code>放进去，保证我们在编译安装时能够找到它</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt pykafka]# ll</div><div class="line">total 128</div><div class="line">...</div><div class="line">drwxr-xr-x 2 root root  4096 Jan  4 14:22 librdkafka</div><div class="line">...</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt pykafka]# ll</span><br><span class="line">total 128</span><br><span class="line">...</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 14:22 librdkafka</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p><code>rdkafka.h</code>文件可以在刚才下载的librdkafka源码包中找到，即<code>librdkafka/src/</code>目录下</p>
 <p>执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /root/librdkafka-0.11.1/src/rdkafka.h /root/pykafka/librdkafka/</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /root/librdkafka-0.11.1/src/rdkafka.h /root/pykafka/librdkafka/</span><br></pre></td></tr></table></figure>
 <p><strong>注意</strong>：/root代表librdkafka-0.11.1的存放目录</p>
 <p>完成以上工作，依次执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd pykafka/</div><div class="line">python setup.py build</div><div class="line">python setup.py install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd pykafka/</span><br><span class="line">python setup.py build</span><br><span class="line">python setup.py install</span><br></pre></td></tr></table></figure>
 <p>不出意外的话，就可以安装成功，这时在Python的安装目录的<code>site-packages/</code>目录下会产生<code>pykafka-2.7.0.dev2-py3.6-linux-x86_64.egg</code>目录，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt pykafka-2.7.0.dev2-py3.6-linux-x86_64.egg]# ll</div><div class="line">total 12</div><div class="line">drwxr-xr-x 2 root root 4096 Jan  4 15:22 EGG-INFO</div><div class="line">drwxr-xr-x 7 root root 4096 Jan  4 15:22 pykafka</div><div class="line">drwxr-xr-x 4 root root 4096 Jan  4 15:22 tests</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt pykafka-2.7.0.dev2-py3.6-linux-x86_64.egg]# ll</span><br><span class="line">total 12</span><br><span class="line">drwxr-xr-x 2 root root 4096 Jan  4 15:22 EGG-INFO</span><br><span class="line">drwxr-xr-x 7 root root 4096 Jan  4 15:22 pykafka</span><br><span class="line">drwxr-xr-x 4 root root 4096 Jan  4 15:22 tests</span><br></pre></td></tr></table></figure>
 <p>表明安装成功了，在<code>pykafka/rdkafka/</code>目录中可以看到</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@hcdn-others-worker-dev100-bjlt rdkafka]# ll</div><div class="line">total 172</div><div class="line">-rw-r--r-- 1 root root  1188 Jan  4 15:22 helpers.py</div><div class="line">-rw-r--r-- 1 root root    89 Jan  4 15:22 __init__.py</div><div class="line">-rw-r--r-- 1 root root  8343 Jan  4 15:22 producer.py</div><div class="line">drwxr-xr-x 2 root root  4096 Jan  4 16:07 __pycache__</div><div class="line">-rwxr-xr-x 1 root root 83815 Jan  4 15:22 _rd_kafka.cpython-36m-x86_64-linux-gnu.so</div><div class="line">-rw-r--r-- 1 root root 41405 Jan  4 15:22 _rd_kafkamodule.c</div><div class="line">-rw-r--r-- 1 root root   314 Jan  4 15:22 _rd_kafka.py</div><div class="line">-rw-r--r-- 1 root root 12674 Jan  4 16:04 simple_consumer.py</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt rdkafka]# ll</span><br><span class="line">total 172</span><br><span class="line">-rw-r--r-- 1 root root  1188 Jan  4 15:22 helpers.py</span><br><span class="line">-rw-r--r-- 1 root root    89 Jan  4 15:22 __init__.py</span><br><span class="line">-rw-r--r-- 1 root root  8343 Jan  4 15:22 producer.py</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 16:07 __pycache__</span><br><span class="line">-rwxr-xr-x 1 root root 83815 Jan  4 15:22 _rd_kafka.cpython-36m-x86_64-linux-gnu.so</span><br><span class="line">-rw-r--r-- 1 root root 41405 Jan  4 15:22 _rd_kafkamodule.c</span><br><span class="line">-rw-r--r-- 1 root root   314 Jan  4 15:22 _rd_kafka.py</span><br><span class="line">-rw-r--r-- 1 root root 12674 Jan  4 16:04 simple_consumer.py</span><br></pre></td></tr></table></figure>
 <h4 id="踩的坑"><a href="#踩的坑" class="headerlink" title="踩的坑"></a>踩的坑</h4><ul>
 <li>使用执行报错1</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pykafka.rdkafka#consumer-1 [PROTOERR] [thrd:openlive-kafka-online005-bjlt.qiyi.virtual:9092/bootstrap]: openlive-kafka-online005-bjlt.qiyi.virtual:9092/5: expected 36732025 bytes &gt; 1048618 remaining bytes</div><div class="line">pykafka.rdkafka#consumer-1 [PROTOERR] [thrd:openlive-kafka-online005-bjlt.qiyi.virtual:9092/bootstrap]: openlive-kafka-online005-bjlt.qiyi.virtual:9092/5: Protocol parse failure at 8/1048626 (rd_kafka_fetch_reply_handle:2496) (incorrect broker.version.fallback?)</div></pre></td></tr></table></figure>
-<p>错误给出的提示是<code>incorrect broker.version.fallback?</code>，一番google后，找到了问题所在，请看 <a href="https://github.com/edenhill/librdkafka/wiki/Broker-version-compatibility" target="_blank" rel="external">Broker version compatibility</a> ，librdkafka不同版本的broker对程序的配置要求不同，主要是<code>api.version.request</code> 、<code>broker.version.fallback</code>这两个参数的配置，在<code>pykafka/rdkafka/simple_consumer.py</code>文件中有这样的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">ver10 = parse_version(self._broker_version) &gt;= parse_version(&quot;0.10.0&quot;)</div><div class="line">...</div><div class="line">conf = &#123;</div><div class="line">    ...</div><div class="line">    &quot;api.version.request&quot;: ver10,</div><div class="line">    ...</div><div class="line">&#125;</div><div class="line">...</div><div class="line">if not ver10:</div><div class="line">    conf[&quot;broker.version.fallback&quot;] = self._broker_version</div><div class="line">...</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pykafka.rdkafka#consumer-1 [PROTOERR] [thrd:openlive-kafka-online005-bjlt.qiyi.virtual:9092/bootstrap]: openlive-kafka-online005-bjlt.qiyi.virtual:9092/5: expected 36732025 bytes &gt; 1048618 remaining bytes</span><br><span class="line">pykafka.rdkafka#consumer-1 [PROTOERR] [thrd:openlive-kafka-online005-bjlt.qiyi.virtual:9092/bootstrap]: openlive-kafka-online005-bjlt.qiyi.virtual:9092/5: Protocol parse failure at 8/1048626 (rd_kafka_fetch_reply_handle:2496) (incorrect broker.version.fallback?)</span><br></pre></td></tr></table></figure>
+<p>错误给出的提示是<code>incorrect broker.version.fallback?</code>，一番google后，找到了问题所在，请看 <a href="https://github.com/edenhill/librdkafka/wiki/Broker-version-compatibility" target="_blank" rel="noopener">Broker version compatibility</a> ，librdkafka不同版本的broker对程序的配置要求不同，主要是<code>api.version.request</code> 、<code>broker.version.fallback</code>这两个参数的配置，在<code>pykafka/rdkafka/simple_consumer.py</code>文件中有这样的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">ver10 = parse_version(self._broker_version) &gt;= parse_version(&quot;0.10.0&quot;)</span><br><span class="line">...</span><br><span class="line">conf = &#123;</span><br><span class="line">    ...</span><br><span class="line">    &quot;api.version.request&quot;: ver10,</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">if not ver10:</span><br><span class="line">    conf[&quot;broker.version.fallback&quot;] = self._broker_version</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>所以在使用时加上了<code>broker_version</code>参数，这个参数需要知道<strong>kafka集群的broker的版本</strong>，这个非常重要！</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">self.client = KafkaClient(zookeeper_hosts=zookeeper_hosts, broker_version=&quot;0.8.2&quot;)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.client = KafkaClient(zookeeper_hosts=zookeeper_hosts, broker_version=&quot;0.8.2&quot;)</span><br></pre></td></tr></table></figure>
 <p>这样使用就没有问题了。</p>
 <p>但是在实际测试中，裸pykafka和pykafka-with-librdkafka的读性能并没有差太多，以下是我在实际中测试从kafka中读取50w条数据的耗时比较：</p>
 <table>
@@ -525,9 +525,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/librdkafka/" rel="tag"># librdkafka</a>
-          
             <a href="/tags/kafka/" rel="tag"># kafka</a>
+          
+            <a href="/tags/librdkafka/" rel="tag"># librdkafka</a>
           
         </div>
       
@@ -602,7 +602,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -613,9 +613,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -626,7 +624,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -753,10 +751,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

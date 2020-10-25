@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,48 +68,47 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="HTTP,网络编程,TCP/IP,Web," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="HTTP,网络编程,TCP/IP,Web,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="当我们在浏览器中输入 www.google.com 后，浏览器会给我们展示最终页面，本文就来讨论一下展示页面的过程到底是怎样的。
-输入网络地址当我们开始在浏览器中输入网址的时候，浏览器其实就已经在智能的匹配可能得 URL 了，他会从历史记录，书签等地方，找到已经输入的字符串可能对应的 URL，然后给出智能提示，让你可以补全 URL 地址。对于 google 的 Chrome 的浏览器，他甚至会直接">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="当我们在浏览器中输入 www.google.com 后，浏览器会给我们展示最终页面，本文就来讨论一下展示页面的过程到底是怎样的。 输入网络地址当我们开始在浏览器中输入网址的时候，浏览器其实就已经在智能的匹配可能得 URL 了，他会从历史记录，书签等地方，找到已经输入的字符串可能对应的 URL，然后给出智能提示，让你可以补全 URL 地址。对于 google 的 Chrome 的浏览器，他甚至会直接">
+<meta name="keywords" content="HTTP,网络编程,TCP&#x2F;IP,Web">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从输入 URL 到页面展示到底发生了什么">
 <meta property="og:url" content="http://runnerliu.github.io/2017/06/22/urlrequestprocess/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="当我们在浏览器中输入 www.google.com 后，浏览器会给我们展示最终页面，本文就来讨论一下展示页面的过程到底是怎样的。
-输入网络地址当我们开始在浏览器中输入网址的时候，浏览器其实就已经在智能的匹配可能得 URL 了，他会从历史记录，书签等地方，找到已经输入的字符串可能对应的 URL，然后给出智能提示，让你可以补全 URL 地址。对于 google 的 Chrome 的浏览器，他甚至会直接">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22 134442.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22 143353.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22 143420.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22 143824.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22 144024.png">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="当我们在浏览器中输入 www.google.com 后，浏览器会给我们展示最终页面，本文就来讨论一下展示页面的过程到底是怎样的。 输入网络地址当我们开始在浏览器中输入网址的时候，浏览器其实就已经在智能的匹配可能得 URL 了，他会从历史记录，书签等地方，找到已经输入的字符串可能对应的 URL，然后给出智能提示，让你可以补全 URL 地址。对于 google 的 Chrome 的浏览器，他甚至会直接">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22%20134442.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22%20143353.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22%20143420.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22%20143824.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-22%20144024.png">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.283Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从输入 URL 到页面展示到底发生了什么">
-<meta name="twitter:description" content="当我们在浏览器中输入 www.google.com 后，浏览器会给我们展示最终页面，本文就来讨论一下展示页面的过程到底是怎样的。
-输入网络地址当我们开始在浏览器中输入网址的时候，浏览器其实就已经在智能的匹配可能得 URL 了，他会从历史记录，书签等地方，找到已经输入的字符串可能对应的 URL，然后给出智能提示，让你可以补全 URL 地址。对于 google 的 Chrome 的浏览器，他甚至会直接">
-<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-6-22 134442.png">
+<meta name="twitter:description" content="当我们在浏览器中输入 www.google.com 后，浏览器会给我们展示最终页面，本文就来讨论一下展示页面的过程到底是怎样的。 输入网络地址当我们开始在浏览器中输入网址的时候，浏览器其实就已经在智能的匹配可能得 URL 了，他会从历史记录，书签等地方，找到已经输入的字符串可能对应的 URL，然后给出智能提示，让你可以补全 URL 地址。对于 google 的 Chrome 的浏览器，他甚至会直接">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-6-22%20134442.png">
 
 
 
@@ -137,7 +136,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/06/22/urlrequestprocess/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/06/22/urlrequestprocess/">
 
 
 
@@ -177,7 +176,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -207,7 +206,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -217,7 +216,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -227,7 +226,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -237,7 +236,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -247,7 +246,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -260,7 +259,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -281,9 +280,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -320,7 +317,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -363,7 +360,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -444,8 +441,8 @@
 <h4 id="请求报头"><a href="#请求报头" class="headerlink" title="请求报头"></a>请求报头</h4><p>请求报头允许客户端向服务器传递请求的附加信息和客户端自身的信息。</p>
 <p>客户端不一定特指浏览器，有时候也可使用 Linux 下的 CURL 命令以及 HTTP 客户端测试工具等。<br>常见的请求报头有：Accept、Accept-Charset、Accept-Encoding、Accept-Language、Content-Type、Authorization、Cookie、User-Agent等。</p>
 <h4 id="请求正文"><a href="#请求正文" class="headerlink" title="请求正文"></a>请求正文</h4><p>当使用POST、PUT等方法时，通常需要客户端向服务器传递数据。这些数据就储存在请求正文中。在请求包头中有一些与请求正文相关的信息，例如：现在的 Web 应用通常采用 Rest 架构，请求的数据格式一般为 JSON。这时就需要设置Content-Type:application/json。</p>
-<h3 id="服务器永久重定向响应"><a href="#服务器永久重定向响应" class="headerlink" title="服务器永久重定向响应"></a>服务器永久重定向响应</h3><p>服务器给浏览器响应一个 301 永久重定向响应，这样浏览器就会访问 “<a href="http://www.google.com/”" target="_blank" rel="external">http://www.google.com/”</a>  而非 “<a href="http://google.com/”。" target="_blank" rel="external">http://google.com/”。</a></p>
-<p>为什么服务器一定要重定向而不是直接发送用户想看的网页内容呢？其中一个原因跟搜索引擎排名有关。如果一个页面有两个地址，就像 <a href="http://www.yy.com/" target="_blank" rel="external">http://www.yy.com/</a> 和 <a href="http://yy.com/" target="_blank" rel="external">http://yy.com/</a> ，搜索引擎会认为它们是两个网站，结果造成每个搜索链接都减少从而降低排名。而搜索引擎知道 301 永久重定向是什么意思，这样就会把访问带 www 的和不带 www 的地址归到同一个网站排名下。还有就是用不同的地址会造成缓存友好性变差，当一个页面有好几个名字时，它可能会在缓存里出现好几次。</p>
+<h3 id="服务器永久重定向响应"><a href="#服务器永久重定向响应" class="headerlink" title="服务器永久重定向响应"></a>服务器永久重定向响应</h3><p>服务器给浏览器响应一个 301 永久重定向响应，这样浏览器就会访问 “<a href="http://www.google.com/”" target="_blank" rel="noopener">http://www.google.com/”</a>  而非 “<a href="http://google.com/”。" target="_blank" rel="noopener">http://google.com/”。</a></p>
+<p>为什么服务器一定要重定向而不是直接发送用户想看的网页内容呢？其中一个原因跟搜索引擎排名有关。如果一个页面有两个地址，就像 <a href="http://www.yy.com/" target="_blank" rel="noopener">http://www.yy.com/</a> 和 <a href="http://yy.com/" target="_blank" rel="noopener">http://yy.com/</a> ，搜索引擎会认为它们是两个网站，结果造成每个搜索链接都减少从而降低排名。而搜索引擎知道 301 永久重定向是什么意思，这样就会把访问带 www 的和不带 www 的地址归到同一个网站排名下。还有就是用不同的地址会造成缓存友好性变差，当一个页面有好几个名字时，它可能会在缓存里出现好几次。</p>
 <h4 id="301和302的区别"><a href="#301和302的区别" class="headerlink" title="301和302的区别"></a>301和302的区别</h4><p>301 和 302 状态码都表示重定向，就是说浏览器在拿到服务器返回的这个状态码后会自动跳转到一个新的 URL 地址，这个地址可以从响应的 Location 首部中获取（用户看到的效果就是他输入的地址 A 瞬间变成了另一个地址 B）——这是它们的共同点。</p>
 <p>他们的不同在于。301 表示旧地址 A 的资源已经被永久地移除了（这个资源不可访问了），搜索引擎在抓取新内容的同时也将旧的网址交换为重定向之后的网址；</p>
 <p>302 表示旧地址 A 的资源还在（仍然可以访问），这个重定向只是临时地从旧地址 A 跳转到地址 B，搜索引擎会抓取新的内容而保存旧的网址。</p>
@@ -462,7 +459,7 @@
 <li>在搜索引擎的搜索结果中出现了不带 www 的域名，而带 www 的域名却没有收录，这个时候可以用301重定向来告诉搜索引擎我们目标的域名是哪一个</li>
 <li>空间服务器不稳定，换空间的时候</li>
 </ul>
-<h3 id="浏览器跟踪重定向地址"><a href="#浏览器跟踪重定向地址" class="headerlink" title="浏览器跟踪重定向地址"></a>浏览器跟踪重定向地址</h3><p>现在浏览器知道了 “<a href="http://www.google.com/”" target="_blank" rel="external">http://www.google.com/”</a> 才是要访问的正确地址，所以它会发送另一个http请求。</p>
+<h3 id="浏览器跟踪重定向地址"><a href="#浏览器跟踪重定向地址" class="headerlink" title="浏览器跟踪重定向地址"></a>浏览器跟踪重定向地址</h3><p>现在浏览器知道了 “<a href="http://www.google.com/”" target="_blank" rel="noopener">http://www.google.com/”</a> 才是要访问的正确地址，所以它会发送另一个http请求。</p>
 <h3 id="服务器处理请求"><a href="#服务器处理请求" class="headerlink" title="服务器处理请求"></a>服务器处理请求</h3><h4 id="数据的接收"><a href="#数据的接收" class="headerlink" title="数据的接收"></a>数据的接收</h4><p>我们知道，IP 协议的作用是把 TCP 分割好的各种数据包传送给接收方。而要保证确实能传到接收方还需要接收方的 MAC 地址，也就是物理地址。IP 地址和 MAC 地址是一一对应的关系，一个网络设备的 IP 地址可以更换，但是 MAC 地址一般是固定不变的。ARP 协议可以将 IP 地址解析成对应的 MAC 地址。当通信的双方不在同一个局域网时，需要多次中转才能到达最终的目标，在中转的过程中需要通过下一个中转站的MAC地址来搜索下一个中转目标。</p>
 <p>在找到对方的 MAC 地址后，就将数据发送到数据链路层传输。接收端的服务器在链路层接收到数据包，再层层向上直到应用层。这过程中包括在运输层通过TCP协议讲分段的数据包重新组成原来的HTTP请求报文。</p>
 <h4 id="处理请求"><a href="#处理请求" class="headerlink" title="处理请求"></a>处理请求</h4><p>一些大一点的网站会将你的请求转到反向代理服务器中，因为当网站访问量非常大，网站越来越慢，一台服务器已经不够用了。于是将同一个应用部署在多台服务器上，将大量用户的请求分配给多台机器处理。此时，客户端不是直接通过 HTTP 协议访问某网站应用服务器，而是先请求到 Nginx，Nginx 再请求应用服务器，然后将结果返回给客户端，这里 Nginx 的作用是反向代理服务器。同时也带来了一个好处，其中一台服务器万一挂了，只要还有其他服务器正常运行，就不会影响用户使用。</p>
@@ -496,7 +493,7 @@
 <p>在浏览器还没接收到完整的 HTML 文件时，它就开始渲染页面了，在遇到外部链入的脚本标签或样式标签或图片时，会再次发送 HTTP 请求重复上述的步骤。在收到 CSS 文件后会对已经渲染的页面重新渲染，加入它们应有的样式，图片文件加载完立刻显示在相应位置。在这一过程中可能会触发页面的重绘或重排。</p>
 <blockquote>
 <p>参考文章：</p>
-<p><a href="http://www.cnblogs.com/kongxy/p/4615226.html" target="_blank" rel="external">从输入URL到浏览器显示页面发生了什么</a>  <a href="https://www.feehi.com/view/5880" target="_blank" rel="external">从输入 URL 到页面展示到底发生了什么</a>  <a href="http://www.cnblogs.com/rollenholt/archive/2012/03/23/2414345.html" target="_blank" rel="external">百度面试题：从输入url到显示网页，后台发生了什么？</a>  <a href="http://www.cnblogs.com/engeng/articles/5943382.html" target="_blank" rel="external">从输入URL到页面加载发生了什么?</a>  <a href="http://www.runoob.com/http/http-header-fields.html" target="_blank" rel="external">HTTP 响应头信息</a>  </p>
+<p><a href="http://www.cnblogs.com/kongxy/p/4615226.html" target="_blank" rel="noopener">从输入URL到浏览器显示页面发生了什么</a>  <a href="https://www.feehi.com/view/5880" target="_blank" rel="noopener">从输入 URL 到页面展示到底发生了什么</a>  <a href="http://www.cnblogs.com/rollenholt/archive/2012/03/23/2414345.html" target="_blank" rel="noopener">百度面试题：从输入url到显示网页，后台发生了什么？</a>  <a href="http://www.cnblogs.com/engeng/articles/5943382.html" target="_blank" rel="noopener">从输入URL到页面加载发生了什么?</a>  <a href="http://www.runoob.com/http/http-header-fields.html" target="_blank" rel="noopener">HTTP 响应头信息</a>  </p>
 </blockquote>
 
       
@@ -608,7 +605,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -619,9 +616,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -632,7 +627,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -759,10 +754,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

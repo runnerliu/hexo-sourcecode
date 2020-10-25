@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,45 +68,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Tornado,翻译文档,并发网络爬虫," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="Tornado,翻译文档,并发网络爬虫,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="Tornado的 tornado.queues 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 queue 实现线程模式。
-一个yields Queue.get 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields Queue.put 的协程直到队列中有空间才会暂停。
-一个 Queue 从0开始对未完成的任务进行计数， put 加计数； task_do">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Tornado的 tornado.queues 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 queue 实现线程模式。 一个yields Queue.get 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields Queue.put 的协程直到队列中有空间才会暂停。 一个 Queue 从0开始对未完成的任务进行计数， put 加计数； task_do">
+<meta name="keywords" content="Tornado,翻译文档,并发网络爬虫">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tornado5.0.2翻译文档 - Queue示例:一个并发网络爬虫">
 <meta property="og:url" content="http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="Tornado的 tornado.queues 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 queue 实现线程模式。
-一个yields Queue.get 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields Queue.put 的协程直到队列中有空间才会暂停。
-一个 Queue 从0开始对未完成的任务进行计数， put 加计数； task_do">
-<meta property="og:updated_time" content="2018-06-18T07:59:11.422Z">
+<meta property="og:description" content="Tornado的 tornado.queues 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 queue 实现线程模式。 一个yields Queue.get 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields Queue.put 的协程直到队列中有空间才会暂停。 一个 Queue 从0开始对未完成的任务进行计数， put 加计数； task_do">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.275Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tornado5.0.2翻译文档 - Queue示例:一个并发网络爬虫">
-<meta name="twitter:description" content="Tornado的 tornado.queues 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 queue 实现线程模式。
-一个yields Queue.get 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields Queue.put 的协程直到队列中有空间才会暂停。
-一个 Queue 从0开始对未完成的任务进行计数， put 加计数； task_do">
+<meta name="twitter:description" content="Tornado的 tornado.queues 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 queue 实现线程模式。 一个yields Queue.get 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields Queue.put 的协程直到队列中有空间才会暂停。 一个 Queue 从0开始对未完成的任务进行计数， put 加计数； task_do">
 
 
 
@@ -134,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/">
 
 
 
@@ -174,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -204,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -214,7 +210,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -224,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -234,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -244,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -257,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -278,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -317,7 +311,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -360,7 +354,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -418,14 +412,14 @@
       
 
       
-        <p>Tornado的 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#module-tornado.queues" target="_blank" rel="external"><code>tornado.queues</code></a> 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 <a href="https://docs.python.org/3.4/library/queue.html#module-queue" target="_blank" rel="external"><code>queue</code></a> 实现线程模式。</p>
-<p>一个yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.get" target="_blank" rel="external"><code>Queue.get</code></a> 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="external"><code>Queue.put</code></a> 的协程直到队列中有空间才会暂停。</p>
-<p>一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue" target="_blank" rel="external"><code>Queue</code></a> 从0开始对未完成的任务进行计数， <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="external"><code>put</code></a> 加计数； <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="external"><code>task_done</code></a> 减少计数。</p>
-<p>这里的网络爬虫的例子，队列开始的时候只包含 base_url。当一个 worker 抓取到一个页面它会解析链接并把它添加到队列中，然后调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="external"><code>task_done</code></a> 减少计数一次。最后，当一个 worker 抓取到的页面 URL 都是之前抓取到过的并且队列中没有任务了。于是 worker 调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="external"><code>task_done</code></a> 把计数减到0。等待 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.join" target="_blank" rel="external"><code>join</code></a> 的主协程取消暂停并且完成。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line">#!/usr/bin/env python</div><div class="line"></div><div class="line">import time</div><div class="line">from datetime import timedelta</div><div class="line"></div><div class="line">try:</div><div class="line">    from HTMLParser import HTMLParser</div><div class="line">    from urlparse import urljoin, urldefrag</div><div class="line">except ImportError:</div><div class="line">    from html.parser import HTMLParser</div><div class="line">    from urllib.parse import urljoin, urldefrag</div><div class="line"></div><div class="line">from tornado import httpclient, gen, ioloop, queues</div><div class="line"></div><div class="line">base_url = &apos;http://www.tornadoweb.org/en/stable/&apos;</div><div class="line">concurrency = 10</div><div class="line"></div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def get_links_from_url(url):</div><div class="line">    &quot;&quot;&quot;Download the page at `url` and parse it for links.</div><div class="line"></div><div class="line">    Returned links have had the fragment after `#` removed, and have been made</div><div class="line">    absolute so, e.g. the URL &apos;gen.html#tornado.gen.coroutine&apos; becomes</div><div class="line">    &apos;http://www.tornadoweb.org/en/stable/gen.html&apos;.</div><div class="line">    &quot;&quot;&quot;</div><div class="line">    try:</div><div class="line">        response = yield httpclient.AsyncHTTPClient().fetch(url)</div><div class="line">        print(&apos;fetched %s&apos; % url)</div><div class="line"></div><div class="line">        html = response.body if isinstance(response.body, str) \</div><div class="line">            else response.body.decode(errors=&apos;ignore&apos;)</div><div class="line">        urls = [urljoin(url, remove_fragment(new_url))</div><div class="line">                for new_url in get_links(html)]</div><div class="line">    except Exception as e:</div><div class="line">        print(&apos;Exception: %s %s&apos; % (e, url))</div><div class="line">        raise gen.Return([])</div><div class="line"></div><div class="line">    raise gen.Return(urls)</div><div class="line"></div><div class="line"></div><div class="line">def remove_fragment(url):</div><div class="line">    pure_url, frag = urldefrag(url)</div><div class="line">    return pure_url</div><div class="line"></div><div class="line"></div><div class="line">def get_links(html):</div><div class="line">    class URLSeeker(HTMLParser):</div><div class="line">        def __init__(self):</div><div class="line">            HTMLParser.__init__(self)</div><div class="line">            self.urls = []</div><div class="line"></div><div class="line">        def handle_starttag(self, tag, attrs):</div><div class="line">            href = dict(attrs).get(&apos;href&apos;)</div><div class="line">            if href and tag == &apos;a&apos;:</div><div class="line">                self.urls.append(href)</div><div class="line"></div><div class="line">    url_seeker = URLSeeker()</div><div class="line">    url_seeker.feed(html)</div><div class="line">    return url_seeker.urls</div><div class="line"></div><div class="line"></div><div class="line">@gen.coroutine</div><div class="line">def main():</div><div class="line">    q = queues.Queue()</div><div class="line">    start = time.time()</div><div class="line">    fetching, fetched = set(), set()</div><div class="line"></div><div class="line">    @gen.coroutine</div><div class="line">    def fetch_url():</div><div class="line">        current_url = yield q.get()</div><div class="line">        try:</div><div class="line">            if current_url in fetching:</div><div class="line">                return</div><div class="line"></div><div class="line">            print(&apos;fetching %s&apos; % current_url)</div><div class="line">            fetching.add(current_url)</div><div class="line">            urls = yield get_links_from_url(current_url)</div><div class="line">            fetched.add(current_url)</div><div class="line"></div><div class="line">            for new_url in urls:</div><div class="line">                # Only follow links beneath the base URL</div><div class="line">                if new_url.startswith(base_url):</div><div class="line">                    yield q.put(new_url)</div><div class="line"></div><div class="line">        finally:</div><div class="line">            q.task_done()</div><div class="line"></div><div class="line">    @gen.coroutine</div><div class="line">    def worker():</div><div class="line">        while True:</div><div class="line">            yield fetch_url()</div><div class="line"></div><div class="line">    q.put(base_url)</div><div class="line"></div><div class="line">    # Start workers, then wait for the work queue to be empty.</div><div class="line">    for _ in range(concurrency):</div><div class="line">        worker()</div><div class="line">    yield q.join(timeout=timedelta(seconds=300))</div><div class="line">    assert fetching == fetched</div><div class="line">    print(&apos;Done in %d seconds, fetched %s URLs.&apos; % (</div><div class="line">        time.time() - start, len(fetched)))</div><div class="line"></div><div class="line"></div><div class="line">if __name__ == &apos;__main__&apos;:</div><div class="line">    io_loop = ioloop.IOLoop.current()</div><div class="line">    io_loop.run_sync(main)</div></pre></td></tr></table></figure>
+        <p>Tornado的 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#module-tornado.queues" target="_blank" rel="noopener"><code>tornado.queues</code></a> 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 <a href="https://docs.python.org/3.4/library/queue.html#module-queue" target="_blank" rel="noopener"><code>queue</code></a> 实现线程模式。</p>
+<p>一个yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.get" target="_blank" rel="noopener"><code>Queue.get</code></a> 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="noopener"><code>Queue.put</code></a> 的协程直到队列中有空间才会暂停。</p>
+<p>一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue" target="_blank" rel="noopener"><code>Queue</code></a> 从0开始对未完成的任务进行计数， <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="noopener"><code>put</code></a> 加计数； <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 减少计数。</p>
+<p>这里的网络爬虫的例子，队列开始的时候只包含 base_url。当一个 worker 抓取到一个页面它会解析链接并把它添加到队列中，然后调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 减少计数一次。最后，当一个 worker 抓取到的页面 URL 都是之前抓取到过的并且队列中没有任务了。于是 worker 调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 把计数减到0。等待 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.join" target="_blank" rel="noopener"><code>join</code></a> 的主协程取消暂停并且完成。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">from datetime import timedelta</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    from HTMLParser import HTMLParser</span><br><span class="line">    from urlparse import urljoin, urldefrag</span><br><span class="line">except ImportError:</span><br><span class="line">    from html.parser import HTMLParser</span><br><span class="line">    from urllib.parse import urljoin, urldefrag</span><br><span class="line"></span><br><span class="line">from tornado import httpclient, gen, ioloop, queues</span><br><span class="line"></span><br><span class="line">base_url = &apos;http://www.tornadoweb.org/en/stable/&apos;</span><br><span class="line">concurrency = 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@gen.coroutine</span><br><span class="line">def get_links_from_url(url):</span><br><span class="line">    &quot;&quot;&quot;Download the page at `url` and parse it for links.</span><br><span class="line"></span><br><span class="line">    Returned links have had the fragment after `#` removed, and have been made</span><br><span class="line">    absolute so, e.g. the URL &apos;gen.html#tornado.gen.coroutine&apos; becomes</span><br><span class="line">    &apos;http://www.tornadoweb.org/en/stable/gen.html&apos;.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    try:</span><br><span class="line">        response = yield httpclient.AsyncHTTPClient().fetch(url)</span><br><span class="line">        print(&apos;fetched %s&apos; % url)</span><br><span class="line"></span><br><span class="line">        html = response.body if isinstance(response.body, str) \</span><br><span class="line">            else response.body.decode(errors=&apos;ignore&apos;)</span><br><span class="line">        urls = [urljoin(url, remove_fragment(new_url))</span><br><span class="line">                for new_url in get_links(html)]</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(&apos;Exception: %s %s&apos; % (e, url))</span><br><span class="line">        raise gen.Return([])</span><br><span class="line"></span><br><span class="line">    raise gen.Return(urls)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def remove_fragment(url):</span><br><span class="line">    pure_url, frag = urldefrag(url)</span><br><span class="line">    return pure_url</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_links(html):</span><br><span class="line">    class URLSeeker(HTMLParser):</span><br><span class="line">        def __init__(self):</span><br><span class="line">            HTMLParser.__init__(self)</span><br><span class="line">            self.urls = []</span><br><span class="line"></span><br><span class="line">        def handle_starttag(self, tag, attrs):</span><br><span class="line">            href = dict(attrs).get(&apos;href&apos;)</span><br><span class="line">            if href and tag == &apos;a&apos;:</span><br><span class="line">                self.urls.append(href)</span><br><span class="line"></span><br><span class="line">    url_seeker = URLSeeker()</span><br><span class="line">    url_seeker.feed(html)</span><br><span class="line">    return url_seeker.urls</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@gen.coroutine</span><br><span class="line">def main():</span><br><span class="line">    q = queues.Queue()</span><br><span class="line">    start = time.time()</span><br><span class="line">    fetching, fetched = set(), set()</span><br><span class="line"></span><br><span class="line">    @gen.coroutine</span><br><span class="line">    def fetch_url():</span><br><span class="line">        current_url = yield q.get()</span><br><span class="line">        try:</span><br><span class="line">            if current_url in fetching:</span><br><span class="line">                return</span><br><span class="line"></span><br><span class="line">            print(&apos;fetching %s&apos; % current_url)</span><br><span class="line">            fetching.add(current_url)</span><br><span class="line">            urls = yield get_links_from_url(current_url)</span><br><span class="line">            fetched.add(current_url)</span><br><span class="line"></span><br><span class="line">            for new_url in urls:</span><br><span class="line">                # Only follow links beneath the base URL</span><br><span class="line">                if new_url.startswith(base_url):</span><br><span class="line">                    yield q.put(new_url)</span><br><span class="line"></span><br><span class="line">        finally:</span><br><span class="line">            q.task_done()</span><br><span class="line"></span><br><span class="line">    @gen.coroutine</span><br><span class="line">    def worker():</span><br><span class="line">        while True:</span><br><span class="line">            yield fetch_url()</span><br><span class="line"></span><br><span class="line">    q.put(base_url)</span><br><span class="line"></span><br><span class="line">    # Start workers, then wait for the work queue to be empty.</span><br><span class="line">    for _ in range(concurrency):</span><br><span class="line">        worker()</span><br><span class="line">    yield q.join(timeout=timedelta(seconds=300))</span><br><span class="line">    assert fetching == fetched</span><br><span class="line">    print(&apos;Done in %d seconds, fetched %s URLs.&apos; % (</span><br><span class="line">        time.time() - start, len(fetched)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    io_loop = ioloop.IOLoop.current()</span><br><span class="line">    io_loop.run_sync(main)</span><br></pre></td></tr></table></figure>
 <p>Read More:</p>
 <blockquote>
-<p><a href="http://www.tornadoweb.org/en/stable/guide/queues.html" target="_blank" rel="external"><code>Queue</code> example - a concurrent web spider</a> </p>
+<p><a href="http://www.tornadoweb.org/en/stable/guide/queues.html" target="_blank" rel="noopener"><code>Queue</code> example - a concurrent web spider</a> </p>
 </blockquote>
 
       
@@ -537,9 +531,7 @@
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -550,7 +542,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -661,10 +653,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

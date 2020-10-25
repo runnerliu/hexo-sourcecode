@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,42 +68,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="数据库,事物,事物隔离," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="数据库,事物,事物隔离,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="学习 MySQL 、SQL Server 或者 Oracle 这些关系型数据库的时候，必须了解的概念之一就是事务，在各种大中小型项目中，事务的使用非常频繁和广泛。本文简单介绍 MySQL 中事务的四大特性，以及在不考虑事务隔离时，对数据的不同操作会产生的一些影响，同时介绍了事务的四中隔离级别。
-事务 ACID 特性原子性：Atomicity事务必须是原子工作单元；对于其执行的数据修改操作，要么全都">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="学习 MySQL 、SQL Server 或者 Oracle 这些关系型数据库的时候，必须了解的概念之一就是事务，在各种大中小型项目中，事务的使用非常频繁和广泛。本文简单介绍 MySQL 中事务的四大特性，以及在不考虑事务隔离时，对数据的不同操作会产生的一些影响，同时介绍了事务的四中隔离级别。 事务 ACID 特性原子性：Atomicity事务必须是原子工作单元；对于其执行的数据修改操作，要么全都">
+<meta name="keywords" content="数据库,事物,事物隔离">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库事物及其隔离级别">
 <meta property="og:url" content="http://runnerliu.github.io/2017/08/28/mysqltransaction/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="学习 MySQL 、SQL Server 或者 Oracle 这些关系型数据库的时候，必须了解的概念之一就是事务，在各种大中小型项目中，事务的使用非常频繁和广泛。本文简单介绍 MySQL 中事务的四大特性，以及在不考虑事务隔离时，对数据的不同操作会产生的一些影响，同时介绍了事务的四中隔离级别。
-事务 ACID 特性原子性：Atomicity事务必须是原子工作单元；对于其执行的数据修改操作，要么全都">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="学习 MySQL 、SQL Server 或者 Oracle 这些关系型数据库的时候，必须了解的概念之一就是事务，在各种大中小型项目中，事务的使用非常频繁和广泛。本文简单介绍 MySQL 中事务的四大特性，以及在不考虑事务隔离时，对数据的不同操作会产生的一些影响，同时介绍了事务的四中隔离级别。 事务 ACID 特性原子性：Atomicity事务必须是原子工作单元；对于其执行的数据修改操作，要么全都">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.252Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库事物及其隔离级别">
-<meta name="twitter:description" content="学习 MySQL 、SQL Server 或者 Oracle 这些关系型数据库的时候，必须了解的概念之一就是事务，在各种大中小型项目中，事务的使用非常频繁和广泛。本文简单介绍 MySQL 中事务的四大特性，以及在不考虑事务隔离时，对数据的不同操作会产生的一些影响，同时介绍了事务的四中隔离级别。
-事务 ACID 特性原子性：Atomicity事务必须是原子工作单元；对于其执行的数据修改操作，要么全都">
+<meta name="twitter:description" content="学习 MySQL 、SQL Server 或者 Oracle 这些关系型数据库的时候，必须了解的概念之一就是事务，在各种大中小型项目中，事务的使用非常频繁和广泛。本文简单介绍 MySQL 中事务的四大特性，以及在不考虑事务隔离时，对数据的不同操作会产生的一些影响，同时介绍了事务的四中隔离级别。 事务 ACID 特性原子性：Atomicity事务必须是原子工作单元；对于其执行的数据修改操作，要么全都">
 
 
 
@@ -131,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/08/28/mysqltransaction/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/08/28/mysqltransaction/">
 
 
 
@@ -171,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -201,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -211,7 +210,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -221,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -231,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -241,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -254,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -275,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -314,7 +311,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -357,7 +354,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -457,12 +454,12 @@
 </ul>
 <blockquote>
 <p>Read More：</p>
-<p><a href="https://www.oschina.net/question/258230_134502" target="_blank" rel="external">数据库事物隔离级别通俗理解</a></p>
-<p><a href="https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/9744607?fr=aladdin" target="_blank" rel="external">数据库事务</a></p>
-<p><a href="https://baike.baidu.com/item/%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/2638091?fr=aladdin" target="_blank" rel="external">事务隔离级别</a></p>
-<p><a href="http://blog.csdn.net/u012712087/article/details/46402433" target="_blank" rel="external">更改MySQL的默认事务隔离级别</a></p>
-<p><a href="http://www.cnblogs.com/fjdingsd/p/5273008.html" target="_blank" rel="external">数据库事务的四大特性以及事务的隔离级别</a></p>
-<p><a href="http://www.cnblogs.com/snsdzjlz320/p/5761387.html" target="_blank" rel="external">[MySQL]–通过例子理解事务的4中隔离级别</a></p>
+<p><a href="https://www.oschina.net/question/258230_134502" target="_blank" rel="noopener">数据库事物隔离级别通俗理解</a></p>
+<p><a href="https://baike.baidu.com/item/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/9744607?fr=aladdin" target="_blank" rel="noopener">数据库事务</a></p>
+<p><a href="https://baike.baidu.com/item/%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/2638091?fr=aladdin" target="_blank" rel="noopener">事务隔离级别</a></p>
+<p><a href="http://blog.csdn.net/u012712087/article/details/46402433" target="_blank" rel="noopener">更改MySQL的默认事务隔离级别</a></p>
+<p><a href="http://www.cnblogs.com/fjdingsd/p/5273008.html" target="_blank" rel="noopener">数据库事务的四大特性以及事务的隔离级别</a></p>
+<p><a href="http://www.cnblogs.com/snsdzjlz320/p/5761387.html" target="_blank" rel="noopener">[MySQL]–通过例子理解事务的4中隔离级别</a></p>
 </blockquote>
 
       
@@ -572,7 +569,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -583,9 +580,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -596,7 +591,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -723,10 +718,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

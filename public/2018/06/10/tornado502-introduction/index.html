@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,51 +68,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Tornado,翻译文档," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="Tornado,翻译文档,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="Tornado 是一个 Python web 框架和异步网络库，起初由 FriendFeed 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理长连接 WebSockets 和其他需要与每个用户保持长久连接的应用。
-Tornado 大体上可以被分为4个主要的部分：
 
-web 框架 - 包括创建 web 应用的 RequestHandler 类，和其他支持类；
-HTTP 客">
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Tornado 是一个 Python web 框架和异步网络库，起初由 FriendFeed 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理长连接 WebSockets 和其他需要与每个用户保持长久连接的应用。 Tornado 大体上可以被分为4个主要的部分：  web 框架 - 包括创建 web 应用的 RequestHandler 类，和其他支持类； HTTP 客">
+<meta name="keywords" content="Tornado,翻译文档">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tornado5.0.2翻译文档 - 介绍">
 <meta property="og:url" content="http://runnerliu.github.io/2018/06/10/tornado502-introduction/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="Tornado 是一个 Python web 框架和异步网络库，起初由 FriendFeed 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理长连接 WebSockets 和其他需要与每个用户保持长久连接的应用。
-Tornado 大体上可以被分为4个主要的部分：
-
-web 框架 - 包括创建 web 应用的 RequestHandler 类，和其他支持类；
-HTTP 客">
-<meta property="og:updated_time" content="2018-06-10T13:05:51.883Z">
+<meta property="og:description" content="Tornado 是一个 Python web 框架和异步网络库，起初由 FriendFeed 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理长连接 WebSockets 和其他需要与每个用户保持长久连接的应用。 Tornado 大体上可以被分为4个主要的部分：  web 框架 - 包括创建 web 应用的 RequestHandler 类，和其他支持类； HTTP 客">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tornado5.0.2翻译文档 - 介绍">
-<meta name="twitter:description" content="Tornado 是一个 Python web 框架和异步网络库，起初由 FriendFeed 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理长连接 WebSockets 和其他需要与每个用户保持长久连接的应用。
-Tornado 大体上可以被分为4个主要的部分：
-
-web 框架 - 包括创建 web 应用的 RequestHandler 类，和其他支持类；
-HTTP 客">
+<meta name="twitter:description" content="Tornado 是一个 Python web 框架和异步网络库，起初由 FriendFeed 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理长连接 WebSockets 和其他需要与每个用户保持长久连接的应用。 Tornado 大体上可以被分为4个主要的部分：  web 框架 - 包括创建 web 应用的 RequestHandler 类，和其他支持类； HTTP 客">
 
 
 
@@ -140,7 +130,7 @@ HTTP 客">
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2018/06/10/tornado502-introduction/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2018/06/10/tornado502-introduction/">
 
 
 
@@ -180,7 +170,7 @@ HTTP 客">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -210,7 +200,7 @@ HTTP 客">
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -220,7 +210,7 @@ HTTP 客">
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -230,7 +220,7 @@ HTTP 客">
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -240,7 +230,7 @@ HTTP 客">
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -250,7 +240,7 @@ HTTP 客">
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -263,7 +253,7 @@ HTTP 客">
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -284,9 +274,7 @@ HTTP 客">
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -323,7 +311,7 @@ HTTP 客">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -366,7 +354,7 @@ HTTP 客">
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -424,18 +412,18 @@ HTTP 客">
       
 
       
-        <p><a href="http://www.tornadoweb.org/" target="_blank" rel="external">Tornado</a> 是一个 Python web 框架和异步网络库，起初由 <a href="http://friendfeed.com/" target="_blank" rel="external">FriendFeed</a> 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理<a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling" target="_blank" rel="external">长连接</a> <a href="http://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="external">WebSockets</a> 和其他需要与每个用户保持长久连接的应用。</p>
+        <p><a href="http://www.tornadoweb.org/" target="_blank" rel="noopener">Tornado</a> 是一个 Python web 框架和异步网络库，起初由 <a href="http://friendfeed.com/" target="_blank" rel="noopener">FriendFeed</a> 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理<a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling" target="_blank" rel="noopener">长连接</a> <a href="http://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="noopener">WebSockets</a> 和其他需要与每个用户保持长久连接的应用。</p>
 <p>Tornado 大体上可以被分为4个主要的部分：</p>
 <ul>
-<li>web 框架 - 包括创建 web 应用的 <a href=""><code>RequestHandler</code></a> 类，和其他支持类；</li>
-<li>HTTP 客户端和服务端的实现(<a href=""><code>HTTPServer</code></a> 和 <a href=""><code>AsyncHTTPClient</code></a>)；</li>
-<li>异步网络库(<a href=""><code>IOLoop</code></a> 和 <a href=""><code>IOStream</code></a>)，为 HTTP 组件提供构建模块，也可以用来实现其他协议；</li>
-<li>协程库 (<a href=""><code>tornado.gen</code></a>) 允许异步代码写的更直接而不用链式回调的方式。</li>
+<li>web 框架 - 包括创建 web 应用的 <a href><code>RequestHandler</code></a> 类，和其他支持类；</li>
+<li>HTTP 客户端和服务端的实现(<a href><code>HTTPServer</code></a> 和 <a href><code>AsyncHTTPClient</code></a>)；</li>
+<li>异步网络库(<a href><code>IOLoop</code></a> 和 <a href><code>IOStream</code></a>)，为 HTTP 组件提供构建模块，也可以用来实现其他协议；</li>
+<li>协程库 (<a href><code>tornado.gen</code></a>) 允许异步代码写的更直接而不用链式回调的方式。</li>
 </ul>
-<p>Tornado web 框架和 HTTP server 一起为 <a href="http://www.python.org/dev/peps/pep-3333/" target="_blank" rel="external">WSGI</a> 提供了一个全栈式的选择，在 WSGI 容器 (<a href=""><code>WSGIAdapter</code></a>) 中使用 Tornado web 框架或者使用 Tornado HTTP server 作为一个其他 WSGI 框架(<a href=""><code>WSGIContainer</code></a>)的容器，这样的组合方式都是有局限性的。为了充分利用Tornado的特性，你需要一起使用 Tornado 的 web 框架和 HTTP server。</p>
+<p>Tornado web 框架和 HTTP server 一起为 <a href="http://www.python.org/dev/peps/pep-3333/" target="_blank" rel="noopener">WSGI</a> 提供了一个全栈式的选择，在 WSGI 容器 (<a href><code>WSGIAdapter</code></a>) 中使用 Tornado web 框架或者使用 Tornado HTTP server 作为一个其他 WSGI 框架(<a href><code>WSGIContainer</code></a>)的容器，这样的组合方式都是有局限性的。为了充分利用Tornado的特性，你需要一起使用 Tornado 的 web 框架和 HTTP server。</p>
 <p>Read More:</p>
 <blockquote>
-<p><a href="http://www.tornadoweb.org/en/stable/guide/intro.html" target="_blank" rel="external">Introduction</a> </p>
+<p><a href="http://www.tornadoweb.org/en/stable/guide/intro.html" target="_blank" rel="noopener">Introduction</a> </p>
 </blockquote>
 
       
@@ -545,9 +533,7 @@ HTTP 客">
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -558,7 +544,7 @@ HTTP 客">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -669,10 +655,10 @@ HTTP 客">
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

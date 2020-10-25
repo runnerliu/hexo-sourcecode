@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,54 +68,44 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Linux,用户态,内核态," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="Linux,用户态,内核态,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="内核态:：CPU 可以访问内存所有数据，包括外围设备：硬盘、网卡。CPU 也可以将自己从一个程序切换到另一个程序。
-用户态：只能受限的访问内存，且不允许访问外围设备。占用 CPU 的能力被剥夺，CPU 资源可以被其他程序获取。
-Unix/Linux的体系架构
-如上图所示，从宏观上来看，Linux 操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。
-内核从本质上看是一种软件—控制计算机的硬">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="内核态:：CPU 可以访问内存所有数据，包括外围设备：硬盘、网卡。CPU 也可以将自己从一个程序切换到另一个程序。 用户态：只能受限的访问内存，且不允许访问外围设备。占用 CPU 的能力被剥夺，CPU 资源可以被其他程序获取。 Unix/Linux的体系架构 如上图所示，从宏观上来看，Linux 操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。 内核从本质上看是一种软件—控制计算机的硬">
+<meta name="keywords" content="Linux,用户态,内核态">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux的用户态和内核态">
 <meta property="og:url" content="http://runnerliu.github.io/2017/07/16/linuxyhtnht/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="内核态:：CPU 可以访问内存所有数据，包括外围设备：硬盘、网卡。CPU 也可以将自己从一个程序切换到另一个程序。
-用户态：只能受限的访问内存，且不允许访问外围设备。占用 CPU 的能力被剥夺，CPU 资源可以被其他程序获取。
-Unix/Linux的体系架构
-如上图所示，从宏观上来看，Linux 操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。
-内核从本质上看是一种软件—控制计算机的硬">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-7-16 152145.png">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-7-16 152540.jpg">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="内核态:：CPU 可以访问内存所有数据，包括外围设备：硬盘、网卡。CPU 也可以将自己从一个程序切换到另一个程序。 用户态：只能受限的访问内存，且不允许访问外围设备。占用 CPU 的能力被剥夺，CPU 资源可以被其他程序获取。 Unix/Linux的体系架构 如上图所示，从宏观上来看，Linux 操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。 内核从本质上看是一种软件—控制计算机的硬">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-7-16%20152145.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-7-16%20152540.jpg">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.250Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux的用户态和内核态">
-<meta name="twitter:description" content="内核态:：CPU 可以访问内存所有数据，包括外围设备：硬盘、网卡。CPU 也可以将自己从一个程序切换到另一个程序。
-用户态：只能受限的访问内存，且不允许访问外围设备。占用 CPU 的能力被剥夺，CPU 资源可以被其他程序获取。
-Unix/Linux的体系架构
-如上图所示，从宏观上来看，Linux 操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。
-内核从本质上看是一种软件—控制计算机的硬">
-<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-7-16 152145.png">
+<meta name="twitter:description" content="内核态:：CPU 可以访问内存所有数据，包括外围设备：硬盘、网卡。CPU 也可以将自己从一个程序切换到另一个程序。 用户态：只能受限的访问内存，且不允许访问外围设备。占用 CPU 的能力被剥夺，CPU 资源可以被其他程序获取。 Unix/Linux的体系架构 如上图所示，从宏观上来看，Linux 操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。 内核从本质上看是一种软件—控制计算机的硬">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-7-16%20152145.png">
 
 
 
@@ -143,7 +133,7 @@ Unix/Linux的体系架构
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/07/16/linuxyhtnht/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/07/16/linuxyhtnht/">
 
 
 
@@ -183,7 +173,7 @@ Unix/Linux的体系架构
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -213,7 +203,7 @@ Unix/Linux的体系架构
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -223,7 +213,7 @@ Unix/Linux的体系架构
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -233,7 +223,7 @@ Unix/Linux的体系架构
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -243,7 +233,7 @@ Unix/Linux的体系架构
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -253,7 +243,7 @@ Unix/Linux的体系架构
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -266,7 +256,7 @@ Unix/Linux的体系架构
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -287,9 +277,7 @@ Unix/Linux的体系架构
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -326,7 +314,7 @@ Unix/Linux的体系架构
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -369,7 +357,7 @@ Unix/Linux的体系架构
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -461,8 +449,8 @@ Unix/Linux的体系架构
 <p><strong>注意</strong>：系统调用的本质其实也是中断，相对于外围设备的硬中断，这种中断称为软中断，这是操作系统为用户特别开放的一种中断，如 Linux int 80h 中断。所以，从触发方式和效果上来看，这三种切换方式是完全一样的，都相当于是执行了一个中断响应的过程。但是从触发的对象来看，系统调用是进程主动请求切换的，而异常和硬中断则是被动的。</p>
 <blockquote>
 <p>参考文章：</p>
-<p><a href="http://www.cnblogs.com/zemliu/p/3695503.html" target="_blank" rel="external">内核态(Kernel Mode)与用户态(User Mode)</a></p>
-<p><a href="http://www.cnblogs.com/bakari/p/5520860.html" target="_blank" rel="external">Linux探秘之用户态与内核态</a></p>
+<p><a href="http://www.cnblogs.com/zemliu/p/3695503.html" target="_blank" rel="noopener">内核态(Kernel Mode)与用户态(User Mode)</a></p>
+<p><a href="http://www.cnblogs.com/bakari/p/5520860.html" target="_blank" rel="noopener">Linux探秘之用户态与内核态</a></p>
 </blockquote>
 
       
@@ -572,7 +560,7 @@ Unix/Linux的体系架构
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -583,9 +571,7 @@ Unix/Linux的体系架构
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -596,7 +582,7 @@ Unix/Linux的体系架构
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -723,10 +709,10 @@ Unix/Linux的体系架构
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

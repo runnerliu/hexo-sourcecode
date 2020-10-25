@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,44 +68,43 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="CGI,FCGI,PHP-FPM,PHP-CGI," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="CGI,FCGI,PHP-FPM,PHP-CGI,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="基本概念CGI通用网关接口（Common Gateway Interface/CGI）是一种重要的互联网技术，可以让一个客户端，从网页浏览器向执行在网络服务器上的程序请求数据。CGI 描述了服务器和请求处理程序之间传输数据的一种标准。
-FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种让交互程序与 Web 服务器通信的协议。多数流行的 HT">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="基本概念CGI通用网关接口（Common Gateway Interface/CGI）是一种重要的互联网技术，可以让一个客户端，从网页浏览器向执行在网络服务器上的程序请求数据。CGI 描述了服务器和请求处理程序之间传输数据的一种标准。 FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种让交互程序与 Web 服务器通信的协议。多数流行的 HT">
+<meta name="keywords" content="CGI,FCGI,PHP-FPM,PHP-CGI">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅析FCGI与PHP-FPM">
 <meta property="og:url" content="http://runnerliu.github.io/2017/06/07/cgifcgiphpfpm/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="基本概念CGI通用网关接口（Common Gateway Interface/CGI）是一种重要的互联网技术，可以让一个客户端，从网页浏览器向执行在网络服务器上的程序请求数据。CGI 描述了服务器和请求处理程序之间传输数据的一种标准。
-FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种让交互程序与 Web 服务器通信的协议。多数流行的 HT">
-<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-7 194822.png">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="基本概念CGI通用网关接口（Common Gateway Interface/CGI）是一种重要的互联网技术，可以让一个客户端，从网页浏览器向执行在网络服务器上的程序请求数据。CGI 描述了服务器和请求处理程序之间传输数据的一种标准。 FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种让交互程序与 Web 服务器通信的协议。多数流行的 HT">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2017-6-7%20194822.png">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.211Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析FCGI与PHP-FPM">
-<meta name="twitter:description" content="基本概念CGI通用网关接口（Common Gateway Interface/CGI）是一种重要的互联网技术，可以让一个客户端，从网页浏览器向执行在网络服务器上的程序请求数据。CGI 描述了服务器和请求处理程序之间传输数据的一种标准。
-FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种让交互程序与 Web 服务器通信的协议。多数流行的 HT">
-<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-6-7 194822.png">
+<meta name="twitter:description" content="基本概念CGI通用网关接口（Common Gateway Interface/CGI）是一种重要的互联网技术，可以让一个客户端，从网页浏览器向执行在网络服务器上的程序请求数据。CGI 描述了服务器和请求处理程序之间传输数据的一种标准。 FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种让交互程序与 Web 服务器通信的协议。多数流行的 HT">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2017-6-7%20194822.png">
 
 
 
@@ -133,7 +132,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/06/07/cgifcgiphpfpm/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/06/07/cgifcgiphpfpm/">
 
 
 
@@ -173,7 +172,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -203,7 +202,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -213,7 +212,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -223,7 +222,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -233,7 +232,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -243,7 +242,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -256,7 +255,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -277,9 +276,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -316,7 +313,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -359,7 +356,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -460,7 +457,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
 </ul>
 <blockquote>
 <p>参考文章：</p>
-<p><a href="http://www.cnblogs.com/JohnABC/p/3529786.html" target="_blank" rel="external">PHP-FastCGI详解</a>   <a href="https://segmentfault.com/q/1010000000256516" target="_blank" rel="external">搞不清FastCgi与PHP-fpm之间是个什么样的关系</a>  <a href="http://www.cleey.com/blog/single/id/848.html" target="_blank" rel="external">关于CGI 和 PHP-FPM需要弄清的</a>  <a href="http://blog.csdn.net/fan2012huan/article/details/53020064" target="_blank" rel="external">理解CGI、FCGI、php-cgi、php-fpm的概念</a>  <a href="http://www.cnblogs.com/mangguoxiansheng/p/5967745.html" target="_blank" rel="external">Nginx–&gt;进阶–&gt;原理–&gt;Nginx+php+fastcgi的原理与关系</a>  <a href="https://segmentfault.com/a/1190000007322358" target="_blank" rel="external">Nginx+Php-fpm运行原理详解</a> </p>
+<p><a href="http://www.cnblogs.com/JohnABC/p/3529786.html" target="_blank" rel="noopener">PHP-FastCGI详解</a>   <a href="https://segmentfault.com/q/1010000000256516" target="_blank" rel="noopener">搞不清FastCgi与PHP-fpm之间是个什么样的关系</a>  <a href="http://www.cleey.com/blog/single/id/848.html" target="_blank" rel="noopener">关于CGI 和 PHP-FPM需要弄清的</a>  <a href="http://blog.csdn.net/fan2012huan/article/details/53020064" target="_blank" rel="noopener">理解CGI、FCGI、php-cgi、php-fpm的概念</a>  <a href="http://www.cnblogs.com/mangguoxiansheng/p/5967745.html" target="_blank" rel="noopener">Nginx–&gt;进阶–&gt;原理–&gt;Nginx+php+fastcgi的原理与关系</a>  <a href="https://segmentfault.com/a/1190000007322358" target="_blank" rel="noopener">Nginx+Php-fpm运行原理详解</a> </p>
 </blockquote>
 
       
@@ -572,7 +569,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -583,9 +580,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -596,7 +591,7 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -723,10 +718,10 @@ FCGI快速通用网关接口（Fast Common Gateway Interface/FastCGI）是一种
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -6,19 +6,19 @@
 
 
 <html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
-  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html" />
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
 
 
 
@@ -34,7 +34,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -68,54 +68,41 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="PHP,约瑟夫环," />
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-
-
-
-  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+  <meta name="keywords" content="PHP,约瑟夫环,">
 
 
 
 
 
+  <link rel="alternate" href="/atom.xml" title="刘小杨的BLOG" type="application/atom+xml">
 
-<meta name="description" content="约瑟夫环（约瑟夫问题）是一个数学的应用问题：已知n个人（以编号1，2，3…n分别表示）围坐在一张圆桌周围。从编号为k的人开始报数，数到m的那个人出列；他的下一个人又从1开始报数，数到m的那个人又出列；依此规律重复下去，直到圆桌周围的人全部出列（或者求最后一个出列的人的编号）。
-这里提供了三种方法：
-逻辑去除法；
-递归法；
-线性表法。
-这个问题我觉得应该也可以用循环队列来解决，这种方法以后再加上。">
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="约瑟夫环（约瑟夫问题）是一个数学的应用问题：已知n个人（以编号1，2，3…n分别表示）围坐在一张圆桌周围。从编号为k的人开始报数，数到m的那个人出列；他的下一个人又从1开始报数，数到m的那个人又出列；依此规律重复下去，直到圆桌周围的人全部出列（或者求最后一个出列的人的编号）。 这里提供了三种方法： 逻辑去除法； 递归法； 线性表法。 这个问题我觉得应该也可以用循环队列来解决，这种方法以后再加上。">
+<meta name="keywords" content="PHP,约瑟夫环">
 <meta property="og:type" content="article">
 <meta property="og:title" content="约瑟夫环问题">
 <meta property="og:url" content="http://runnerliu.github.io/2017/04/06/josephring/index.html">
 <meta property="og:site_name" content="刘小杨的BLOG">
-<meta property="og:description" content="约瑟夫环（约瑟夫问题）是一个数学的应用问题：已知n个人（以编号1，2，3…n分别表示）围坐在一张圆桌周围。从编号为k的人开始报数，数到m的那个人出列；他的下一个人又从1开始报数，数到m的那个人又出列；依此规律重复下去，直到圆桌周围的人全部出列（或者求最后一个出列的人的编号）。
-这里提供了三种方法：
-逻辑去除法；
-递归法；
-线性表法。
-这个问题我觉得应该也可以用循环队列来解决，这种方法以后再加上。">
-<meta property="og:updated_time" content="2018-06-05T23:50:56.000Z">
+<meta property="og:description" content="约瑟夫环（约瑟夫问题）是一个数学的应用问题：已知n个人（以编号1，2，3…n分别表示）围坐在一张圆桌周围。从编号为k的人开始报数，数到m的那个人出列；他的下一个人又从1开始报数，数到m的那个人又出列；依此规律重复下去，直到圆桌周围的人全部出列（或者求最后一个出列的人的编号）。 这里提供了三种方法： 逻辑去除法； 递归法； 线性表法。 这个问题我觉得应该也可以用循环队列来解决，这种方法以后再加上。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-10-25T06:43:32.222Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="约瑟夫环问题">
-<meta name="twitter:description" content="约瑟夫环（约瑟夫问题）是一个数学的应用问题：已知n个人（以编号1，2，3…n分别表示）围坐在一张圆桌周围。从编号为k的人开始报数，数到m的那个人出列；他的下一个人又从1开始报数，数到m的那个人又出列；依此规律重复下去，直到圆桌周围的人全部出列（或者求最后一个出列的人的编号）。
-这里提供了三种方法：
-逻辑去除法；
-递归法；
-线性表法。
-这个问题我觉得应该也可以用循环队列来解决，这种方法以后再加上。">
+<meta name="twitter:description" content="约瑟夫环（约瑟夫问题）是一个数学的应用问题：已知n个人（以编号1，2，3…n分别表示）围坐在一张圆桌周围。从编号为k的人开始报数，数到m的那个人出列；他的下一个人又从1开始报数，数到m的那个人又出列；依此规律重复下去，直到圆桌周围的人全部出列（或者求最后一个出列的人的编号）。 这里提供了三种方法： 逻辑去除法； 递归法； 线性表法。 这个问题我觉得应该也可以用循环队列来解决，这种方法以后再加上。">
 
 
 
@@ -143,7 +130,7 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/2017/04/06/josephring/"/>
+  <link rel="canonical" href="http://runnerliu.github.io/2017/04/06/josephring/">
 
 
 
@@ -183,7 +170,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">刘小杨的BLOG</span>
         <span class="logo-line-after"><i></i></span>
@@ -213,7 +200,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -223,7 +210,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
             
             分类
           </a>
@@ -233,7 +220,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -243,7 +230,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -253,7 +240,7 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             关于
           </a>
@@ -266,7 +253,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
             
             搜索
           </a>
@@ -287,9 +274,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocapitalize="off" autocomplete="off" autocorrect="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -326,7 +311,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="liuxiaoyang">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.png">
     </span>
 
@@ -369,7 +354,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -433,13 +418,13 @@
 <p>递归法；</p>
 <p>线性表法。</p>
 <p>这个问题我觉得应该也可以用循环队列来解决，这种方法以后再加上。</p>
-<h3 id="逻辑去除法"><a href="#逻辑去除法" class="headerlink" title="逻辑去除法"></a>逻辑去除法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 逻辑去除法</div><div class="line">    * @param $n</div><div class="line">    * @param $m</div><div class="line">    * @return int</div><div class="line">    */</div><div class="line">   public function ExJosephRing_Logic($n, $m)</div><div class="line">   &#123;</div><div class="line">       $tmp_array = array();</div><div class="line">       // $left_over记录数组中不为0的个数</div><div class="line">       $left_over = $n;</div><div class="line">       // $ret_value记录最后返回的数字</div><div class="line">       $ret_value = 0;</div><div class="line">       // 记录开始循环查找的起点</div><div class="line">       $start = 0;</div><div class="line">       // 初始化数组</div><div class="line">       for ($i = 0; $i &lt;= $n; $i++) &#123;</div><div class="line">           $tmp_array[$i] = $i;</div><div class="line">       &#125;</div><div class="line">       $array_length = count($tmp_array);</div><div class="line">       while ($left_over != 1) &#123;</div><div class="line">           for ($j = 1; $j &lt;= $m; $j++) &#123;</div><div class="line">               $start++;</div><div class="line">               // $tmp_array[$start] == 0检测数组越界</div><div class="line">               if ($start != $array_length &amp;&amp; $tmp_array[$start] == 0) &#123;</div><div class="line">                   for ($k = $start; $k &lt; $array_length; $k++) &#123;</div><div class="line">                       if ($tmp_array[$k] == 0) &#123;</div><div class="line">                           $start++;</div><div class="line">                       &#125; elseif ($tmp_array[$k] &gt; 0) &#123;</div><div class="line">                           break;</div><div class="line">                       &#125;</div><div class="line">                   &#125;</div><div class="line">               &#125;</div><div class="line">               // 循环到头，重新开始</div><div class="line">               if ($start == $array_length) &#123;</div><div class="line">                   $start = 0;</div><div class="line">               &#125;</div><div class="line">               if ($tmp_array[$start] == 0) &#123;</div><div class="line">                   for ($k = $start; $k &lt; $array_length; $k++) &#123;</div><div class="line">                       if ($tmp_array[$k] == 0) &#123;</div><div class="line">                           $start++;</div><div class="line">                       &#125; elseif ($tmp_array[$k] &gt; 0) &#123;</div><div class="line">                           break;</div><div class="line">                       &#125;</div><div class="line">                   &#125;</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">           </div><div class="line">           $tmp_array[$start] = 0;</div><div class="line"></div><div class="line">           // 循环遍历，记录数组中不为0的元素的个数</div><div class="line">           $left_over = 0;</div><div class="line">           foreach ($tmp_array as $key =&gt; $value) &#123;</div><div class="line">               if ($value != 0) &#123;</div><div class="line">                   $left_over++;</div><div class="line">                   $ret_value = $value;</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       return $ret_value;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<h3 id="递归方法"><a href="#递归方法" class="headerlink" title="递归方法"></a>递归方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 递归方法</div><div class="line">    * @param $tmp_array</div><div class="line">    * @param $m</div><div class="line">    * @param int $current</div><div class="line">    * @return int</div><div class="line">    */</div><div class="line">   public function ExJosephRing_Recursive($tmp_array, $m, $current = 0)</div><div class="line">   &#123;</div><div class="line">       $array_length = count($tmp_array);</div><div class="line">       $num = 1;</div><div class="line">       if (count($tmp_array) == 1) &#123;</div><div class="line">           return $tmp_array[0];</div><div class="line">       &#125; else &#123;</div><div class="line">           while ($num++ &lt; $m) &#123;</div><div class="line">               $current++;</div><div class="line">               $current = $current % $array_length;</div><div class="line">           &#125;</div><div class="line">           array_splice($tmp_array, $current, 1);</div><div class="line">           // 如果需要返回数据，这里必须加上return，否则不会返回结果</div><div class="line">           return $this-&gt;ExJosephRing_Recursive($tmp_array, $m, $current);</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<h3 id="线性表法"><a href="#线性表法" class="headerlink" title="线性表法"></a>线性表法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 线性表法</div><div class="line">    * @param $n</div><div class="line">    * @param $m</div><div class="line">    * @return int</div><div class="line">    */</div><div class="line">   public function ExJosephRing_Linear($n, $m)</div><div class="line">   &#123;</div><div class="line">       $r = 0;</div><div class="line">       for ($i = 2; $i &lt;= $n; $i++) &#123;</div><div class="line">           $r = ($r + $m) % $i;</div><div class="line">       &#125;</div><div class="line">       return $r + 1;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h3 id="逻辑去除法"><a href="#逻辑去除法" class="headerlink" title="逻辑去除法"></a>逻辑去除法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    * 逻辑去除法</span><br><span class="line">    * @param $n</span><br><span class="line">    * @param $m</span><br><span class="line">    * @return int</span><br><span class="line">    */</span><br><span class="line">   public function ExJosephRing_Logic($n, $m)</span><br><span class="line">   &#123;</span><br><span class="line">       $tmp_array = array();</span><br><span class="line">       // $left_over记录数组中不为0的个数</span><br><span class="line">       $left_over = $n;</span><br><span class="line">       // $ret_value记录最后返回的数字</span><br><span class="line">       $ret_value = 0;</span><br><span class="line">       // 记录开始循环查找的起点</span><br><span class="line">       $start = 0;</span><br><span class="line">       // 初始化数组</span><br><span class="line">       for ($i = 0; $i &lt;= $n; $i++) &#123;</span><br><span class="line">           $tmp_array[$i] = $i;</span><br><span class="line">       &#125;</span><br><span class="line">       $array_length = count($tmp_array);</span><br><span class="line">       while ($left_over != 1) &#123;</span><br><span class="line">           for ($j = 1; $j &lt;= $m; $j++) &#123;</span><br><span class="line">               $start++;</span><br><span class="line">               // $tmp_array[$start] == 0检测数组越界</span><br><span class="line">               if ($start != $array_length &amp;&amp; $tmp_array[$start] == 0) &#123;</span><br><span class="line">                   for ($k = $start; $k &lt; $array_length; $k++) &#123;</span><br><span class="line">                       if ($tmp_array[$k] == 0) &#123;</span><br><span class="line">                           $start++;</span><br><span class="line">                       &#125; elseif ($tmp_array[$k] &gt; 0) &#123;</span><br><span class="line">                           break;</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">               // 循环到头，重新开始</span><br><span class="line">               if ($start == $array_length) &#123;</span><br><span class="line">                   $start = 0;</span><br><span class="line">               &#125;</span><br><span class="line">               if ($tmp_array[$start] == 0) &#123;</span><br><span class="line">                   for ($k = $start; $k &lt; $array_length; $k++) &#123;</span><br><span class="line">                       if ($tmp_array[$k] == 0) &#123;</span><br><span class="line">                           $start++;</span><br><span class="line">                       &#125; elseif ($tmp_array[$k] &gt; 0) &#123;</span><br><span class="line">                           break;</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           </span><br><span class="line">           $tmp_array[$start] = 0;</span><br><span class="line"></span><br><span class="line">           // 循环遍历，记录数组中不为0的元素的个数</span><br><span class="line">           $left_over = 0;</span><br><span class="line">           foreach ($tmp_array as $key =&gt; $value) &#123;</span><br><span class="line">               if ($value != 0) &#123;</span><br><span class="line">                   $left_over++;</span><br><span class="line">                   $ret_value = $value;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       return $ret_value;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="递归方法"><a href="#递归方法" class="headerlink" title="递归方法"></a>递归方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    * 递归方法</span><br><span class="line">    * @param $tmp_array</span><br><span class="line">    * @param $m</span><br><span class="line">    * @param int $current</span><br><span class="line">    * @return int</span><br><span class="line">    */</span><br><span class="line">   public function ExJosephRing_Recursive($tmp_array, $m, $current = 0)</span><br><span class="line">   &#123;</span><br><span class="line">       $array_length = count($tmp_array);</span><br><span class="line">       $num = 1;</span><br><span class="line">       if (count($tmp_array) == 1) &#123;</span><br><span class="line">           return $tmp_array[0];</span><br><span class="line">       &#125; else &#123;</span><br><span class="line">           while ($num++ &lt; $m) &#123;</span><br><span class="line">               $current++;</span><br><span class="line">               $current = $current % $array_length;</span><br><span class="line">           &#125;</span><br><span class="line">           array_splice($tmp_array, $current, 1);</span><br><span class="line">           // 如果需要返回数据，这里必须加上return，否则不会返回结果</span><br><span class="line">           return $this-&gt;ExJosephRing_Recursive($tmp_array, $m, $current);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="线性表法"><a href="#线性表法" class="headerlink" title="线性表法"></a>线性表法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">    * 线性表法</span><br><span class="line">    * @param $n</span><br><span class="line">    * @param $m</span><br><span class="line">    * @return int</span><br><span class="line">    */</span><br><span class="line">   public function ExJosephRing_Linear($n, $m)</span><br><span class="line">   &#123;</span><br><span class="line">       $r = 0;</span><br><span class="line">       for ($i = 2; $i &lt;= $n; $i++) &#123;</span><br><span class="line">           $r = ($r + $m) % $i;</span><br><span class="line">       &#125;</span><br><span class="line">       return $r + 1;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 <p>对于线性表法的解释：每个人出列后，剩下的人又组成了另一个子问题。只是他们的编号变化了。第一个出列的人肯定是a[1] = m(mod)n（m/n的余数），他除去后剩下的人编号是a[1]+1、a[1]+2、…、n、1、2、…a[1]-2、a[1]-1，对应的新编号是1，2，3…n-1。设此时某个人的新编号是i，他原来的编号就是(i+a[1])%n。于是，这便形成了一个递归问题。假如知道了这个子问题（n-1个人）的解是x，那么原问题（n个人）的解便是：(x+m%n)%n = (x+m)%n。问题的起始条件：如果n=1,那么结果就是1。</p>
 <blockquote>
 <p>参考文章：</p>
-<p><a href="http://9iphp.com/web/php/1112.html" target="_blank" rel="external">用PHP解决“约瑟夫环”的几种方法</a></p>
+<p><a href="http://9iphp.com/web/php/1112.html" target="_blank" rel="noopener">用PHP解决“约瑟夫环”的几种方法</a></p>
 </blockquote>
 
       
@@ -547,7 +532,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -558,9 +543,7 @@
 
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/avatar.png"
-               alt="liuxiaoyang" />
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="liuxiaoyang">
           <p class="site-author-name" itemprop="name">liuxiaoyang</p>
            
               <p class="site-description motion-element" itemprop="description">初级Coder的求生之路</p>
@@ -571,7 +554,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">68</span>
+                <span class="site-state-item-count">69</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -698,10 +681,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
