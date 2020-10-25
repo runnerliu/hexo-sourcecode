@@ -127,7 +127,7 @@ categories:
 
 
 - **注意**：配置SSH主要是用于本地远程更新GitHub代码库，在搜集资料的时候看到有人说可以用https url的方式，但是我实践过程中是不行的，而且https url的方式在fetch和push代码都需要输入账号和密码，这是比较麻烦的。建议使用SSH-Key方式。
-- 打开Git Bash，输入`ssh-keygen -t rsa -C "zhangsan@163.com"`生成密钥，"zhangsan@163.com"是你注册GitHub的邮箱，然后**连续三个回车**；
+- 打开Git Bash，输入`ssh-keygen -t rsa -C "zhangsan@163.com" -f "filename"`生成密钥，"zhangsan@163.com"是你注册GitHub的邮箱，然后**连续三个回车**；
 - 最后得到了两个文件：id\_rsa和id\_rsa.pub，默认存数在`C:\Users\电脑名称\.ssh`；
 - 添加密钥到ssh-agent：输入 `eval "$(ssh-agent -s)"` ，输入 `ssh-add ~/.ssh/id_rsa` ；
 - 登录GitHub，点击自己头像选择"Settings"，选择"SSH and GPG keys"，选择"New SSH key"，将id_rsa.pub中的内容copy过去；
