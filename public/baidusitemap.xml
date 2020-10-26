@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://runnerliu.github.io/2020/10/26/go-series-0/</loc>
+    <lastmod>2020-10-26</lastmod>
+  </url>
+  <url>
     <loc>http://runnerliu.github.io/2017/04/01/hexogithub/</loc>
     <lastmod>2020-10-25</lastmod>
   </url>

@@ -34,6 +34,40 @@
       </tags>
   </entry>
   <entry>
+    <title>Apache2.4配置虚拟主机</title>
+    <url>/2017/04/18/apachevirtualhost/</url>
+    <content><![CDATA[<p>在开发项目的时候，每个项目对应的工程目录是不同的，想直接用一个自定义主机名来分别对应，这样就不用每次敲目录名了。Apache的虚拟主机可以实现这种功能。</p>
+<p>配置虚拟主机有三种方式：</p>
+<ul>
+<li>基于IP地址</li>
+<li>基于主机名</li>
+<li>基于端口号</li>
+</ul>
+<p>本文主要介绍 <strong>基于主机名</strong> 和 <strong>基于端口号</strong> 这两种方式。</p>
+<h3 id="基于主机名"><a href="#基于主机名" class="headerlink" title="基于主机名"></a>基于主机名</h3><p>我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache 默认的监听端口是80端口，这里不用输入80端口号就可以。</p>
+<p>首先修改 <em>C:\Windows\System32\drivers\etc</em> 目录下的 hosts 文件，如果修改时保存失败，第一种方式是可以修改 hosts 文件的安全属性，右键-&gt;属性-&gt;安全，赋予相应用户的权限即可；第二种方式是，使用管理员身份打开记事本，然后在记事本中打开 hosts 文件，进行如下修改：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Copyright (c) 1993-2009 Microsoft Corp.</span><br><span class="line">#</span><br><span class="line"># This is a sample HOSTS file used by Microsoft TCP/IP for Windows.</span><br><span class="line">#</span><br><span class="line"># This file contains the mappings of IP addresses to host names. Each</span><br><span class="line"># entry should be kept on an individual line. The IP address should</span><br><span class="line"># be placed in the first column followed by the corresponding host name.</span><br><span class="line"># The IP address and the host name should be separated by at least one</span><br><span class="line"># space.</span><br><span class="line">#</span><br><span class="line"># Additionally, comments (such as these) may be inserted on individual</span><br><span class="line"># lines or following the machine name denoted by a &apos;#&apos; symbol.</span><br><span class="line">#</span><br><span class="line"># For example:</span><br><span class="line">#</span><br><span class="line">#      102.54.94.97     rhino.acme.com          # source server</span><br><span class="line">#       38.25.63.10     x.acme.com              # x client host</span><br><span class="line"></span><br><span class="line"># localhost name resolution is handled within DNS itself.</span><br><span class="line">#	127.0.0.1       localhost</span><br><span class="line">#	::1             localhost</span><br><span class="line">192.168.1.105 windows10.microdone.cn</span><br><span class="line">127.0.0.1       myapp.com			// 自定义的主机名，名称不能与网上的域名冲突</span><br></pre></td></tr></table></figure>
+<p>hosts 文件配置好后，打开 <em>\Apache24\conf</em> 目录下的 httpd.conf 文件，修改如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Virtual hosts</span><br><span class="line"># Include conf/extra/httpd-vhosts.conf</span><br><span class="line"></span><br><span class="line">将 # 去掉</span><br><span class="line"></span><br><span class="line"># Virtual hosts</span><br><span class="line">Include conf/extra/httpd-vhosts.conf</span><br></pre></td></tr></table></figure>
+<p>然后打开 <em>\Apache24\conf\extra</em> 目录下的 httpd-vhosts.conf 文件，修改如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    ServerAdmin YourName</span><br><span class="line">    DocumentRoot &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;</span><br><span class="line">    ServerName myapp.com</span><br><span class="line">    ErrorLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-error.log&quot;</span><br><span class="line">    CustomLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-access.log&quot; common</span><br><span class="line">    &lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;&gt;</span><br><span class="line">    	Options Indexes FollowSymLinks MultiViews</span><br><span class="line">		AllowOverride None</span><br><span class="line">		Require all granted</span><br><span class="line">	&lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+<p>DocumentRoot 对应虚拟主机主目录；<br>ServerName 对应主机名；<br>ErrorLog 对应错误日志存放路径；<br>CustomLog 对应访问日志存放路径；<br>其中的&lt; Directory &gt;&lt; Directory /&gt;对应相应地设置信息。</p>
+<p>最后，在浏览器中输入 mapp.com/index.php 就可以访问不同目录了。</p>
+<h3 id="基于端口号"><a href="#基于端口号" class="headerlink" title="基于端口号"></a>基于端口号</h3><p>打开 <em>\Apache24\conf</em> 目录下的 httpd.conf 文件，修改如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#</span><br><span class="line"># Listen: Allows you to bind Apache to specific IP addresses and/or</span><br><span class="line"># ports, instead of the default. See also the &lt;VirtualHost&gt;</span><br><span class="line"># directive.</span><br><span class="line">#</span><br><span class="line"># Change this to Listen on specific IP addresses as shown below to </span><br><span class="line"># prevent Apache from glomming onto all bound IP addresses.</span><br><span class="line">#</span><br><span class="line">#Listen 12.34.56.78:80</span><br><span class="line">Listen 80</span><br><span class="line">Listen 8090		// 添加的apache监听的另一端口号，确保未被占用</span><br></pre></td></tr></table></figure>
+<p>然后打开 <em>\Apache24\conf\extra</em> 目录下的 httpd-vhosts.conf 文件，修改如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:8090&gt;</span><br><span class="line">    ServerAdmin YourName</span><br><span class="line">    DocumentRoot &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;</span><br><span class="line">    ServerName myapp.com</span><br><span class="line">    ErrorLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-error.log&quot;</span><br><span class="line">    CustomLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-access.log&quot; common</span><br><span class="line">    &lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;&gt;</span><br><span class="line">    	Options Indexes FollowSymLinks MultiViews</span><br><span class="line">		AllowOverride None</span><br><span class="line">		Require all granted</span><br><span class="line">	&lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+<p>以上通过两种方式实现了通过访问不同的主机名来访问不同目录，基于IP地址的方式请访问  <a href="http://www.cnblogs.com/hi-bazinga/archive/2012/04/23/2466605.html" target="_blank" rel="noopener">Apache 配置虚拟主机三种方式</a>  </p>
+]]></content>
+      <categories>
+        <category>Web</category>
+      </categories>
+      <tags>
+        <tag>Apache</tag>
+        <tag>虚拟主机</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>重构改善既有代码的设计-代码的坏味道</title>
     <url>/2017/05/20/badtasteofcode/</url>
     <content><![CDATA[<p>《重构，改善既有代码的设计》一书中，将重构时机用味道来形容，“代码的坏味道”顾名思义就是我们的程序中存在一些不合理、难以理解、难以扩展的设计，本文参考书中的“坏味道条款”列举程序设计中可能遇到的可重构代码。</p>
@@ -132,6 +166,47 @@
       </tags>
   </entry>
   <entry>
+    <title>CentOS编译安装Python3</title>
+    <url>/2018/06/26/centosinstallpython3/</url>
+    <content><![CDATA[<p>Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题。如果需要使用最新的 Python3 那么我们可以编译安装源码包到独立目录，这和系统默认环境之间是没有任何影响的，Python3 和 Python2 两个环境并存即可。</p>
+<p>首先去 Python 官网下载 Python3 的源码包，<a href="https://www.python.org/" target="_blank" rel="noopener">传送门</a> </p>
+<p>进去之后点击导航栏的 Downloads，也可以鼠标放到 Downloads 上弹出菜单选择 Source code，表示源码包，这里选择最新版本 3.6.5，当然下面也有很多其他历史版本，点进去之后页面下方可以看到下载链接，包括源码包、Mac OSX 安装包、Windows 安装包等。Linux 系统可以直接使用以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz</span><br></pre></td></tr></table></figure>
+<p>接下来，如果是全新的 Linux 系统，可能需要安装一些 Python 的依赖，如 openssl、readline等模块。需要的依赖主要如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum -y install zlib zlib-devel</span><br><span class="line">yum -y install bzip2 bzip2-devel</span><br><span class="line">yum -y install ncurses ncurses-devel</span><br><span class="line">yum -y install readline readline-devel</span><br><span class="line">yum -y install openssl openssl-devel</span><br><span class="line">yum -y install openssl-static</span><br><span class="line">yum -y install xz lzma xz-devel</span><br><span class="line">yum -y install sqlite sqlite-devel</span><br><span class="line">yum -y install gdbm gdbm-devel</span><br><span class="line">yum -y install tk tk-devel</span><br></pre></td></tr></table></figure>
+<p>如果不是全新的 Linux 系统，可以查看是否安装了以上依赖：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum list installed | grep zlib</span><br><span class="line">yum list installed | grep zlib-devel</span><br><span class="line">yum list installed | grep bzip2</span><br><span class="line">yum list installed | grep bzip2-devel</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<p>解压文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxvf Python-3.6.5.tgz</span><br></pre></td></tr></table></figure>
+<p>进入目录：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd Python-3.6.5/</span><br></pre></td></tr></table></figure>
+<p>配置编译：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">./configure --prefix=/usr/local/python3.6.5 --enable-shared CFLAGS=-fPIC</span><br></pre></td></tr></table></figure>
+<p>因为上面依赖包是用 yum 安装而不是自己编译的，所以都是安装在系统默认目录下，因此各种选项不用加默认即可生效。<code>--enable-shared</code> 和 <code>-fPIC</code> 之后可以将 Python3 的动态链接库编译出来，默认情况编译完 lib 下面只有 Python3.xm.a 这样的文件，python本身可以正常使用，但是如果编译第三方库需要python 接口的比如 caffe 等，则会报错；所以这里建议按照上面的方式配置。</p>
+<p>然后编译并安装：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+<p>整个过程大约5分钟，安装成功之后，安装目录就在 <code>/usr/local/python3.6.5/</code> 。</p>
+<p>一般为了系统环境的干净，不需要将 python3、pip3 加入到系统环境变量中，使用全路径运行 Python 文件或安装第三方库即可，如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/usr/local/python3.6.5/bin/python3.6 xxx.py</span><br><span class="line">/usr/local/python3.6.5/bin/pip3.6 install twisted</span><br></pre></td></tr></table></figure>
+<p>但是一般在开发机上时，加入环境变量会更加方便，建立软连接如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ln -s /usr/python3.6.5/bin/python3.6 /usr/bin/python36</span><br><span class="line">ln -s /usr/python3.6.5/bin/pip3 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
+<p>然后可以直接使用软连接运行 Python 文件或安装第三方库：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python36 xxx.py</span><br><span class="line">pip3 install twisted</span><br></pre></td></tr></table></figure>
+<p>如上在 CentOS 上安装 Python3 就完成了，安装其他版本的 Python 解释器同理。</p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://www.cnblogs.com/freeweb/p/5181764.html" target="_blank" rel="noopener">Linux下编译安装python3</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux/Unix</category>
+      </categories>
+      <tags>
+        <tag>Linux/Unix</tag>
+        <tag>Python3</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>浅析FCGI与PHP-FPM</title>
     <url>/2017/06/07/cgifcgiphpfpm/</url>
     <content><![CDATA[<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><h4 id="CGI"><a href="#CGI" class="headerlink" title="CGI"></a>CGI</h4><p><strong>通用网关接口</strong>（Common Gateway Interface/CGI）是一种重要的互联网技术，可以让一个客户端，从网页浏览器向执行在网络服务器上的程序请求数据。CGI 描述了服务器和请求处理程序之间传输数据的一种标准。</p>
@@ -191,81 +266,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Apache2.4配置虚拟主机</title>
-    <url>/2017/04/18/apachevirtualhost/</url>
-    <content><![CDATA[<p>在开发项目的时候，每个项目对应的工程目录是不同的，想直接用一个自定义主机名来分别对应，这样就不用每次敲目录名了。Apache的虚拟主机可以实现这种功能。</p>
-<p>配置虚拟主机有三种方式：</p>
-<ul>
-<li>基于IP地址</li>
-<li>基于主机名</li>
-<li>基于端口号</li>
-</ul>
-<p>本文主要介绍 <strong>基于主机名</strong> 和 <strong>基于端口号</strong> 这两种方式。</p>
-<h3 id="基于主机名"><a href="#基于主机名" class="headerlink" title="基于主机名"></a>基于主机名</h3><p>我们安装好Apache后，如果成功安装，在浏览器中中输入 localhost 即可显示出欢迎界面，Apache 默认的监听端口是80端口，这里不用输入80端口号就可以。</p>
-<p>首先修改 <em>C:\Windows\System32\drivers\etc</em> 目录下的 hosts 文件，如果修改时保存失败，第一种方式是可以修改 hosts 文件的安全属性，右键-&gt;属性-&gt;安全，赋予相应用户的权限即可；第二种方式是，使用管理员身份打开记事本，然后在记事本中打开 hosts 文件，进行如下修改：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Copyright (c) 1993-2009 Microsoft Corp.</span><br><span class="line">#</span><br><span class="line"># This is a sample HOSTS file used by Microsoft TCP/IP for Windows.</span><br><span class="line">#</span><br><span class="line"># This file contains the mappings of IP addresses to host names. Each</span><br><span class="line"># entry should be kept on an individual line. The IP address should</span><br><span class="line"># be placed in the first column followed by the corresponding host name.</span><br><span class="line"># The IP address and the host name should be separated by at least one</span><br><span class="line"># space.</span><br><span class="line">#</span><br><span class="line"># Additionally, comments (such as these) may be inserted on individual</span><br><span class="line"># lines or following the machine name denoted by a &apos;#&apos; symbol.</span><br><span class="line">#</span><br><span class="line"># For example:</span><br><span class="line">#</span><br><span class="line">#      102.54.94.97     rhino.acme.com          # source server</span><br><span class="line">#       38.25.63.10     x.acme.com              # x client host</span><br><span class="line"></span><br><span class="line"># localhost name resolution is handled within DNS itself.</span><br><span class="line">#	127.0.0.1       localhost</span><br><span class="line">#	::1             localhost</span><br><span class="line">192.168.1.105 windows10.microdone.cn</span><br><span class="line">127.0.0.1       myapp.com			// 自定义的主机名，名称不能与网上的域名冲突</span><br></pre></td></tr></table></figure>
-<p>hosts 文件配置好后，打开 <em>\Apache24\conf</em> 目录下的 httpd.conf 文件，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Virtual hosts</span><br><span class="line"># Include conf/extra/httpd-vhosts.conf</span><br><span class="line"></span><br><span class="line">将 # 去掉</span><br><span class="line"></span><br><span class="line"># Virtual hosts</span><br><span class="line">Include conf/extra/httpd-vhosts.conf</span><br></pre></td></tr></table></figure>
-<p>然后打开 <em>\Apache24\conf\extra</em> 目录下的 httpd-vhosts.conf 文件，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    ServerAdmin YourName</span><br><span class="line">    DocumentRoot &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;</span><br><span class="line">    ServerName myapp.com</span><br><span class="line">    ErrorLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-error.log&quot;</span><br><span class="line">    CustomLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-access.log&quot; common</span><br><span class="line">    &lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;&gt;</span><br><span class="line">    	Options Indexes FollowSymLinks MultiViews</span><br><span class="line">		AllowOverride None</span><br><span class="line">		Require all granted</span><br><span class="line">	&lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
-<p>DocumentRoot 对应虚拟主机主目录；<br>ServerName 对应主机名；<br>ErrorLog 对应错误日志存放路径；<br>CustomLog 对应访问日志存放路径；<br>其中的&lt; Directory &gt;&lt; Directory /&gt;对应相应地设置信息。</p>
-<p>最后，在浏览器中输入 mapp.com/index.php 就可以访问不同目录了。</p>
-<h3 id="基于端口号"><a href="#基于端口号" class="headerlink" title="基于端口号"></a>基于端口号</h3><p>打开 <em>\Apache24\conf</em> 目录下的 httpd.conf 文件，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#</span><br><span class="line"># Listen: Allows you to bind Apache to specific IP addresses and/or</span><br><span class="line"># ports, instead of the default. See also the &lt;VirtualHost&gt;</span><br><span class="line"># directive.</span><br><span class="line">#</span><br><span class="line"># Change this to Listen on specific IP addresses as shown below to </span><br><span class="line"># prevent Apache from glomming onto all bound IP addresses.</span><br><span class="line">#</span><br><span class="line">#Listen 12.34.56.78:80</span><br><span class="line">Listen 80</span><br><span class="line">Listen 8090		// 添加的apache监听的另一端口号，确保未被占用</span><br></pre></td></tr></table></figure>
-<p>然后打开 <em>\Apache24\conf\extra</em> 目录下的 httpd-vhosts.conf 文件，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;VirtualHost *:8090&gt;</span><br><span class="line">    ServerAdmin YourName</span><br><span class="line">    DocumentRoot &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;</span><br><span class="line">    ServerName myapp.com</span><br><span class="line">    ErrorLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-error.log&quot;</span><br><span class="line">    CustomLog &quot;$&#123;SRVROOT&#125;/htdocs/laravel/myapp.com-access.log&quot; common</span><br><span class="line">    &lt;Directory &quot;$&#123;SRVROOT&#125;/htdocs/laravel/public&quot;&gt;</span><br><span class="line">    	Options Indexes FollowSymLinks MultiViews</span><br><span class="line">		AllowOverride None</span><br><span class="line">		Require all granted</span><br><span class="line">	&lt;/Directory&gt;</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
-<p>以上通过两种方式实现了通过访问不同的主机名来访问不同目录，基于IP地址的方式请访问  <a href="http://www.cnblogs.com/hi-bazinga/archive/2012/04/23/2466605.html" target="_blank" rel="noopener">Apache 配置虚拟主机三种方式</a>  </p>
-]]></content>
-      <categories>
-        <category>Web</category>
-      </categories>
-      <tags>
-        <tag>Apache</tag>
-        <tag>虚拟主机</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CentOS编译安装Python3</title>
-    <url>/2018/06/26/centosinstallpython3/</url>
-    <content><![CDATA[<p>Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题。如果需要使用最新的 Python3 那么我们可以编译安装源码包到独立目录，这和系统默认环境之间是没有任何影响的，Python3 和 Python2 两个环境并存即可。</p>
-<p>首先去 Python 官网下载 Python3 的源码包，<a href="https://www.python.org/" target="_blank" rel="noopener">传送门</a> </p>
-<p>进去之后点击导航栏的 Downloads，也可以鼠标放到 Downloads 上弹出菜单选择 Source code，表示源码包，这里选择最新版本 3.6.5，当然下面也有很多其他历史版本，点进去之后页面下方可以看到下载链接，包括源码包、Mac OSX 安装包、Windows 安装包等。Linux 系统可以直接使用以下命令：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz</span><br></pre></td></tr></table></figure>
-<p>接下来，如果是全新的 Linux 系统，可能需要安装一些 Python 的依赖，如 openssl、readline等模块。需要的依赖主要如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum -y install zlib zlib-devel</span><br><span class="line">yum -y install bzip2 bzip2-devel</span><br><span class="line">yum -y install ncurses ncurses-devel</span><br><span class="line">yum -y install readline readline-devel</span><br><span class="line">yum -y install openssl openssl-devel</span><br><span class="line">yum -y install openssl-static</span><br><span class="line">yum -y install xz lzma xz-devel</span><br><span class="line">yum -y install sqlite sqlite-devel</span><br><span class="line">yum -y install gdbm gdbm-devel</span><br><span class="line">yum -y install tk tk-devel</span><br></pre></td></tr></table></figure>
-<p>如果不是全新的 Linux 系统，可以查看是否安装了以上依赖：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum list installed | grep zlib</span><br><span class="line">yum list installed | grep zlib-devel</span><br><span class="line">yum list installed | grep bzip2</span><br><span class="line">yum list installed | grep bzip2-devel</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
-<p>解压文件：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxvf Python-3.6.5.tgz</span><br></pre></td></tr></table></figure>
-<p>进入目录：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd Python-3.6.5/</span><br></pre></td></tr></table></figure>
-<p>配置编译：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">./configure --prefix=/usr/local/python3.6.5 --enable-shared CFLAGS=-fPIC</span><br></pre></td></tr></table></figure>
-<p>因为上面依赖包是用 yum 安装而不是自己编译的，所以都是安装在系统默认目录下，因此各种选项不用加默认即可生效。<code>--enable-shared</code> 和 <code>-fPIC</code> 之后可以将 Python3 的动态链接库编译出来，默认情况编译完 lib 下面只有 Python3.xm.a 这样的文件，python本身可以正常使用，但是如果编译第三方库需要python 接口的比如 caffe 等，则会报错；所以这里建议按照上面的方式配置。</p>
-<p>然后编译并安装：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-<p>整个过程大约5分钟，安装成功之后，安装目录就在 <code>/usr/local/python3.6.5/</code> 。</p>
-<p>一般为了系统环境的干净，不需要将 python3、pip3 加入到系统环境变量中，使用全路径运行 Python 文件或安装第三方库即可，如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/usr/local/python3.6.5/bin/python3.6 xxx.py</span><br><span class="line">/usr/local/python3.6.5/bin/pip3.6 install twisted</span><br></pre></td></tr></table></figure>
-<p>但是一般在开发机上时，加入环境变量会更加方便，建立软连接如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ln -s /usr/python3.6.5/bin/python3.6 /usr/bin/python36</span><br><span class="line">ln -s /usr/python3.6.5/bin/pip3 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
-<p>然后可以直接使用软连接运行 Python 文件或安装第三方库：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python36 xxx.py</span><br><span class="line">pip3 install twisted</span><br></pre></td></tr></table></figure>
-<p>如上在 CentOS 上安装 Python3 就完成了，安装其他版本的 Python 解释器同理。</p>
-<p>Read More:</p>
-<blockquote>
-<p><a href="https://www.cnblogs.com/freeweb/p/5181764.html" target="_blank" rel="noopener">Linux下编译安装python3</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux/Unix</category>
-      </categories>
-      <tags>
-        <tag>Linux/Unix</tag>
-        <tag>Python3</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Git常用命令的简单使用</title>
     <url>/2017/10/09/gitcommand/</url>
     <content><![CDATA[<h3 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h3><p><code>git add</code> 命令将文件内容添加到索引（将修改添加到暂存区）。也就是将要提交的文件的信息添加到索引库中。</p>
@@ -305,43 +305,20 @@
       </tags>
   </entry>
   <entry>
-    <title>Heox主题的其他配置</title>
-    <url>/2017/04/01/hexoOthers/</url>
-    <content><![CDATA[<h3 id="Hexo页面底部次数显示"><a href="#Hexo页面底部次数显示" class="headerlink" title="Hexo页面底部次数显示"></a>Hexo页面底部次数显示</h3><p>很多网站中都有访问人数和总访问量，也就是下图所示的功能：</p>
-<p><img src="/images/2017-4-2 102013.png" alt="截图20170402095045"></p>
-<p>我们可以通过在主题配置文件中添加以下代码来实现此功能：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">busuanzi_count:</span><br><span class="line">  # count values only if the other configs are false</span><br><span class="line">  enable: true</span><br><span class="line">  # custom uv span for the whole site</span><br><span class="line">  site_uv: true</span><br><span class="line">  site_uv_header: &lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt; 访问人数</span><br><span class="line">  site_uv_footer:</span><br><span class="line">  # custom pv span for the whole site</span><br><span class="line">  site_pv: true</span><br><span class="line">  site_pv_header: &lt;i class=&quot;fa fa-eye&quot;&gt;&lt;/i&gt; 总访问量</span><br><span class="line">  site_pv_footer: 次</span><br><span class="line">  # custom pv span for one page only</span><br><span class="line">  page_pv: true</span><br><span class="line">  page_pv_header: &lt;i class=&quot;fa fa-file-o&quot;&gt;&lt;/i&gt; 浏览</span><br><span class="line">  page_pv_footer: 次</span><br></pre></td></tr></table></figure>
-<h3 id="添加社交链接"><a href="#添加社交链接" class="headerlink" title="添加社交链接"></a>添加社交链接</h3><p>如果希望试下下图显示的功能：</p>
-<p><img src="/images/2017-4-2 102023.png" alt="截图20170402095414"></p>
-<p>可以在主题配置文件中添加如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">social:</span><br><span class="line">  #LinkLabel: Link</span><br><span class="line">  GitHub: 链接地址</span><br><span class="line">  weibo: 链接地址</span><br><span class="line">  zhihu: 链接地址</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Social Links Icons</span><br><span class="line"># Icon Mapping:</span><br><span class="line">#   Map a menu item to a specific FontAwesome icon name.</span><br><span class="line">#   Key is the name of the item and value is the name of FontAwesome icon. Key is case-senstive.</span><br><span class="line">#   When an globe mask icon presenting up means that the item has no mapping icon.</span><br><span class="line">social_icons:</span><br><span class="line">  enable: true</span><br><span class="line">  # Icon Mappings.</span><br><span class="line">  # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome</span><br><span class="line">  GitHub: github</span><br><span class="line">  weibo: weibo</span><br><span class="line">  zhihu: hand-o-right</span><br></pre></td></tr></table></figure>
-<p>Hexo主题使用的图标都在 <a href="http://fontawesome.io/" target="_blank" rel="noopener">FontAwesome</a> 上，你可以根据自己需要选择，我发现这是一个很不错的网站，各种图标很漂亮，PPT中也可以用。</p>
-<h3 id="分类、归档、关于页面的创建"><a href="#分类、归档、关于页面的创建" class="headerlink" title="分类、归档、关于页面的创建"></a>分类、归档、关于页面的创建</h3><p>安装完成Hexo之后，我们点击“分类”、“关于”、“标签”页面都会显示GitH的404页面，这是因为我们还没有创建每个功能对应的文件，使用如下方法创建：</p>
-<p>分类：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page &quot;categories&quot;</span><br></pre></td></tr></table></figure>
-<p>关于：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page &quot;about&quot;</span><br></pre></td></tr></table></figure>
-<p>标签：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page &quot;tags&quot;</span><br></pre></td></tr></table></figure>
-<p>使用以上hexo命令会在Hexo根目录的source文件夹下创建各个对应的文件夹，每个文件夹中都有index.md文件，这就成功了，文件中的内容不用修改。</p>
-<p>创建完成之后，我们在编辑文章时：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">title: 标题</span><br><span class="line">date: 2017-04-01 21:34:40</span><br><span class="line">tags:</span><br><span class="line"> - Hexo</span><br><span class="line"> - 主题</span><br><span class="line"> - 博客</span><br><span class="line">categories:</span><br><span class="line"> - Hexo</span><br></pre></td></tr></table></figure>
-<p>“tags”、“categories”是对文章打的标签和分类，默认文章是可以评论的，如果不希望评论，可以加上：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">comments： false</span><br></pre></td></tr></table></figure>
-<h3 id="首页文章显示摘要"><a href="#首页文章显示摘要" class="headerlink" title="首页文章显示摘要"></a>首页文章显示摘要</h3><p>第一种方式：在主题配置文件中，找到auto_excerpt，修改如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Automatically Excerpt. Not recommend.</span><br><span class="line"># Please use &lt;!-- more --&gt; in the post to control excerpt accurately.</span><br><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 150</span><br></pre></td></tr></table></figure>
-<p>第二种方式：根据文章的内容，自己在合适的位置添加<code>&lt;!--more--&gt;</code>标签，使用灵活，也是Hexo推荐的方法</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/2352140-ec93f0ac69d07b21.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="img"></p>
-<p>第三种方式：在文章中的<code>front-matter</code>中添加description，并提供文章摘录。这种方式只会在首页列表中显示文章的摘要内容，进入文章详情后不会再显示。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/2352140-67c6e1edb5695035.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="img"></p>
+    <title>GO学习系列0 - 学习资料</title>
+    <url>/2020/10/26/go-series-0/</url>
+    <content><![CDATA[<h4 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h4><p><a href="https://github.com/golang/go" target="_blank" rel="noopener">github.com/golang/go</a></p>
+<p><a href="https://learnku.com/docs/gobyexample/2020" target="_blank" rel="noopener">Go 编程实例 Go by Example</a></p>
+<p><a href="https://learnku.com/docs/the-way-to-go" target="_blank" rel="noopener">Go 入门指南</a></p>
+<h4 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h4><h4 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h4><h5 id="Go-Frame"><a href="#Go-Frame" class="headerlink" title="Go Frame"></a>Go Frame</h5><ul>
+<li><a href="https://goframe.org/index" target="_blank" rel="noopener">框架介绍</a></li>
+</ul>
 ]]></content>
       <categories>
-        <category>Hexo</category>
+        <category>GO</category>
       </categories>
       <tags>
-        <tag>Hexo</tag>
-        <tag>主题</tag>
-        <tag>博客</tag>
+        <tag>GO</tag>
       </tags>
   </entry>
   <entry>
@@ -404,21 +381,8 @@
       </categories>
       <tags>
         <tag>Hexo</tag>
-        <tag>主题</tag>
         <tag>NexT</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>愚人节</title>
-    <url>/2017/04/01/heyliuxiaoyang/</url>
-    <content><![CDATA[<p>今天是愚人节，我的个人博客上线了。</p>
-]]></content>
-      <categories>
-        <category>生活日志</category>
-      </categories>
-      <tags>
-        <tag>生活</tag>
-        <tag>Life</tag>
+        <tag>主题</tag>
       </tags>
   </entry>
   <entry>
@@ -519,8 +483,61 @@
       </categories>
       <tags>
         <tag>Hexo</tag>
-        <tag>博客</tag>
         <tag>GitHub</tag>
+        <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Heox主题的其他配置</title>
+    <url>/2017/04/01/hexoOthers/</url>
+    <content><![CDATA[<h3 id="Hexo页面底部次数显示"><a href="#Hexo页面底部次数显示" class="headerlink" title="Hexo页面底部次数显示"></a>Hexo页面底部次数显示</h3><p>很多网站中都有访问人数和总访问量，也就是下图所示的功能：</p>
+<p><img src="/images/2017-4-2 102013.png" alt="截图20170402095045"></p>
+<p>我们可以通过在主题配置文件中添加以下代码来实现此功能：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">busuanzi_count:</span><br><span class="line">  # count values only if the other configs are false</span><br><span class="line">  enable: true</span><br><span class="line">  # custom uv span for the whole site</span><br><span class="line">  site_uv: true</span><br><span class="line">  site_uv_header: &lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt; 访问人数</span><br><span class="line">  site_uv_footer:</span><br><span class="line">  # custom pv span for the whole site</span><br><span class="line">  site_pv: true</span><br><span class="line">  site_pv_header: &lt;i class=&quot;fa fa-eye&quot;&gt;&lt;/i&gt; 总访问量</span><br><span class="line">  site_pv_footer: 次</span><br><span class="line">  # custom pv span for one page only</span><br><span class="line">  page_pv: true</span><br><span class="line">  page_pv_header: &lt;i class=&quot;fa fa-file-o&quot;&gt;&lt;/i&gt; 浏览</span><br><span class="line">  page_pv_footer: 次</span><br></pre></td></tr></table></figure>
+<h3 id="添加社交链接"><a href="#添加社交链接" class="headerlink" title="添加社交链接"></a>添加社交链接</h3><p>如果希望试下下图显示的功能：</p>
+<p><img src="/images/2017-4-2 102023.png" alt="截图20170402095414"></p>
+<p>可以在主题配置文件中添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">social:</span><br><span class="line">  #LinkLabel: Link</span><br><span class="line">  GitHub: 链接地址</span><br><span class="line">  weibo: 链接地址</span><br><span class="line">  zhihu: 链接地址</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Social Links Icons</span><br><span class="line"># Icon Mapping:</span><br><span class="line">#   Map a menu item to a specific FontAwesome icon name.</span><br><span class="line">#   Key is the name of the item and value is the name of FontAwesome icon. Key is case-senstive.</span><br><span class="line">#   When an globe mask icon presenting up means that the item has no mapping icon.</span><br><span class="line">social_icons:</span><br><span class="line">  enable: true</span><br><span class="line">  # Icon Mappings.</span><br><span class="line">  # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome</span><br><span class="line">  GitHub: github</span><br><span class="line">  weibo: weibo</span><br><span class="line">  zhihu: hand-o-right</span><br></pre></td></tr></table></figure>
+<p>Hexo主题使用的图标都在 <a href="http://fontawesome.io/" target="_blank" rel="noopener">FontAwesome</a> 上，你可以根据自己需要选择，我发现这是一个很不错的网站，各种图标很漂亮，PPT中也可以用。</p>
+<h3 id="分类、归档、关于页面的创建"><a href="#分类、归档、关于页面的创建" class="headerlink" title="分类、归档、关于页面的创建"></a>分类、归档、关于页面的创建</h3><p>安装完成Hexo之后，我们点击“分类”、“关于”、“标签”页面都会显示GitH的404页面，这是因为我们还没有创建每个功能对应的文件，使用如下方法创建：</p>
+<p>分类：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page &quot;categories&quot;</span><br></pre></td></tr></table></figure>
+<p>关于：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page &quot;about&quot;</span><br></pre></td></tr></table></figure>
+<p>标签：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page &quot;tags&quot;</span><br></pre></td></tr></table></figure>
+<p>使用以上hexo命令会在Hexo根目录的source文件夹下创建各个对应的文件夹，每个文件夹中都有index.md文件，这就成功了，文件中的内容不用修改。</p>
+<p>创建完成之后，我们在编辑文章时：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">title: 标题</span><br><span class="line">date: 2017-04-01 21:34:40</span><br><span class="line">tags:</span><br><span class="line"> - Hexo</span><br><span class="line"> - 主题</span><br><span class="line"> - 博客</span><br><span class="line">categories:</span><br><span class="line"> - Hexo</span><br></pre></td></tr></table></figure>
+<p>“tags”、“categories”是对文章打的标签和分类，默认文章是可以评论的，如果不希望评论，可以加上：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">comments： false</span><br></pre></td></tr></table></figure>
+<h3 id="首页文章显示摘要"><a href="#首页文章显示摘要" class="headerlink" title="首页文章显示摘要"></a>首页文章显示摘要</h3><p>第一种方式：在主题配置文件中，找到auto_excerpt，修改如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Automatically Excerpt. Not recommend.</span><br><span class="line"># Please use &lt;!-- more --&gt; in the post to control excerpt accurately.</span><br><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 150</span><br></pre></td></tr></table></figure>
+<p>第二种方式：根据文章的内容，自己在合适的位置添加<code>&lt;!--more--&gt;</code>标签，使用灵活，也是Hexo推荐的方法</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2352140-ec93f0ac69d07b21.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="img"></p>
+<p>第三种方式：在文章中的<code>front-matter</code>中添加description，并提供文章摘录。这种方式只会在首页列表中显示文章的摘要内容，进入文章详情后不会再显示。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2352140-67c6e1edb5695035.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="img"></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>主题</tag>
+        <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>愚人节</title>
+    <url>/2017/04/01/heyliuxiaoyang/</url>
+    <content><![CDATA[<p>今天是愚人节，我的个人博客上线了。</p>
+]]></content>
+      <categories>
+        <category>生活日志</category>
+      </categories>
+      <tags>
+        <tag>生活</tag>
+        <tag>Life</tag>
       </tags>
   </entry>
   <entry>
@@ -2140,6 +2157,28 @@
       </tags>
   </entry>
   <entry>
+    <title>Tornado5.0.2翻译文档 - Queue示例:一个并发网络爬虫</title>
+    <url>/2018/06/18/tornado502-concurrentwebspider/</url>
+    <content><![CDATA[<p>Tornado的 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#module-tornado.queues" target="_blank" rel="noopener"><code>tornado.queues</code></a> 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 <a href="https://docs.python.org/3.4/library/queue.html#module-queue" target="_blank" rel="noopener"><code>queue</code></a> 实现线程模式。</p>
+<p>一个yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.get" target="_blank" rel="noopener"><code>Queue.get</code></a> 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="noopener"><code>Queue.put</code></a> 的协程直到队列中有空间才会暂停。</p>
+<p>一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue" target="_blank" rel="noopener"><code>Queue</code></a> 从0开始对未完成的任务进行计数， <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="noopener"><code>put</code></a> 加计数； <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 减少计数。</p>
+<p>这里的网络爬虫的例子，队列开始的时候只包含 base_url。当一个 worker 抓取到一个页面它会解析链接并把它添加到队列中，然后调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 减少计数一次。最后，当一个 worker 抓取到的页面 URL 都是之前抓取到过的并且队列中没有任务了。于是 worker 调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 把计数减到0。等待 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.join" target="_blank" rel="noopener"><code>join</code></a> 的主协程取消暂停并且完成。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">from datetime import timedelta</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    from HTMLParser import HTMLParser</span><br><span class="line">    from urlparse import urljoin, urldefrag</span><br><span class="line">except ImportError:</span><br><span class="line">    from html.parser import HTMLParser</span><br><span class="line">    from urllib.parse import urljoin, urldefrag</span><br><span class="line"></span><br><span class="line">from tornado import httpclient, gen, ioloop, queues</span><br><span class="line"></span><br><span class="line">base_url = &apos;http://www.tornadoweb.org/en/stable/&apos;</span><br><span class="line">concurrency = 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@gen.coroutine</span><br><span class="line">def get_links_from_url(url):</span><br><span class="line">    &quot;&quot;&quot;Download the page at `url` and parse it for links.</span><br><span class="line"></span><br><span class="line">    Returned links have had the fragment after `#` removed, and have been made</span><br><span class="line">    absolute so, e.g. the URL &apos;gen.html#tornado.gen.coroutine&apos; becomes</span><br><span class="line">    &apos;http://www.tornadoweb.org/en/stable/gen.html&apos;.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    try:</span><br><span class="line">        response = yield httpclient.AsyncHTTPClient().fetch(url)</span><br><span class="line">        print(&apos;fetched %s&apos; % url)</span><br><span class="line"></span><br><span class="line">        html = response.body if isinstance(response.body, str) \</span><br><span class="line">            else response.body.decode(errors=&apos;ignore&apos;)</span><br><span class="line">        urls = [urljoin(url, remove_fragment(new_url))</span><br><span class="line">                for new_url in get_links(html)]</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(&apos;Exception: %s %s&apos; % (e, url))</span><br><span class="line">        raise gen.Return([])</span><br><span class="line"></span><br><span class="line">    raise gen.Return(urls)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def remove_fragment(url):</span><br><span class="line">    pure_url, frag = urldefrag(url)</span><br><span class="line">    return pure_url</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_links(html):</span><br><span class="line">    class URLSeeker(HTMLParser):</span><br><span class="line">        def __init__(self):</span><br><span class="line">            HTMLParser.__init__(self)</span><br><span class="line">            self.urls = []</span><br><span class="line"></span><br><span class="line">        def handle_starttag(self, tag, attrs):</span><br><span class="line">            href = dict(attrs).get(&apos;href&apos;)</span><br><span class="line">            if href and tag == &apos;a&apos;:</span><br><span class="line">                self.urls.append(href)</span><br><span class="line"></span><br><span class="line">    url_seeker = URLSeeker()</span><br><span class="line">    url_seeker.feed(html)</span><br><span class="line">    return url_seeker.urls</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@gen.coroutine</span><br><span class="line">def main():</span><br><span class="line">    q = queues.Queue()</span><br><span class="line">    start = time.time()</span><br><span class="line">    fetching, fetched = set(), set()</span><br><span class="line"></span><br><span class="line">    @gen.coroutine</span><br><span class="line">    def fetch_url():</span><br><span class="line">        current_url = yield q.get()</span><br><span class="line">        try:</span><br><span class="line">            if current_url in fetching:</span><br><span class="line">                return</span><br><span class="line"></span><br><span class="line">            print(&apos;fetching %s&apos; % current_url)</span><br><span class="line">            fetching.add(current_url)</span><br><span class="line">            urls = yield get_links_from_url(current_url)</span><br><span class="line">            fetched.add(current_url)</span><br><span class="line"></span><br><span class="line">            for new_url in urls:</span><br><span class="line">                # Only follow links beneath the base URL</span><br><span class="line">                if new_url.startswith(base_url):</span><br><span class="line">                    yield q.put(new_url)</span><br><span class="line"></span><br><span class="line">        finally:</span><br><span class="line">            q.task_done()</span><br><span class="line"></span><br><span class="line">    @gen.coroutine</span><br><span class="line">    def worker():</span><br><span class="line">        while True:</span><br><span class="line">            yield fetch_url()</span><br><span class="line"></span><br><span class="line">    q.put(base_url)</span><br><span class="line"></span><br><span class="line">    # Start workers, then wait for the work queue to be empty.</span><br><span class="line">    for _ in range(concurrency):</span><br><span class="line">        worker()</span><br><span class="line">    yield q.join(timeout=timedelta(seconds=300))</span><br><span class="line">    assert fetching == fetched</span><br><span class="line">    print(&apos;Done in %d seconds, fetched %s URLs.&apos; % (</span><br><span class="line">        time.time() - start, len(fetched)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    io_loop = ioloop.IOLoop.current()</span><br><span class="line">    io_loop.run_sync(main)</span><br></pre></td></tr></table></figure>
+<p>Read More:</p>
+<blockquote>
+<p><a href="http://www.tornadoweb.org/en/stable/guide/queues.html" target="_blank" rel="noopener"><code>Queue</code> example - a concurrent web spider</a> </p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Tornado</category>
+      </categories>
+      <tags>
+        <tag>Tornado</tag>
+        <tag>翻译文档</tag>
+        <tag>并发网络爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Tornado5.0.2翻译文档 - 异步和非阻塞I/O</title>
     <url>/2018/06/10/tornado502-asnon/</url>
     <content><![CDATA[<p>实时web功能需要为每个用户提供一个多数时间被闲置的长连接，在传统的同步 web 服务器中，这意味着要为每个用户提供一个线程，当然每个线程的开销都是很昂贵的。</p>
@@ -2175,28 +2214,6 @@
       <tags>
         <tag>Tornado</tag>
         <tag>翻译文档</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Tornado5.0.2翻译文档 - Queue示例:一个并发网络爬虫</title>
-    <url>/2018/06/18/tornado502-concurrentwebspider/</url>
-    <content><![CDATA[<p>Tornado的 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#module-tornado.queues" target="_blank" rel="noopener"><code>tornado.queues</code></a> 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 <a href="https://docs.python.org/3.4/library/queue.html#module-queue" target="_blank" rel="noopener"><code>queue</code></a> 实现线程模式。</p>
-<p>一个yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.get" target="_blank" rel="noopener"><code>Queue.get</code></a> 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="noopener"><code>Queue.put</code></a> 的协程直到队列中有空间才会暂停。</p>
-<p>一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue" target="_blank" rel="noopener"><code>Queue</code></a> 从0开始对未完成的任务进行计数， <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="noopener"><code>put</code></a> 加计数； <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 减少计数。</p>
-<p>这里的网络爬虫的例子，队列开始的时候只包含 base_url。当一个 worker 抓取到一个页面它会解析链接并把它添加到队列中，然后调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 减少计数一次。最后，当一个 worker 抓取到的页面 URL 都是之前抓取到过的并且队列中没有任务了。于是 worker 调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 把计数减到0。等待 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.join" target="_blank" rel="noopener"><code>join</code></a> 的主协程取消暂停并且完成。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">from datetime import timedelta</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    from HTMLParser import HTMLParser</span><br><span class="line">    from urlparse import urljoin, urldefrag</span><br><span class="line">except ImportError:</span><br><span class="line">    from html.parser import HTMLParser</span><br><span class="line">    from urllib.parse import urljoin, urldefrag</span><br><span class="line"></span><br><span class="line">from tornado import httpclient, gen, ioloop, queues</span><br><span class="line"></span><br><span class="line">base_url = &apos;http://www.tornadoweb.org/en/stable/&apos;</span><br><span class="line">concurrency = 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@gen.coroutine</span><br><span class="line">def get_links_from_url(url):</span><br><span class="line">    &quot;&quot;&quot;Download the page at `url` and parse it for links.</span><br><span class="line"></span><br><span class="line">    Returned links have had the fragment after `#` removed, and have been made</span><br><span class="line">    absolute so, e.g. the URL &apos;gen.html#tornado.gen.coroutine&apos; becomes</span><br><span class="line">    &apos;http://www.tornadoweb.org/en/stable/gen.html&apos;.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    try:</span><br><span class="line">        response = yield httpclient.AsyncHTTPClient().fetch(url)</span><br><span class="line">        print(&apos;fetched %s&apos; % url)</span><br><span class="line"></span><br><span class="line">        html = response.body if isinstance(response.body, str) \</span><br><span class="line">            else response.body.decode(errors=&apos;ignore&apos;)</span><br><span class="line">        urls = [urljoin(url, remove_fragment(new_url))</span><br><span class="line">                for new_url in get_links(html)]</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(&apos;Exception: %s %s&apos; % (e, url))</span><br><span class="line">        raise gen.Return([])</span><br><span class="line"></span><br><span class="line">    raise gen.Return(urls)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def remove_fragment(url):</span><br><span class="line">    pure_url, frag = urldefrag(url)</span><br><span class="line">    return pure_url</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_links(html):</span><br><span class="line">    class URLSeeker(HTMLParser):</span><br><span class="line">        def __init__(self):</span><br><span class="line">            HTMLParser.__init__(self)</span><br><span class="line">            self.urls = []</span><br><span class="line"></span><br><span class="line">        def handle_starttag(self, tag, attrs):</span><br><span class="line">            href = dict(attrs).get(&apos;href&apos;)</span><br><span class="line">            if href and tag == &apos;a&apos;:</span><br><span class="line">                self.urls.append(href)</span><br><span class="line"></span><br><span class="line">    url_seeker = URLSeeker()</span><br><span class="line">    url_seeker.feed(html)</span><br><span class="line">    return url_seeker.urls</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@gen.coroutine</span><br><span class="line">def main():</span><br><span class="line">    q = queues.Queue()</span><br><span class="line">    start = time.time()</span><br><span class="line">    fetching, fetched = set(), set()</span><br><span class="line"></span><br><span class="line">    @gen.coroutine</span><br><span class="line">    def fetch_url():</span><br><span class="line">        current_url = yield q.get()</span><br><span class="line">        try:</span><br><span class="line">            if current_url in fetching:</span><br><span class="line">                return</span><br><span class="line"></span><br><span class="line">            print(&apos;fetching %s&apos; % current_url)</span><br><span class="line">            fetching.add(current_url)</span><br><span class="line">            urls = yield get_links_from_url(current_url)</span><br><span class="line">            fetched.add(current_url)</span><br><span class="line"></span><br><span class="line">            for new_url in urls:</span><br><span class="line">                # Only follow links beneath the base URL</span><br><span class="line">                if new_url.startswith(base_url):</span><br><span class="line">                    yield q.put(new_url)</span><br><span class="line"></span><br><span class="line">        finally:</span><br><span class="line">            q.task_done()</span><br><span class="line"></span><br><span class="line">    @gen.coroutine</span><br><span class="line">    def worker():</span><br><span class="line">        while True:</span><br><span class="line">            yield fetch_url()</span><br><span class="line"></span><br><span class="line">    q.put(base_url)</span><br><span class="line"></span><br><span class="line">    # Start workers, then wait for the work queue to be empty.</span><br><span class="line">    for _ in range(concurrency):</span><br><span class="line">        worker()</span><br><span class="line">    yield q.join(timeout=timedelta(seconds=300))</span><br><span class="line">    assert fetching == fetched</span><br><span class="line">    print(&apos;Done in %d seconds, fetched %s URLs.&apos; % (</span><br><span class="line">        time.time() - start, len(fetched)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    io_loop = ioloop.IOLoop.current()</span><br><span class="line">    io_loop.run_sync(main)</span><br></pre></td></tr></table></figure>
-<p>Read More:</p>
-<blockquote>
-<p><a href="http://www.tornadoweb.org/en/stable/guide/queues.html" target="_blank" rel="noopener"><code>Queue</code> example - a concurrent web spider</a> </p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Tornado</category>
-      </categories>
-      <tags>
-        <tag>Tornado</tag>
-        <tag>翻译文档</tag>
-        <tag>并发网络爬虫</tag>
       </tags>
   </entry>
   <entry>
@@ -3192,6 +3209,186 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux命令-tar</title>
+    <url>/2018/01/04/linuxtar/</url>
+    <content><![CDATA[<p>通过SSH访问服务器，难免会要用到压缩、解压缩、打包、解包等操作，这时候<code>tar</code>命令是必不可少的一个功能强大的工具。</p>
+<p>tar命令可以为Linux的文件和目录创建档案。利用<code>tar</code>可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件。<code>tar</code>最初被用来在磁带上创建档案，现在，用户可以在任何设备上创建档案。</p>
+<p>首先区分一下打包和压缩的概念：</p>
+<ul>
+<li>打包是将一大堆文件或目录变成一个总的文件；</li>
+<li>压缩是将一个大的文件通过一些压缩算法变成一个小文件。</li>
+</ul>
+<p>为什么要区分这两个概念呢？这源于Linux中很多压缩程序只能针对一个文件进行压缩，这样当你想要压缩一大堆文件时，你得先将这一大堆文件先打成一个包（<code>tar</code>命令），然后再用压缩程序进行压缩（<code>gzip</code>、<code>bzip2</code>命令）。</p>
+<p>Linux下最常用的打包程序就是<code>tar</code>了，使用<code>tar</code>程序打出来的包我们常称为<code>tar</code>包，<code>tar</code>包文件的命令通常都是以<code>.tar</code>结尾的。生成<code>tar</code>包后，就可以用其它的程序来进行压缩。</p>
+<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar [参数] [文件]</span><br></pre></td></tr></table></figure>
+<h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>用来压缩和解压文件，<code>tar</code>本身不具有压缩功能，是调用压缩功能实现的压缩。</p>
+<h4 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-A</td>
+<td>新增文件到以存在的备份文件</td>
+</tr>
+<tr>
+<td>-B</td>
+<td>设置区块大小</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>建立新的备份文件</td>
+</tr>
+<tr>
+<td>-C &lt;目录&gt;</td>
+<td>这个选项用在解压缩，若要在特定目录解压缩，可以使用这个选项</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>记录文件的差别</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>添加文件到已经压缩的文件</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>添加改变了和现有的文件到已经存在的压缩文件</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>从备份文件中还原文件</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>列出备份文件的内容</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>通过gzip指令处理备份文件</td>
+</tr>
+<tr>
+<td>-j</td>
+<td>支持bzip2解压文件</td>
+</tr>
+<tr>
+<td>-Z</td>
+<td>通过compress指令处理备份文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示操作过程</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>文件系统边界设置</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>保留原有文件不覆盖</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>保留文件不被覆盖</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>确认压缩文件的正确性</td>
+</tr>
+<tr>
+<td>-f &lt;备份文件&gt;</td>
+<td>指定备份文件</td>
+</tr>
+<tr>
+<td>-b &lt;区块数目&gt;</td>
+<td>设置每笔记录的区块数目，每个区块大小为12Bytes</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>用原来的文件权限还原文件</td>
+</tr>
+<tr>
+<td>-P</td>
+<td>文件名使用绝对名称，不移除文件名称前的”/“号</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>只将较指定日期更新的文件保存到备份文件里</td>
+</tr>
+<tr>
+<td>–version</td>
+<td>显示版本信息</td>
+</tr>
+<tr>
+<td>–exclude &lt;文件&gt;</td>
+<td>排除某个文件</td>
+</tr>
+</tbody>
+</table>
+<h4 id="常见的解压-压缩命令"><a href="#常见的解压-压缩命令" class="headerlink" title="常见的解压/压缩命令"></a>常见的解压/压缩命令</h4><p><code>.tar</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解包：tar xvf FileName.tar</span><br><span class="line">打包：tar cvf FileName.tar DirName</span><br></pre></td></tr></table></figure>
+<p><code>.gz</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压1：gunzip FileName.gz</span><br><span class="line">解压2：gzip -d FileName.gz</span><br><span class="line">压缩：gzip FileName</span><br></pre></td></tr></table></figure>
+<p><code>.tar.gz</code>文件 和 <code>.tgz</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：tar zxvf FileName.tar.gz</span><br><span class="line">压缩：tar zcvf FileName.tar.gz DirName</span><br></pre></td></tr></table></figure>
+<p><code>.bz2</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压1：bzip2 -d FileName.bz2</span><br><span class="line">解压2：bunzip2 FileName.bz2</span><br><span class="line">压缩： bzip2 -z FileName</span><br></pre></td></tr></table></figure>
+<p><code>.tar.bz2</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：tar jxvf FileName.tar.bz2</span><br><span class="line">压缩：tar jcvf FileName.tar.bz2 DirName</span><br></pre></td></tr></table></figure>
+<p><code>.bz</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压1：bzip2 -d FileName.bz</span><br><span class="line">解压2：bunzip2 FileName.bz</span><br><span class="line">压缩：未知</span><br></pre></td></tr></table></figure>
+<p><code>.tar.bz</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：tar jxvf FileName.tar.bz</span><br><span class="line">压缩：未知</span><br></pre></td></tr></table></figure>
+<p><code>.Z</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：uncompress FileName.Z</span><br><span class="line">压缩：compress FileName</span><br></pre></td></tr></table></figure>
+<p><code>.tar.Z</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：tar Zxvf FileName.tar.Z</span><br><span class="line">压缩：tar Zcvf FileName.tar.Z DirName</span><br></pre></td></tr></table></figure>
+<p><code>.zip</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：unzip FileName.zip</span><br><span class="line">压缩：zip FileName.zip DirName</span><br></pre></td></tr></table></figure>
+<p><code>.rar</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：rar x FileName.rar</span><br><span class="line">压缩：rar a FileName.rar DirName</span><br></pre></td></tr></table></figure>
+<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><ul>
+<li>tar -cvf testlog.tar testlog.log | tar -zcvf testlog.tar.gz testlog.log | tar -jcvf testlog.tar.bz2 testlog.log</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 4</span><br><span class="line">-rw-r--r-- 1 root root 94 Jan  4 17:07 testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -cvf testlog.tar testlog.log </span><br><span class="line">testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -zcvf testlog.tar.gz testlog.log </span><br><span class="line">testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -jcvf testlog.tar.bz2 testlog.log </span><br><span class="line">testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 24</span><br><span class="line">-rw-r--r-- 1 root root    94 Jan  4 17:07 testlog.log</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br></pre></td></tr></table></figure>
+<p>将文件只打包不压缩、以gzip压缩、以bzip2压缩。</p>
+<ul>
+<li>tar -ztvf testlog.tar.gz</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -ztvf testlog.tar.gz </span><br><span class="line">-rw-r--r-- root/root        94 2018-01-04 17:07 testlog.log</span><br></pre></td></tr></table></figure>
+<p>查看testlog.tar.gz中有哪些文件。</p>
+<ul>
+<li>tar -zxvf testlog.tar.gz</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 24</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -zxvf testlog.tar.gz</span><br><span class="line">testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 28</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root    94 Jan  4 17:07 testlog.log</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br></pre></td></tr></table></figure>
+<p>将testlog.tar.gz解压缩。</p>
+<ul>
+<li>tar -zcvf testlogs.tar.gz testlog1.log</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -zcvf testlogs.tar.gz testlog1.log testlog2.log </span><br><span class="line">testlog1.log</span><br><span class="line">testlog2.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 36</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root    13 Jan  4 17:21 testlog1.log</span><br><span class="line">-rw-r--r-- 1 root root    25 Jan  4 17:21 testlog2.log</span><br><span class="line">-rw-r--r-- 1 root root   152 Jan  4 17:21 testlogs.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -ztvf testlogs.tar.gz </span><br><span class="line">-rw-r--r-- root/root        13 2018-01-04 17:21 testlog1.log</span><br><span class="line">-rw-r--r-- root/root        25 2018-01-04 17:21 testlog2.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# rm -rf testlog1.log </span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 32</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root    25 Jan  4 17:21 testlog2.log</span><br><span class="line">-rw-r--r-- 1 root root   152 Jan  4 17:21 testlogs.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -zxvf testlogs.tar.gz testlog1.log</span><br><span class="line">testlog1.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 36</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root    13 Jan  4 17:21 testlog1.log</span><br><span class="line">-rw-r--r-- 1 root root    25 Jan  4 17:21 testlog2.log</span><br><span class="line">-rw-r--r-- 1 root root   152 Jan  4 17:21 testlogs.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br></pre></td></tr></table></figure>
+<p>从压缩包中解压出指定文件。</p>
+<ul>
+<li>tar -N “2018/01/03” -zcvf testlog.tar.gz test: 指定文件夹中的文件比某个日期新的才备份</li>
+<li>tar –exclude testlog/testlog1.log -zcvf testlogs.tar.gz testlog/*: 排除文件夹中的某个文件</li>
+</ul>
+<p>Read More：</p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/peida/archive/2012/11/30/2795656.html" target="_blank" rel="noopener">每天一个linux命令（28）：tar命令</a> <a href="http://www.runoob.com/linux/linux-comm-tar.html" target="_blank" rel="noopener">Linux tar命令</a>  <a href="http://wangchujiang.com/linux-command/c/tar.html" target="_blank" rel="noopener">tar</a> </p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux/Unix</category>
+      </categories>
+      <tags>
+        <tag>命令</tag>
+        <tag>Linux</tag>
+        <tag>tar</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux命令-ps</title>
     <url>/2018/01/02/linuxps/</url>
     <content><![CDATA[<p>Linux中的ps命令是Process Status的缩写。用来列出系统中当前运行的那些进程。ps命令列出的是当前那些进程的快照，就是执行ps命令的那个时刻的那些进程，如果想要动态的显示进程信息，就可以使用top命令。</p>
@@ -3399,186 +3596,6 @@
         <tag>命令</tag>
         <tag>Linux</tag>
         <tag>ps</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux命令-tar</title>
-    <url>/2018/01/04/linuxtar/</url>
-    <content><![CDATA[<p>通过SSH访问服务器，难免会要用到压缩、解压缩、打包、解包等操作，这时候<code>tar</code>命令是必不可少的一个功能强大的工具。</p>
-<p>tar命令可以为Linux的文件和目录创建档案。利用<code>tar</code>可以为某一特定文件创建档案（备份文件），也可以在档案中改变文件，或者向档案中加入新的文件。<code>tar</code>最初被用来在磁带上创建档案，现在，用户可以在任何设备上创建档案。</p>
-<p>首先区分一下打包和压缩的概念：</p>
-<ul>
-<li>打包是将一大堆文件或目录变成一个总的文件；</li>
-<li>压缩是将一个大的文件通过一些压缩算法变成一个小文件。</li>
-</ul>
-<p>为什么要区分这两个概念呢？这源于Linux中很多压缩程序只能针对一个文件进行压缩，这样当你想要压缩一大堆文件时，你得先将这一大堆文件先打成一个包（<code>tar</code>命令），然后再用压缩程序进行压缩（<code>gzip</code>、<code>bzip2</code>命令）。</p>
-<p>Linux下最常用的打包程序就是<code>tar</code>了，使用<code>tar</code>程序打出来的包我们常称为<code>tar</code>包，<code>tar</code>包文件的命令通常都是以<code>.tar</code>结尾的。生成<code>tar</code>包后，就可以用其它的程序来进行压缩。</p>
-<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar [参数] [文件]</span><br></pre></td></tr></table></figure>
-<h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>用来压缩和解压文件，<code>tar</code>本身不具有压缩功能，是调用压缩功能实现的压缩。</p>
-<h4 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h4><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-A</td>
-<td>新增文件到以存在的备份文件</td>
-</tr>
-<tr>
-<td>-B</td>
-<td>设置区块大小</td>
-</tr>
-<tr>
-<td>-c</td>
-<td>建立新的备份文件</td>
-</tr>
-<tr>
-<td>-C &lt;目录&gt;</td>
-<td>这个选项用在解压缩，若要在特定目录解压缩，可以使用这个选项</td>
-</tr>
-<tr>
-<td>-d</td>
-<td>记录文件的差别</td>
-</tr>
-<tr>
-<td>-r</td>
-<td>添加文件到已经压缩的文件</td>
-</tr>
-<tr>
-<td>-u</td>
-<td>添加改变了和现有的文件到已经存在的压缩文件</td>
-</tr>
-<tr>
-<td>-x</td>
-<td>从备份文件中还原文件</td>
-</tr>
-<tr>
-<td>-t</td>
-<td>列出备份文件的内容</td>
-</tr>
-<tr>
-<td>-z</td>
-<td>通过gzip指令处理备份文件</td>
-</tr>
-<tr>
-<td>-j</td>
-<td>支持bzip2解压文件</td>
-</tr>
-<tr>
-<td>-Z</td>
-<td>通过compress指令处理备份文件</td>
-</tr>
-<tr>
-<td>-v</td>
-<td>显示操作过程</td>
-</tr>
-<tr>
-<td>-l</td>
-<td>文件系统边界设置</td>
-</tr>
-<tr>
-<td>-k</td>
-<td>保留原有文件不覆盖</td>
-</tr>
-<tr>
-<td>-m</td>
-<td>保留文件不被覆盖</td>
-</tr>
-<tr>
-<td>-w</td>
-<td>确认压缩文件的正确性</td>
-</tr>
-<tr>
-<td>-f &lt;备份文件&gt;</td>
-<td>指定备份文件</td>
-</tr>
-<tr>
-<td>-b &lt;区块数目&gt;</td>
-<td>设置每笔记录的区块数目，每个区块大小为12Bytes</td>
-</tr>
-<tr>
-<td>-p</td>
-<td>用原来的文件权限还原文件</td>
-</tr>
-<tr>
-<td>-P</td>
-<td>文件名使用绝对名称，不移除文件名称前的”/“号</td>
-</tr>
-<tr>
-<td>-N</td>
-<td>只将较指定日期更新的文件保存到备份文件里</td>
-</tr>
-<tr>
-<td>–version</td>
-<td>显示版本信息</td>
-</tr>
-<tr>
-<td>–exclude &lt;文件&gt;</td>
-<td>排除某个文件</td>
-</tr>
-</tbody>
-</table>
-<h4 id="常见的解压-压缩命令"><a href="#常见的解压-压缩命令" class="headerlink" title="常见的解压/压缩命令"></a>常见的解压/压缩命令</h4><p><code>.tar</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解包：tar xvf FileName.tar</span><br><span class="line">打包：tar cvf FileName.tar DirName</span><br></pre></td></tr></table></figure>
-<p><code>.gz</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压1：gunzip FileName.gz</span><br><span class="line">解压2：gzip -d FileName.gz</span><br><span class="line">压缩：gzip FileName</span><br></pre></td></tr></table></figure>
-<p><code>.tar.gz</code>文件 和 <code>.tgz</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：tar zxvf FileName.tar.gz</span><br><span class="line">压缩：tar zcvf FileName.tar.gz DirName</span><br></pre></td></tr></table></figure>
-<p><code>.bz2</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压1：bzip2 -d FileName.bz2</span><br><span class="line">解压2：bunzip2 FileName.bz2</span><br><span class="line">压缩： bzip2 -z FileName</span><br></pre></td></tr></table></figure>
-<p><code>.tar.bz2</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：tar jxvf FileName.tar.bz2</span><br><span class="line">压缩：tar jcvf FileName.tar.bz2 DirName</span><br></pre></td></tr></table></figure>
-<p><code>.bz</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压1：bzip2 -d FileName.bz</span><br><span class="line">解压2：bunzip2 FileName.bz</span><br><span class="line">压缩：未知</span><br></pre></td></tr></table></figure>
-<p><code>.tar.bz</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：tar jxvf FileName.tar.bz</span><br><span class="line">压缩：未知</span><br></pre></td></tr></table></figure>
-<p><code>.Z</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：uncompress FileName.Z</span><br><span class="line">压缩：compress FileName</span><br></pre></td></tr></table></figure>
-<p><code>.tar.Z</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：tar Zxvf FileName.tar.Z</span><br><span class="line">压缩：tar Zcvf FileName.tar.Z DirName</span><br></pre></td></tr></table></figure>
-<p><code>.zip</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：unzip FileName.zip</span><br><span class="line">压缩：zip FileName.zip DirName</span><br></pre></td></tr></table></figure>
-<p><code>.rar</code>文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">解压：rar x FileName.rar</span><br><span class="line">压缩：rar a FileName.rar DirName</span><br></pre></td></tr></table></figure>
-<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><ul>
-<li>tar -cvf testlog.tar testlog.log | tar -zcvf testlog.tar.gz testlog.log | tar -jcvf testlog.tar.bz2 testlog.log</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 4</span><br><span class="line">-rw-r--r-- 1 root root 94 Jan  4 17:07 testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -cvf testlog.tar testlog.log </span><br><span class="line">testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -zcvf testlog.tar.gz testlog.log </span><br><span class="line">testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -jcvf testlog.tar.bz2 testlog.log </span><br><span class="line">testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 24</span><br><span class="line">-rw-r--r-- 1 root root    94 Jan  4 17:07 testlog.log</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br></pre></td></tr></table></figure>
-<p>将文件只打包不压缩、以gzip压缩、以bzip2压缩。</p>
-<ul>
-<li>tar -ztvf testlog.tar.gz</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -ztvf testlog.tar.gz </span><br><span class="line">-rw-r--r-- root/root        94 2018-01-04 17:07 testlog.log</span><br></pre></td></tr></table></figure>
-<p>查看testlog.tar.gz中有哪些文件。</p>
-<ul>
-<li>tar -zxvf testlog.tar.gz</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 24</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -zxvf testlog.tar.gz</span><br><span class="line">testlog.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 28</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root    94 Jan  4 17:07 testlog.log</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br></pre></td></tr></table></figure>
-<p>将testlog.tar.gz解压缩。</p>
-<ul>
-<li>tar -zcvf testlogs.tar.gz testlog1.log</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -zcvf testlogs.tar.gz testlog1.log testlog2.log </span><br><span class="line">testlog1.log</span><br><span class="line">testlog2.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 36</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root    13 Jan  4 17:21 testlog1.log</span><br><span class="line">-rw-r--r-- 1 root root    25 Jan  4 17:21 testlog2.log</span><br><span class="line">-rw-r--r-- 1 root root   152 Jan  4 17:21 testlogs.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -ztvf testlogs.tar.gz </span><br><span class="line">-rw-r--r-- root/root        13 2018-01-04 17:21 testlog1.log</span><br><span class="line">-rw-r--r-- root/root        25 2018-01-04 17:21 testlog2.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# rm -rf testlog1.log </span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 32</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root    25 Jan  4 17:21 testlog2.log</span><br><span class="line">-rw-r--r-- 1 root root   152 Jan  4 17:21 testlogs.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# tar -zxvf testlogs.tar.gz testlog1.log</span><br><span class="line">testlog1.log</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt testtar]# ll</span><br><span class="line">total 36</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  4 17:17 testlog</span><br><span class="line">-rw-r--r-- 1 root root    13 Jan  4 17:21 testlog1.log</span><br><span class="line">-rw-r--r-- 1 root root    25 Jan  4 17:21 testlog2.log</span><br><span class="line">-rw-r--r-- 1 root root   152 Jan  4 17:21 testlogs.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root 10240 Jan  4 17:08 testlog.tar</span><br><span class="line">-rw-r--r-- 1 root root   128 Jan  4 17:08 testlog.tar.bz2</span><br><span class="line">-rw-r--r-- 1 root root   125 Jan  4 17:08 testlog.tar.gz</span><br></pre></td></tr></table></figure>
-<p>从压缩包中解压出指定文件。</p>
-<ul>
-<li>tar -N “2018/01/03” -zcvf testlog.tar.gz test: 指定文件夹中的文件比某个日期新的才备份</li>
-<li>tar –exclude testlog/testlog1.log -zcvf testlogs.tar.gz testlog/*: 排除文件夹中的某个文件</li>
-</ul>
-<p>Read More：</p>
-<blockquote>
-<p><a href="http://www.cnblogs.com/peida/archive/2012/11/30/2795656.html" target="_blank" rel="noopener">每天一个linux命令（28）：tar命令</a> <a href="http://www.runoob.com/linux/linux-comm-tar.html" target="_blank" rel="noopener">Linux tar命令</a>  <a href="http://wangchujiang.com/linux-command/c/tar.html" target="_blank" rel="noopener">tar</a> </p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux/Unix</category>
-      </categories>
-      <tags>
-        <tag>命令</tag>
-        <tag>Linux</tag>
-        <tag>tar</tag>
       </tags>
   </entry>
   <entry>
@@ -4845,6 +4862,182 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux命令-ls</title>
+    <url>/2018/04/15/linuxls/</url>
+    <content><![CDATA[<p>Linux ls命令用于显示指定工作目录下之内容（列出目前工作目录所含之文件及子目录），在Linux中是使用率较高的命令，ls命令的输出信息可以进行彩色加亮显示，以区分不同类型的文件。</p>
+<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ls [OPTION]... [FILE]...</span><br></pre></td></tr></table></figure>
+<h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>列出目标目录中所有的子目录和文件。</p>
+<h4 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>显示所有文件及目录（ls内定将文件名或目录名称开头为”.”的视为隐藏档，不会列出）</td>
+</tr>
+<tr>
+<td>-A</td>
+<td>同 -a ，但不列出 “.”（当前目录）及 “..”（父目录）</td>
+</tr>
+<tr>
+<td>-C</td>
+<td>多列显示输出结果。这是默认选项</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>除文件名称外，亦将文件型态、权限、拥有者、文件大小等资讯详细列出</td>
+</tr>
+<tr>
+<td>-F</td>
+<td>在列出的文件名称后加一符号；例如可执行档则加 “*”, 目录则加 “/“</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>与”-lt”选项连用时，按照文件状态时间排序输出目录内容，排序的依据是文件的索引节点中的ctime字段。与”-l”选项连用时，则排序的一句是文件的状态改变时间</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>仅显示目录名，而不显示目录下的内容列表。显示符号链接文件本身，而不显示其所指向的目录列表</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>此参数的效果和同时指定”aU”参数相同，并关闭”lst”参数的效果；</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>显示文件索引节点号（inode）。一个索引节点代表一个文件</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>以KB（千字节）为单位显示文件大小</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>用”,”号区隔每个文件和目录的名称</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>以用户识别码和群组识别码替代其名称</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>将文件以相反次序显示(原定依英文字母次序)</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>显示文件和目录的大小，以区块为单位</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>将文件依建立时间之先后次序列出</td>
+</tr>
+<tr>
+<td>-L</td>
+<td>如果遇到性质为符号链接的文件或目录，直接列出该链接所指向的原始文件或目录</td>
+</tr>
+<tr>
+<td>-R</td>
+<td>递归列出该目录中的所有文件</td>
+</tr>
+<tr>
+<td>–full-time</td>
+<td>列出完整的日期与时间</td>
+</tr>
+<tr>
+<td>–color[=WHEN] (WHEN=never/always/auto)</td>
+<td>使用不同的颜色高亮显示不同类型的</td>
+</tr>
+<tr>
+<td>-g</td>
+<td>类似 -l，但不列出所有者</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>以容易理解的格式列出文件大小 (例如 1K 234M 2G)</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>根据文件大小排序</td>
+</tr>
+<tr>
+<td>-X</td>
+<td>根据扩展名排序</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>逐行列出项目而不是逐栏列出</td>
+</tr>
+</tbody>
+</table>
+<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><ul>
+<li><code>ls -l ly</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -l ly</span><br><span class="line">total 48</span><br><span class="line">drwxr-xr-x  8 root root 4096 Dec 14 11:49 analysisweb</span><br><span class="line">drwxr-xr-x  9 root root 4096 Dec 28 16:19 atsbtsp</span><br><span class="line">drwxr-xr-x  2 root root 4096 Sep 12 14:37 auth_server_ratio</span><br><span class="line">drwxr-xr-x  7 root root 4096 Jan  2 10:10 datawritehbase</span><br><span class="line">drwxr-xr-x 10 root root 4096 Dec 13 14:54 hbasequeryweb</span><br><span class="line">drwxr-xr-x  7 root root 4096 Oct  9 18:46 live_alarm_monitor</span><br><span class="line">drwxr-xr-x  9 root root 4096 Oct 27 11:59 openrestywork</span><br><span class="line">drwxr-xr-x  9 root root 4096 Dec 27 16:20 prepullvidcs</span><br><span class="line">drwxr-xr-x  2 root root 4096 Nov 23 20:26 push_ffmpeg</span><br><span class="line">drwxr-xr-x  3 root root 4096 Jan  4 18:46 testkafka</span><br><span class="line">drwxr-xr-x  3 root root 4096 Nov 29 14:32 virtualenv</span><br><span class="line">drwxr-xr-x  5 root root 4096 Oct 12 10:27 xiu_server_stat</span><br></pre></td></tr></table></figure>
+<p>单列显示某目录。</p>
+<ul>
+<li><code>ls</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls</span><br><span class="line">ly  zabbix</span><br></pre></td></tr></table></figure>
+<p>显示当前目录下非影藏文件与目录</p>
+<ul>
+<li><code>ls -a</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -a</span><br><span class="line">.  ..  ly  zabbix</span><br></pre></td></tr></table></figure>
+<p>显示当前目录下包括影藏文件在内的所有文件列表</p>
+<ul>
+<li><code>ls -l</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# </span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -l</span><br><span class="line">total 8</span><br><span class="line">drwxr-xr-x  15 root   root   4096 Jan  3 18:05 ly</span><br><span class="line">drwxr-xr-x.  2 zabbix zabbix 4096 Dec 21 18:05 zabbix</span><br></pre></td></tr></table></figure>
+<p>输出长格式列表</p>
+<ul>
+<li><code>ls -i -l</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -i -l</span><br><span class="line">total 8</span><br><span class="line">393222 drwxr-xr-x  15 root   root   4096 Jan  3 18:05 ly</span><br><span class="line">393219 drwxr-xr-x.  2 zabbix zabbix 4096 Dec 21 18:05 zabbix</span><br></pre></td></tr></table></figure>
+<p>输出文件的inode信息</p>
+<ul>
+<li><code>ls -m</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -m</span><br><span class="line">ly, zabbix</span><br></pre></td></tr></table></figure>
+<p>水平输出文件列表</p>
+<ul>
+<li><code>ls -t -l</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -t -l</span><br><span class="line">total 303312</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</span><br></pre></td></tr></table></figure>
+<p>最近修改的文件显示在最前面</p>
+<ul>
+<li><code>ls -F -l</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -F -l</span><br><span class="line">total 303312</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client/</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6/</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1/</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1/</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3/</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64/</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5/</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38/</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka/</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9/</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13/</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1/</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6/</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama/</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar/</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0/</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0/</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br></pre></td></tr></table></figure>
+<p>安装特殊字符对文件进行分类</p>
+<ul>
+<li><code>ls -l --color=auto | ls -l --color=never | ls -l --color=always</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=auto</span><br><span class="line">total 303312</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=never</span><br><span class="line">total 303312</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=always</span><br><span class="line">total 303312</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br></pre></td></tr></table></figure>
+<p>单列列出文件并标记颜色</p>
+<ul>
+<li><code>ls -l n*</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l n*</span><br><span class="line">-rw-r--r--  1 root root    981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">-rw-r--r--  1 root root  11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--  1 root root  31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line"></span><br><span class="line">nginx-1.12.1:</span><br><span class="line">total 732</span><br><span class="line">drwxr-xr-x 6 1001 1001   4096 Aug 30 20:00 auto</span><br><span class="line">-rw-r--r-- 1 1001 1001 277349 Jul 11 21:24 CHANGES</span><br><span class="line">-rw-r--r-- 1 1001 1001 422542 Jul 11 21:24 CHANGES.ru</span><br><span class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 conf</span><br><span class="line">-rwxr-xr-x 1 1001 1001   2481 Jul 11 21:24 configure</span><br><span class="line">drwxr-xr-x 4 1001 1001   4096 Aug 30 20:00 contrib</span><br><span class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 html</span><br><span class="line">-rw-r--r-- 1 1001 1001   1397 Jul 11 21:24 LICENSE</span><br><span class="line">-rw-r--r-- 1 root root    376 Aug 30 20:11 Makefile</span><br><span class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 man</span><br><span class="line">drwxr-xr-x 3 root root   4096 Aug 30 20:12 objs</span><br><span class="line">-rw-r--r-- 1 1001 1001     49 Jul 11 21:24 README</span><br><span class="line">drwxr-xr-x 9 1001 1001   4096 Aug 30 20:00 src</span><br><span class="line"></span><br><span class="line">node-v8.9.3:</span><br><span class="line">total 596</span><br><span class="line">-rwxr-xr-x  1  502 games  1944 Dec  8 23:22 android-configure</span><br><span class="line">-rw-r--r--  1  502 games 62552 Dec  8 23:22 AUTHORS</span><br><span class="line">drwxr-xr-x 32  502 games  4096 Jan  2 11:13 benchmark</span><br><span class="line">-rw-r--r--  1  502 games   263 Dec  8 23:22 BSDmakefile</span><br><span class="line">-rw-r--r--  1  502 games 13117 Dec  8 23:22 BUILDING.md</span><br><span class="line">-rw-r--r--  1  502 games 53576 Dec  8 23:22 CHANGELOG.md</span><br><span class="line">-rw-r--r--  1  502 games   181 Dec  8 23:22 CODE_OF_CONDUCT.md</span><br><span class="line">-rw-r--r--  1  502 games 30242 Dec  8 23:22 COLLABORATOR_GUIDE.md</span><br><span class="line">-rw-r--r--  1  502 games 14659 Dec  8 23:22 common.gypi</span><br><span class="line">-rw-r--r--  1 root root   2748 Jan  2 11:13 config.gypi</span><br><span class="line">-rw-r--r--  1 root root    223 Jan  2 11:13 config.mk</span><br><span class="line">-rwxr-xr-x  1  502 games 50245 Dec  8 23:22 configure</span><br><span class="line">-rw-r--r--  1  502 games 37017 Dec  8 23:22 CONTRIBUTING.md</span><br><span class="line">-rw-r--r--  1  502 games  3454 Dec  8 23:22 CPP_STYLE_GUIDE.md</span><br><span class="line">drwxr-xr-x 13  502 games  4096 Jan  2 11:13 deps</span><br><span class="line">drwxr-xr-x  6  502 games  4096 Jan  2 11:13 doc</span><br><span class="line">-rw-r--r--  1  502 games  5832 Dec  8 23:22 GOVERNANCE.md</span><br><span class="line">-rw-r--r--  1 root root  60153 Jan  2 11:13 icu_config.gypi</span><br><span class="line">drwxr-xr-x  3  502 games  4096 Jan  2 11:13 lib</span><br><span class="line">-rw-r--r--  1  502 games 59059 Dec  8 23:22 LICENSE</span><br><span class="line">-rw-r--r--  1  502 games 37468 Dec  8 23:22 Makefile</span><br><span class="line">-rw-r--r--  1  502 games 24881 Dec  8 23:23 node.gyp</span><br><span class="line">-rw-r--r--  1  502 games 10585 Dec  8 23:23 node.gypi</span><br><span class="line">drwxr-xr-x  5 root root   4096 Jan  2 11:14 out</span><br><span class="line">-rw-r--r--  1  502 games 26525 Dec  8 23:22 README.md</span><br><span class="line">drwxr-xr-x  4  502 games  4096 Jan  2 11:13 src</span><br><span class="line">drwxr-xr-x 22  502 games  4096 Jan  2 11:13 test</span><br><span class="line">drwxr-xr-x  9  502 games  4096 Jan  2 11:13 tools</span><br><span class="line">-rw-r--r--  1  502 games 24869 Dec  8 23:23 vcbuild.bat</span><br><span class="line"></span><br><span class="line">node-v8.9.3-linux-x64:</span><br><span class="line">total 164</span><br><span class="line">drwxrwxr-x 2  500  500  4096 Jan  2 12:14 bin</span><br><span class="line">-rw-rw-r-- 1  500  500 53576 Dec  8 22:10 CHANGELOG.md</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  2 11:40 etc</span><br><span class="line">drwxrwxr-x 3  500  500  4096 Dec  8 22:10 include</span><br><span class="line">drwxrwxr-x 3  500  500  4096 Dec  8 22:10 lib</span><br><span class="line">-rw-rw-r-- 1  500  500 59059 Dec  8 22:10 LICENSE</span><br><span class="line">-rw-rw-r-- 1  500  500 26525 Dec  8 22:10 README.md</span><br><span class="line">drwxrwxr-x 5  500  500  4096 Dec  8 22:10 share</span><br></pre></td></tr></table></figure>
+<p>单列列出以某个字符开头的文件和目录的详细内容</p>
+<p>Read More: </p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/peida/archive/2012/10/23/2734829.html" target="_blank" rel="noopener">每天一个linux命令(1)：ls命令</a> <a href="http://www.runoob.com/linux/linux-comm-ls.html" target="_blank" rel="noopener">Linux ls命令</a> <a href="http://man.linuxde.net/ls" target="_blank" rel="noopener">ls命令</a>  </p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Linux/Unix</category>
+      </categories>
+      <tags>
+        <tag>命令</tag>
+        <tag>Linux</tag>
+        <tag>ls</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux命令-netstat</title>
     <url>/2018/01/02/linuxnetstat/</url>
     <content><![CDATA[<h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat [-acCeFghilMnNoprstuvVwx][-A&lt;网络类型&gt;][--ip]</span><br></pre></td></tr></table></figure>
@@ -5069,182 +5262,6 @@
         <tag>命令</tag>
         <tag>Linux</tag>
         <tag>netstat</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux命令-ls</title>
-    <url>/2018/04/15/linuxls/</url>
-    <content><![CDATA[<p>Linux ls命令用于显示指定工作目录下之内容（列出目前工作目录所含之文件及子目录），在Linux中是使用率较高的命令，ls命令的输出信息可以进行彩色加亮显示，以区分不同类型的文件。</p>
-<h4 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ls [OPTION]... [FILE]...</span><br></pre></td></tr></table></figure>
-<h4 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h4><p>列出目标目录中所有的子目录和文件。</p>
-<h4 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h4><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-a</td>
-<td>显示所有文件及目录（ls内定将文件名或目录名称开头为”.”的视为隐藏档，不会列出）</td>
-</tr>
-<tr>
-<td>-A</td>
-<td>同 -a ，但不列出 “.”（当前目录）及 “..”（父目录）</td>
-</tr>
-<tr>
-<td>-C</td>
-<td>多列显示输出结果。这是默认选项</td>
-</tr>
-<tr>
-<td>-l</td>
-<td>除文件名称外，亦将文件型态、权限、拥有者、文件大小等资讯详细列出</td>
-</tr>
-<tr>
-<td>-F</td>
-<td>在列出的文件名称后加一符号；例如可执行档则加 “*”, 目录则加 “/“</td>
-</tr>
-<tr>
-<td>-c</td>
-<td>与”-lt”选项连用时，按照文件状态时间排序输出目录内容，排序的依据是文件的索引节点中的ctime字段。与”-l”选项连用时，则排序的一句是文件的状态改变时间</td>
-</tr>
-<tr>
-<td>-d</td>
-<td>仅显示目录名，而不显示目录下的内容列表。显示符号链接文件本身，而不显示其所指向的目录列表</td>
-</tr>
-<tr>
-<td>-f</td>
-<td>此参数的效果和同时指定”aU”参数相同，并关闭”lst”参数的效果；</td>
-</tr>
-<tr>
-<td>-i</td>
-<td>显示文件索引节点号（inode）。一个索引节点代表一个文件</td>
-</tr>
-<tr>
-<td>-k</td>
-<td>以KB（千字节）为单位显示文件大小</td>
-</tr>
-<tr>
-<td>-m</td>
-<td>用”,”号区隔每个文件和目录的名称</td>
-</tr>
-<tr>
-<td>-n</td>
-<td>以用户识别码和群组识别码替代其名称</td>
-</tr>
-<tr>
-<td>-r</td>
-<td>将文件以相反次序显示(原定依英文字母次序)</td>
-</tr>
-<tr>
-<td>-s</td>
-<td>显示文件和目录的大小，以区块为单位</td>
-</tr>
-<tr>
-<td>-t</td>
-<td>将文件依建立时间之先后次序列出</td>
-</tr>
-<tr>
-<td>-L</td>
-<td>如果遇到性质为符号链接的文件或目录，直接列出该链接所指向的原始文件或目录</td>
-</tr>
-<tr>
-<td>-R</td>
-<td>递归列出该目录中的所有文件</td>
-</tr>
-<tr>
-<td>–full-time</td>
-<td>列出完整的日期与时间</td>
-</tr>
-<tr>
-<td>–color[=WHEN] (WHEN=never/always/auto)</td>
-<td>使用不同的颜色高亮显示不同类型的</td>
-</tr>
-<tr>
-<td>-g</td>
-<td>类似 -l，但不列出所有者</td>
-</tr>
-<tr>
-<td>-h</td>
-<td>以容易理解的格式列出文件大小 (例如 1K 234M 2G)</td>
-</tr>
-<tr>
-<td>-S</td>
-<td>根据文件大小排序</td>
-</tr>
-<tr>
-<td>-X</td>
-<td>根据扩展名排序</td>
-</tr>
-<tr>
-<td>-x</td>
-<td>逐行列出项目而不是逐栏列出</td>
-</tr>
-</tbody>
-</table>
-<h4 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h4><ul>
-<li><code>ls -l ly</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -l ly</span><br><span class="line">total 48</span><br><span class="line">drwxr-xr-x  8 root root 4096 Dec 14 11:49 analysisweb</span><br><span class="line">drwxr-xr-x  9 root root 4096 Dec 28 16:19 atsbtsp</span><br><span class="line">drwxr-xr-x  2 root root 4096 Sep 12 14:37 auth_server_ratio</span><br><span class="line">drwxr-xr-x  7 root root 4096 Jan  2 10:10 datawritehbase</span><br><span class="line">drwxr-xr-x 10 root root 4096 Dec 13 14:54 hbasequeryweb</span><br><span class="line">drwxr-xr-x  7 root root 4096 Oct  9 18:46 live_alarm_monitor</span><br><span class="line">drwxr-xr-x  9 root root 4096 Oct 27 11:59 openrestywork</span><br><span class="line">drwxr-xr-x  9 root root 4096 Dec 27 16:20 prepullvidcs</span><br><span class="line">drwxr-xr-x  2 root root 4096 Nov 23 20:26 push_ffmpeg</span><br><span class="line">drwxr-xr-x  3 root root 4096 Jan  4 18:46 testkafka</span><br><span class="line">drwxr-xr-x  3 root root 4096 Nov 29 14:32 virtualenv</span><br><span class="line">drwxr-xr-x  5 root root 4096 Oct 12 10:27 xiu_server_stat</span><br></pre></td></tr></table></figure>
-<p>单列显示某目录。</p>
-<ul>
-<li><code>ls</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls</span><br><span class="line">ly  zabbix</span><br></pre></td></tr></table></figure>
-<p>显示当前目录下非影藏文件与目录</p>
-<ul>
-<li><code>ls -a</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -a</span><br><span class="line">.  ..  ly  zabbix</span><br></pre></td></tr></table></figure>
-<p>显示当前目录下包括影藏文件在内的所有文件列表</p>
-<ul>
-<li><code>ls -l</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# </span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -l</span><br><span class="line">total 8</span><br><span class="line">drwxr-xr-x  15 root   root   4096 Jan  3 18:05 ly</span><br><span class="line">drwxr-xr-x.  2 zabbix zabbix 4096 Dec 21 18:05 zabbix</span><br></pre></td></tr></table></figure>
-<p>输出长格式列表</p>
-<ul>
-<li><code>ls -i -l</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -i -l</span><br><span class="line">total 8</span><br><span class="line">393222 drwxr-xr-x  15 root   root   4096 Jan  3 18:05 ly</span><br><span class="line">393219 drwxr-xr-x.  2 zabbix zabbix 4096 Dec 21 18:05 zabbix</span><br></pre></td></tr></table></figure>
-<p>输出文件的inode信息</p>
-<ul>
-<li><code>ls -m</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt home]# ls -m</span><br><span class="line">ly, zabbix</span><br></pre></td></tr></table></figure>
-<p>水平输出文件列表</p>
-<ul>
-<li><code>ls -t -l</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -t -l</span><br><span class="line">total 303312</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</span><br></pre></td></tr></table></figure>
-<p>最近修改的文件显示在最前面</p>
-<ul>
-<li><code>ls -F -l</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -F -l</span><br><span class="line">total 303312</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client/</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6/</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1/</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1/</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3/</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64/</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5/</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38/</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka/</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9/</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13/</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1/</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6/</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama/</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar/</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0/</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0/</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br></pre></td></tr></table></figure>
-<p>安装特殊字符对文件进行分类</p>
-<ul>
-<li><code>ls -l --color=auto | ls -l --color=never | ls -l --color=always</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=auto</span><br><span class="line">total 303312</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=never</span><br><span class="line">total 303312</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l --color=always</span><br><span class="line">total 303312</span><br><span class="line">-rw-------.  1 root root       1267 Mar 12  2014 anaconda-ks.cfg</span><br><span class="line">-rw-r--r--   1 root root    1595408 Nov  7  2016 get-pip.py</span><br><span class="line">drwxr-xr-x  10 root root       4096 Jan  3 13:26 go_kafka_client</span><br><span class="line">drwxr-xr-x  26 root root       4096 Aug 22 11:04 hbase-1.2.6</span><br><span class="line">-rw-r--r--   1 root root   16054584 May 29  2017 hbase-1.2.6-src.tar.gz</span><br><span class="line">drwxrwxr-x  10 root root       4096 Jan  4 15:21 librdkafka-0.11.1</span><br><span class="line">-rw-r--r--   1 root root     859238 Jan  3 13:01 librdkafka-0.11.1.tar.gz</span><br><span class="line">-rw-r--r--   1 root root  194351104 Jul  7 15:25 long.flv</span><br><span class="line">drwxr-xr-x   9 1001  1001      4096 Aug 30 20:05 nginx-1.12.1</span><br><span class="line">-rw-r--r--   1 root root     981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">drwxr-xr-x  10  502 games      4096 Jan  2 11:13 node-v8.9.3</span><br><span class="line">drwxrwxr-x   7  500   500      4096 Jan  2 11:40 node-v8.9.3-linux-x64</span><br><span class="line">-rw-r--r--   1 root root   11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--   1 root root   31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line">drwxrwxr-x   6 1000  1000      4096 Oct 27 11:35 openresty-1.11.2.5</span><br><span class="line">-rw-r--r--   1 root root    4183884 Oct 27 10:55 openresty-1.11.2.5.tar.gz</span><br><span class="line">drwxr-xr-x   9 1169  1169     12288 Aug 30 20:02 pcre-8.38</span><br><span class="line">-rw-r--r--   1 root root    2053336 Aug 30 19:55 pcre-8.38.tar.gz</span><br><span class="line">drwxr-xr-x  11 root root       4096 Jan  4 14:26 pykafka</span><br><span class="line">drwxr-xr-x   9 1125  1125      4096 Apr 25  2009 pyOpenSSL-0.9</span><br><span class="line">-rw-r--r--   1 root root     197981 Apr 25  2009 pyOpenSSL-0.9.tar.gz</span><br><span class="line">drwxr-xr-x  18 1000  1000      4096 Aug 28 15:15 Python-2.7.13</span><br><span class="line">-rw-r--r--   1 root root   17076672 Dec 18  2016 Python-2.7.13.tgz</span><br><span class="line">drwxr-xr-x  18  501   501      4096 Aug 11 09:13 Python-3.6.1</span><br><span class="line">-rw-r--r--   1 root root   22540566 Mar 21  2017 Python-3.6.1.tgz</span><br><span class="line">drwxrwxr-x   6 root root       4096 Dec  5 01:01 redis-4.0.6</span><br><span class="line">-rw-r--r--   1 root root    1723533 Dec  5 01:02 redis-4.0.6.tar.gz</span><br><span class="line">drwxr-xr-x   8 root root      12288 Jan  3 13:31 sarama</span><br><span class="line">drwxr-xr-x   2 root root       4096 Jan  4 17:54 testtar</span><br><span class="line">drwxr-xr-x  11 1000 ftp        4096 Aug 22 12:01 thrift-0.10.0</span><br><span class="line">-rw-r--r--   1 root root    3340748 Jun 20  2017 thrift-0.10.0.tar.gz</span><br><span class="line">drwxr-xr-x   7  501 games      4096 Aug 11 09:26 Twisted-17.5.0</span><br><span class="line">-rw-r--r--   1 root root    2993816 Jun 11  2017 Twisted-17.5.0.tar.bz2</span><br></pre></td></tr></table></figure>
-<p>单列列出文件并标记颜色</p>
-<ul>
-<li><code>ls -l n*</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@hcdn-others-worker-dev100-bjlt ~]# ls -l n*</span><br><span class="line">-rw-r--r--  1 root root    981093 Jul 11 23:45 nginx-1.12.1.tar.gz</span><br><span class="line">-rw-r--r--  1 root root  11395380 Dec  8 22:11 node-v8.9.3-linux-x64.tar.xz</span><br><span class="line">-rw-r--r--  1 root root  31121503 Dec  8 23:23 node-v8.9.3.tar.gz</span><br><span class="line"></span><br><span class="line">nginx-1.12.1:</span><br><span class="line">total 732</span><br><span class="line">drwxr-xr-x 6 1001 1001   4096 Aug 30 20:00 auto</span><br><span class="line">-rw-r--r-- 1 1001 1001 277349 Jul 11 21:24 CHANGES</span><br><span class="line">-rw-r--r-- 1 1001 1001 422542 Jul 11 21:24 CHANGES.ru</span><br><span class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 conf</span><br><span class="line">-rwxr-xr-x 1 1001 1001   2481 Jul 11 21:24 configure</span><br><span class="line">drwxr-xr-x 4 1001 1001   4096 Aug 30 20:00 contrib</span><br><span class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 html</span><br><span class="line">-rw-r--r-- 1 1001 1001   1397 Jul 11 21:24 LICENSE</span><br><span class="line">-rw-r--r-- 1 root root    376 Aug 30 20:11 Makefile</span><br><span class="line">drwxr-xr-x 2 1001 1001   4096 Aug 30 20:00 man</span><br><span class="line">drwxr-xr-x 3 root root   4096 Aug 30 20:12 objs</span><br><span class="line">-rw-r--r-- 1 1001 1001     49 Jul 11 21:24 README</span><br><span class="line">drwxr-xr-x 9 1001 1001   4096 Aug 30 20:00 src</span><br><span class="line"></span><br><span class="line">node-v8.9.3:</span><br><span class="line">total 596</span><br><span class="line">-rwxr-xr-x  1  502 games  1944 Dec  8 23:22 android-configure</span><br><span class="line">-rw-r--r--  1  502 games 62552 Dec  8 23:22 AUTHORS</span><br><span class="line">drwxr-xr-x 32  502 games  4096 Jan  2 11:13 benchmark</span><br><span class="line">-rw-r--r--  1  502 games   263 Dec  8 23:22 BSDmakefile</span><br><span class="line">-rw-r--r--  1  502 games 13117 Dec  8 23:22 BUILDING.md</span><br><span class="line">-rw-r--r--  1  502 games 53576 Dec  8 23:22 CHANGELOG.md</span><br><span class="line">-rw-r--r--  1  502 games   181 Dec  8 23:22 CODE_OF_CONDUCT.md</span><br><span class="line">-rw-r--r--  1  502 games 30242 Dec  8 23:22 COLLABORATOR_GUIDE.md</span><br><span class="line">-rw-r--r--  1  502 games 14659 Dec  8 23:22 common.gypi</span><br><span class="line">-rw-r--r--  1 root root   2748 Jan  2 11:13 config.gypi</span><br><span class="line">-rw-r--r--  1 root root    223 Jan  2 11:13 config.mk</span><br><span class="line">-rwxr-xr-x  1  502 games 50245 Dec  8 23:22 configure</span><br><span class="line">-rw-r--r--  1  502 games 37017 Dec  8 23:22 CONTRIBUTING.md</span><br><span class="line">-rw-r--r--  1  502 games  3454 Dec  8 23:22 CPP_STYLE_GUIDE.md</span><br><span class="line">drwxr-xr-x 13  502 games  4096 Jan  2 11:13 deps</span><br><span class="line">drwxr-xr-x  6  502 games  4096 Jan  2 11:13 doc</span><br><span class="line">-rw-r--r--  1  502 games  5832 Dec  8 23:22 GOVERNANCE.md</span><br><span class="line">-rw-r--r--  1 root root  60153 Jan  2 11:13 icu_config.gypi</span><br><span class="line">drwxr-xr-x  3  502 games  4096 Jan  2 11:13 lib</span><br><span class="line">-rw-r--r--  1  502 games 59059 Dec  8 23:22 LICENSE</span><br><span class="line">-rw-r--r--  1  502 games 37468 Dec  8 23:22 Makefile</span><br><span class="line">-rw-r--r--  1  502 games 24881 Dec  8 23:23 node.gyp</span><br><span class="line">-rw-r--r--  1  502 games 10585 Dec  8 23:23 node.gypi</span><br><span class="line">drwxr-xr-x  5 root root   4096 Jan  2 11:14 out</span><br><span class="line">-rw-r--r--  1  502 games 26525 Dec  8 23:22 README.md</span><br><span class="line">drwxr-xr-x  4  502 games  4096 Jan  2 11:13 src</span><br><span class="line">drwxr-xr-x 22  502 games  4096 Jan  2 11:13 test</span><br><span class="line">drwxr-xr-x  9  502 games  4096 Jan  2 11:13 tools</span><br><span class="line">-rw-r--r--  1  502 games 24869 Dec  8 23:23 vcbuild.bat</span><br><span class="line"></span><br><span class="line">node-v8.9.3-linux-x64:</span><br><span class="line">total 164</span><br><span class="line">drwxrwxr-x 2  500  500  4096 Jan  2 12:14 bin</span><br><span class="line">-rw-rw-r-- 1  500  500 53576 Dec  8 22:10 CHANGELOG.md</span><br><span class="line">drwxr-xr-x 2 root root  4096 Jan  2 11:40 etc</span><br><span class="line">drwxrwxr-x 3  500  500  4096 Dec  8 22:10 include</span><br><span class="line">drwxrwxr-x 3  500  500  4096 Dec  8 22:10 lib</span><br><span class="line">-rw-rw-r-- 1  500  500 59059 Dec  8 22:10 LICENSE</span><br><span class="line">-rw-rw-r-- 1  500  500 26525 Dec  8 22:10 README.md</span><br><span class="line">drwxrwxr-x 5  500  500  4096 Dec  8 22:10 share</span><br></pre></td></tr></table></figure>
-<p>单列列出以某个字符开头的文件和目录的详细内容</p>
-<p>Read More: </p>
-<blockquote>
-<p><a href="http://www.cnblogs.com/peida/archive/2012/10/23/2734829.html" target="_blank" rel="noopener">每天一个linux命令(1)：ls命令</a> <a href="http://www.runoob.com/linux/linux-comm-ls.html" target="_blank" rel="noopener">Linux ls命令</a> <a href="http://man.linuxde.net/ls" target="_blank" rel="noopener">ls命令</a>  </p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Linux/Unix</category>
-      </categories>
-      <tags>
-        <tag>命令</tag>
-        <tag>Linux</tag>
-        <tag>ls</tag>
       </tags>
   </entry>
   <entry>
