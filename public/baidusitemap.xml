@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://runnerliu.github.io/2020/10/27/linux-centos-sys-time/</loc>
+    <lastmod>2020-10-27</lastmod>
+  </url>
+  <url>
     <loc>http://runnerliu.github.io/2020/10/27/gf-cli-series-0-md/</loc>
     <lastmod>2020-10-27</lastmod>
   </url>
