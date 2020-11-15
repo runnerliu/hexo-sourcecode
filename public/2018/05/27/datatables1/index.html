@@ -1,0 +1,1207 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="datatables,jquery,前端,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="LiuYang's BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Datatables 为是 JQuery 的一款表格插件库，是一个高度灵活的工具，可以将任何 HTML 表格添加高级的交互功能。特别是后台开发者，对前端相关框架或知识并不是很熟悉，在做一些内部使用的工具时，总会涉及到页面展示的功能，Buttons 同样是一个高度可定制的、免费并且开源的按钮 CSS 样式库。类似插件对于后台开发者来说，简直是福音。本文主要介绍 Datatables 的基本配置和使用">
+<meta name="keywords" content="datatables,jquery,前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Datatables使用系列-基础配置">
+<meta property="og:url" content="http://runnerliu.github.io/2018/05/27/datatables1/index.html">
+<meta property="og:site_name" content="LiuYang&#39;s BLOG">
+<meta property="og:description" content="Datatables 为是 JQuery 的一款表格插件库，是一个高度灵活的工具，可以将任何 HTML 表格添加高级的交互功能。特别是后台开发者，对前端相关框架或知识并不是很熟悉，在做一些内部使用的工具时，总会涉及到页面展示的功能，Buttons 同样是一个高度可定制的、免费并且开源的按钮 CSS 样式库。类似插件对于后台开发者来说，简直是福音。本文主要介绍 Datatables 的基本配置和使用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2018-05-27T222132.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2018-05-27T223227.png">
+<meta property="og:updated_time" content="2020-11-15T02:24:39.465Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Datatables使用系列-基础配置">
+<meta name="twitter:description" content="Datatables 为是 JQuery 的一款表格插件库，是一个高度灵活的工具，可以将任何 HTML 表格添加高级的交互功能。特别是后台开发者，对前端相关框架或知识并不是很熟悉，在做一些内部使用的工具时，总会涉及到页面展示的功能，Buttons 同样是一个高度可定制的、免费并且开源的按钮 CSS 样式库。类似插件对于后台开发者来说，简直是福音。本文主要介绍 Datatables 的基本配置和使用">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2018-05-27T222132.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2018/05/27/datatables1/">
+
+
+
+
+
+  <title> Datatables使用系列-基础配置 | LiuYang's BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LiuYang's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2018/05/27/datatables1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Datatables使用系列-基础配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-27T16:48:21+08:00">
+                2018-05-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/05/27/datatables1/" class="leancloud_visitors" data-flag-title="Datatables使用系列-基础配置">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://datatables.net/" target="_blank" rel="noopener">Datatables</a> 为是 <a href="https://jquery.com/" target="_blank" rel="noopener">JQuery</a> 的一款表格插件库，是一个高度灵活的工具，可以将任何 HTML 表格添加高级的交互功能。特别是后台开发者，对前端相关框架或知识并不是很熟悉，在做一些内部使用的工具时，总会涉及到页面展示的功能，<a href="http://www.bootcss.com/p/buttons/" target="_blank" rel="noopener">Buttons</a> 同样是一个高度可定制的、免费并且开源的按钮 CSS 样式库。类似插件对于后台开发者来说，简直是福音。本文主要介绍 <a href="https://datatables.net/" target="_blank" rel="noopener">Datatables</a> 的基本配置和使用。</p>
+<h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>从 <a href="https://datatables.net/download/" target="_blank" rel="noopener">Download</a> 页面可下载需要使用的 JS 文件和其他的插件，可以根据需求选择不同的样式、包文件和扩展文件，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Step 1. Choose a styling framework</span><br><span class="line">    Bootstrap 4</span><br><span class="line">Step 2. Select packages</span><br><span class="line">    jQuery 3</span><br><span class="line">    Bootstrap 4</span><br><span class="line">    DataTables</span><br><span class="line">Extensions</span><br><span class="line">    可选</span><br><span class="line">Step 3. Pick a download method</span><br><span class="line">    Minify</span><br><span class="line">    Concatenate</span><br><span class="line">    下载方式常用是CDN和本地文件方式（推荐）</span><br></pre></td></tr></table></figure>
+<p>然后我们下载打包好的文件到本地就可以了。</p>
+<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><p>将文件打包下载后，因为一般页面都是在 web 应用中使用，所以笔者创建了一个简单的 <a href="http://www.tornadoweb.org/en/stable/" target="_blank" rel="noopener">Tornado</a> 应用，将所有的静态文件放到了 <code>/static</code> 目录下：</p>
+<p> <img src="/images/2018-05-27T222132.png" alt="2018-05-27T222132"></p>
+<p><strong>注意：</strong> <code>jquery.js</code> 文件是必需的，目前使用 <code>3.0</code> 版本。</p>
+<p>然后我们可以创建一个简单的 HTML 静态页面，引入基本的 <code>js</code>  文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Datatables&lt;/title&gt;</span><br><span class="line"></span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;static/js/Bootstrap-4-4.0.0/css/bootstrap.css&quot;/&gt;</span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;static/js/DataTables-1.10.16/css/dataTables.bootstrap4.css&quot;/&gt;</span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;static/css/datatables.min.css&quot;/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;script src=&quot;static/js/jquery.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script src=&quot;static/js/Bootstrap-4-4.0.0/js/bootstrap.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script src=&quot;static/js/DataTables-1.10.16/js/jquery.dataTables.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script src=&quot;static/js/DataTables-1.10.16/js/dataTables.bootstrap4.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong> 如果在调试过程中，出现表格显示错误，请检查 <code>css</code> 文件和 <code>js</code>  文件的引用顺序。</p>
+<p>接下来创建一个 <code>div</code> 作为表格区域：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">    &lt;table id=&quot;test_dt&quot; class=&quot;table table-striped table-bordered&quot; cellspacing=&quot;0&quot; style=&quot;width: 100%&quot;&gt;</span><br><span class="line">        &lt;thead&gt;</span><br><span class="line">        &lt;tr&gt;</span><br><span class="line">            &lt;th&gt;id&lt;/th&gt;</span><br><span class="line">            &lt;th&gt;username&lt;/th&gt;</span><br><span class="line">            &lt;th&gt;sex&lt;/th&gt;</span><br><span class="line">            &lt;th&gt;address&lt;/th&gt;</span><br><span class="line">            &lt;th&gt;age&lt;/th&gt;</span><br><span class="line">        &lt;/tr&gt;</span><br><span class="line">        &lt;/thead&gt;</span><br><span class="line">    &lt;/table&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p><code>table</code> 中的 <code>class</code> 属性都是在 <code>css</code> 文件中定义好的，直接引用即可。</p>
+<p>然后就是通过 <code>js</code> 为 <code>test_dt</code> 表格填充数据，数据源一般 <a href="https://datatables.net/examples/data_sources/" target="_blank" rel="noopener">Data sources</a> 这些，我们在 <code>web</code> 应用中使用最多的就是 <a href="https://datatables.net/examples/ajax/" target="_blank" rel="noopener">Ajax</a> 方式了，可以局部刷新页面。</p>
+<p>本文数据源方式使用 <a href="https://datatables.net/examples/ajax/objects.html" target="_blank" rel="noopener">Ajax data source (objects)</a> 这种方式，<code>js</code> 代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">function init_table()&#123;</span><br><span class="line">    $(&apos;#test_dt&apos;).DataTable(&#123;</span><br><span class="line">        order: [[ 0, &quot;desc&quot;]],</span><br><span class="line">        searching: true,</span><br><span class="line">        stateSave: true,</span><br><span class="line">        paging: true,</span><br><span class="line">        pagingType: &apos;full_numbers&apos;,</span><br><span class="line">        autoWidth: true,</span><br><span class="line">        responsive: false,</span><br><span class="line">        pageLength: 10,</span><br><span class="line">        destroy: true,</span><br><span class="line">        ajax: &#123;</span><br><span class="line">            &apos;url&apos;: &apos;/index&apos;,</span><br><span class="line">            &apos;dataSrc&apos;: handle_data_src,</span><br><span class="line">            &apos;type&apos;: &apos;POST&apos;,</span><br><span class="line">            &apos;async&apos;: false,</span><br><span class="line">            &apos;data&apos;: &#123;&#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        columns:[</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;data&quot;:&quot;id&quot;,</span><br><span class="line">                &quot;width&quot;: &quot;10%&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;data&quot;:&quot;username&quot;,</span><br><span class="line">                &quot;width&quot;: &quot;10%&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;data&quot;:&quot;sex&quot;,</span><br><span class="line">                &quot;width&quot;: &quot;10%&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;data&quot;:&quot;address&quot;,</span><br><span class="line">                &quot;width&quot;: &quot;10%&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;data&quot;:&quot;age&quot;,</span><br><span class="line">                &quot;width&quot;: &quot;10%&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">        ],</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 <code>POST</code> 方式获取表格数据，方便表格的刷新操作。其中 <code>dataSrc</code> 参数可以对请求的数据在显示到表格前做其他处理。</p>
+<p>效果图基本如下：</p>
+<p><img src="/images/2018-05-27T223227.png" alt="2018-05-27T223227"></p>
+<h3 id="配置参数"><a href="#配置参数" class="headerlink" title="配置参数"></a>配置参数</h3><p>Datatables 支持参数配置方式以提供各种场景下对表格的需求，目前笔者主要使用的参数如下：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th>可选值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>order</td>
+<td>表格在初始化的时候的排序</td>
+<td><a href="https://datatables.net/reference/option/order" target="_blank" rel="noopener">order</a></td>
+</tr>
+<tr>
+<td>searching</td>
+<td>允许表格搜索</td>
+<td>true false</td>
+</tr>
+<tr>
+<td>stateSave</td>
+<td>允许浏览器缓存 Datatables，以便下次恢复之前的状态</td>
+<td>true false</td>
+</tr>
+<tr>
+<td>paging</td>
+<td>允许表格分页</td>
+<td>true false</td>
+</tr>
+<tr>
+<td>pagingType</td>
+<td>分页按钮显示选项</td>
+<td><a href="http://www.datatables.club/reference/option/pagingType.html" target="_blank" rel="noopener">pagingType</a></td>
+</tr>
+<tr>
+<td>autoWidth</td>
+<td>定义是否由控件自动控制列宽</td>
+<td>true false</td>
+</tr>
+<tr>
+<td>pageLength</td>
+<td>单页显示的数据条数</td>
+<td>integer</td>
+</tr>
+<tr>
+<td>destroy</td>
+<td>销毁已经存在的 Datatables 实例并替换新的选项</td>
+<td>true false</td>
+</tr>
+<tr>
+<td>ajax</td>
+<td>异步获取数据填充到表格显示</td>
+<td><a href="http://www.datatables.club/reference/option/ajax.html" target="_blank" rel="noopener">ajax</a></td>
+</tr>
+<tr>
+<td>columns</td>
+<td>设定列的所有初始属性</td>
+<td><a href="http://www.datatables.club/reference/option/columns.html" target="_blank" rel="noopener">columns</a></td>
+</tr>
+<tr>
+<td>info</td>
+<td>控制总数信息（标准界面右下角显示总数和过滤条数的控件）的显隐</td>
+<td>true false</td>
+</tr>
+</tbody>
+</table>
+<p>其他参数设置可参考 <a href="https://datatables.net/manual/options" target="_blank" rel="noopener">Options</a> 。</p>
+<h3 id="Tips-持续更新"><a href="#Tips-持续更新" class="headerlink" title="Tips[持续更新]"></a>Tips[持续更新]</h3><p><strong>ajax.reload()</strong></p>
+<p>场景：间隔一定时间进行局部刷新。</p>
+<p>该场景下如果每次都初始化 datatables ，则会使表格在刷新时失去鼠标控制，用户体验较差。使用 <code>ajax.reload(callback, resetPaging)</code> 方式可以在重复初始化 <code>datatables</code> 下重新加载数据，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(&apos;#test_dt&apos;).DataTable().ajax.reload(null, false);</span><br></pre></td></tr></table></figure>
+<p>当使用该方式时，如果 <code>ajax</code> 提交的请求 <code>data</code> 字段带的参数值需要动态更新的话，可以使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&apos;data&apos;: function(d)&#123;</span><br><span class="line">    d.test_name = test_name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 <code>js</code> 函数动态更新参数值，这样在 <code>reload</code> 表格时，提交的参数就是动态获取的了。</p>
+<p><strong>render</strong></p>
+<p>场景：获取数据后，需要根据某列值对数据进行预处理。</p>
+<p>我们可以在 <code>dataSrc</code> 中对数据进行处理，但是 <code>Datatables</code> 提供了另外一种更加方便的处理方式，即 <a href="https://datatables.net/reference/option/columns.render" target="_blank" rel="noopener">columns.render</a> 方法，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;data&quot;:&quot;address&quot;,</span><br><span class="line">    render: function (data, type, row, meta) &#123;</span><br><span class="line">        var node = &quot;&lt;span &quot;;</span><br><span class="line">        if (data &lt;= bw_warn) &#123;</span><br><span class="line">            node += &quot;style=&apos;color:red;font-weight: bold;&apos;&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        node += &quot;&gt;&quot; + data + &quot;&lt;/span&gt;&quot;</span><br><span class="line">        return node;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;width&quot;: &quot;10%&quot;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>可以根据列值，对该列的显示添加其他的 <code>css</code> 属性。</p>
+<p><strong>自定义排序</strong></p>
+<p>Datatables 可以根据指定的列进行排序，但是实际场景中某列值可能较为复杂，而我们只需使用其中的一部分进行排序，例如：去掉前缀。Datatables 的扩展插件提供了很多较为强大的<a href="https://datatables.net/plug-ins/sorting/" target="_blank" rel="noopener">自定义排序功能</a>。</p>
+<p>例如：去掉前缀字符 <code>prefix</code> ，将剩下字符作为整型排序，可以参考 <a href="https://datatables.net/plug-ins/sorting/anti-the" target="_blank" rel="noopener">Anti-the</a>。</p>
+<p>首先新建一个名为 jquery.datatable.sort.plugin.js 文件，将以下 copy 到文件中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">jQuery.extend( jQuery.fn.dataTableExt.oSort, &#123;</span><br><span class="line">    &quot;anti-prefix-pre&quot;: function ( a ) &#123;</span><br><span class="line">        var x = a.replace(/^prefix /i, &quot;&quot;);</span><br><span class="line">        return parseInt(x);</span><br><span class="line">    &#125;,</span><br><span class="line"> </span><br><span class="line">    &quot;anti-prefix-asc&quot;: function ( a, b ) &#123;</span><br><span class="line">        return ((a &lt; b) ? -1 : ((a &gt; b) ? 1 : 0));</span><br><span class="line">    &#125;,</span><br><span class="line"> </span><br><span class="line">    &quot;anti-prefix-desc&quot;: function ( a, b ) &#123;</span><br><span class="line">        return ((a &lt; b) ? 1 : ((a &gt; b) ? -1 : 0));</span><br><span class="line">    &#125;</span><br><span class="line">&#125; );</span><br></pre></td></tr></table></figure>
+<p>然后在页面中按照如下方式引用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/path/jquery.datatable.sort.plugin.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>最后在 Datatables 中加入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">columnDefs: [</span><br><span class="line">    &#123; type: &apos;anti-prefix&apos;, targets: 0 &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>其中：targets 表示列编号，从0开始。</p>
+<p>Example：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$(&apos;#example&apos;).dataTable( &#123;</span><br><span class="line">    columnDefs: [</span><br><span class="line">        &#123; type: &apos;anti-the&apos;, targets: 0 &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125; );</span><br></pre></td></tr></table></figure>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://datatables.net/" target="_blank" rel="noopener">Datatables</a> </p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/datatables/" rel="tag"># datatables</a>
+          
+            <a href="/tags/jquery/" rel="tag"># jquery</a>
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/13/sqlalchemybug1/" rel="next" title="SQLAlchemy bug系列(一)">
+                <i class="fa fa-chevron-left"></i> SQLAlchemy bug系列(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/03/tornado502_start/" rel="prev" title="Tornado5.0.2翻译文档 - Tornado">
+                Tornado5.0.2翻译文档 - Tornado <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
+          <p class="site-author-name" itemprop="name">william</p>
+           
+              <p class="site-description motion-element" itemprop="description">删繁就简 一心一意</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本使用"><span class="nav-number">2.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置参数"><span class="nav-number">3.</span> <span class="nav-text">配置参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips-持续更新"><span class="nav-number">4.</span> <span class="nav-text">Tips[持续更新]</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">william</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

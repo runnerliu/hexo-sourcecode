@@ -1,0 +1,1209 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Laravel,后台用户认证,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="LiuYang's BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="简介Laravel 5.3 的 Auth 认证在 5.2 的基础上又有一些改变，本文说明如何在 Laravel 5.3 下做不同用户表的登录认证。 Auth 认证原理简述Laravel 的认证是使用 guard 与 provider 配合完成， guard 负责认证的业务逻辑，认证信息的服务端保存等； provider 负责提供认证信息的持久化数据提供。请求提交给 guard， guard 从 p">
+<meta name="keywords" content="Laravel,后台用户认证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel学习笔记-Laravel5.3后台用户认证">
+<meta property="og:url" content="http://runnerliu.github.io/2017/05/05/laraveladminlogin/index.html">
+<meta property="og:site_name" content="LiuYang&#39;s BLOG">
+<meta property="og:description" content="简介Laravel 5.3 的 Auth 认证在 5.2 的基础上又有一些改变，本文说明如何在 Laravel 5.3 下做不同用户表的登录认证。 Auth 认证原理简述Laravel 的认证是使用 guard 与 provider 配合完成， guard 负责认证的业务逻辑，认证信息的服务端保存等； provider 负责提供认证信息的持久化数据提供。请求提交给 guard， guard 从 p">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-11-15T02:24:39.469Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Laravel学习笔记-Laravel5.3后台用户认证">
+<meta name="twitter:description" content="简介Laravel 5.3 的 Auth 认证在 5.2 的基础上又有一些改变，本文说明如何在 Laravel 5.3 下做不同用户表的登录认证。 Auth 认证原理简述Laravel 的认证是使用 guard 与 provider 配合完成， guard 负责认证的业务逻辑，认证信息的服务端保存等； provider 负责提供认证信息的持久化数据提供。请求提交给 guard， guard 从 p">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2017/05/05/laraveladminlogin/">
+
+
+
+
+
+  <title> Laravel学习笔记-Laravel5.3后台用户认证 | LiuYang's BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LiuYang's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2017/05/05/laraveladminlogin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Laravel学习笔记-Laravel5.3后台用户认证
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-05T18:54:35+08:00">
+                2017-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Laravel/" itemprop="url" rel="index">
+                    <span itemprop="name">Laravel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/05/05/laraveladminlogin/" class="leancloud_visitors" data-flag-title="Laravel学习笔记-Laravel5.3后台用户认证">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Laravel 5.3 的 Auth 认证在 5.2 的基础上又有一些改变，本文说明如何在 Laravel 5.3 下做不同用户表的登录认证。</p>
+<h3 id="Auth-认证原理简述"><a href="#Auth-认证原理简述" class="headerlink" title="Auth 认证原理简述"></a>Auth 认证原理简述</h3><p>Laravel 的认证是使用 guard 与 provider 配合完成， guard 负责认证的业务逻辑，认证信息的服务端保存等； provider 负责提供认证信息的持久化数据提供。<br>请求提交给 guard， guard 从 provider 里取出数据（类似用户名、密码等），验证输入数据与服务器端存储的数据是否吻合。如果提交的数据正确，再做 session 等业务的处理（如有需要）。</p>
+<h3 id="认证脚手架"><a href="#认证脚手架" class="headerlink" title="认证脚手架"></a>认证脚手架</h3><p>首先我们导入 Laravel 的自带的认证脚手架</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:auth</span><br></pre></td></tr></table></figure>
+<p>执行数据库迁移</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan migrate</span><br></pre></td></tr></table></figure>
+<p>修改 Auth 认证的配置文件 config/auth.php，在 gurads 处，添加 admin guard 用于后台管理员认证</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&apos;guards&apos; =&gt; [</span><br><span class="line">        &apos;web&apos; =&gt; [</span><br><span class="line">            &apos;driver&apos; =&gt; &apos;session&apos;,</span><br><span class="line">            &apos;provider&apos; =&gt; &apos;users&apos;,</span><br><span class="line">        ],</span><br><span class="line"></span><br><span class="line">        &apos;admin&apos; =&gt; [</span><br><span class="line">            &apos;driver&apos; =&gt; &apos;session&apos;,</span><br><span class="line">            &apos;provider&apos; =&gt; &apos;admins&apos;,</span><br><span class="line">        ],</span><br><span class="line"></span><br><span class="line">        &apos;api&apos; =&gt; [</span><br><span class="line">            &apos;driver&apos; =&gt; &apos;token&apos;,</span><br><span class="line">            &apos;provider&apos; =&gt; &apos;users&apos;,</span><br><span class="line">        ],</span><br><span class="line">    ],</span><br></pre></td></tr></table></figure>
+<p>在 providers 处添加 admins provider，使用 Admin 模型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&apos;providers&apos; =&gt; [</span><br><span class="line">        &apos;users&apos; =&gt; [</span><br><span class="line">            &apos;driver&apos; =&gt; &apos;eloquent&apos;,</span><br><span class="line">            &apos;model&apos; =&gt; App\Models\User::class,</span><br><span class="line">        ],</span><br><span class="line"></span><br><span class="line">        &apos;admins&apos; =&gt; [</span><br><span class="line">            &apos;driver&apos; =&gt; &apos;eloquent&apos;,</span><br><span class="line">            &apos;model&apos; =&gt; App\Models\Admin::class,</span><br><span class="line">        ],</span><br><span class="line">    ],</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>本文将所有的 Model 都存放在 App\Models\ 目录下。</p>
+<h3 id="创建后台管理员模型"><a href="#创建后台管理员模型" class="headerlink" title="创建后台管理员模型"></a>创建后台管理员模型</h3><p>我们再创建一个 Admin 模型，用于后台管理员登录验证</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:model Admin -m</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-m 参数会同时生成数据库迁移文件 xxxx_create_admins_table</p>
+</blockquote>
+<p>修改 app/Admin.php 模型文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App;</span><br><span class="line"></span><br><span class="line">use Illuminate\Notifications\Notifiable;</span><br><span class="line">use Illuminate\Foundation\Auth\User as Authenticatable;</span><br><span class="line"></span><br><span class="line">class Admin extends Authenticatable</span><br><span class="line">&#123;</span><br><span class="line">    use Notifiable;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * The attributes that are mass assignable.</span><br><span class="line">     *</span><br><span class="line">     * @var array</span><br><span class="line">     */</span><br><span class="line">    protected $fillable = [</span><br><span class="line">        &apos;name&apos;, &apos;password&apos;,</span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * The attributes that should be hidden for arrays.</span><br><span class="line">     *</span><br><span class="line">     * @var array</span><br><span class="line">     */</span><br><span class="line">    protected $hidden = [</span><br><span class="line">        &apos;password&apos;, &apos;remember_token&apos;,</span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编辑 xxxx_create_admins_table 文件，后台管理员模型结构与前台用户差不多，去掉 email 字段，name 字段设为 unique()，后台用户登录使用用户名、密码的形式，如果需要 email ，也可以不去掉。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">use Illuminate\Support\Facades\Schema;</span><br><span class="line">use Illuminate\Database\Schema\Blueprint;</span><br><span class="line">use Illuminate\Database\Migrations\Migration;</span><br><span class="line"></span><br><span class="line">class CreateAdminsTable extends Migration</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * Run the migrations.</span><br><span class="line">     *</span><br><span class="line">     * @return void</span><br><span class="line">     */</span><br><span class="line">    public function up()</span><br><span class="line">    &#123;</span><br><span class="line">        Schema::create(&apos;admins&apos;, function (Blueprint $table) &#123;</span><br><span class="line">            $table-&gt;increments(&apos;id&apos;);</span><br><span class="line">            $table-&gt;string(&apos;name&apos;)-&gt;unique();</span><br><span class="line">            $table-&gt;string(&apos;password&apos;);</span><br><span class="line">            $table-&gt;rememberToken();</span><br><span class="line">            $table-&gt;timestamps();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Reverse the migrations.</span><br><span class="line">     *</span><br><span class="line">     * @return void</span><br><span class="line">     */</span><br><span class="line">    public function down()</span><br><span class="line">    &#123;</span><br><span class="line">        Schema::dropIfExists(&apos;admins&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="管理员模型填充数据"><a href="#管理员模型填充数据" class="headerlink" title="管理员模型填充数据"></a>管理员模型填充数据</h3><p>定义一个数据模型工厂，在 database/factories/ModelFactory.php 中添加如下代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$factory-&gt;define(App\Admin::class, function (Faker\Generator $faker) &#123;</span><br><span class="line">    static $password;</span><br><span class="line"></span><br><span class="line">    return [</span><br><span class="line">        &apos;name&apos; =&gt; $faker-&gt;firstName,</span><br><span class="line">        &apos;password&apos; =&gt; $password ?: $password = bcrypt(&apos;secret&apos;),</span><br><span class="line">        &apos;remember_token&apos; =&gt; str_random(10),</span><br><span class="line">    ];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用 Faker 随机填充用户名</p>
+</blockquote>
+<p>在 database/seeds 目录下生成 AdminsTableSeeder.php 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:seeder AdminsTableSeeder</span><br></pre></td></tr></table></figure>
+<p>编辑 database/seeds/AdminsTableSeeder.php 文件的 run 方法，添加3个管理员用户，密码为 123456</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public function run()</span><br><span class="line">    &#123;</span><br><span class="line">        factory(&apos;App\Admin&apos;, 3)-&gt;create([</span><br><span class="line">            &apos;password&apos; =&gt; bcrypt(&apos;123456&apos;)</span><br><span class="line">            ]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在 database/seeds/DatabaseSeeder.php 的 run 方法里调用 AdminsTableSeeder 类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public function run()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;call(AdminsTableSeeder::class);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>执行数据库迁移命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan migrate --seed</span><br></pre></td></tr></table></figure>
+<p>数据库里会创建 admins 表，并且生成了3条数据：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>password</th>
+<th>remember_token</th>
+<th>created_at</th>
+<th>updated_at</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>John</td>
+<td>$2y$10$AYD4MoW…</td>
+<td>9p7bycJ5Wn</td>
+<td>2017-05-05 15:12:37</td>
+<td>2017-05-05 15:12:37</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Ransom</td>
+<td>$2y$10$AYD4MoW…</td>
+<td>Ct8W5nmTsg</td>
+<td>2017-05-05 15:12:37</td>
+<td>2017-05-05 15:12:37</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Dulce</td>
+<td>$2y$10$AYD4MoW…</td>
+<td>I8RJpxwVrk</td>
+<td>2017-05-05 15:12:37</td>
+<td>2017-05-05 15:12:37</td>
+</tr>
+</tbody>
+</table>
+<h3 id="创建后台页面"><a href="#创建后台页面" class="headerlink" title="创建后台页面"></a>创建后台页面</h3><h4 id="创建控制器"><a href="#创建控制器" class="headerlink" title="创建控制器"></a>创建控制器</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:controller Admin/LoginController    </span><br><span class="line">php artisan make:controller Admin/IndexController</span><br></pre></td></tr></table></figure>
+<p>其中， Admin/LoginController 负责登录逻辑； Admin/IndexController 管理登录后的首页。</p>
+<p>编辑 Admin/LoginController.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Http\Controllers\Admin;</span><br><span class="line"></span><br><span class="line">use App\Http\Controllers\Controller;</span><br><span class="line">use Illuminate\Foundation\Auth\AuthenticatesUsers;</span><br><span class="line"></span><br><span class="line">class LoginController extends Controller</span><br><span class="line">&#123;</span><br><span class="line">    /*</span><br><span class="line">    |--------------------------------------------------------------------------</span><br><span class="line">    | Login Controller</span><br><span class="line">    |--------------------------------------------------------------------------</span><br><span class="line">    |</span><br><span class="line">    | This controller handles authenticating users for the application and</span><br><span class="line">    | redirecting them to your home screen. The controller uses a trait</span><br><span class="line">    | to conveniently provide its functionality to your applications.</span><br><span class="line">    |</span><br><span class="line">    */</span><br><span class="line"></span><br><span class="line">    use AuthenticatesUsers;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Where to redirect users after login / registration.</span><br><span class="line">     *</span><br><span class="line">     * @var string</span><br><span class="line">     */</span><br><span class="line">    protected $redirectTo = &apos;/admin&apos;;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Create a new controller instance.</span><br><span class="line">     *</span><br><span class="line">     * @return void</span><br><span class="line">     */</span><br><span class="line">    public function __construct()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;middleware(&apos;guest.admin&apos;, [&apos;except&apos; =&gt; &apos;logout&apos;]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 显示后台登录模板</span><br><span class="line">     */</span><br><span class="line">    public function showLoginForm()</span><br><span class="line">    &#123;</span><br><span class="line">        return view(&apos;admin.login&apos;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 使用 admin guard</span><br><span class="line">     */</span><br><span class="line">    protected function guard()</span><br><span class="line">    &#123;</span><br><span class="line">        return auth()-&gt;guard(&apos;admin&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编辑 Admin/IndexController.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Http\Controllers\Admin;</span><br><span class="line"></span><br><span class="line">use Illuminate\Http\Request;</span><br><span class="line"></span><br><span class="line">use App\Http\Requests;</span><br><span class="line">use App\Http\Controllers\Controller;</span><br><span class="line"></span><br><span class="line">class IndexController extends Controller</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * 显示后台管理模板首页</span><br><span class="line">     */</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        return view(&apos;admin.index&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="后台显示模板"><a href="#后台显示模板" class="headerlink" title="后台显示模板"></a>后台显示模板</h4><p>复制 views/layouts/app.blade.php 成 views/layouts/admin.blade.php。</p>
+<p>编辑后台管理布局模板</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- CSRF Token --&gt;</span><br><span class="line">    &lt;meta name=&quot;csrf-token&quot; content=&quot;&#123;&#123; csrf_token() &#125;&#125;&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;title&gt;&#123;&#123; config(&apos;app.name&apos;, &apos;Laravel&apos;) &#125;&#125; - Admin&lt;/title&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- Styles --&gt;</span><br><span class="line">    &lt;link href=&quot;/css/app.css&quot; rel=&quot;stylesheet&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- Scripts --&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        window.Laravel = &lt;?php echo json_encode([</span><br><span class="line">            &apos;csrfToken&apos; =&gt; csrf_token(),</span><br><span class="line">        ]); ?&gt;</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;nav class=&quot;navbar navbar-default navbar-static-top&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">            &lt;div class=&quot;navbar-header&quot;&gt;</span><br><span class="line"></span><br><span class="line">                &lt;!-- Collapsed Hamburger --&gt;</span><br><span class="line">                &lt;button type=&quot;button&quot; class=&quot;navbar-toggle collapsed&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#app-navbar-collapse&quot;&gt;</span><br><span class="line">                    &lt;span class=&quot;sr-only&quot;&gt;Toggle Navigation&lt;/span&gt;</span><br><span class="line">                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;</span><br><span class="line">                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;</span><br><span class="line">                    &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;</span><br><span class="line">                &lt;/button&gt;</span><br><span class="line"></span><br><span class="line">                &lt;!-- Branding Image --&gt;</span><br><span class="line">                &lt;a class=&quot;navbar-brand&quot; href=&quot;&#123;&#123; url(&apos;/&apos;) &#125;&#125;&quot;&gt;</span><br><span class="line">                    &#123;&#123; config(&apos;app.name&apos;, &apos;Laravel&apos;) &#125;&#125;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">            &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;app-navbar-collapse&quot;&gt;</span><br><span class="line">                &lt;!-- Left Side Of Navbar --&gt;</span><br><span class="line">                &lt;ul class=&quot;nav navbar-nav&quot;&gt;</span><br><span class="line">                    &amp;nbsp;</span><br><span class="line">                &lt;/ul&gt;</span><br><span class="line"></span><br><span class="line">                &lt;!-- Right Side Of Navbar --&gt;</span><br><span class="line">                &lt;ul class=&quot;nav navbar-nav navbar-right&quot;&gt;</span><br><span class="line">                    &lt;!-- Authentication Links --&gt;</span><br><span class="line">                    @if (auth()-&gt;guard(&apos;admin&apos;)-&gt;guest())</span><br><span class="line">                        &lt;li&gt;&lt;a href=&quot;&#123;&#123; url(&apos;/admin/login&apos;) &#125;&#125;&quot;&gt;Login&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">                    @else</span><br><span class="line">                        &lt;li class=&quot;dropdown&quot;&gt;</span><br><span class="line">                            &lt;a href=&quot;#&quot; class=&quot;dropdown-toggle&quot; data-toggle=&quot;dropdown&quot; role=&quot;button&quot; aria-expanded=&quot;false&quot;&gt;</span><br><span class="line">                                &#123;&#123; auth()-&gt;guard(&apos;admin&apos;)-&gt;user()-&gt;name &#125;&#125; &lt;span class=&quot;caret&quot;&gt;&lt;/span&gt;</span><br><span class="line">                            &lt;/a&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;ul class=&quot;dropdown-menu&quot; role=&quot;menu&quot;&gt;</span><br><span class="line">                                &lt;li&gt;</span><br><span class="line">                                    &lt;a href=&quot;&#123;&#123; url(&apos;/admin/logout&apos;) &#125;&#125;&quot;</span><br><span class="line">                                        onclick=&quot;event.preventDefault();</span><br><span class="line">                                                 document.getElementById(&apos;logout-form&apos;).submit();&quot;&gt;</span><br><span class="line">                                        Logout</span><br><span class="line">                                    &lt;/a&gt;</span><br><span class="line"></span><br><span class="line">                                    &lt;form id=&quot;logout-form&quot; action=&quot;&#123;&#123; url(&apos;/admin/logout&apos;) &#125;&#125;&quot; method=&quot;POST&quot; style=&quot;display: none;&quot;&gt;</span><br><span class="line">                                        &#123;&#123; csrf_field() &#125;&#125;</span><br><span class="line">                                    &lt;/form&gt;</span><br><span class="line">                                &lt;/li&gt;</span><br><span class="line">                            &lt;/ul&gt;</span><br><span class="line">                        &lt;/li&gt;</span><br><span class="line">                    @endif</span><br><span class="line">                &lt;/ul&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/nav&gt;</span><br><span class="line"></span><br><span class="line">    @yield(&apos;content&apos;)</span><br><span class="line"></span><br><span class="line">    &lt;!-- Scripts --&gt;</span><br><span class="line">    &lt;script src=&quot;/js/app.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>复制 views/auth/login.blade.php 成 views/admin/login.blade.php。</p>
+<p>编辑该模板，更改布局文件为 layouts.admin， 把表单的提交 url 改为 admin/login，email 字段改成 name 字段，去掉找回密码的部分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">@extends(&apos;layouts.admin&apos;)</span><br><span class="line"></span><br><span class="line">@section(&apos;content&apos;)</span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;col-md-8 col-md-offset-2&quot;&gt;</span><br><span class="line">            &lt;div class=&quot;panel panel-default&quot;&gt;</span><br><span class="line">                &lt;div class=&quot;panel-heading&quot;&gt;Admin Login&lt;/div&gt;</span><br><span class="line">                &lt;div class=&quot;panel-body&quot;&gt;</span><br><span class="line">                    &lt;form class=&quot;form-horizontal&quot; role=&quot;form&quot; method=&quot;POST&quot; action=&quot;&#123;&#123; url(&apos;/admin/login&apos;) &#125;&#125;&quot;&gt;</span><br><span class="line">                        &#123;&#123; csrf_field() &#125;&#125;</span><br><span class="line"></span><br><span class="line">                        &lt;div class=&quot;form-group&#123;&#123; $errors-&gt;has(&apos;name&apos;) ? &apos; has-error&apos; : &apos;&apos; &#125;&#125;&quot;&gt;</span><br><span class="line">                            &lt;label for=&quot;name&quot; class=&quot;col-md-4 control-label&quot;&gt;Name&lt;/label&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;div class=&quot;col-md-6&quot;&gt;</span><br><span class="line">                                &lt;input id=&quot;name&quot; type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;name&quot; value=&quot;&#123;&#123; old(&apos;name&apos;) &#125;&#125;&quot; required autofocus&gt;</span><br><span class="line"></span><br><span class="line">                                @if ($errors-&gt;has(&apos;name&apos;))</span><br><span class="line">                                    &lt;span class=&quot;help-block&quot;&gt;</span><br><span class="line">                                        &lt;strong&gt;&#123;&#123; $errors-&gt;first(&apos;name&apos;) &#125;&#125;&lt;/strong&gt;</span><br><span class="line">                                    &lt;/span&gt;</span><br><span class="line">                                @endif</span><br><span class="line">                            &lt;/div&gt;</span><br><span class="line">                        &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">                        &lt;div class=&quot;form-group&#123;&#123; $errors-&gt;has(&apos;password&apos;) ? &apos; has-error&apos; : &apos;&apos; &#125;&#125;&quot;&gt;</span><br><span class="line">                            &lt;label for=&quot;password&quot; class=&quot;col-md-4 control-label&quot;&gt;Password&lt;/label&gt;</span><br><span class="line"></span><br><span class="line">                            &lt;div class=&quot;col-md-6&quot;&gt;</span><br><span class="line">                                &lt;input id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; name=&quot;password&quot; required&gt;</span><br><span class="line"></span><br><span class="line">                                @if ($errors-&gt;has(&apos;password&apos;))</span><br><span class="line">                                    &lt;span class=&quot;help-block&quot;&gt;</span><br><span class="line">                                        &lt;strong&gt;&#123;&#123; $errors-&gt;first(&apos;password&apos;) &#125;&#125;&lt;/strong&gt;</span><br><span class="line">                                    &lt;/span&gt;</span><br><span class="line">                                @endif</span><br><span class="line">                            &lt;/div&gt;</span><br><span class="line">                        &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">                        &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">                            &lt;div class=&quot;col-md-6 col-md-offset-4&quot;&gt;</span><br><span class="line">                                &lt;div class=&quot;checkbox&quot;&gt;</span><br><span class="line">                                    &lt;label&gt;</span><br><span class="line">                                        &lt;input type=&quot;checkbox&quot; name=&quot;remember&quot;&gt; Remember Me</span><br><span class="line">                                    &lt;/label&gt;</span><br><span class="line">                                &lt;/div&gt;</span><br><span class="line">                            &lt;/div&gt;</span><br><span class="line">                        &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">                        &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">                            &lt;div class=&quot;col-md-8 col-md-offset-4&quot;&gt;</span><br><span class="line">                                &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;</span><br><span class="line">                                    Login</span><br><span class="line">                                &lt;/button&gt;</span><br><span class="line">                            &lt;/div&gt;</span><br><span class="line">                        &lt;/div&gt;</span><br><span class="line">                    &lt;/form&gt;</span><br><span class="line">                &lt;/div&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">@endsection</span><br></pre></td></tr></table></figure>
+<p>复制 views/home.blade.php 成 views/admins/index.blade.php。</p>
+<p>编辑该模板</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@extends(&apos;layouts.admin&apos;)</span><br><span class="line"></span><br><span class="line">@section(&apos;content&apos;)</span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;col-md-8 col-md-offset-2&quot;&gt;</span><br><span class="line">            &lt;div class=&quot;panel panel-default&quot;&gt;</span><br><span class="line">                &lt;div class=&quot;panel-heading&quot;&gt;Dashboard&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">                &lt;div class=&quot;panel-body&quot;&gt;</span><br><span class="line">                    You are logged in admin dashboard!</span><br><span class="line">                &lt;/div&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">@endsection</span><br></pre></td></tr></table></figure>
+<h4 id="添加后台路由"><a href="#添加后台路由" class="headerlink" title="添加后台路由"></a>添加后台路由</h4><p>编辑 routes/web.php， 添加以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Route::group([&apos;prefix&apos; =&gt; &apos;admin&apos;], function () &#123;</span><br><span class="line">    Route::group([&apos;middleware&apos; =&gt; &apos;auth.admin&apos;], function () &#123;</span><br><span class="line">        Route::get(&apos;/&apos;, &apos;Admin\IndexController@index&apos;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    Route::get(&apos;login&apos;, &apos;Admin\LoginController@showLoginForm&apos;)-&gt;name(&apos;admin.login&apos;);</span><br><span class="line">    Route::post(&apos;login&apos;, &apos;Admin\LoginController@login&apos;);</span><br><span class="line">    Route::post(&apos;logout&apos;, &apos;Admin\LoginController@logout&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="后台管理认证中间件"><a href="#后台管理认证中间件" class="headerlink" title="后台管理认证中间件"></a>后台管理认证中间件</h4><p>创建后台管理认证中间件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:middleware AuthAdmin</span><br></pre></td></tr></table></figure>
+<p>编辑 AuthAdmin</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace App\Http\Middleware;</span><br><span class="line"></span><br><span class="line">use Closure;</span><br><span class="line"></span><br><span class="line">class AuthAdmin</span><br><span class="line">&#123;</span><br><span class="line">    /**</span><br><span class="line">     * Handle an incoming request.</span><br><span class="line">     *</span><br><span class="line">     * @param  \Illuminate\Http\Request  $request</span><br><span class="line">     * @param  \Closure  $next</span><br><span class="line">     * @return mixed</span><br><span class="line">     */</span><br><span class="line">    public function handle($request, Closure $next)</span><br><span class="line">    &#123;</span><br><span class="line">        if (auth()-&gt;guard(&apos;admin&apos;)-&gt;guest()) &#123;</span><br><span class="line">            if ($request-&gt;ajax() || $request-&gt;wantsJson()) &#123;</span><br><span class="line">                return response(&apos;Unauthorized.&apos;, 401);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                return redirect()-&gt;guest(&apos;admin/login&apos;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return $next($request);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建后台管理登录跳转中间件，用于有些操作在登录之后的跳转</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:middleware GuestAdmin</span><br></pre></td></tr></table></figure>
+<p>编辑该中间件的 handle 方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public function handle($request, Closure $next)</span><br><span class="line">    &#123;</span><br><span class="line">        if (auth()-&gt;guard(&apos;admin&apos;)-&gt;check()) &#123;</span><br><span class="line">            return redirect(&apos;/admin&apos;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return $next($request);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>在 app/Http/Kernel.php 中注册以上中间件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">protected $routeMiddleware = [</span><br><span class="line">    ......</span><br><span class="line">    &apos;auth.admin&apos; =&gt; \App\Http\Middleware\AuthAdmin::class,</span><br><span class="line">    &apos;guest.admin&apos; =&gt; \App\Http\Middleware\GuestAdmin::class,</span><br><span class="line">    ......</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<h4 id="处理注销"><a href="#处理注销" class="headerlink" title="处理注销"></a>处理注销</h4><p>经过上面的步骤，已经实现了前后台分离登录，但是不管是在前台注销，还是在后台注销，都销毁了所有的 session，导致前后台注销连在一起。所以我们还要对注销的方法处理一下。</p>
+<p>原来的 logout 方法是这样写的，在 Illuminate\Foundation\Auth\AuthenticatesUsers 里</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public function logout(Request $request)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;guard()-&gt;logout();</span><br><span class="line"></span><br><span class="line">        $request-&gt;session()-&gt;flush();</span><br><span class="line"></span><br><span class="line">        $request-&gt;session()-&gt;regenerate();</span><br><span class="line"></span><br><span class="line">        return redirect(&apos;/&apos;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>注意这一句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$request-&gt;session()-&gt;flush();</span><br></pre></td></tr></table></figure>
+<p>将所有的 session 全部清除，这里不分前台、后台，所以要对这里进行改造。</p>
+<p>因为前台、后台注销都要修改，所以我们新建一个 trait，前后台都可以使用。</p>
+<p>新建一个文件 app/Extensions/AuthenticatesLogout.php <strong>这里需要新建 Extensions 文件夹，在Laravel5.3中是没有这个文件夹的</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">namespace App\Extensions;</span><br><span class="line"></span><br><span class="line">use Illuminate\Http\Request;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">trait AuthenticatesLogout</span><br><span class="line">&#123;</span><br><span class="line">    public function logout(Request $request)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;guard()-&gt;logout();</span><br><span class="line"></span><br><span class="line">        $request-&gt;session()-&gt;forget($this-&gt;guard()-&gt;getName());</span><br><span class="line"></span><br><span class="line">        $request-&gt;session()-&gt;regenerate();</span><br><span class="line"></span><br><span class="line">        return redirect(&apos;/&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们将</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$request-&gt;session()-&gt;flush();</span><br></pre></td></tr></table></figure>
+<p>改成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$request-&gt;session()-&gt;forget($this-&gt;guard()-&gt;getName());</span><br></pre></td></tr></table></figure>
+<p>只是删除掉当前 guard 所创建的 session，这样就达到了分别注销的目的。</p>
+<p>修改 Auth/LoginController.php 和 Admin/LoginController.php，将</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use AuthenticatesUsers;</span><br></pre></td></tr></table></figure>
+<p>改掉，在文件的前面别忘了加上 use 语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">use App\Extensions\AuthenticatesLogout;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">class LoginController extends Controller</span><br><span class="line">&#123;</span><br><span class="line">    use AuthenticatesUsers, AuthenticatesLogout &#123;</span><br><span class="line">        AuthenticatesLogout::logout insteadof AuthenticatesUsers;</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>到这里，就完成了整个不同用户表登录认证的过程。</p>
+<blockquote>
+<p>参考文章：</p>
+<p><a href="http://www.fullstack.pub/doc/1" target="_blank" rel="noopener">Laravel 5.3 不同用户表登录认证</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Laravel/" rel="tag"># Laravel</a>
+          
+            <a href="/tags/后台用户认证/" rel="tag"># 后台用户认证</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/27/laraveliocanddi/" rel="next" title="Laravel学习笔记-深入理解控制反转(IoC)和依赖注入(DI)">
+                <i class="fa fa-chevron-left"></i> Laravel学习笔记-深入理解控制反转(IoC)和依赖注入(DI)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/05/laraveluserlogin/" rel="prev" title="Laravel学习笔记-Laravel5.3用户登录实现及注册源码初探">
+                Laravel学习笔记-Laravel5.3用户登录实现及注册源码初探 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
+          <p class="site-author-name" itemprop="name">william</p>
+           
+              <p class="site-description motion-element" itemprop="description">删繁就简 一心一意</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Auth-认证原理简述"><span class="nav-number">2.</span> <span class="nav-text">Auth 认证原理简述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#认证脚手架"><span class="nav-number">3.</span> <span class="nav-text">认证脚手架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建后台管理员模型"><span class="nav-number">4.</span> <span class="nav-text">创建后台管理员模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理员模型填充数据"><span class="nav-number">5.</span> <span class="nav-text">管理员模型填充数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建后台页面"><span class="nav-number">6.</span> <span class="nav-text">创建后台页面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建控制器"><span class="nav-number">6.1.</span> <span class="nav-text">创建控制器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后台显示模板"><span class="nav-number">6.2.</span> <span class="nav-text">后台显示模板</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加后台路由"><span class="nav-number">6.3.</span> <span class="nav-text">添加后台路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后台管理认证中间件"><span class="nav-number">6.4.</span> <span class="nav-text">后台管理认证中间件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#处理注销"><span class="nav-number">6.5.</span> <span class="nav-text">处理注销</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">william</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

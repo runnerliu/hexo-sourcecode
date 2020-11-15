@@ -1,0 +1,1124 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Python,上下文管理器,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="LiuYang's BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。 例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
+<meta name="keywords" content="Python,上下文管理器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python上下文管理器">
+<meta property="og:url" content="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/index.html">
+<meta property="og:site_name" content="LiuYang&#39;s BLOG">
+<meta property="og:description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。 例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-11-15T02:24:39.478Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python上下文管理器">
+<meta name="twitter:description" content="何为上下文管理器上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。 例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/">
+
+
+
+
+
+  <title> Python上下文管理器 | LiuYang's BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LiuYang's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2018/01/02/pythoncontextmanager/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python上下文管理器
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T22:54:29+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/01/02/pythoncontextmanager/" class="leancloud_visitors" data-flag-title="Python上下文管理器">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="何为上下文管理器"><a href="#何为上下文管理器" class="headerlink" title="何为上下文管理器"></a>何为上下文管理器</h4><p>上下文管理器是管理上下文的，负责冲锋和垫后，而让开发人员专心完成自己的事情。我们在编写程序的时候，通常会将一系列操作放到一个语句块中，当某一条件为真时执行该语句快。有时候，我们需要再执行一个语句块时保持某种状态，并且在离开语句块后结束这种状态。</p>
+<p>例如对文件的操作，我们在打开一个文件进行读写操作时需要保持文件处于打开状态，而等操作完成之后要将文件关闭。所以，上下文管理器的任务是：代码块执行前准备，代码块执行后收拾。上下文管理器是在Python2.5加入的功能，它能够让你的代码可读性更强并且错误更少。</p>
+<h4 id="需求的产生"><a href="#需求的产生" class="headerlink" title="需求的产生"></a>需求的产生</h4><p>在正常的管理各种系统资源（文件、锁定和连接），在涉及到异常时通常是个棘手的问题。异常很可能导致控制流跳过负责释放关键资源的语句。例如打开一个文件进行操作时，如果意外情况发生（磁盘已满、特殊的终端信号让其终止等），就会抛出异常，这样可能最后的文件关闭操作就不会执行。如果这样的问题频繁出现，则可能耗尽系统资源。</p>
+<p>在没有接触到上下文管理器之前，我们可以用”try/finally”语句来解决这样的问题。或许在有些人看来，”try/finally”语句显得有些繁琐。上下文管理器就是被设计用来简化”try/finally”语句的，这样可以让程序更加简洁。</p>
+<h4 id="上下文管理协议"><a href="#上下文管理协议" class="headerlink" title="上下文管理协议"></a>上下文管理协议</h4><p>那么在Python中怎么实现一个上下文管理器呢？主要依靠<code>__enter__</code>、<code>__exit__</code>这两个”魔术方法”。</p>
+<blockquote>
+<p><code>__enter__(self)</code> </p>
+<p>Defines what the context manager should do at the beginning of the block created by the with statement. Note that the return value of __enter__ is bound to the target of the with statement, or the name after the as.</p>
+<p><code>__exit__(self, exception_type, exception_value, traceback)</code> </p>
+<p>Defines what the context manager should do after its block has been executed (or terminates). It can be used to handle exceptions, perform cleanup, or do something always done immediately after the action in the block. If the block executes successfully, exception_type, exception_value, and traceback will be None. Otherwise, you can choose to handle the exception or let the user handle it; if you want to handle it, make sure __exit__ returns True after all is said and done. If you don’t want the exception to be handled by the context manager, just let it happen.</p>
+</blockquote>
+<p>也就是说，当我们需要创建一个上下文管理器类型的时候，就需要实现<code>__enter__</code>和<code>__exit__</code>方法，这对方法就称为上下文管理协议（Context Manager Protocol），定义了一种运行时上下文环境。</p>
+<h4 id="with语句"><a href="#with语句" class="headerlink" title="with语句"></a>with语句</h4><p>在Python中，可以通过with语句来方便的使用上下文管理器，with语句可以在代码块运行前进入一个运行时上下文（执行__enter__方法），并在代码块结束后退出该上下文（执行__exit__方法）。</p>
+<p>with语句的语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">with context_expr [as var]:</span><br><span class="line">    with_suite</span><br></pre></td></tr></table></figure>
+<ul>
+<li>context_expr: 支持上下文管理协议的对象，也就是上下文管理器对象，负责维护上下文环境</li>
+<li>as var: 可选部分，通过变量方式保存上下文管理器对象</li>
+<li>with_suite: 需要放在上下文环境中执行的语句块</li>
+</ul>
+<p>在Python的内置类型中，很多类型都是支持上下文管理协议的，例如file、thread.LockType、threading.Lock等等。这里我们就以file类型为例，看看with语句的使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">with File(&apos;demo.txt&apos;, &apos;w&apos;) as opened_file:</span><br><span class="line">    opened_file.write(&apos;Hola!&apos;)</span><br></pre></td></tr></table></figure>
+<p> with语句先暂存了File类的<code>__exit__()</code>方法，然后它调用File类的<code>__enter__()</code>方方法，<code>__enter__</code>方法打开文件并返回给with语句，打开的文件句柄被传递给<code>opened_file</code>参数，然后使用<code>.write()</code>来写文件，with语句调用之前暂存的<code>__exit__</code>方法关闭了文件。</p>
+<h4 id="自定义上下文管理器"><a href="#自定义上下文管理器" class="headerlink" title="自定义上下文管理器"></a>自定义上下文管理器</h4><p>了解上下文管理器的执行流程和方法后，我们可以通过实现<code>__enter__()</code>、<code>__exit__()</code>函数来自定义上下文管理器，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">filename = &apos;my_file.txt&apos;</span><br><span class="line">mode = &apos;w&apos; # Mode that allows to write to the file</span><br><span class="line">writer = open(filename, mode)</span><br><span class="line"></span><br><span class="line">class PypixOpen(object):</span><br><span class="line">    def __init__(self, filename, mode):</span><br><span class="line">        self.filename = filename</span><br><span class="line">        self.mode = mode</span><br><span class="line"></span><br><span class="line">    def __enter__(self):</span><br><span class="line">        self.openedFile = open(self.filename, self.mode)</span><br><span class="line">        return self.openedFile</span><br><span class="line"></span><br><span class="line">    def __exit__(self, *unused):</span><br><span class="line">        self.openedFile.close()</span><br><span class="line"></span><br><span class="line"># Script starts from here</span><br><span class="line"></span><br><span class="line">with PypixOpen(filename, mode) as writer:</span><br><span class="line">    writer.write(&quot;Hello World from our new Context Manager!&quot;)</span><br></pre></td></tr></table></figure>
+<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><p>上下文管理器根据<code>__exit__()</code> 方法的返回值来决定是否抛出异常，如果没有返回值或者返回值为 False ，则异常由上下文管理器处理，如果为 True 则由用户自己处理。</p>
+<p><code>__exit__ ()</code>接受三个参数，exception_type、exception_value、traceback，我们可以根据这些值来决定是否处理异常</p>
+<p>下面这个例子，捕捉了 AttributeError 的异常，并打印出警告: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Open:</span><br><span class="line">    def __init__(self, file, mode):</span><br><span class="line">        self.open_file = open(file, mode)</span><br><span class="line">    def __enter__(self):</span><br><span class="line">        return self.open_file</span><br><span class="line">    def __exit__(self, type, value, tb):</span><br><span class="line">        self.open_file.close()</span><br><span class="line">        if type is AttributeError:</span><br><span class="line">            print(&apos;handing some exception&apos;)</span><br><span class="line">            return True</span><br><span class="line">            </span><br><span class="line">with Open(&apos;aaa&apos;, &apos;w&apos;) as f:</span><br><span class="line">    f.writeee(&apos;aaaa&apos;)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&gt;&gt;&gt; handing some exception</span><br></pre></td></tr></table></figure>
+<h4 id="contextmanager"><a href="#contextmanager" class="headerlink" title="contextmanager"></a>contextmanager</h4><p>由于上下文管理非常有用，Python 中有一个专门用于实现上下文管理的标准库，这就是 contextlib。</p>
+<p>有了 contextlib 创建上下文管理的最好方式就是使用 contextmanager 装饰器，通过 contextmanager 装饰一个生成器函数，<code>yield</code> 语句前面的部分被认为是<code>__enter__()</code> 方法的代码，后面的部分被认为是 <code>__exit__()</code>方法的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from contextlib import contextmanager</span><br><span class="line">@contextmanager</span><br><span class="line">def file(path, mode):</span><br><span class="line">    open_file = open(path, mode)</span><br><span class="line">    yield open_file</span><br><span class="line">    open_file.close()</span><br></pre></td></tr></table></figure>
+<p>Python解释器遇到了<code>yield</code>关键字。因为这个缘故它创建了一个生成器而不是一个普通的函数。因为这个装饰器，contextmanager会被调用并传入函数名（<code>file</code>）作为参数。contextmanager函数返回一个以GeneratorContextManager对象封装过的生成器。这个GeneratorContextManager被赋值给<code>file</code>函数，我们实际上是在调用GeneratorContextManager对象。</p>
+<p>Read More: </p>
+<blockquote>
+<p><a href="https://eastlakeside.gitbooks.io/interpy-zh/content/context_managers/" target="_blank" rel="noopener">上下文管理器(Context managers)</a> <a href="http://kuanghy.github.io/2015/08/08/python-with" target="_blank" rel="noopener">Python上下文管理器与with语句</a> <a href="http://www.cnblogs.com/wilber2013/p/4638967.html" target="_blank" rel="noopener">Python上下文管理器</a> <a href="https://anyisalin.github.io/anyisalin.github.io/2017/03/07/python-context-manager/" target="_blank" rel="noopener">Python - 上下文管理</a> </p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/上下文管理器/" rel="tag"># 上下文管理器</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/02/linuxnetstat/" rel="next" title="Linux命令-netstat">
+                <i class="fa fa-chevron-left"></i> Linux命令-netstat
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/02/windowskillprocess/" rel="prev" title="Windows查看端口占用并关闭进程">
+                Windows查看端口占用并关闭进程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
+          <p class="site-author-name" itemprop="name">william</p>
+           
+              <p class="site-description motion-element" itemprop="description">删繁就简 一心一意</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#何为上下文管理器"><span class="nav-number">1.</span> <span class="nav-text">何为上下文管理器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#需求的产生"><span class="nav-number">2.</span> <span class="nav-text">需求的产生</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#上下文管理协议"><span class="nav-number">3.</span> <span class="nav-text">上下文管理协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#with语句"><span class="nav-number">4.</span> <span class="nav-text">with语句</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义上下文管理器"><span class="nav-number">5.</span> <span class="nav-text">自定义上下文管理器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#异常处理"><span class="nav-number">6.</span> <span class="nav-text">异常处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#contextmanager"><span class="nav-number">7.</span> <span class="nav-text">contextmanager</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">william</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

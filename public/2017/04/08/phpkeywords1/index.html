@@ -1,0 +1,1147 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="PHP,self,final,this,parent,static,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="LiuYang's BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="最近在看PHP手册，看到类和对象的时候，有一个“后期静态绑定”的内容，self，static，parent这几个关键字弄的我云里雾里，索性查了一些资料，看看self，final，static，this，parent这些关键字到底是什么意思。 官方文档解释：后期静态绑定  自 PHP 5.3.0 起，PHP 增加了一个叫做后期静态绑定的功能，用于在继承范围内引用静态调用的类。 准确说，后期静态绑定工">
+<meta name="keywords" content="PHP,self,final,this,parent,static">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP关键字之self,final,static,this,parent">
+<meta property="og:url" content="http://runnerliu.github.io/2017/04/08/phpkeywords1/index.html">
+<meta property="og:site_name" content="LiuYang&#39;s BLOG">
+<meta property="og:description" content="最近在看PHP手册，看到类和对象的时候，有一个“后期静态绑定”的内容，self，static，parent这几个关键字弄的我云里雾里，索性查了一些资料，看看self，final，static，this，parent这些关键字到底是什么意思。 官方文档解释：后期静态绑定  自 PHP 5.3.0 起，PHP 增加了一个叫做后期静态绑定的功能，用于在继承范围内引用静态调用的类。 准确说，后期静态绑定工">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-11-15T02:24:39.475Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP关键字之self,final,static,this,parent">
+<meta name="twitter:description" content="最近在看PHP手册，看到类和对象的时候，有一个“后期静态绑定”的内容，self，static，parent这几个关键字弄的我云里雾里，索性查了一些资料，看看self，final，static，this，parent这些关键字到底是什么意思。 官方文档解释：后期静态绑定  自 PHP 5.3.0 起，PHP 增加了一个叫做后期静态绑定的功能，用于在继承范围内引用静态调用的类。 准确说，后期静态绑定工">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2017/04/08/phpkeywords1/">
+
+
+
+
+
+  <title> PHP关键字之self,final,static,this,parent | LiuYang's BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LiuYang's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2017/04/08/phpkeywords1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP关键字之self,final,static,this,parent
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-08T15:53:31+08:00">
+                2017-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/04/08/phpkeywords1/" class="leancloud_visitors" data-flag-title="PHP关键字之self,final,static,this,parent">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在看PHP手册，看到类和对象的时候，有一个“后期静态绑定”的内容，self，static，parent这几个关键字弄的我云里雾里，索性查了一些资料，看看self，final，static，this，parent这些关键字到底是什么意思。</p>
+<p><a href="http://php.net/manual/zh/language.oop5.late-static-bindings.php" target="_blank" rel="noopener">官方文档解释：后期静态绑定</a></p>
+<blockquote>
+<p>自 PHP 5.3.0 起，PHP 增加了一个叫做后期静态绑定的功能，用于在继承范围内引用静态调用的类。</p>
+<p>准确说，后期静态绑定工作原理是存储了在上一个“非转发调用”（non-forwarding call）的类名。当进行静态方法调用时，该类名即为明确指定的那个（通常在 :: 运算符左侧部分）；当进行非静态方法调用时，即为该对象所属的类。所谓的“转发调用”（forwarding call）指的是通过以下几种方式进行的静态调用：self::，parent::，static:: 以及 forward_static_call()。可用 get_called_class() 函数来得到被调用的方法所在的类名，static:: 则指出了其范围。</p>
+<p>该功能从语言内部角度考虑被命名为“后期静态绑定”。“后期绑定”的意思是说，static:: 不再被解析为定义当前方法所在的类，而是在实际运行时计算的。也可以称之为“静态绑定”，因为它可以用于（但不限于）静态方法的调用。</p>
+</blockquote>
+<p>因为存在继承和不存在继承的情况下，self，static，parent关键字的作用不同，而this和final是不受继承限制的，我们先来看看this，final。</p>
+<h3 id="关键字this"><a href="#关键字this" class="headerlink" title="关键字this"></a>关键字this</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">class name                              //建立了一个名为name的类</span><br><span class="line">&#123;</span><br><span class="line">    private $name;                      //定义属性，私有</span><br><span class="line"></span><br><span class="line">    //定义构造函数，用于初始化赋值</span><br><span class="line">    function __construct($name)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;name = $name;            //这里已经使用了this指针语句(1)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //析构函数</span><br><span class="line">    function __destruct()</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //打印用户名成员函数</span><br><span class="line">    function print_name()</span><br><span class="line">    &#123;</span><br><span class="line">        print($this-&gt;name);             //再次使用了this指针语句(2)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$obj1 = new name(&quot;PHP_Home&quot;);            //实例化对象 语句(3)</span><br><span class="line"></span><br><span class="line">//执行打印</span><br><span class="line">$obj1-&gt;print_name();                    //输出:PBPHome</span><br><span class="line"></span><br><span class="line">//第二次实例化对象</span><br><span class="line">$obj2 = new name(&quot;PHP&quot;);</span><br><span class="line"></span><br><span class="line">//执行打印</span><br><span class="line">$obj2-&gt;print_name();                    //输出：PHP</span><br></pre></td></tr></table></figure>
+<p><strong>Note</strong>：上面的类分别在语句(1)和语句(2)使用了 this 指针，那么当时 this 是指向谁呢？其实 <strong>this 是在实例化的时候来确定指向谁</strong>，比如第一次实例化对象的时候（语句(3)），那么当时 this 就是指向 \$obj1 对象，那么执行语句(2)的打印时就把</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print($this-&gt;name)</span><br></pre></td></tr></table></figure>
+<p>变成了 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print($obj1-&gt;name)</span><br></pre></td></tr></table></figure>
+<p>那么当然就输出了”PHP_Home”。</p>
+<p>第二个实例的时候，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print($this-&gt;name )</span><br></pre></td></tr></table></figure>
+<p>变成了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print( $obj2-&gt;name)</span><br></pre></td></tr></table></figure>
+<p>于是就输出了”PHP”。所以说，<strong>this 是指向当前对象实例的指针，不指向任何其他对象或类</strong>。</p>
+<h3 id="关键字final"><a href="#关键字final" class="headerlink" title="关键字final"></a>关键字final</h3><p><strong>如果父类中的方法被声明为 final，则子类无法覆盖该方法。如果一个类被声明为 final，则不能被继承</strong>。</p>
+<p>final 方法示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class BaseClass &#123;</span><br><span class="line">   public function test() &#123;</span><br><span class="line">       echo &quot;BaseClass::test() called\n&quot;;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   final public function moreTesting() &#123;</span><br><span class="line">       echo &quot;BaseClass::moreTesting() called\n&quot;;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ChildClass extends BaseClass &#123;</span><br><span class="line">   public function moreTesting() &#123;</span><br><span class="line">       echo &quot;ChildClass::moreTesting() called\n&quot;;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 产生Fatal error: Cannot override final method BaseClass::moreTesting()</span><br></pre></td></tr></table></figure>
+<p>final 类示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">final class BaseClass &#123;</span><br><span class="line">   public function test() &#123;</span><br><span class="line">       echo &quot;BaseClass::test() called\n&quot;;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   // 这里无论你是否将方法声明为final，都没有关系</span><br><span class="line">   final public function moreTesting() &#123;</span><br><span class="line">       echo &quot;BaseClass::moreTesting() called\n&quot;;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ChildClass extends BaseClass &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 产生 Fatal error: Class ChildClass may not inherit from final class (BaseClass)</span><br></pre></td></tr></table></figure>
+<p><strong>Note</strong>：属性不能被定义为 final，只有类和方法才能被定义为 final。</p>
+<p>下面我们在存在继承和不存在继承两种情况下看看self，static，parent关键字的作用。</p>
+<h3 id="不存在继承的时候"><a href="#不存在继承的时候" class="headerlink" title="不存在继承的时候"></a>不存在继承的时候</h3><p>顾名思义，不存在继承就是书写一个单独的类来使用。self 和 static 在范围解析操作符 （::） 的使用上，并无区别。</p>
+<p>在静态函数中，self 和 static 可以调用静态属性和静态函数（没有实例化类，因此不能调用非静态的属性和函数）。<br>在非静态函数中，self 和 static 可以调用静态属性和静态函数以及非静态函数。<br>不存在继承的情况下，self 和 static 的作用是一样的，同时可替换为 <strong>类名::</strong> 的方式调用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">class Demo &#123;</span><br><span class="line">    public static $static;</span><br><span class="line">    public $Nostatic;</span><br><span class="line"></span><br><span class="line">    public function __construct() &#123;</span><br><span class="line">        self::$static = &quot;static&quot;;</span><br><span class="line">        $this-&gt;Nostatic = &quot;Nostatic&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static function get() &#123;</span><br><span class="line">        return __CLASS__;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function show() &#123;</span><br><span class="line">        return &quot;this is function show with &quot; . $this-&gt;Nostatic;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function test() &#123;</span><br><span class="line">        echo Demo::$static . &quot;&lt;br/&gt;&quot;;   //使用类名调用静态属性</span><br><span class="line">        echo Demo::get() . &quot;&lt;br/&gt;&quot;;     //使用类名调用静态属性</span><br><span class="line">        echo Demo::show() . &quot;&lt;br/&gt;&quot;;    //使用类名调用静态属性</span><br><span class="line">        echo self::$static . &quot;&lt;br/&gt;&quot;;   //self调用静态属性</span><br><span class="line">        echo self::show() . &quot;&lt;br/&gt;&quot;;    //self调用非静态方法</span><br><span class="line">        echo self::get() . &quot;&lt;br/&gt;&quot;;     //self调用静态方法</span><br><span class="line">        echo static::$static . &quot;&lt;br/&gt;&quot;; //static调用静态属性</span><br><span class="line">        echo static::show() . &quot;&lt;br/&gt;&quot;;  //static调用非静态方法</span><br><span class="line">        echo static::get() . &quot;&lt;br/&gt;&quot;;   //static调用静态方法</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$obj = new Demo();</span><br><span class="line">$obj-&gt;test();</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">static</span><br><span class="line">Demo</span><br><span class="line">this is function show with Nostatic</span><br><span class="line">static</span><br><span class="line">this is function show with Nostatic</span><br><span class="line">Demo</span><br><span class="line">static</span><br><span class="line">this is function show with Nostatic</span><br><span class="line">Demo</span><br></pre></td></tr></table></figure>
+<h3 id="存在继承的时候"><a href="#存在继承的时候" class="headerlink" title="存在继承的时候"></a>存在继承的时候</h3><p>示例1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    static function getClassName() &#123;</span><br><span class="line">        return &quot;this is class A&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static function testSelf() &#123;</span><br><span class="line">        echo self::getClassName();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static function testStatic() &#123;</span><br><span class="line">        echo static::getClassName();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A &#123;</span><br><span class="line">    static function getClassName() &#123;</span><br><span class="line">        return &quot;this is class B&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">B::testSelf();</span><br><span class="line">B::testStatic();</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">this is class A</span><br><span class="line">this is class B</span><br></pre></td></tr></table></figure>
+<p>Note：self 调用的静态方法或属性始终表示其在使用的时候的当前类（A）的方法或属性，可以替换为其类名，static 调用的静态方法或属性会在继承中被其子类重写覆盖，应该替换为对应的子类名（B）。</p>
+<p>对于parent关键字，用于调用父类的方法和属性。在静态方法中，可以调用父类的静态方法和属性；在非静态方法中，可以调用父类的方法和属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    public static $static;</span><br><span class="line">    public $Nostatic;</span><br><span class="line"></span><br><span class="line">    public function __construct() &#123;</span><br><span class="line">        self::$static = &quot;static&quot;;</span><br><span class="line">        $this-&gt;Nostatic = &quot;Nostatic&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static function staticFun() &#123;</span><br><span class="line">        return self::$static;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function noStaticFun() &#123;</span><br><span class="line">        return &quot;this is function show with &quot; . $this-&gt;Nostatic;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A &#123;</span><br><span class="line">    static function testS() &#123;</span><br><span class="line">        echo parent::staticFun();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function testNoS() &#123;</span><br><span class="line">        echo parent::noStaticFun();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$obj = new B();</span><br><span class="line">$obj-&gt;testS();</span><br><span class="line">$obj-&gt;testNoS();</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">static</span><br><span class="line">this is function show with Nostatic</span><br></pre></td></tr></table></figure>
+<h3 id="PHP手册中的例子"><a href="#PHP手册中的例子" class="headerlink" title="PHP手册中的例子"></a>PHP手册中的例子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    public static function foo() &#123;</span><br><span class="line">        static::who();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static function who() &#123;</span><br><span class="line">        echo __CLASS__ . &quot;\n&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A &#123;</span><br><span class="line">    public static function test() &#123;</span><br><span class="line">        A::foo();</span><br><span class="line">        parent::foo();</span><br><span class="line">        self::foo();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static function who() &#123;</span><br><span class="line">        echo __CLASS__ . &quot;\n&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class C extends B &#123;</span><br><span class="line">    public static function who() &#123;</span><br><span class="line">        echo __CLASS__ . &quot;\n&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">C::test();</span><br></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A</span><br><span class="line">C</span><br><span class="line">C</span><br></pre></td></tr></table></figure>
+<p>我们分析 test() 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static function test() &#123;</span><br><span class="line">        A::foo();</span><br><span class="line">        parent::foo();</span><br><span class="line">        self::foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>A::foo()；这个语句是可以在任何地方执行的，它表示使用A去调用静态方法 foo() 得到“A”。 </p>
+<p>parent::foo()；C 的 parent 是 B ， B 的parent是A，回溯找到了A 的 foo 方法；static::who()；语句中的 static:: 调用的方法会被子类覆盖，所以优先调用 C 的 who() 方法，如果 C 的 who 方法不存在会调用 B 的 who 方法，如果 B 的 who 方法不存在会调用 A 的 who 方法。所以，输出结果是”C”。</p>
+<p>self::foo()；这个 self:: 是在 B 中使用的，所以 self:: 等价于 B:: ，但是 B 没有实现 foo() 方法，B 又继承自 A，所以我们实际上调用了 A::foo() 这个方法。foo() 方法使用了static::who() 语句，导致我们又调用了 C 的 who 函数。</p>
+<blockquote>
+<p>参考文章：</p>
+<p><a href="http://www.cnblogs.com/myjavawork/articles/1793664.html" target="_blank" rel="noopener">PHP中this,self,parent的区别</a>  <a href="http://php.net/manual/zh/language.oop5.final.php" target="_blank" rel="noopener">Final 关键字</a>   <a href="http://php.net/manual/zh/language.oop5.late-static-bindings.php" target="_blank" rel="noopener">后期静态绑定</a>  <a href="http://blog.csdn.net/koastal/article/details/52166246" target="_blank" rel="noopener">PHP中的self、static、parent关键字</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+            <a href="/tags/self/" rel="tag"># self</a>
+          
+            <a href="/tags/final/" rel="tag"># final</a>
+          
+            <a href="/tags/this/" rel="tag"># this</a>
+          
+            <a href="/tags/parent/" rel="tag"># parent</a>
+          
+            <a href="/tags/static/" rel="tag"># static</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/06/josephring/" rel="next" title="约瑟夫环问题">
+                <i class="fa fa-chevron-left"></i> 约瑟夫环问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/09/sina2014php/" rel="prev" title="新浪2014校园招聘 PHP 开发工程师">
+                新浪2014校园招聘 PHP 开发工程师 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
+          <p class="site-author-name" itemprop="name">william</p>
+           
+              <p class="site-description motion-element" itemprop="description">删繁就简 一心一意</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">119</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字this"><span class="nav-number">1.</span> <span class="nav-text">关键字this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字final"><span class="nav-number">2.</span> <span class="nav-text">关键字final</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不存在继承的时候"><span class="nav-number">3.</span> <span class="nav-text">不存在继承的时候</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存在继承的时候"><span class="nav-number">4.</span> <span class="nav-text">存在继承的时候</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP手册中的例子"><span class="nav-number">5.</span> <span class="nav-text">PHP手册中的例子</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">william</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
