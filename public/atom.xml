@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2020-11-29T11:34:32.253Z</updated>
+  <updated>2020-11-29T12:09:36.717Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>学习路线-2020</title>
+    <link href="http://runnerliu.github.io/2020/11/29/roadmap-2020/"/>
+    <id>http://runnerliu.github.io/2020/11/29/roadmap-2020/</id>
+    <published>2020-11-29T12:01:33.000Z</published>
+    <updated>2020-11-29T12:09:36.717Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="英文版"><a href="#英文版" class="headerlink" title="英文版"></a>英文版</h3><p><img src="/images/2020-11-29200200.png" alt="2020-11-29200200.png"></p><p><img src="/images/2020-11-29200201.png" alt="2020-11-29200201.png"></p><p><img src="/images/2020-11-29200202.png" alt="2020-11-29200202.png"></p><p><img src="/images/2020-11-29200203.png" alt="2020-11-29200203.png"></p><h3 id="翻译版"><a href="#翻译版" class="headerlink" title="翻译版"></a>翻译版</h3><p><img src="/images/2020-11-29200200-1.png" alt="2020-11-29200200-1.png"></p><p><img src="/images/2020-11-29200201-1.png" alt="2020-11-29200201-1.png"></p><p><img src="/images/2020-11-29200202-1.png" alt="2020-11-29200202-1.png"></p><p><img src="/images/2020-11-29200203-1.png" alt="2020-11-29200203-1.png"></p><blockquote><p><a href="https://github.com/kamranahmedse/developer-roadmap" target="_blank" rel="noopener">https://github.com/kamranahmedse/developer-roadmap</a></p><p><a href="https://www.w3cschool.cn/article/3131568.html" target="_blank" rel="noopener">https://www.w3cschool.cn/article/3131568.html</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;英文版&quot;&gt;&lt;a href=&quot;#英文版&quot; class=&quot;headerlink&quot; title=&quot;英文版&quot;&gt;&lt;/a&gt;英文版&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/images/2020-11-29200200.png&quot; alt=&quot;2020-11-29200200.png&quot;
+      
+    
+    </summary>
+    
+      <category term="RoadMap" scheme="http://runnerliu.github.io/categories/RoadMap/"/>
+    
+      <category term="学习路线" scheme="http://runnerliu.github.io/categories/RoadMap/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/"/>
+    
+    
+      <category term="RoadMap" scheme="http://runnerliu.github.io/tags/RoadMap/"/>
+    
+      <category term="学习路线" scheme="http://runnerliu.github.io/tags/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/"/>
+    
+  </entry>
   
   <entry>
     <title>Python库-gevent</title>
@@ -534,33 +563,6 @@
       <category term="SQLAlchemy" scheme="http://runnerliu.github.io/tags/SQLAlchemy/"/>
     
       <category term="bug" scheme="http://runnerliu.github.io/tags/bug/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HTTP POST提交数据分常见方式</title>
-    <link href="http://runnerliu.github.io/2018/05/13/httppostmethod/"/>
-    <id>http://runnerliu.github.io/2018/05/13/httppostmethod/</id>
-    <published>2018-05-13T06:17:00.000Z</published>
-    <updated>2020-11-15T02:24:39.467Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="http://www.ietf.org/rfc/rfc2616.txt" target="_blank" rel="noopener">HTTP/1.1协议</a> 规定的 HTTP 请求方法有 OPTIONS、GET、HEAD、POST、PUT、DELETE、TRACE、CONNECT这几种。其中 POST 一般用来向服务端提交数据，我们在写类似接口文档这种被业务方调用的服务时，涉及到 POST 的默认提交方式基本都是：<code>application/x-www-form-urlencoded</code> 。本 文主要讨论 POST 提交数据的几种方式。</p><p>我们知道，HTTP 协议是以 <strong>ASCII</strong> 码传输，建立在 TCP/IP 协议之上的应用层规范。规范把 HTTP 请求分为三个部分：状态行、请求头、消息主体。类似于下面这样：</p><blockquote><p><method> <request-url> <version></version></request-url></method></p><headers><p><entity-body></entity-body></p></headers></blockquote><p>协议规定 POST 提交的数据必须放在消息主体（<code>entity-body</code>）中，但协议并没有规定数据必须使用什么编码方式。实际上，开发者完全可以自己决定消息主体的格式，只要最后发送的 HTTP 请求满足上面的格式就可以。</p><p>但是，数据发送出去，还要服务端解析成功才有意义。一般服务端语言如 java php python 等，以及它们的 framework，都内置了自动解析常见数据格式的功能。服务端通常是根据请求头（headers）中的 <code>Content-Type</code>字段来获知请求中的消息主体是用何种方式编码，再对主体进行解析。所以说到 POST 提交数据方案，包含了 <code>Content-Type</code> 和消息主体编码方式两部分。下面进入正题。</p><h3 id="application-x-www-form-urlencoded"><a href="#application-x-www-form-urlencoded" class="headerlink" title="application/x-www-form-urlencoded"></a>application/x-www-form-urlencoded</h3><p>这种方式是最常见的 POST 提交数据的方式。浏览器的原生 <code>&lt;form&gt;</code> 表单，如果不设置 <code>enctype</code> 属性，那么最终就会以 <code>application/x-www-form-urlencoded</code> 方式提交数据。请求类似于下面这样（无关的请求头在本文中都省略掉了）：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST http://www.example.com HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded;charset=utf-8</span><br><span class="line">title=test&amp;sub%5B%5D=1&amp;sub%5B%5D=2&amp;sub%5B%5D=3</span><br></pre></td></tr></table></figure><p>首先，Content-Type 被指定为 <code>application/x-www-form-urlencoded</code> ；其次，提交的数据按照 <code>key1=val1&amp;key2=val2</code> 的方式进行编码，key 和 val 都进行了 URL 转码。大部分服务端语言都对这种方式有很好的支持。</p><p>通常，我们用 Ajax 提交数据时，也是使用这种方式。例如 <a href="http://jquery.com/" target="_blank" rel="noopener">JQuery</a> 和 <a href="http://www.qwrap.com/" target="_blank" rel="noopener">QWrap</a> 的 Ajax，<code>Content-Type</code> 默认值都是 <code>application/x-www-form-urlencoded;charset=utf-8</code> 。</p><h3 id="multipart-form-data"><a href="#multipart-form-data" class="headerlink" title="multipart/form-data"></a>multipart/form-data</h3><p>在使用表单上传文件时，必须让 <code>&lt;form&gt;</code> 表单的 <code>enctype</code> 等于 <code>multipart/form-data</code>。直接来看一个请求示例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST http://www.example.com HTTP/1.1</span><br><span class="line">Content-Type:multipart/form-data; boundary=----WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name=&quot;text&quot;</span><br><span class="line"></span><br><span class="line">title</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;chrome.png&quot;</span><br><span class="line">Content-Type: image/png</span><br><span class="line"></span><br><span class="line">PNG ... content of chrome.png ...</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA--</span><br></pre></td></tr></table></figure><p>这个例子稍微复杂点。首先生成了一个 <code>boundary</code> 用于分割不同的字段，为了避免与正文内容重复，<code>boundary</code> 很长很复杂。然后 <code>Content-Type</code> 里指明了数据是以 <code>multipart/form-data</code> 来编码，本次请求的 <code>boundary</code> 是什么内容。消息主体里按照字段个数又分为多个结构类似的部分，每部分都是以 <code>--boundary</code> 开始，紧接着是内容描述信息，然后是回车，最后是字段具体内容（文本或二进制）。如果传输的是文件，还要包含文件名和文件类型信息。消息主体最后以 <code>--boundary--</code> 标示结束。关于 <code>multipart/form-data</code> 的详细定义，请前往 <a href="http://www.ietf.org/rfc/rfc1867.txt" target="_blank" rel="noopener">rfc1867</a> 查看。这种方式一般用来上传文件，各大服务端语言对它也有着良好的支持。</p><p>以上提到的两种 POST 数据的方式，都是浏览器原生支持的，而且现阶段标准中原生 \&lt;form> 表单也 <a href="http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4" target="_blank" rel="noopener">只支持这两种方式</a>（通过 <code>&lt;form&gt;</code> 元素的 <code>enctype</code> 属性指定，默认为 <code>application/x-www-form-urlencoded</code>。其实 <code>enctype</code> 还支持 <code>text/plain</code>，不过用得非常少）。</p><p>随着越来越多的 Web 站点，尤其是 WebApp，全部使用 Ajax 进行数据交互之后，我们完全可以定义新的数据提交方式，给开发带来更多便利。</p><h3 id="application-json"><a href="#application-json" class="headerlink" title="application/json"></a>application/json</h3><p><code>application/json</code> 这个 <code>Content-Type</code> 作为响应头大家肯定不陌生。实际上，现在越来越多的人把它作为请求头，用来告诉服务端消息主体是序列化后的 JSON 字符串。由于 JSON 规范的流行，除了低版本 IE 之外的各大浏览器都原生支持 JSON.stringify，服务端语言也都有处理 JSON 的函数，使用 JSON 不会遇上什么麻烦。JSON 格式支持比键值对复杂得多的结构化数据，这一点也很有用。</p><p>Google 的 <a href="http://angularjs.org/" target="_blank" rel="noopener">AngularJS</a> 中的 Ajax 功能，默认就是提交 JSON 字符串。例如下面这段代码：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var data = &#123;&apos;title&apos;:&apos;test&apos;, &apos;sub&apos; : [1,2,3]&#125;;</span><br><span class="line">$http.post(url, data).success(function(result) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>最终发送的请求是：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST http://www.example.com HTTP/1.1 </span><br><span class="line">Content-Type: application/json;charset=utf-8</span><br><span class="line"></span><br><span class="line">&#123;&quot;title&quot;:&quot;test&quot;,&quot;sub&quot;:[1,2,3]&#125;</span><br></pre></td></tr></table></figure><p>这种方案，可以方便的提交复杂的结构化数据，特别适合 RESTful 的接口。各大抓包工具如 Chrome 自带的开发者工具、Firebug、Fiddler，都会以树形结构展示 JSON 数据，非常友好。但也有些服务端语言还没有支持这种方式，例如 php 就无法通过 $_POST 对象从上面的请求中获得内容。这时候，需要自己动手处理下：在请求头中 <code>Content-Type</code> 为 <code>application/json</code> 时，从 <code>php://input</code> 里获得原始输入流，再 <code>json_decode</code> 成对象。一些 php 框架已经开始这么做了。</p><p>当然 AngularJS 也可以配置为使用 <code>x-www-form-urlencoded</code> 方式提交数据。如有需要，可以参考 <a href="http://victorblog.com/2012/12/20/make-angularjs-http-service-behave-like-jquery-ajax/" target="_blank" rel="noopener">这里</a>。</p><h3 id="text-xml"><a href="#text-xml" class="headerlink" title="text/xml"></a>text/xml</h3><p>这种方式目前几乎很少在用，因为 JSON 方式更加灵活方便，而 xml 方式显得比较臃肿和繁琐。<code>XML-RPC（XML Remote Procedure Call）</code> 协议是一套允许运行在不同操作系统、不同环境的程序实现基于 Internet 过程调用的规范和一系列的实现。这种远程过程调用使用 HTTP 作为传输协议，XML 作为传送信息的编码格式。</p><p>典型的 <code>XML-RPC</code> 请求是这样的：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST http://www.example.com HTTP/1.1 </span><br><span class="line">Content-Type: text/xml</span><br><span class="line"></span><br><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;methodCall&gt;</span><br><span class="line">    &lt;methodName&gt;examples.getStateName&lt;/methodName&gt;</span><br><span class="line">    &lt;params&gt;</span><br><span class="line">        &lt;param&gt;</span><br><span class="line">            &lt;value&gt;&lt;i4&gt;41&lt;/i4&gt;&lt;/value&gt;</span><br><span class="line">        &lt;/param&gt;</span><br><span class="line">    &lt;/params&gt;</span><br><span class="line">&lt;/methodCall&gt;</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;http://www.ietf.org/rfc/rfc2616.txt&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;HTTP/1.1协议&lt;/a&gt; 规定的 HTTP 请求方法有 OPTIONS、GET、HEAD、POST、PUT、DELE
-      
-    
-    </summary>
-    
-      <category term="HTTP" scheme="http://runnerliu.github.io/categories/HTTP/"/>
-    
-    
-      <category term="HTTP" scheme="http://runnerliu.github.io/tags/HTTP/"/>
-    
-      <category term="POST" scheme="http://runnerliu.github.io/tags/POST/"/>
     
   </entry>
   
