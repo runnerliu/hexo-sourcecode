@@ -4,6 +4,161 @@
   
     
     <entry>
+      <title><![CDATA[Tornado5.0.2翻译文档 - 模板和UI]]></title>
+      <url>http://runnerliu.github.io/2020/12/19/tornado502-templateui/</url>
+      <content type="html"><![CDATA[<p>Tornado包含一种简单、快速、灵活的模板语言。本节描述该语言以及相关问题，如国际化。</p>
+<p>Tornado还可以与任何其他Python模板语言一起使用，尽管没有将这些系统集成到<code>RequestHandler.render</code>中。只需将模板呈现为一个字符串并将其传递给<code>RequestHandler.write</code>即可。</p>
+<h3 id="模板配置"><a href="#模板配置" class="headerlink" title="模板配置"></a>模板配置</h3><p>默认情况下，Tornado会在引用它们的<code>.py</code>文件的同一目录中寻找模板文件。要将模板文件放到不同的目录中，请使用<code>template_path</code>应用程序设置(或覆盖<code>RequestHandler.get_template_path</code>如果不同的处理程序有不同的模板路径)。</p>
+<p>要从非文件系统位置加载模板，子类<code>tornado.template.BaseLoader</code>并传递一个实例作为<code>template_loader</code>应用程序设置。</p>
+<p>编译后的模板默认缓存;要关闭此缓存并重新加载模板，以便底层文件的更改始终可见，请使用应用程序设置<code>compiled_template_cache=False</code>或<code>debug=True</code>。</p>
+<h3 id="模板语法"><a href="#模板语法" class="headerlink" title="模板语法"></a>模板语法</h3><p>Tornado模板只是HTML(或任何其他基于文本的格式)，在标记中嵌入了Python控制序列和表达式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">   &lt;head&gt;</span><br><span class="line">      &lt;title&gt;&#123;&#123; title &#125;&#125;&lt;/title&gt;</span><br><span class="line">   &lt;/head&gt;</span><br><span class="line">   &lt;body&gt;</span><br><span class="line">     &lt;ul&gt;</span><br><span class="line">       &#123;% for item in items %&#125;</span><br><span class="line">         &lt;li&gt;&#123;&#123; escape(item) &#125;&#125;&lt;/li&gt;</span><br><span class="line">       &#123;% end %&#125;</span><br><span class="line">     &lt;/ul&gt;</span><br><span class="line">   &lt;/body&gt;</span><br><span class="line"> &lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>如果您将此模板保存为“template.html”。然后把它放在与Python文件相同的目录下，你可以用下面的方法来渲染这个模板:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class MainHandler(tornado.web.RequestHandler):</span><br><span class="line">    def get(self):</span><br><span class="line">        items = [&quot;Item 1&quot;, &quot;Item 2&quot;, &quot;Item 3&quot;]</span><br><span class="line">        self.render(&quot;template.html&quot;, title=&quot;My title&quot;, items=items)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tornado模板支持控制语句和表达式。控制语句被&#123;%和%&#125;包围，比如：&#123;% if len(items) &gt; 2 %&#125;，表达式由&#123;&#123;和&#125;&#125;包围，比如&#123;&#123; item[0] &#125;&#125;。控制语句或多或少精确地映射到Python语句。我们支持if、for、while和try，它们都以&#123;%end%&#125;结尾，我们还支持使用extends和block语句的模板继承，这些语句都能在tornado.template找到。</span><br></pre></td></tr></table></figure>
+<p>表达式可以是任何Python表达式，包括函数调用。模板代码在包含以下对象和函数的命名空间中执行(注意使用此列表呈现的模板<code>RequestHandler.render</code>和<code>render_string</code>。如果你使用<code>tornado.template</code>模块直接位于<code>RequestHandler</code>外部，其中许多条目不存在）</p>
+<ul>
+<li><p><code>escape</code>: alias for <code>tornado.escape.xhtml_escape</code></p>
+</li>
+<li><p><code>xhtml_escape</code>: alias for <code>tornado.escape.xhtml_escape</code></p>
+</li>
+<li><p><code>url_escape</code>: alias for <code>tornado.escape.url_escape</code></p>
+</li>
+<li><p><code>json_encode</code>: alias for <code>tornado.escape.json_encode</code></p>
+</li>
+<li><p><code>squeeze</code>: alias for <code>tornado.escape.squeeze</code></p>
+</li>
+<li><p><code>linkify</code>: alias for <code>tornado.escape.linkify</code></p>
+</li>
+<li><p><code>datetime</code>: the Python <code>datetime</code>module</p>
+</li>
+<li><p><code>handler</code>: the current <code>RequestHandler</code> object</p>
+</li>
+<li><p><code>request</code>: alias for <code>handler.request</code></p>
+</li>
+<li><p><code>current_user</code>: alias for <code>handler.current_user</code></p>
+</li>
+<li><p><code>locale</code>: alias for <code>handler.locale</code></p>
+</li>
+<li><p><code>\_</code>: alias for handler.locale.translate</p>
+</li>
+<li><p>static_url: alias for <code>handler.static_url</code></p>
+</li>
+<li><p>xsrf_form_html: alias for <code>handler.xsrf_form_html</code></p>
+</li>
+<li><p>reverse_url: alias for <code>Application.reverse_url</code></p>
+</li>
+<li><p>All entries from the <code>ui_methods</code> and <code>ui_modules</code> <code>Application</code> settings</p>
+</li>
+<li><p>Any keyword arguments passed to <code>render</code> or <code>render_string</code></p>
+</li>
+</ul>
+<p>当您构建一个真正的应用程序时，您需要使用Tornado模板的所有特性，特别是模板继承。请阅读<code>tornado.template</code>部分（一些功能，包括<code>UIModules</code>在<code>tornado.web</code>模块）</p>
+<p>Tornado模板直接翻译成Python。模板中包含的表达式将被逐字复制到表示模板的Python函数中。我们不试图阻止模板语言中的任何东西；我们显式地创建它是为了提供其他更严格的模板系统所阻止的灵活性。因此，如果您在模板表达式中编写随机内容，那么在执行模板时，您将得到随机的Python错误。</p>
+<p>默认情况下，所有模板输出都是转义的，使用<code>tornado.escape.xhtml_escape</code>函数，可以传递参数 <code>autoescape=None</code> 给Application或者通过<code>tornado.template.Loader</code>来全局改变该属性，此外，在这些地方中的每一个都可以使用替代转义函数的名称来代替<code>None</code>。</p>
+<p>请注意，虽然Tornado的自动转义有助于避免XSS漏洞，但它在所有情况下都不够。出现在某些位置（如JavaScript或CSS）中的表达式可能需要额外的转义。此外，必须注意在可能包含不可信内容的HTML属性中始终使用双引号和xhtml_escape，或者必须对属性使用单独的转义函数（参见<a href="https://wonko.com/post/html-escaping" target="_blank" rel="noopener">博客</a>）。</p>
+<h3 id="国际化"><a href="#国际化" class="headerlink" title="国际化"></a>国际化</h3><p>参见<a href="https://www.tornadoweb.org/en/stable/guide/templates.html#internationalization" target="_blank" rel="noopener">Internationalization</a></p>
+<h3 id="UI模块"><a href="#UI模块" class="headerlink" title="UI模块"></a>UI模块</h3><p>参见<a href="https://www.tornadoweb.org/en/stable/guide/templates.html#ui-modules" target="_blank" rel="noopener">UI modules</a></p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://www.tornadoweb.org/en/stable/guide/templates.html" target="_blank" rel="noopener">Templates and UI</a></p>
+</blockquote>
+]]></content>
+      
+        <categories>
+            
+            <category> Tornado </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Tornado </tag>
+            
+            <tag> 翻译文档 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Tornado5.0.2翻译文档 - Tornado web应用程序的结构]]></title>
+      <url>http://runnerliu.github.io/2020/12/19/tornado502-structureofweb/</url>
+      <content type="html"><![CDATA[<p>Tornado web应用程序通常由一个或多个 <code>RequestHandler</code> 子类组成，将传入请求路由到处理程序的 <code>Application</code> 对象，和一个启动服务程序的 <code>main</code> 方法。</p>
+<p>一个最小的“hello world”示例是这样的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tornado.ioloop</span><br><span class="line">import tornado.web</span><br><span class="line"></span><br><span class="line">class MainHandler(tornado.web.RequestHandler):</span><br><span class="line">    def get(self):</span><br><span class="line">        self.write(&quot;Hello, world&quot;)</span><br><span class="line"></span><br><span class="line">def make_app():</span><br><span class="line">    return tornado.web.Application([</span><br><span class="line">        (r&quot;/&quot;, MainHandler),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    app = make_app()</span><br><span class="line">    app.listen(8888)</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
+<h3 id="Application-对象"><a href="#Application-对象" class="headerlink" title="Application 对象"></a>Application 对象</h3><p><code>Application</code> 对象负责全局配置，包括将请求映射到处理程序的路由表。</p>
+<p>路由表是 <code>URLSpec</code> 对象(或元组)的列表，每个对象都包含(至少)一个正则表达式和一个处理程序类。顺序问题：使用第一个匹配规则。如果正则表达式包含捕获组，那么这些组就是路径参数，并将被传递给处理程序的HTTP方法。如果字典作为 <code>URLSpec</code> 的第三个元素传递，它将提供初始化参数，该参数将被传递给 <code>RequestHandler.initialize</code>。<code>URLSpec</code> 对象也可自定义名称，用于 <code>RequestHandler.reverse_url</code>。</p>
+<p>例如，在这个片段中，根URL <code>/</code> 被映射到 <code>MainHandler</code>，而形式 <code>/story/</code> 后面跟着一个数字的 <code>URL</code> 被映射到 <code>StoryHandler</code>。这个数字被传递(作为字符串)给 <code>StoryHandler.get</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class MainHandler(RequestHandler):</span><br><span class="line">    def get(self):</span><br><span class="line">        self.write(&apos;&lt;a href=&quot;%s&quot;&gt;link to story 1&lt;/a&gt;&apos; %</span><br><span class="line">                   self.reverse_url(&quot;story&quot;, &quot;1&quot;))</span><br><span class="line"></span><br><span class="line">class StoryHandler(RequestHandler):</span><br><span class="line">    def initialize(self, db):</span><br><span class="line">        self.db = db</span><br><span class="line"></span><br><span class="line">    def get(self, story_id):</span><br><span class="line">        self.write(&quot;this is story %s&quot; % story_id)</span><br><span class="line"></span><br><span class="line">app = Application([</span><br><span class="line">    url(r&quot;/&quot;, MainHandler),</span><br><span class="line">    url(r&quot;/story/([0-9]+)&quot;, StoryHandler, dict(db=db), name=&quot;story&quot;)</span><br><span class="line">    ])</span><br></pre></td></tr></table></figure>
+<p><code>Application</code> 构造函数接受许多关键字参数，这些参数可用于自定义应用程序的行为和启用可选特性；点击 <a href="https://www.tornadoweb.org/en/stable/web.html#tornado.web.Application.settings" target="_blank" rel="noopener">Application.settings</a>，查看完整设置。</p>
+<h3 id="RequestHandler-子类"><a href="#RequestHandler-子类" class="headerlink" title="RequestHandler 子类"></a>RequestHandler 子类</h3><p>Tornado web应用程序的大部分工作都是在 <code>RequestHandler</code> 的子类中完成的。处理程序子类的主要入口点是以被处理的HTTP方法命名的方法: <code>get()</code>、<code>post()</code>等。每个处理程序可以定义一个或多个这样的方法来处理不同的HTTP操作。如上所述，这些方法将被调用，参数与匹配的路由规则的捕获组相对应。</p>
+<p>在处理程序中，调用 <code>RequestHandler.render</code>、<code>RequestHandler.write</code>来产生一个响应。<code>render()</code> 按名称加载模板，并使用给定参数呈现它。<code>write()</code> 用于非基于模板的输出；它接受字符串、字节和字典(dicts将被编码为JSON)。</p>
+<p><code>RequestHandler</code> 中的许多方法被设计成可以在子类中重写，并在整个应用程序中使用。通常定义一个 <code>BaseHandler</code> 类，覆盖 <code>write_error</code> 和 <code>get_current_user</code> 等方法，然后为所有特定的处理程序子类化你自己的 <code>BaseHandler</code> 而不是 <code>RequestHandler</code>。</p>
+<h4 id="处理请求输入"><a href="#处理请求输入" class="headerlink" title="处理请求输入"></a>处理请求输入</h4><p>请求处理程序可以通过 <code>self.request</code> 访问表示当前请求的对象。有关属性的完整列表，请参阅 <a href="https://www.tornadoweb.org/en/stable/httputil.html#tornado.httputil.HTTPServerRequest" target="_blank" rel="noopener">HTTPServerRequest</a> 的类定义。</p>
+<p>HTML表单使用的格式的请求数据将为您解析，并在 <code>get_query_argument</code> 和 <code>get_body_argument</code> 等方法中可用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class MyFormHandler(tornado.web.RequestHandler):</span><br><span class="line">    def get(self):</span><br><span class="line">        self.write(&apos;&lt;html&gt;&lt;body&gt;&lt;form action=&quot;/myform&quot; method=&quot;POST&quot;&gt;&apos;</span><br><span class="line">                   &apos;&lt;input type=&quot;text&quot; name=&quot;message&quot;&gt;&apos;</span><br><span class="line">                   &apos;&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;&apos;</span><br><span class="line">                   &apos;&lt;/form&gt;&lt;/body&gt;&lt;/html&gt;&apos;)</span><br><span class="line"></span><br><span class="line">    def post(self):</span><br><span class="line">        self.set_header(&quot;Content-Type&quot;, &quot;text/plain&quot;)</span><br><span class="line">        self.write(&quot;You wrote &quot; + self.get_body_argument(&quot;message&quot;))</span><br></pre></td></tr></table></figure>
+<p>由于HTML表单编码对于参数是单个值还是包含一个元素的列表是模棱两可的，<code>RequestHandler</code> 提供了不同的方法，允许应用程序指示它是否需要列表。对于列表，使用 <code>get_query_arguments</code> 和 <code>get_body_arguments</code> 而不是它们的单一对应项。</p>
+<p>通过表单上传的文件在 <code>self.request.files</code> 中可用。它将名称 <code>&lt;input type=&quot;file&quot;&gt;</code> 元素映射到一个文件列表。每个文件是一个字典形式 <code>{&quot;filename&quot;:…, &quot;content_type&quot;:……, &quot;body&quot;:…}</code>。<code>files</code> 对象只有在文件上传带有表单包装器(即 <code>multipart/form-data</code> 类型)时才存在;如果未使用此格式，则在 <code>self.request.body</code> 中可以使用原始上传数据。默认情况下，上传的文件在内存中完全缓冲;如果您需要处理太大而不能舒适地保存在内存中的文件，请参阅 <a href="https://www.tornadoweb.org/en/stable/web.html#tornado.web.stream_request_body" target="_blank" rel="noopener">stream_request_body</a> 类装饰器。</p>
+<p>在demos目录中，<a href="https://github.com/tornadoweb/tornado/tree/master/demos/file_upload/" target="_blank" rel="noopener">file_receiver.py</a>显示了两种接收文件上传的方法。</p>
+<p>由于HTML表单编码的奇怪之处(例如，单参数与复数参数之间的模糊性)，Tornado并不试图将表单参数与其他类型的输入统一起来。特别地，我们不解析JSON请求体。希望使用JSON而不是form-encoding的应用程序可以重写 <code>prepare</code> 来解析它们的请求:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def prepare(self):</span><br><span class="line">    if self.request.headers.get(&quot;Content-Type&quot;, &quot;&quot;).startswith(&quot;application/json&quot;):</span><br><span class="line">        self.json_args = json.loads(self.request.body)</span><br><span class="line">    else:</span><br><span class="line">        self.json_args = None</span><br></pre></td></tr></table></figure>
+<h3 id="重写RequestHandler方法"><a href="#重写RequestHandler方法" class="headerlink" title="重写RequestHandler方法"></a>重写RequestHandler方法</h3><p>除了 <code>get()</code>/ <code>post()</code>/等，<code>RequestHandler</code> 中的某些其他方法被设计成在必要时由子类覆盖。在每个请求中，会发生以下调用序列:</p>
+<ul>
+<li>每个请求都会创建一个新的 <code>RequestHandler</code> 对象。</li>
+<li><code>initialize()</code> 使用来自应用程序配置的初始化参数调用。初始化通常应该只保存传递给成员变量的实参;它可能不会产生任何输出或调用 <code>send_error</code> 之类的方法。</li>
+<li><code>prepare()</code> 被调用。这在所有处理程序子类共享的基类中最有用，因为无论使用哪种HTTP方法都将调用 <code>prepare</code>。准备可产生产出;如果它调用<code>finish</code>(或<code>redirect</code>，等等)，处理将在此停止。</li>
+<li>其中一个HTTP方法被调用:<code>get()</code>、<code>post()</code>、<code>put()</code>等等。如果URL正则表达式包含捕获组，则将它们作为参数传递给此方法。</li>
+<li>当请求完成时，调用<code>on_finish()</code>。这通常是在<code>get()</code>或另一个HTTP方法返回之后。</li>
+</ul>
+<p>所有设计要重写的方法都在<code>RequestHandler</code>文档中有这样的说明。一些最常见的覆盖方法包括:</p>
+<ul>
+<li><code>write_error</code> - 输出用于错误页面的HTML。</li>
+<li><code>on_connection_close</code> - 当客户端断开连接时调用;应用程序可以选择检测这种情况并停止进一步处理。请注意，不能保证能够迅速检测到关闭的连接。</li>
+<li><code>get_current_user</code> - 参见<a href="https://www.tornadoweb.org/en/stable/guide/security.html#user-authentication" target="_blank" rel="noopener">User authentication</a>。</li>
+<li><code>get_user_locale</code> - 返回用于当前用户的<code>Locale</code>对象。</li>
+<li><code>set_default_headers</code> - 可以用于设置响应的附加标头(例如自定义<code>Server</code>头)。</li>
+</ul>
+<h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><p>如果处理程序抛出异常，Tornado将调用<code>RequestHandler.write_error</code>生成一个错误页面。<code>tornado.web.HTTPError</code>可以用来生成指定的状态码;所有其他异常返回一个500状态。</p>
+<p>默认的错误页面包括调试模式下的堆栈跟踪和错误的单行描述(例如:“500: Internal Server Error”)。若要生成自定义错误页面，请覆盖<code>RequestHandler.write_error</code>(可能在所有处理程序共享的基类中)。该方法可以通过<code>write</code>和<code>render</code>等方法正常生成输出。如果错误是由异常引起的，那么将传递一个<code>exc_info</code>三元组作为关键字参数(注意，这个异常不能保证是<code>sys.exc_info</code>，所以<code>write_error</code>必须使用<code>traceback.format_exception</code>代替<code>traceback.format_exc</code>)。</p>
+<p>通过调用<code>set_status</code>编写响应并返回，也可以从常规处理程序方法而不是<code>write_error</code>生成一个错误页面。在简便返回不很方便的情况下<code>tornado.web.Finish</code> 异常会被抛出来终止处理程序而不是抛出<code>write_error</code>。</p>
+<p>对于404错误，使用<code>default_handler_class</code> <code>Application settings</code>。这个处理程序应该覆盖<code>prepare</code>而不是像<code>get()</code>这样更具体的方法，这样它就可以与任何HTTP方法一起工作。它应该像上面描述的那样生成它的错误页面:通过调用<code>HTTPError(404)</code>并覆盖<code>write_error</code>，或者调用<code>self.set_status(404)</code>并在<code>prepare()</code>中直接生成响应。</p>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p>在Tornado中有两种主要的重定向请求的方法:<code>RequestHandler.redirect</code> 和 <code>RedirectHandler</code>。</p>
+<p>您可以在<code>RequestHandler</code>方法中使用<code>self.redirect()</code>将用户重定向到其他地方。还有一个可选参数<code>permanent</code>，您可以使用它来指示重定向被认为是永久性的。<code>permanent</code>的默认值是False，它生成<code>302 Found HTTP</code>响应代码，适合在成功POST请求后重定向用户。如果<code>permanent</code>为True，则使用301移动的永久HTTP响应代码，这在以面向seo的方式重定向到页面的规范URL时很有用。</p>
+<p><code>RedirectHandler</code>允许您在应用程序路由表中直接配置重定向。例如，要配置一个静态重定向:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app = tornado.web.Application([</span><br><span class="line">    url(r&quot;/app&quot;, tornado.web.RedirectHandler,</span><br><span class="line">        dict(url=&quot;http://itunes.apple.com/my-app-id&quot;)),</span><br><span class="line">    ])</span><br></pre></td></tr></table></figure>
+<p><code>RedirectHandler</code>也支持正则表达式替换。下面的规则将所有以<code>/pictures/</code>开头的请求重定向到前缀<code>/photos/</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app = tornado.web.Application([</span><br><span class="line">    url(r&quot;/photos/(.*)&quot;, MyPhotoHandler),</span><br><span class="line">    url(r&quot;/pictures/(.*)&quot;, tornado.web.RedirectHandler,</span><br><span class="line">        dict(url=r&quot;/photos/&#123;0&#125;&quot;)),</span><br><span class="line">    ])</span><br></pre></td></tr></table></figure>
+<p>不像<code>RequestHandler.redirect</code>，<code>RedirectHandler</code>默认使用永久重定向。这是因为路由表在运行时不会改变，并且被认为是永久的，而在处理程序中发现的重定向很可能是其他可能改变的逻辑的结果。要使用<code>RedirectHandler</code>发送临时重定向，请在<code>RedirectHandler</code>初始化参数中添加<code>permanent=False</code>。</p>
+<h3 id="异步处理类"><a href="#异步处理类" class="headerlink" title="异步处理类"></a>异步处理类</h3><p>某些处理程序方法(包括<code>prepare()</code>和HTTP动词方法<code>get()</code>/ <code>post()</code>/等)可能被重写为协程，以使处理程序异步。</p>
+<p>例如，下面是一个使用协同程序的简单处理程序:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class MainHandler(tornado.web.RequestHandler):</span><br><span class="line">    async def get(self):</span><br><span class="line">        http = tornado.httpclient.AsyncHTTPClient()</span><br><span class="line">        response = await http.fetch(&quot;http://friendfeed-api.com/v2/feed/bret&quot;)</span><br><span class="line">        json = tornado.escape.json_decode(response.body)</span><br><span class="line">        self.write(&quot;Fetched &quot; + str(len(json[&quot;entries&quot;])) + &quot; entries &quot;</span><br><span class="line">                   &quot;from the FriendFeed API&quot;)</span><br></pre></td></tr></table></figure>
+<p>关于更高级的异步示例，请查看<a href="https://github.com/tornadoweb/tornado/tree/stable/demos/chat" target="_blank" rel="noopener">聊天示例应用程序</a>，该应用程序使用长轮询实现了一个AJAX聊天室。使用长轮询的用户可能希望覆盖<code>on_connection_close()</code>，以便在客户端关闭连接后进行清理(但请参阅该方法的文档字符串以了解注意事项)。</p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://www.tornadoweb.org/en/stable/guide/structure.html" target="_blank" rel="noopener">Structure of a Tornado web application</a></p>
+</blockquote>
+]]></content>
+      
+        <categories>
+            
+            <category> Tornado </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Tornado </tag>
+            
+            <tag> 翻译文档 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[学习路线-2020]]></title>
       <url>http://runnerliu.github.io/2020/11/29/roadmap-2020/</url>
       <content type="html"><![CDATA[<h3 id="英文版"><a href="#英文版" class="headerlink" title="英文版"></a>英文版</h3><p><img src="/images/2020-11-29200200.png" alt="2020-11-29200200.png"></p>
@@ -23,8 +178,6 @@
         <categories>
             
             <category> RoadMap </category>
-            
-            <category> 学习路线 </category>
             
         </categories>
         
@@ -734,21 +887,21 @@
 </ul>
 </li>
 <li><a href="https://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/#more">Queue 示例-一个并发网络爬虫</a></li>
-<li><a href>Tornado Web应用的结构</a><ul>
-<li><a href>Application 对象</a></li>
-<li><a href>RequestHandler 子类</a></li>
-<li><a href>处理输入请求</a></li>
-<li><a href>重写 RequestHandler 方法</a></li>
-<li><a href>错误处理</a></li>
-<li><a href>重定向</a></li>
-<li><a href>异步处理</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">Tornado Web应用的结构</a><ul>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">Application 对象</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">RequestHandler 子类</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">处理输入请求</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">重写 RequestHandler 方法</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">错误处理</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">重定向</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">异步处理</a></li>
 </ul>
 </li>
-<li><a href>模板和 UI</a><ul>
-<li><a href>配置模板</a></li>
-<li><a href>模板语法</a></li>
-<li><a href>国际化</a></li>
-<li><a href>UI 模块</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">模板和 UI</a><ul>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">配置模板</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">模板语法</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">国际化</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">UI 模块</a></li>
 </ul>
 </li>
 <li><a href>认证和安全</a><ul>
@@ -826,8 +979,8 @@
 <li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">异步和非阻塞 I/O</a></li>
 <li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">协程</a></li>
 <li><a href="https://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/#more">Queue 示例-一个并发网络爬虫</a></li>
-<li><a href>Tornado 的 web 应用程序结构</a></li>
-<li><a href>模板和UI</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">Tornado 的 web 应用程序结构</a></li>
+<li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">模板和UI</a></li>
 <li><a href>认证和安全</a></li>
 <li><a href>运行和部署</a></li>
 </ul>

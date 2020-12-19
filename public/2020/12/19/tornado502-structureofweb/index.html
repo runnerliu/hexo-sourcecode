@@ -1,0 +1,1141 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Tornado,翻译文档,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="LiuYang's BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Tornado web应用程序通常由一个或多个 RequestHandler 子类组成，将传入请求路由到处理程序的 Application 对象，和一个启动服务程序的 main 方法。 一个最小的“hello world”示例是这样的: 12345678910111213141516import tornado.ioloopimport tornado.webclass MainHandler(t">
+<meta name="keywords" content="Tornado,翻译文档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tornado5.0.2翻译文档 - Tornado web应用程序的结构">
+<meta property="og:url" content="http://runnerliu.github.io/2020/12/19/tornado502-structureofweb/index.html">
+<meta property="og:site_name" content="LiuYang&#39;s BLOG">
+<meta property="og:description" content="Tornado web应用程序通常由一个或多个 RequestHandler 子类组成，将传入请求路由到处理程序的 Application 对象，和一个启动服务程序的 main 方法。 一个最小的“hello world”示例是这样的: 12345678910111213141516import tornado.ioloopimport tornado.webclass MainHandler(t">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-12-19T08:01:26.245Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tornado5.0.2翻译文档 - Tornado web应用程序的结构">
+<meta name="twitter:description" content="Tornado web应用程序通常由一个或多个 RequestHandler 子类组成，将传入请求路由到处理程序的 Application 对象，和一个启动服务程序的 main 方法。 一个最小的“hello world”示例是这样的: 12345678910111213141516import tornado.ioloopimport tornado.webclass MainHandler(t">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2020/12/19/tornado502-structureofweb/">
+
+
+
+
+
+  <title> Tornado5.0.2翻译文档 - Tornado web应用程序的结构 | LiuYang's BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LiuYang's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2020/12/19/tornado502-structureofweb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Tornado5.0.2翻译文档 - Tornado web应用程序的结构
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-19T10:34:43+08:00">
+                2020-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tornado/" itemprop="url" rel="index">
+                    <span itemprop="name">Tornado</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2020/12/19/tornado502-structureofweb/" class="leancloud_visitors" data-flag-title="Tornado5.0.2翻译文档 - Tornado web应用程序的结构">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Tornado web应用程序通常由一个或多个 <code>RequestHandler</code> 子类组成，将传入请求路由到处理程序的 <code>Application</code> 对象，和一个启动服务程序的 <code>main</code> 方法。</p>
+<p>一个最小的“hello world”示例是这样的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tornado.ioloop</span><br><span class="line">import tornado.web</span><br><span class="line"></span><br><span class="line">class MainHandler(tornado.web.RequestHandler):</span><br><span class="line">    def get(self):</span><br><span class="line">        self.write(&quot;Hello, world&quot;)</span><br><span class="line"></span><br><span class="line">def make_app():</span><br><span class="line">    return tornado.web.Application([</span><br><span class="line">        (r&quot;/&quot;, MainHandler),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    app = make_app()</span><br><span class="line">    app.listen(8888)</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
+<h3 id="Application-对象"><a href="#Application-对象" class="headerlink" title="Application 对象"></a>Application 对象</h3><p><code>Application</code> 对象负责全局配置，包括将请求映射到处理程序的路由表。</p>
+<p>路由表是 <code>URLSpec</code> 对象(或元组)的列表，每个对象都包含(至少)一个正则表达式和一个处理程序类。顺序问题：使用第一个匹配规则。如果正则表达式包含捕获组，那么这些组就是路径参数，并将被传递给处理程序的HTTP方法。如果字典作为 <code>URLSpec</code> 的第三个元素传递，它将提供初始化参数，该参数将被传递给 <code>RequestHandler.initialize</code>。<code>URLSpec</code> 对象也可自定义名称，用于 <code>RequestHandler.reverse_url</code>。</p>
+<p>例如，在这个片段中，根URL <code>/</code> 被映射到 <code>MainHandler</code>，而形式 <code>/story/</code> 后面跟着一个数字的 <code>URL</code> 被映射到 <code>StoryHandler</code>。这个数字被传递(作为字符串)给 <code>StoryHandler.get</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class MainHandler(RequestHandler):</span><br><span class="line">    def get(self):</span><br><span class="line">        self.write(&apos;&lt;a href=&quot;%s&quot;&gt;link to story 1&lt;/a&gt;&apos; %</span><br><span class="line">                   self.reverse_url(&quot;story&quot;, &quot;1&quot;))</span><br><span class="line"></span><br><span class="line">class StoryHandler(RequestHandler):</span><br><span class="line">    def initialize(self, db):</span><br><span class="line">        self.db = db</span><br><span class="line"></span><br><span class="line">    def get(self, story_id):</span><br><span class="line">        self.write(&quot;this is story %s&quot; % story_id)</span><br><span class="line"></span><br><span class="line">app = Application([</span><br><span class="line">    url(r&quot;/&quot;, MainHandler),</span><br><span class="line">    url(r&quot;/story/([0-9]+)&quot;, StoryHandler, dict(db=db), name=&quot;story&quot;)</span><br><span class="line">    ])</span><br></pre></td></tr></table></figure>
+<p><code>Application</code> 构造函数接受许多关键字参数，这些参数可用于自定义应用程序的行为和启用可选特性；点击 <a href="https://www.tornadoweb.org/en/stable/web.html#tornado.web.Application.settings" target="_blank" rel="noopener">Application.settings</a>，查看完整设置。</p>
+<h3 id="RequestHandler-子类"><a href="#RequestHandler-子类" class="headerlink" title="RequestHandler 子类"></a>RequestHandler 子类</h3><p>Tornado web应用程序的大部分工作都是在 <code>RequestHandler</code> 的子类中完成的。处理程序子类的主要入口点是以被处理的HTTP方法命名的方法: <code>get()</code>、<code>post()</code>等。每个处理程序可以定义一个或多个这样的方法来处理不同的HTTP操作。如上所述，这些方法将被调用，参数与匹配的路由规则的捕获组相对应。</p>
+<p>在处理程序中，调用 <code>RequestHandler.render</code>、<code>RequestHandler.write</code>来产生一个响应。<code>render()</code> 按名称加载模板，并使用给定参数呈现它。<code>write()</code> 用于非基于模板的输出；它接受字符串、字节和字典(dicts将被编码为JSON)。</p>
+<p><code>RequestHandler</code> 中的许多方法被设计成可以在子类中重写，并在整个应用程序中使用。通常定义一个 <code>BaseHandler</code> 类，覆盖 <code>write_error</code> 和 <code>get_current_user</code> 等方法，然后为所有特定的处理程序子类化你自己的 <code>BaseHandler</code> 而不是 <code>RequestHandler</code>。</p>
+<h4 id="处理请求输入"><a href="#处理请求输入" class="headerlink" title="处理请求输入"></a>处理请求输入</h4><p>请求处理程序可以通过 <code>self.request</code> 访问表示当前请求的对象。有关属性的完整列表，请参阅 <a href="https://www.tornadoweb.org/en/stable/httputil.html#tornado.httputil.HTTPServerRequest" target="_blank" rel="noopener">HTTPServerRequest</a> 的类定义。</p>
+<p>HTML表单使用的格式的请求数据将为您解析，并在 <code>get_query_argument</code> 和 <code>get_body_argument</code> 等方法中可用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class MyFormHandler(tornado.web.RequestHandler):</span><br><span class="line">    def get(self):</span><br><span class="line">        self.write(&apos;&lt;html&gt;&lt;body&gt;&lt;form action=&quot;/myform&quot; method=&quot;POST&quot;&gt;&apos;</span><br><span class="line">                   &apos;&lt;input type=&quot;text&quot; name=&quot;message&quot;&gt;&apos;</span><br><span class="line">                   &apos;&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;&apos;</span><br><span class="line">                   &apos;&lt;/form&gt;&lt;/body&gt;&lt;/html&gt;&apos;)</span><br><span class="line"></span><br><span class="line">    def post(self):</span><br><span class="line">        self.set_header(&quot;Content-Type&quot;, &quot;text/plain&quot;)</span><br><span class="line">        self.write(&quot;You wrote &quot; + self.get_body_argument(&quot;message&quot;))</span><br></pre></td></tr></table></figure>
+<p>由于HTML表单编码对于参数是单个值还是包含一个元素的列表是模棱两可的，<code>RequestHandler</code> 提供了不同的方法，允许应用程序指示它是否需要列表。对于列表，使用 <code>get_query_arguments</code> 和 <code>get_body_arguments</code> 而不是它们的单一对应项。</p>
+<p>通过表单上传的文件在 <code>self.request.files</code> 中可用。它将名称 <code>&lt;input type=&quot;file&quot;&gt;</code> 元素映射到一个文件列表。每个文件是一个字典形式 <code>{&quot;filename&quot;:…, &quot;content_type&quot;:……, &quot;body&quot;:…}</code>。<code>files</code> 对象只有在文件上传带有表单包装器(即 <code>multipart/form-data</code> 类型)时才存在;如果未使用此格式，则在 <code>self.request.body</code> 中可以使用原始上传数据。默认情况下，上传的文件在内存中完全缓冲;如果您需要处理太大而不能舒适地保存在内存中的文件，请参阅 <a href="https://www.tornadoweb.org/en/stable/web.html#tornado.web.stream_request_body" target="_blank" rel="noopener">stream_request_body</a> 类装饰器。</p>
+<p>在demos目录中，<a href="https://github.com/tornadoweb/tornado/tree/master/demos/file_upload/" target="_blank" rel="noopener">file_receiver.py</a>显示了两种接收文件上传的方法。</p>
+<p>由于HTML表单编码的奇怪之处(例如，单参数与复数参数之间的模糊性)，Tornado并不试图将表单参数与其他类型的输入统一起来。特别地，我们不解析JSON请求体。希望使用JSON而不是form-encoding的应用程序可以重写 <code>prepare</code> 来解析它们的请求:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">def prepare(self):</span><br><span class="line">    if self.request.headers.get(&quot;Content-Type&quot;, &quot;&quot;).startswith(&quot;application/json&quot;):</span><br><span class="line">        self.json_args = json.loads(self.request.body)</span><br><span class="line">    else:</span><br><span class="line">        self.json_args = None</span><br></pre></td></tr></table></figure>
+<h3 id="重写RequestHandler方法"><a href="#重写RequestHandler方法" class="headerlink" title="重写RequestHandler方法"></a>重写RequestHandler方法</h3><p>除了 <code>get()</code>/ <code>post()</code>/等，<code>RequestHandler</code> 中的某些其他方法被设计成在必要时由子类覆盖。在每个请求中，会发生以下调用序列:</p>
+<ul>
+<li>每个请求都会创建一个新的 <code>RequestHandler</code> 对象。</li>
+<li><code>initialize()</code> 使用来自应用程序配置的初始化参数调用。初始化通常应该只保存传递给成员变量的实参;它可能不会产生任何输出或调用 <code>send_error</code> 之类的方法。</li>
+<li><code>prepare()</code> 被调用。这在所有处理程序子类共享的基类中最有用，因为无论使用哪种HTTP方法都将调用 <code>prepare</code>。准备可产生产出;如果它调用<code>finish</code>(或<code>redirect</code>，等等)，处理将在此停止。</li>
+<li>其中一个HTTP方法被调用:<code>get()</code>、<code>post()</code>、<code>put()</code>等等。如果URL正则表达式包含捕获组，则将它们作为参数传递给此方法。</li>
+<li>当请求完成时，调用<code>on_finish()</code>。这通常是在<code>get()</code>或另一个HTTP方法返回之后。</li>
+</ul>
+<p>所有设计要重写的方法都在<code>RequestHandler</code>文档中有这样的说明。一些最常见的覆盖方法包括:</p>
+<ul>
+<li><code>write_error</code> - 输出用于错误页面的HTML。</li>
+<li><code>on_connection_close</code> - 当客户端断开连接时调用;应用程序可以选择检测这种情况并停止进一步处理。请注意，不能保证能够迅速检测到关闭的连接。</li>
+<li><code>get_current_user</code> - 参见<a href="https://www.tornadoweb.org/en/stable/guide/security.html#user-authentication" target="_blank" rel="noopener">User authentication</a>。</li>
+<li><code>get_user_locale</code> - 返回用于当前用户的<code>Locale</code>对象。</li>
+<li><code>set_default_headers</code> - 可以用于设置响应的附加标头(例如自定义<code>Server</code>头)。</li>
+</ul>
+<h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><p>如果处理程序抛出异常，Tornado将调用<code>RequestHandler.write_error</code>生成一个错误页面。<code>tornado.web.HTTPError</code>可以用来生成指定的状态码;所有其他异常返回一个500状态。</p>
+<p>默认的错误页面包括调试模式下的堆栈跟踪和错误的单行描述(例如:“500: Internal Server Error”)。若要生成自定义错误页面，请覆盖<code>RequestHandler.write_error</code>(可能在所有处理程序共享的基类中)。该方法可以通过<code>write</code>和<code>render</code>等方法正常生成输出。如果错误是由异常引起的，那么将传递一个<code>exc_info</code>三元组作为关键字参数(注意，这个异常不能保证是<code>sys.exc_info</code>，所以<code>write_error</code>必须使用<code>traceback.format_exception</code>代替<code>traceback.format_exc</code>)。</p>
+<p>通过调用<code>set_status</code>编写响应并返回，也可以从常规处理程序方法而不是<code>write_error</code>生成一个错误页面。在简便返回不很方便的情况下<code>tornado.web.Finish</code> 异常会被抛出来终止处理程序而不是抛出<code>write_error</code>。</p>
+<p>对于404错误，使用<code>default_handler_class</code> <code>Application settings</code>。这个处理程序应该覆盖<code>prepare</code>而不是像<code>get()</code>这样更具体的方法，这样它就可以与任何HTTP方法一起工作。它应该像上面描述的那样生成它的错误页面:通过调用<code>HTTPError(404)</code>并覆盖<code>write_error</code>，或者调用<code>self.set_status(404)</code>并在<code>prepare()</code>中直接生成响应。</p>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p>在Tornado中有两种主要的重定向请求的方法:<code>RequestHandler.redirect</code> 和 <code>RedirectHandler</code>。</p>
+<p>您可以在<code>RequestHandler</code>方法中使用<code>self.redirect()</code>将用户重定向到其他地方。还有一个可选参数<code>permanent</code>，您可以使用它来指示重定向被认为是永久性的。<code>permanent</code>的默认值是False，它生成<code>302 Found HTTP</code>响应代码，适合在成功POST请求后重定向用户。如果<code>permanent</code>为True，则使用301移动的永久HTTP响应代码，这在以面向seo的方式重定向到页面的规范URL时很有用。</p>
+<p><code>RedirectHandler</code>允许您在应用程序路由表中直接配置重定向。例如，要配置一个静态重定向:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app = tornado.web.Application([</span><br><span class="line">    url(r&quot;/app&quot;, tornado.web.RedirectHandler,</span><br><span class="line">        dict(url=&quot;http://itunes.apple.com/my-app-id&quot;)),</span><br><span class="line">    ])</span><br></pre></td></tr></table></figure>
+<p><code>RedirectHandler</code>也支持正则表达式替换。下面的规则将所有以<code>/pictures/</code>开头的请求重定向到前缀<code>/photos/</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app = tornado.web.Application([</span><br><span class="line">    url(r&quot;/photos/(.*)&quot;, MyPhotoHandler),</span><br><span class="line">    url(r&quot;/pictures/(.*)&quot;, tornado.web.RedirectHandler,</span><br><span class="line">        dict(url=r&quot;/photos/&#123;0&#125;&quot;)),</span><br><span class="line">    ])</span><br></pre></td></tr></table></figure>
+<p>不像<code>RequestHandler.redirect</code>，<code>RedirectHandler</code>默认使用永久重定向。这是因为路由表在运行时不会改变，并且被认为是永久的，而在处理程序中发现的重定向很可能是其他可能改变的逻辑的结果。要使用<code>RedirectHandler</code>发送临时重定向，请在<code>RedirectHandler</code>初始化参数中添加<code>permanent=False</code>。</p>
+<h3 id="异步处理类"><a href="#异步处理类" class="headerlink" title="异步处理类"></a>异步处理类</h3><p>某些处理程序方法(包括<code>prepare()</code>和HTTP动词方法<code>get()</code>/ <code>post()</code>/等)可能被重写为协程，以使处理程序异步。</p>
+<p>例如，下面是一个使用协同程序的简单处理程序:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class MainHandler(tornado.web.RequestHandler):</span><br><span class="line">    async def get(self):</span><br><span class="line">        http = tornado.httpclient.AsyncHTTPClient()</span><br><span class="line">        response = await http.fetch(&quot;http://friendfeed-api.com/v2/feed/bret&quot;)</span><br><span class="line">        json = tornado.escape.json_decode(response.body)</span><br><span class="line">        self.write(&quot;Fetched &quot; + str(len(json[&quot;entries&quot;])) + &quot; entries &quot;</span><br><span class="line">                   &quot;from the FriendFeed API&quot;)</span><br></pre></td></tr></table></figure>
+<p>关于更高级的异步示例，请查看<a href="https://github.com/tornadoweb/tornado/tree/stable/demos/chat" target="_blank" rel="noopener">聊天示例应用程序</a>，该应用程序使用长轮询实现了一个AJAX聊天室。使用长轮询的用户可能希望覆盖<code>on_connection_close()</code>，以便在客户端关闭连接后进行清理(但请参阅该方法的文档字符串以了解注意事项)。</p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://www.tornadoweb.org/en/stable/guide/structure.html" target="_blank" rel="noopener">Structure of a Tornado web application</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Tornado/" rel="tag"># Tornado</a>
+          
+            <a href="/tags/翻译文档/" rel="tag"># 翻译文档</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/29/roadmap-2020/" rel="next" title="学习路线-2020">
+                <i class="fa fa-chevron-left"></i> 学习路线-2020
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/19/tornado502-templateui/" rel="prev" title="Tornado5.0.2翻译文档 - 模板和UI">
+                Tornado5.0.2翻译文档 - 模板和UI <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
+          <p class="site-author-name" itemprop="name">william</p>
+           
+              <p class="site-description motion-element" itemprop="description">删繁就简 一心一意</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">121</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Application-对象"><span class="nav-number">1.</span> <span class="nav-text">Application 对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RequestHandler-子类"><span class="nav-number">2.</span> <span class="nav-text">RequestHandler 子类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#处理请求输入"><span class="nav-number">2.1.</span> <span class="nav-text">处理请求输入</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重写RequestHandler方法"><span class="nav-number">3.</span> <span class="nav-text">重写RequestHandler方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误处理"><span class="nav-number">4.</span> <span class="nav-text">错误处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向"><span class="nav-number">5.</span> <span class="nav-text">重定向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步处理类"><span class="nav-number">6.</span> <span class="nav-text">异步处理类</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">william</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

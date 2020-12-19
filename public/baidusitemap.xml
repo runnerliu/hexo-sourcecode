@@ -2,7 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://runnerliu.github.io/2020/11/29/roadmap-2020/</loc>
-    <lastmod>2020-11-29</lastmod>
+    <lastmod>2020-12-19</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/06/03/tornado502_start/</loc>
+    <lastmod>2020-12-19</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/06/10/tornado502-userguide/</loc>
+    <lastmod>2020-12-19</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2020/12/19/tornado502-templateui/</loc>
+    <lastmod>2020-12-19</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2020/12/19/tornado502-structureofweb/</loc>
+    <lastmod>2020-12-19</lastmod>
   </url>
   <url>
     <loc>http://runnerliu.github.io/2020/11/29/python-lib-gevent/</loc>
@@ -42,14 +58,6 @@
   </url>
   <url>
     <loc>http://runnerliu.github.io/2018/06/10/tornado502-introduction/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/06/10/tornado502-userguide/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/06/03/tornado502_start/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>

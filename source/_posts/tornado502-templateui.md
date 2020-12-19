@@ -48,7 +48,63 @@ class MainHandler(tornado.web.RequestHandler):
         self.render("template.html", title="My title", items=items)
 ```
 
+```
+Tornado模板支持控制语句和表达式。控制语句被{%和%}包围，比如：{% if len(items) > 2 %}，表达式由{{和}}包围，比如{{ item[0] }}。控制语句或多或少精确地映射到Python语句。我们支持if、for、while和try，它们都以{%end%}结尾，我们还支持使用extends和block语句的模板继承，这些语句都能在tornado.template找到。
+```
 
+表达式可以是任何Python表达式，包括函数调用。模板代码在包含以下对象和函数的命名空间中执行(注意使用此列表呈现的模板`RequestHandler.render`和`render_string`。如果你使用`tornado.template`模块直接位于`RequestHandler`外部，其中许多条目不存在）
+
+
+- `escape`: alias for `tornado.escape.xhtml_escape`
+
+- `xhtml_escape`: alias for `tornado.escape.xhtml_escape`
+
+- `url_escape`: alias for `tornado.escape.url_escape`
+
+- `json_encode`: alias for `tornado.escape.json_encode`
+
+- `squeeze`: alias for `tornado.escape.squeeze`
+
+- `linkify`: alias for `tornado.escape.linkify`
+
+- `datetime`: the Python `datetime`module
+
+- `handler`: the current `RequestHandler` object
+
+- `request`: alias for `handler.request`
+
+- `current_user`: alias for `handler.current_user`
+
+- `locale`: alias for `handler.locale`
+
+- `\_`: alias for handler.locale.translate
+
+- static_url: alias for `handler.static_url`
+
+- xsrf_form_html: alias for `handler.xsrf_form_html`
+
+- reverse_url: alias for `Application.reverse_url`
+
+- All entries from the `ui_methods` and `ui_modules` `Application` settings
+
+- Any keyword arguments passed to `render` or `render_string`
+
+
+当您构建一个真正的应用程序时，您需要使用Tornado模板的所有特性，特别是模板继承。请阅读`tornado.template`部分（一些功能，包括`UIModules`在`tornado.web`模块）
+
+Tornado模板直接翻译成Python。模板中包含的表达式将被逐字复制到表示模板的Python函数中。我们不试图阻止模板语言中的任何东西；我们显式地创建它是为了提供其他更严格的模板系统所阻止的灵活性。因此，如果您在模板表达式中编写随机内容，那么在执行模板时，您将得到随机的Python错误。
+
+默认情况下，所有模板输出都是转义的，使用`tornado.escape.xhtml_escape`函数，可以传递参数 `autoescape=None` 给Application或者通过`tornado.template.Loader`来全局改变该属性，此外，在这些地方中的每一个都可以使用替代转义函数的名称来代替`None`。
+
+请注意，虽然Tornado的自动转义有助于避免XSS漏洞，但它在所有情况下都不够。出现在某些位置（如JavaScript或CSS）中的表达式可能需要额外的转义。此外，必须注意在可能包含不可信内容的HTML属性中始终使用双引号和xhtml_escape，或者必须对属性使用单独的转义函数（参见[博客](https://wonko.com/post/html-escaping)）。
+
+### 国际化
+
+参见[Internationalization](https://www.tornadoweb.org/en/stable/guide/templates.html#internationalization)
+
+### UI模块
+
+参见[UI modules](https://www.tornadoweb.org/en/stable/guide/templates.html#ui-modules)
 
 
 

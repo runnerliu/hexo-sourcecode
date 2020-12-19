@@ -31,7 +31,7 @@ if __name__ == "__main__":
     tornado.ioloop.IOLoop.current().start()
 ```
 
-### `Application` 对象
+### Application 对象
 
 `Application` 对象负责全局配置，包括将请求映射到处理程序的路由表。
 
@@ -60,7 +60,7 @@ app = Application([
 
 `Application` 构造函数接受许多关键字参数，这些参数可用于自定义应用程序的行为和启用可选特性；点击 [Application.settings](https://www.tornadoweb.org/en/stable/web.html#tornado.web.Application.settings)，查看完整设置。
 
-### `RequestHandler` 子类
+### RequestHandler 子类
 
 Tornado web应用程序的大部分工作都是在 `RequestHandler` 的子类中完成的。处理程序子类的主要入口点是以被处理的HTTP方法命名的方法: `get()`、`post()`等。每个处理程序可以定义一个或多个这样的方法来处理不同的HTTP操作。如上所述，这些方法将被调用，参数与匹配的路由规则的捕获组相对应。
 
