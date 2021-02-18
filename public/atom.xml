@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2020-12-19T08:39:47.550Z</updated>
+  <updated>2021-02-18T13:26:42.584Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>聊聊WS和WSS</title>
+    <link href="http://runnerliu.github.io/2021/02/18/wsandwss/"/>
+    <id>http://runnerliu.github.io/2021/02/18/wsandwss/</id>
+    <published>2021-02-18T03:35:50.000Z</published>
+    <updated>2021-02-18T13:26:42.584Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="初识WS-WSS"><a href="#初识WS-WSS" class="headerlink" title="初识WS/WSS"></a>初识WS/WSS</h3><p>WebSocket （WS）是HTML5一种新的协议，它实现了浏览器与服务器全双工通信，能更好地节省服务器资源和带宽并达到实时通讯。WebSocket建立在TCP之上，同HTTP一样通过TCP来传输数据，但是它和HTTP最大不同是：WebSocket是一种双向通信协议，在建立连接后，WebSocket服务器和Browser/Client Agent都能主动的向对方发送或接收数据，就像Socket一样；WebSocket需要类似TCP的客户端和服务器端通过握手连接，连接成功后才能相互通信。</p><p>WSS（Web Socket Secure）是WebSocket的加密版本。WS一般默认是80端口，而WSS默认是443端口，大多数网站用的就是80和433端口。（在高防防护过程中，80和433端口的网站是需要备案才可以接入国内的。）当然网站也会有别的端口，这种如果做高防是方案是可以用海外高防的。WS和WSS的体现形式分别是TCP+WS AS WS ，TCP+TLS+WS AS WS。服务器网址就是 URL。</p><h3 id="为何使用WS-WSS"><a href="#为何使用WS-WSS" class="headerlink" title="为何使用WS/WSS"></a>为何使用WS/WSS</h3><p>随着互联网的蓬勃发展，各种类型的Web应用层出不穷，很多应用要求服务端有能力进行实时推送能力（例如直播间聊天室），以往很多网站为了实现推送技术，所用的技术都是轮询。轮询是在特定的的时间间隔（如每1秒），由浏览器对服务器发出HTTP请求，然后由服务器返回最新的数据给客户端的浏览器。这种传统的模式带来很明显的缺点，即浏览器需要不断地向服务器发出请求，然而HTTP请求可能包含较长的头部，其中真正有效的数据可能只是很小的一部分，显然这样会浪费很多的带宽资源。</p><p>在这种情况下，HTML5定义了WebSocket协议，能更好地节省服务器资源和带宽，并且能够更实时地进行通讯。WebSocket实现了浏览器与服务器全双工（full-duplex）通信，允许服务器主动发送信息给客户端。</p><p>WebSocket协议的交互过程如下图所示。</p><p><img src="/images/20210218T211759.png" alt="20210218T211759.png"></p><h3 id="WS特点"><a href="#WS特点" class="headerlink" title="WS特点"></a>WS特点</h3><ul><li>建立在 TCP 协议之上，服务端实现容易；</li><li>与 HTTP 协议有良好的兼容性，握手时不容易被屏蔽，可以通过各种 HTTP 代理服务器；</li><li>数据轻量，实时通讯；</li><li>可以发送文本和二进制数据；</li><li>不限制同源，客户端可以与任意服务器端进行通讯。因此WebSocket协议的出现，为很多人解决了关于扩展以及兼容性协议的烦恼问题。</li></ul><h3 id="与http-https关系"><a href="#与http-https关系" class="headerlink" title="与http/https关系"></a>与http/https关系</h3><p>按照标准来是有如下对应关系的：</p><ul><li><p>http -&gt; new WebSocket(‘ws://xxx’)</p></li><li><p>https -&gt; new WebSocket(‘wss://xxx’)</p></li></ul><p>在https下应该使用wss协议做安全链接，且wss下不支持ip地址的写法，写成域名形式。</p><p>Read More:</p><blockquote><p><a href="https://www.alibabacloud.com/help/zh/doc-detail/63421.htm" target="_blank" rel="noopener">WS/WSS协议支持FAQ</a></p><p><a href="https://zhuanlan.zhihu.com/p/75328501" target="_blank" rel="noopener">浅谈WebSocket协议、WS协议和WSS协议原理及关系</a></p><p><a href="https://www.jianshu.com/p/72bcc74409ad" target="_blank" rel="noopener">http/https与websocket的ws/wss的关系</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;初识WS-WSS&quot;&gt;&lt;a href=&quot;#初识WS-WSS&quot; class=&quot;headerlink&quot; title=&quot;初识WS/WSS&quot;&gt;&lt;/a&gt;初识WS/WSS&lt;/h3&gt;&lt;p&gt;WebSocket （WS）是HTML5一种新的协议，它实现了浏览器与服务器全双工通信，能更
+      
+    
+    </summary>
+    
+      <category term="WebSocket" scheme="http://runnerliu.github.io/categories/WebSocket/"/>
+    
+    
+      <category term="WS" scheme="http://runnerliu.github.io/tags/WS/"/>
+    
+      <category term="WSS" scheme="http://runnerliu.github.io/tags/WSS/"/>
+    
+      <category term="WebSocket" scheme="http://runnerliu.github.io/tags/WebSocket/"/>
+    
+  </entry>
   
   <entry>
     <title>Tornado5.0.2翻译文档 - 模板和UI</title>
@@ -251,11 +280,11 @@
       <category term="Linux" scheme="http://runnerliu.github.io/categories/Linux/"/>
     
     
+      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
+    
       <category term="CentOS" scheme="http://runnerliu.github.io/tags/CentOS/"/>
     
       <category term="系统时间" scheme="http://runnerliu.github.io/tags/%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4/"/>
-    
-      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
     
   </entry>
   
@@ -533,33 +562,6 @@
       <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
     
       <category term="用户指南" scheme="http://runnerliu.github.io/tags/%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Tornado5.0.2翻译文档 - Tornado</title>
-    <link href="http://runnerliu.github.io/2018/06/03/tornado502_start/"/>
-    <id>http://runnerliu.github.io/2018/06/03/tornado502_start/</id>
-    <published>2018-06-03T09:27:51.000Z</published>
-    <updated>2020-12-19T08:44:00.174Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="http://www.tornadoweb.org/" target="_blank" rel="noopener">Tornado</a> 是一个 Python 的 Web 框架和异步网络库，最初由 <a href="http://friendfeed.com/" target="_blank" rel="noopener">FriendFeed </a>开发。通过使用非阻塞网络I/O，Tornado 可以支持数以万计的连接，非常适合<a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling" target="_blank" rel="noopener">长轮询</a>、<a href="http://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="noopener">WebSockets</a> 和其他需要与每个用户建立长连接的应用程序。</p><h3 id="快速链接"><a href="#快速链接" class="headerlink" title="快速链接"></a>快速链接</h3><ul><li>当前版本：5.0.2(<a href="https://pypi.python.org/pypi/tornado" target="_blank" rel="noopener">download from PyPi</a> <a href="http://www.tornadoweb.org/en/stable/releases.html" target="_blank" rel="noopener">release notes</a>)</li><li><a href="https://github.com/tornadoweb/tornado" target="_blank" rel="noopener">源代码</a></li><li>邮件列表：<a href="http://groups.google.com/group/python-tornado" target="_blank" rel="noopener">discussion</a> 和 <a href="http://groups.google.com/group/python-tornado-announce" target="_blank" rel="noopener">announcements</a></li><li><a href="http://stackoverflow.com/questions/tagged/tornado" target="_blank" rel="noopener">Stack Overflow</a></li><li><a href="https://github.com/tornadoweb/tornado/wiki/Links" target="_blank" rel="noopener">Wiki</a></li></ul><h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello, World"></a>Hello, World</h3><p>以下是利用 Tornado 实现的一个简单的 “Hello, World” 应用程序：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import tornado.ioloop</span><br><span class="line">import tornado.web</span><br><span class="line"></span><br><span class="line">class MainHandler(tornado.web.RequestHandler):</span><br><span class="line">    def get(self):</span><br><span class="line">        self.write(&quot;Hello, world&quot;)</span><br><span class="line"></span><br><span class="line">def make_app():</span><br><span class="line">    return tornado.web.Application([</span><br><span class="line">        (r&quot;/&quot;, MainHandler),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    app = make_app()</span><br><span class="line">    app.listen(8888)</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure><p>以上例子没有使用 Tornado 的任何异步特性，异步特性可以移步 <a href="https://github.com/tornadoweb/tornado/tree/stable/demos/chat" target="_blank" rel="noopener">simple char room</a>。</p><h3 id="线程和-WSGI"><a href="#线程和-WSGI" class="headerlink" title="线程和 WSGI"></a>线程和 WSGI</h3><p>Tornado 与其他大多 Python web 框架不同，它不基于 <a href="https://wsgi.readthedocs.io/en/latest/" target="_blank" rel="noopener">WSGI</a> 且每个进程只能运行一个 Tornado 线程，移步 <a href>用户手册</a> 了解更多 Tornado 的异步编程方式。</p><p>然而 WSGI 支持的一些方法可以在 <a href>tornado.wsgi</a> 模块中找到，但这并不是 Tornado 后续发展的重点，大多数 Tornado 应用应该直接使用其自带的接口（例如 <a href>tornado.web</a>）而不是 WSGI。</p><p>一般来说，Tornado 的应用代码并不是线程安全的，Tornado 中唯一可以安全地从其他线程调用的方法是 <a href>IOLoop.add_callback</a> 。你也可以使用 <a href>IOLoop.run_in_executor</a> 在另一个线程上异步运行阻塞函数，但请注意，传给 <a href>run_in_executor</a> 的函数不能引用任何 Tornado 对象。与阻塞函数进行交互时，推荐使用 <a href>run_in_executor</a> 。</p><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install tornado</span><br></pre></td></tr></table></figure><p>Tornado 在 <a href="http://pypi.python.org/pypi/tornado" target="_blank" rel="noopener">PyPi</a> 可获取安装列表中，所以可以直接使用 <code>pip</code> 方式进行安装。请注意，源代码发行版包含演示应用程序，当以这种方式安装 Tornado 时，这些演示应用程序将不会存在，因此您可能希望下载源代码 tar 包或克隆 <a href="https://github.com/tornadoweb/tornado" target="_blank" rel="noopener">git repository</a>。</p><p><strong>安装条件</strong>：Tornado 运行在 Python 2.7 和 Python 3.4+上。 Python 2.7.9 中需要对 ssl 模块进行更新（在某些发行版中，这些更新可能在较早的 Python 版本中可用）。除了 <code>pip</code> 或 <code>setup.py</code> 自动安装的依赖外，以下可选软件包可能会有用：</p><ul><li><a href="http://pycurl.sourceforge.net/" target="_blank" rel="noopener">pycurl</a> 在 <a href>tornado.curl_httpclient</a> 中需要使用，需要 Libcurl 7.22或更高版本；</li><li><a href="http://www.twistedmatrix.com/" target="_blank" rel="noopener">Twisted</a> 在 <a href>tornado.platform.twisted</a> 的诸多类中会使用到；</li><li><a href="https://pypi.python.org/pypi/pycares" target="_blank" rel="noopener">pycares</a> 是一个可选的非阻塞 DNS 解析器，可以在线程不适用时使用；</li><li><a href="https://pypi.python.org/pypi/monotonic" target="_blank" rel="noopener">monotonic</a> 或 <a href="https://pypi.python.org/pypi/Monotime" target="_blank" rel="noopener">Monotime</a> 添加对单调时钟的支持，从而提高时钟频繁调整场景下的可靠性。 在Python 3中不再需要。</li></ul><p><strong>平台</strong>：尽管为了获得最佳性能和可扩展性，Tornado 应该可以在任何类Unix平台上运行，但对于生产部署，建议只使用Linux（with <code>epoll</code>）和 BSD（with <code>kqueue</code>）（尽管 Mac OS X 源自 BSD 并支持 kqueue，但其网络 性能一般很差，所以建议仅用于开发使用）。Tornado 也可以在 Windows 上运行，这种配置没有官方的支持，只推荐用于开发。 如果不修改 Tornado IOLoop 接口，就不可能添加本地 Tornado Windows IOLoop 实现，且不能利用像 AsyncIO 或 Twisted 等框架的 Windows 的 IOCP 支持。</p><h3 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h3><ul><li><a href="https://runnerliu.github.io/2018/06/10/tornado502-userguide/#more">用户指南</a><ul><li><a href="https://runnerliu.github.io/2018/06/10/tornado502-introduction/">介绍</a></li><li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">异步和非阻塞 I/O</a></li><li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">协程</a></li><li><a href="https://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/#more">Queue 示例-一个并发网络爬虫</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">Tornado 的 web 应用程序结构</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">模板和UI</a></li><li><a href>认证和安全</a></li><li><a href>运行和部署</a></li></ul></li><li><a href>Web 框架</a><ul><li><a href>tornado.web - RequestHandler Application 类</a></li><li><a href>tornado.template - 灵活的输出生成</a></li><li><a href>tornado.routing - 基本的路由实现</a></li><li><a href>tornado.escape - 转义和字符串操作</a></li><li><a href>tornado.locale - 国际化支持</a></li><li><a href>tornado.websocket - 与浏览器的双向通信</a></li></ul></li><li><a href>HTTP 服务器和客户端</a><ul><li><a href>tornado.httpserver - 非阻塞 HTTP 服务器</a></li><li><a href>tornado.httpclient - 异步 HTTP 客户端</a></li><li><a href>tornado.httputil - 操作HTTP标头和URL</a></li><li><a href>tornado.httpconnection - HTTP/1.x客户端/服务器实现</a></li></ul></li><li><a href>异步网络</a><ul><li><a href>tornado.ioloop - 主时间循环</a></li><li><a href>tornado.iostream - 对非阻塞 socket 的简易包装</a></li><li><a href>tronado.netutil - 网络实用程序</a></li><li><a href>tornado.tcpclient - IOStream 连接工厂</a></li><li><a href>tornado.tcpserver - 基于 TCP 服务器的 IOStream</a></li></ul></li><li><a href>协程和并发</a><ul><li><a href>tornado.gen - 基于生成器的协程</a></li><li><a href>tornado.locks - 同步原语</a></li><li><a href>tornado.queues - 协程队列</a></li><li><a href>tornado.process - 多进程的实用程序</a></li></ul></li><li><a href>与其他服务集成</a><ul><li><a href>tornado.auth - 集成 OpenID 和 OAuth 的第三方登录服务</a></li><li><a href>tornado.wsgi - 与其他 Python 框架和服务器的互操作性</a></li><li><a href>tornado.platform.caresresolver - 使用 C-Ares 的异步DNS解析器</a></li><li><a href>tornado.platform.twisted - 兼容 Tornado 和 Twisted</a></li><li><a href>tornado.asyncio - 兼容 Tornado 和 asyncio</a></li></ul></li><li><a href>通用工具</a><ul><li><a href>tornado.authoreload - 开发环境中自动检测代码变化</a></li><li><a href>tornado.concrrent - 与 Future 对象交互</a></li><li><a href>tornado.log - 日志支持</a></li><li><a href>tornado.options - 命令行解析</a></li><li><a href>tornado.stack_context - 异步回调异常处理</a></li><li><a href>tornado.testing - 异步代码的单元测试</a></li><li><a href>tornado.util - 通用程序</a></li></ul></li></ul><h3 id="讨论和支持"><a href="#讨论和支持" class="headerlink" title="讨论和支持"></a>讨论和支持</h3><p>你可以在 <a href="http://groups.google.com/group/python-tornado" target="_blank" rel="noopener">the Tornado developer mailing list</a> 参与 Tornado 的讨论，在 <a href="https://github.com/tornadoweb/tornado/issues" target="_blank" rel="noopener">GitHub issue tracker</a> 上提交你的bug，更多资源可以在 <a href="https://github.com/tornadoweb/tornado/wiki/Links" target="_blank" rel="noopener">Tornado wiki</a> 找到，新版本发布在 <a href="http://groups.google.com/group/python-tornado-announce" target="_blank" rel="noopener">announcements mailing list</a>。</p><p>Read More:</p><blockquote><p><a href="http://www.tornadoweb.org/en/stable/index.html" target="_blank" rel="noopener">Tornado</a> </p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;http://www.tornadoweb.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Tornado&lt;/a&gt; 是一个 Python 的 Web 框架和异步网络库，最初由 &lt;a href=&quot;http://friendfeed.
-      
-    
-    </summary>
-    
-      <category term="Tornado" scheme="http://runnerliu.github.io/categories/Tornado/"/>
-    
-    
-      <category term="Tornado" scheme="http://runnerliu.github.io/tags/Tornado/"/>
-    
-      <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
     
   </entry>
   
