@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2021-02-18T13:26:42.584Z</updated>
+  <updated>2021-02-19T08:28:51.784Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>GO垃圾回收机制</title>
+    <link href="http://runnerliu.github.io/2021/02/19/gogc/"/>
+    <id>http://runnerliu.github.io/2021/02/19/gogc/</id>
+    <published>2021-02-19T06:32:47.000Z</published>
+    <updated>2021-02-19T08:28:51.784Z</updated>
+    
+    <content type="html"><![CDATA[<p>在此之前，我们介绍过 <a href="https://runnerliu.github.io/2017/07/16/pythongc/">浅析Python的垃圾回收机制</a> 和 <a href="https://runnerliu.github.io/2017/04/15/phpnewgc/">PHP新的垃圾回收机制</a> ，有兴趣的话可以参考阅读，今天我们来聊聊golang是如何进行垃圾回收的。我们知道，目前各语言进行垃圾回收的方法有很多，如引用计数、标记清除、分代回收、三色标记等，各种方式都有其特点，GO语言在发展过程中， 其GC算法也是不断改进的。</p><h3 id="GO的GC里程碑"><a href="#GO的GC里程碑" class="headerlink" title="GO的GC里程碑"></a>GO的GC里程碑</h3><h4 id="v1-3以前：STW"><a href="#v1-3以前：STW" class="headerlink" title="v1.3以前：STW"></a>v1.3以前：STW</h4><p>golang的垃圾回收算法都非常简陋，其性能也广被诟病：go runtime在一定条件下（内存超过阈值或定期如2min），暂停所有任务的执行，进行mark&amp;sweep操作，操作完成后启动所有任务的执行。在内存使用较多的场景下，go程序在进行垃圾回收时会发生非常明显的卡顿现象（Stop The World）。在对响应速度要求较高的后台服务进程中，这种延迟简直是不能忍受的！这个时期国内外很多在生产环境实践go语言的团队都或多或少踩过gc的坑。当时解决这个问题比较常用的方法是尽快控制自动分配内存的内存数量以减少gc负荷，同时采用手动管理内存的方法处理需要大量及高频分配内存的场景。</p><h4 id="v1-3：Mark-STW-amp-Sweep"><a href="#v1-3：Mark-STW-amp-Sweep" class="headerlink" title="v1.3：Mark STW &amp; Sweep"></a>v1.3：Mark STW &amp; Sweep</h4><p>1.3版本中，go runtime分离了mark和sweep操作，和以前一样，也是先暂停所有任务执行并启动mark，mark完成后马上就重新启动被暂停的任务了，而是让sweep任务和普通协程任务一样并行的和其他任务一起执行。如果运行在多核处理器上，go会试图将gc任务放到单独的核心上运行而尽量不影响业务代码的执行。go team自己的说法是减少了50%-70%的暂停时间。</p><h4 id="v1-5：三色标记"><a href="#v1-5：三色标记" class="headerlink" title="v1.5：三色标记"></a>v1.5：三色标记</h4><p>go 1.5正在实现的垃圾回收器“非分代的、非移动的、并发的、三色的标记清除垃圾收集器”。这种方法的mark操作是可以渐进执行的而不需每次都扫描整个内存空间，可以减少stop the world的时间。 由此可以看到，一路走来直到1.5版本，go的垃圾回收性能也是一直在提升。</p><h4 id="v1-8：混合写屏障（hybrid-write-barrier）"><a href="#v1-8：混合写屏障（hybrid-write-barrier）" class="headerlink" title="v1.8：混合写屏障（hybrid write barrier）"></a>v1.8：混合写屏障（hybrid write barrier）</h4><p>由于标记操作和用户逻辑是并发执行的，用户逻辑会时常生成对象或者改变对象的引用。例如把⼀个对象标记为白色准备回收时，用户逻辑突然引用了它，或者又创建了新的对象。由于对象初始时都看为白色，会被 GC 回收掉，为了解决这个问题，引入了写屏障机制。</p><p>GC 对扫描过后的对象使⽤操作系统写屏障功能来监控这段内存。如果这段内存发⽣引⽤改变，写屏障会给垃圾回收期发送⼀个信号，垃圾回收器捕获到信号后就知道这个对象发⽣改变，然后重新扫描这个对象，看看它的引⽤或者被引⽤是否改变。利⽤状态的重置实现当对象状态发⽣改变的时候，依然可以再次其引用的对象。</p><h3 id="GO的GC"><a href="#GO的GC" class="headerlink" title="GO的GC"></a>GO的GC</h3><h4 id="三色标记"><a href="#三色标记" class="headerlink" title="三色标记"></a>三色标记</h4><p>传统的标记清除算法中，垃圾收集器从垃圾收集的根对象出发，递归遍历这些对象指向的子对象并将所有可达的对象标记成存活；标记阶段结束后，垃圾收集器会依次遍历堆中的对象并清除其中的垃圾，整个过程需要标记对象的存活状态，用户程序在垃圾收集的过程中也不能执行，我们需要用到更复杂的机制来解决 STW 的问题，这就出现了三色标记法。</p><p>三色标记算法将程序中的对象分成白色、黑色和灰色三类：</p><ul><li>白色对象：潜在的垃圾，其内存可能会被垃圾收集器回收；</li><li>黑色对象：活跃的对象，包括不存在任何引用外部指针的对象以及从根对象可达的对象；</li><li>灰色对象：活跃的对象，因为存在指向白色对象的外部指针，垃圾收集器会扫描这些对象的子对象；</li></ul><p><img src="/images/2021-2-19T154834.png" alt="2021-2-19T154834.png"></p><p>在垃圾收集器开始工作时，程序中不存在任何的黑色对象，垃圾收集的根对象会被标记成灰色，垃圾收集器只会从灰色对象集合中取出对象开始扫描，当灰色集合中不存在任何对象时，标记阶段就会结束。</p><p><img src="/images/2021-2-19T154948.png" alt="2021-2-19T154948.png"></p><p>三色标记垃圾收集器的工作原理很简单，我们可以将其归纳成以下几个步骤：</p><ul><li>从灰色对象的集合中选择一个灰色对象并将其标记成黑色；</li><li>将黑色对象指向的所有对象都标记成灰色，保证该对象和被该对象引用的对象都不会被回收；</li><li>重复上述两个步骤直到对象图中不存在灰色对象。</li></ul><p>当三色的标记清除的标记阶段结束之后，应用程序的堆中就不存在任何的灰色对象，我们只能看到黑色的存活对象以及白色的垃圾对象，垃圾收集器可以回收这些白色的垃圾，下面是使用三色标记垃圾收集器执行标记后的堆内存，堆中只有对象 D 为待回收的垃圾：</p><p><img src="/images/2021-2-19T155305.png" alt="2021-2-19T155305.png"></p><p>因为用户程序可能在标记执行的过程中修改对象的指针，所以三色标记清除算法本身是不可以并发或者增量执行的，它仍然需要 STW，在如下所示的三色标记过程中，用户程序建立了从 A 对象到 D 对象的引用，但是因为程序中已经不存在灰色对象了，所以 D 对象会被垃圾收集器错误地回收。</p><p><img src="/images/2021-2-19T155403.png" alt="2021-2-19T155403.png"></p><p>本来不应该被回收的对象却被回收了，这在内存管理中是非常严重的错误，我们将这种错误称为悬挂指针，即指针没有指向特定类型的合法对象，影响了内存的安全性，想要并发或者增量地标记对象还是需要使用屏障技术。</p><p>整个流程如下：</p><p><img src="/images/2021-2-19T155548.gif" alt="2021-2-19T155548.gif"></p><h4 id="混合写屏障"><a href="#混合写屏障" class="headerlink" title="混合写屏障"></a>混合写屏障</h4><p>想要在并发或者增量的标记算法中保证正确性，我们需要达成以下两种三色不变性（Tri-color invariant）中的一种：</p><ul><li>强三色不变性：黑色对象不会指向白色对象，只会指向灰色对象或者黑色对象；</li><li>弱三色不变性：黑色对象指向的白色对象必须包含一条从灰色对象经由多个白色对象的可达路径。</li></ul><p><img src="/images/2021-2-19T160000.png" alt="2021-2-19T160000.png"></p><p>上图分别展示了遵循强三色不变性和弱三色不变性的堆内存，遵循上述两个不变性中的任意一个，我们都能保证垃圾收集算法的正确性，而屏障技术就是在并发或者增量标记过程中保证三色不变性的重要技术。</p><p>垃圾收集中的屏障技术更像是一个钩子方法，它是在用户程序读取对象、创建新对象以及更新对象指针时执行的一段代码，根据操作类型的不同，我们可以将它们分成读屏障（Read barrier）和写屏障（Write barrier）两种，因为读屏障需要在读操作中加入代码片段，对用户程序的性能影响很大，所以编程语言往往都会采用写屏障保证三色不变性。</p><p>Go 语言在 v1.8 组合 Dijkstra 插入写屏障和 Yuasa 删除写屏障构成混合写屏障，该写屏障会<strong>将被覆盖的对象标记成灰色并在当前栈没有扫描时将新对象也标记成灰色</strong>。</p><p>为了移除栈的重扫描过程，除了引入混合写屏障之外，在垃圾收集的标记阶段，我们还需要<strong>将创建的所有新对象都标记成黑色</strong>，防止新分配的栈内存和堆内存中的对象被错误地回收，因为栈内存在标记阶段最终都会变为黑色，所以不再需要重新扫描栈空间。</p><h4 id="增量和并发"><a href="#增量和并发" class="headerlink" title="增量和并发"></a>增量和并发</h4><p>传统的垃圾收集算法会在垃圾收集的执行期间暂停应用程序，一旦触发垃圾收集，垃圾收集器会抢占 CPU 的使用权占据大量的计算资源以完成标记和清除工作，然而很多追求实时的应用程序无法接受长时间的 STW。</p><p>为了减少应用程序暂停的最长时间和垃圾收集的总暂停时间，我们会使用下面的策略优化现代的垃圾收集器：</p><ul><li>增量垃圾收集：增量地标记和清除垃圾，降低应用程序暂停的最长时间；</li><li>并发垃圾收集：利用多核的计算资源，在用户程序执行时并发标记和清除垃圾；</li></ul><p>因为增量和并发两种方式都可以与用户程序交替运行，所以我们需要使用屏障技术保证垃圾收集的正确性；与此同时，应用程序也不能等到内存溢出时触发垃圾收集，因为当内存不足时，应用程序已经无法分配内存，这与直接暂停程序没有什么区别，增量和并发的垃圾收集需要提前触发并在内存不足前完成整个循环，避免程序的长时间暂停。</p><h5 id="增量收集"><a href="#增量收集" class="headerlink" title="增量收集"></a>增量收集</h5><p>增量式（Incremental）的垃圾收集是减少程序最长暂停时间的一种方案，它可以将原本时间较长的暂停时间切分成多个更小的 GC 时间片，虽然从垃圾收集开始到结束的时间更长了，但是这也减少了应用程序暂停的最大时间：</p><p><img src="/images/2021-2-19T160403.png" alt="2021-2-19T160403.png"></p><p>需要注意的是，增量式的垃圾收集需要与三色标记法一起使用，为了保证垃圾收集的正确性，我们需要在垃圾收集开始前打开写屏障，这样用户程序修改内存都会先经过写屏障的处理，保证了堆内存中对象关系的强三色不变性或者弱三色不变性。虽然增量式的垃圾收集能够减少最大的程序暂停时间，但是增量式收集也会增加一次 GC 循环的总时间，在垃圾收集期间，因为写屏障的影响用户程序也需要承担额外的计算开销，所以增量式的垃圾收集也不是只带来好处的，但是总体来说还是利大于弊。</p><h5 id="并发收集"><a href="#并发收集" class="headerlink" title="并发收集"></a>并发收集</h5><p>并发（Concurrent）的垃圾收集不仅能够减少程序的最长暂停时间，还能减少整个垃圾收集阶段的时间，通过开启读写屏障、利用多核优势与用户程序并行执行，并发垃圾收集器确实能够减少垃圾收集对应用程序的影响：</p><p><img src="/images/2021-2-19T160457.png" alt="2021-2-19T160457.png"></p><p>虽然并发收集器能够与用户程序一起运行，但是并不是所有阶段都可以与用户程序一起运行，部分阶段还是需要暂停用户程序的，不过与传统的算法相比，并发的垃圾收集可以将能够并发执行的工作尽量并发执行；当然，因为读写屏障的引入，并发的垃圾收集器也一定会带来额外开销，不仅会增加垃圾收集的总时间，还会影响用户程序，这是我们在设计垃圾收集策略时必须要注意的。</p><h3 id="GC的时机"><a href="#GC的时机" class="headerlink" title="GC的时机"></a>GC的时机</h3><p>运行时会通过如下所示的 <a href="https://draveness.me/golang/tree/runtime.gcTrigger.test" target="_blank" rel="noopener"><code>runtime.gcTrigger.test</code></a> 方法决定是否需要触发垃圾收集，当满足触发垃圾收集的基本条件时 — 允许垃圾收集、程序没有崩溃并且没有处于垃圾收集循环，该方法会根据三种不同方式触发进行不同的检查：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">func (t gcTrigger) test() bool &#123;</span><br><span class="line">if !memstats.enablegc || panicking != 0 || gcphase != _GCoff &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">switch t.kind &#123;</span><br><span class="line">case gcTriggerHeap:</span><br><span class="line">return memstats.heap_live &gt;= memstats.gc_trigger</span><br><span class="line">case gcTriggerTime:</span><br><span class="line">if gcpercent &lt; 0 &#123;</span><br><span class="line">return false</span><br><span class="line">&#125;</span><br><span class="line">lastgc := int64(atomic.Load64(&amp;memstats.last_gc_nanotime))</span><br><span class="line">return lastgc != 0 &amp;&amp; t.now-lastgc &gt; forcegcperiod</span><br><span class="line">case gcTriggerCycle:</span><br><span class="line">return int32(t.n-work.cycles) &gt; 0</span><br><span class="line">&#125;</span><br><span class="line">return true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ol><li><code>gcTriggerHeap</code> ：堆内存的分配达到达控制器计算的触发堆大小；</li><li><code>gcTriggerTime</code> ：如果一定时间内没有触发，就会触发新的循环，该出发条件由 <a href="https://draveness.me/golang/tree/runtime.forcegcperiod" target="_blank" rel="noopener"><code>runtime.forcegcperiod</code></a> 变量控制，默认为 2 分钟；</li><li><code>gcTriggerCycle</code>：如果当前没有开启垃圾收集，则触发新的循环；</li><li><a href="https://draveness.me/golang/tree/runtime.gcpercent" target="_blank" rel="noopener"><code>runtime.gcpercent</code></a> 是触发垃圾收集的内存增长百分比，默认情况下为 100，即堆内存相比上次垃圾收集增长 100% 时应该触发 GC，并行的垃圾收集器会在到达该目标前完成垃圾收集。</li></ol><p>用于开启垃圾收集的方法 <a href="https://draveness.me/golang/tree/runtime.gcStart" target="_blank" rel="noopener"><code>runtime.gcStart</code></a> 会接收一个 <a href="https://draveness.me/golang/tree/runtime.gcTrigger" target="_blank" rel="noopener"><code>runtime.gcTrigger</code></a> 类型的结构，所有出现 <a href="https://draveness.me/golang/tree/runtime.gcTrigger" target="_blank" rel="noopener"><code>runtime.gcTrigger</code></a> 结构体的位置都是触发垃圾收集的代码：</p><ul><li><a href="https://draveness.me/golang/tree/runtime.sysmon" target="_blank" rel="noopener"><code>runtime.sysmon</code></a> 和 <a href="https://draveness.me/golang/tree/runtime.forcegchelper" target="_blank" rel="noopener"><code>runtime.forcegchelper</code></a> ：后台运行定时检查和垃圾收集；</li><li><a href="https://draveness.me/golang/tree/runtime.GC" target="_blank" rel="noopener"><code>runtime.GC</code></a> ：用户程序手动触发垃圾收集；</li><li><a href="https://draveness.me/golang/tree/runtime.mallocgc" target="_blank" rel="noopener"><code>runtime.mallocgc</code></a> ：申请内存时根据堆大小触发垃圾收集。</li></ul><p><img src="/images/2021-2-19T162340.png" alt="2021-2-19T162340.png"></p><p>Read More:</p><blockquote><p><a href="https://draveness.me/golang/docs/part3-runtime/ch07-memory/golang-garbage-collector/" target="_blank" rel="noopener">垃圾收集器</a></p><p><a href="https://segmentfault.com/a/1190000018161588" target="_blank" rel="noopener">GO GC 垃圾回收机制</a></p><p><a href="https://juejin.cn/post/6844903917650722829" target="_blank" rel="noopener">搞懂Go垃圾回收</a></p><p><a href="https://wingsxdu.com/post/golang/gc/" target="_blank" rel="noopener">Go 语言 GC 机制 · Analyze</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在此之前，我们介绍过 &lt;a href=&quot;https://runnerliu.github.io/2017/07/16/pythongc/&quot;&gt;浅析Python的垃圾回收机制&lt;/a&gt; 和 &lt;a href=&quot;https://runnerliu.github.io/2017/04/
+      
+    
+    </summary>
+    
+      <category term="GO" scheme="http://runnerliu.github.io/categories/GO/"/>
+    
+    
+      <category term="垃圾回收" scheme="http://runnerliu.github.io/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
+    
+      <category term="GC" scheme="http://runnerliu.github.io/tags/GC/"/>
+    
+      <category term="golang" scheme="http://runnerliu.github.io/tags/golang/"/>
+    
+  </entry>
   
   <entry>
     <title>聊聊WS和WSS</title>
@@ -280,11 +309,11 @@
       <category term="Linux" scheme="http://runnerliu.github.io/categories/Linux/"/>
     
     
-      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
-    
       <category term="CentOS" scheme="http://runnerliu.github.io/tags/CentOS/"/>
     
       <category term="系统时间" scheme="http://runnerliu.github.io/tags/%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4/"/>
+    
+      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
     
   </entry>
   
@@ -532,36 +561,6 @@
       <category term="Tornado" scheme="http://runnerliu.github.io/tags/Tornado/"/>
     
       <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Tornado5.0.2翻译文档 - 用户指南</title>
-    <link href="http://runnerliu.github.io/2018/06/10/tornado502-userguide/"/>
-    <id>http://runnerliu.github.io/2018/06/10/tornado502-userguide/</id>
-    <published>2018-06-10T10:50:44.000Z</published>
-    <updated>2020-12-19T08:43:55.793Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="用户指南"><a href="#用户指南" class="headerlink" title="用户指南"></a>用户指南</h3><ul><li><a href="https://runnerliu.github.io/2018/06/10/tornado502-introduction/">介绍</a></li><li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">异步和非阻塞I/O</a><ul><li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">阻塞</a></li><li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">异步</a></li><li><a href="https://runnerliu.github.io/2018/06/10/tornado502-asnon/#more">例子</a></li></ul></li><li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">协程</a><ul><li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">Python3.5: async 和 await </a></li><li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">它如何工作</a></li><li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">如何调用协程</a></li><li><a href="https://runnerliu.github.io/2018/06/18/tornado502-coroutines/#more">协程模式</a><ul><li><a href>调用阻塞函数</a></li><li><a href>并行</a></li><li><a href>交叉存取</a></li><li><a href>循环</a></li><li><a href>在后台运行</a></li></ul></li></ul></li><li><a href="https://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/#more">Queue 示例-一个并发网络爬虫</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">Tornado Web应用的结构</a><ul><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">Application 对象</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">RequestHandler 子类</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">处理输入请求</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">重写 RequestHandler 方法</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">错误处理</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">重定向</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-structureofweb/#more">异步处理</a></li></ul></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">模板和 UI</a><ul><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">配置模板</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">模板语法</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">国际化</a></li><li><a href="https://runnerliu.github.io/2020/12/19/tornado502-templateui/#more">UI 模块</a></li></ul></li><li><a href>认证和安全</a><ul><li><a href>Cookies 和 secure cookies</a></li><li><a href>用户认证</a></li><li><a href>第三方用户认证</a></li><li><a href>跨站请求伪造(防护)</a></li><li><a href>DNS 重绑定</a></li></ul></li><li><a href>运行和部署</a><ul><li><a href>进程和端口</a></li><li><a href>运行在负载均衡器后面</a></li><li><a href>静态文件和文件缓存</a></li><li><a href>Debug 模式和自动重载</a></li><li><a href>WSGI 和 Google App Engine</a></li></ul></li></ul><p>Read More:</p><blockquote><p><a href="http://www.tornadoweb.org/en/stable/guide.html" target="_blank" rel="noopener">User’s guide</a> </p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;用户指南&quot;&gt;&lt;a href=&quot;#用户指南&quot; class=&quot;headerlink&quot; title=&quot;用户指南&quot;&gt;&lt;/a&gt;用户指南&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://runnerliu.github.io/2018/06/10/tornado5
-      
-    
-    </summary>
-    
-      <category term="Tornado" scheme="http://runnerliu.github.io/categories/Tornado/"/>
-    
-    
-      <category term="Tornado" scheme="http://runnerliu.github.io/tags/Tornado/"/>
-    
-      <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
-    
-      <category term="用户指南" scheme="http://runnerliu.github.io/tags/%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97/"/>
     
   </entry>
   
