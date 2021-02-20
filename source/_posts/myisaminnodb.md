@@ -1,5 +1,5 @@
 ---
-title: MySQL存储引擎InnoDB与MyISAM的区别
+title: MySQL系列 - InnoDB与MyISAM
 date: 2017-07-15 19:29:44
 tags:
  - MySQL

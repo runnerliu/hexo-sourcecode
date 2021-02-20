@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://runnerliu.github.io/2021/02/20/mysql-explain/</loc>
+    
+    <lastmod>2021-02-20T04:48:29.807Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</loc>
+    
+    <lastmod>2021-02-20T03:36:48.878Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/08/28/mysqltransaction/</loc>
+    
+    <lastmod>2021-02-20T03:36:09.313Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/15/myisaminnodb/</loc>
+    
+    <lastmod>2021-02-20T03:35:42.437Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://runnerliu.github.io/about/index.html</loc>
     
     <lastmod>2021-02-20T03:13:26.025Z</lastmod>
@@ -100,14 +128,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/07/20/zsfzsybtb/</loc>
+    <loc>http://runnerliu.github.io/2018/01/02/windowskillprocess/</loc>
     
     <lastmod>2020-11-15T02:24:39.484Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/01/02/windowskillprocess/</loc>
+    <loc>http://runnerliu.github.io/2017/07/20/zsfzsybtb/</loc>
     
     <lastmod>2020-11-15T02:24:39.484Z</lastmod>
     
@@ -117,13 +145,6 @@
     <loc>http://runnerliu.github.io/2017/06/22/urlrequestprocess/</loc>
     
     <lastmod>2020-11-15T02:24:39.484Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</loc>
-    
-    <lastmod>2020-11-15T02:24:39.483Z</lastmod>
     
   </url>
   
@@ -205,14 +226,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/06/07/sharesession/</loc>
+    <loc>http://runnerliu.github.io/2017/08/27/singleinstancepython/</loc>
     
     <lastmod>2020-11-15T02:24:39.479Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/08/27/singleinstancepython/</loc>
+    <loc>http://runnerliu.github.io/2017/06/07/sharesession/</loc>
     
     <lastmod>2020-11-15T02:24:39.479Z</lastmod>
     
@@ -226,14 +247,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/01/02/pythoncontextmanager/</loc>
+    <loc>http://runnerliu.github.io/2017/07/16/pythongc/</loc>
     
     <lastmod>2020-11-15T02:24:39.478Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/07/16/pythongc/</loc>
+    <loc>http://runnerliu.github.io/2018/01/02/pythoncontextmanager/</loc>
     
     <lastmod>2020-11-15T02:24:39.478Z</lastmod>
     
@@ -296,14 +317,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/08/phpkeywords1/</loc>
+    <loc>http://runnerliu.github.io/2017/09/03/nginxtornadosupervisor/</loc>
     
     <lastmod>2020-11-15T02:24:39.475Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/09/03/nginxtornadosupervisor/</loc>
+    <loc>http://runnerliu.github.io/2017/04/08/phpkeywords1/</loc>
     
     <lastmod>2020-11-15T02:24:39.475Z</lastmod>
     
@@ -324,28 +345,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/07/15/myisaminnodb/</loc>
-    
-    <lastmod>2020-11-15T02:24:39.474Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/08/28/mysqltransaction/</loc>
-    
-    <lastmod>2020-11-15T02:24:39.474Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2018/01/04/linuxtar/</loc>
+    <loc>http://runnerliu.github.io/2018/01/02/linuxps/</loc>
     
     <lastmod>2020-11-15T02:24:39.473Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/01/02/linuxps/</loc>
+    <loc>http://runnerliu.github.io/2018/01/04/linuxtar/</loc>
     
     <lastmod>2020-11-15T02:24:39.473Z</lastmod>
     
@@ -443,6 +450,13 @@
   </url>
   
   <url>
+    <loc>http://runnerliu.github.io/2017/04/06/josephring/</loc>
+    
+    <lastmod>2020-11-15T02:24:39.468Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://runnerliu.github.io/2017/04/04/httpstatecode/</loc>
     
     <lastmod>2020-11-15T02:24:39.468Z</lastmod>
@@ -451,13 +465,6 @@
   
   <url>
     <loc>http://runnerliu.github.io/2017/07/15/jsmjiomj/</loc>
-    
-    <lastmod>2020-11-15T02:24:39.468Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/06/josephring/</loc>
     
     <lastmod>2020-11-15T02:24:39.468Z</lastmod>
     
@@ -478,13 +485,6 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/05/13/httppostmethod/</loc>
-    
-    <lastmod>2020-11-15T02:24:39.467Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://runnerliu.github.io/2017/04/01/hexogithub/</loc>
     
     <lastmod>2020-11-15T02:24:39.467Z</lastmod>
@@ -493,6 +493,13 @@
   
   <url>
     <loc>http://runnerliu.github.io/2017/04/01/heyliuxiaoyang/</loc>
+    
+    <lastmod>2020-11-15T02:24:39.467Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2018/05/13/httppostmethod/</loc>
     
     <lastmod>2020-11-15T02:24:39.467Z</lastmod>
     
@@ -555,13 +562,6 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</loc>
-    
-    <lastmod>2020-11-15T02:24:39.464Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://runnerliu.github.io/2017/06/21/bdphp2/</loc>
     
     <lastmod>2020-11-15T02:24:39.464Z</lastmod>
@@ -570,6 +570,13 @@
   
   <url>
     <loc>http://runnerliu.github.io/2017/05/20/badtasteofcode/</loc>
+    
+    <lastmod>2020-11-15T02:24:39.464Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</loc>
     
     <lastmod>2020-11-15T02:24:39.464Z</lastmod>
     

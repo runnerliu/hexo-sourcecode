@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2021-02-19T08:28:51.784Z</updated>
+  <updated>2021-02-20T04:48:29.807Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mysql系列 - explain</title>
+    <link href="http://runnerliu.github.io/2021/02/20/mysql-explain/"/>
+    <id>http://runnerliu.github.io/2021/02/20/mysql-explain/</id>
+    <published>2021-02-20T04:04:15.000Z</published>
+    <updated>2021-02-20T04:48:29.807Z</updated>
+    
+    <content type="html"><![CDATA[<p>通常我们在优化Mysql语句时会使用explain关键字，它是MySQL 提供的对 SELECT 语句进行分析并输出 SELECT 执行的详细信息的命令，其输出结果如下图：</p><p><img src="/images/2021-2-20T121509.png" alt="2021-2-20T121509.png"></p><h3 id="explain结果"><a href="#explain结果" class="headerlink" title="explain结果"></a>explain结果</h3><table><thead><tr><th>字段</th><th>含义</th><th>说明</th></tr></thead><tbody><tr><td>id</td><td>SELECT 查询的标识符，每个 SELECT 都会自动分配一个唯一的标识符</td><td>id大的先执行，id相等由上到下执行</td></tr><tr><td>select_type</td><td>SELECT 查询的类型</td><td></td></tr><tr><td>table</td><td>查询的表名</td><td></td></tr><tr><td>partitions</td><td>匹配的分区</td><td>分库时使用</td></tr><tr><td>type</td><td>join 类型</td><td></td></tr><tr><td>possible_keys</td><td>此次查询中可能选用的索引</td><td></td></tr><tr><td>key</td><td>此次查询中确切使用到的索引</td><td></td></tr><tr><td>key_len</td><td>实际选择的索引的长度</td><td></td></tr><tr><td>ref</td><td>哪个字段或常数与 key 一起被使用</td><td></td></tr><tr><td>rows</td><td>显示此查询共扫描了多少行，估计值</td><td></td></tr><tr><td>filtered</td><td>表示此查询条件所过滤的数据的百分比</td><td></td></tr><tr><td>Extra</td><td>额外的信息</td></tr></tbody></table><h3 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h3><table><thead><tr><th>取值</th><th>含义</th></tr></thead><tbody><tr><td>SIMPLE</td><td>此查询不包含 UNION 查询或子查询</td></tr><tr><td>PRIMARY</td><td>此查询是最外层的查询</td></tr><tr><td>UNION</td><td>此查询是 UNION 的第二或随后的查询</td></tr><tr><td>DEPENDENT UNION</td><td>UNION 中的第二个或后面的查询语句，取决于外面的查询</td></tr><tr><td>UNION RESULT</td><td>UNION 的结果</td></tr><tr><td>SUBQUERY</td><td>子查询中的第一个 SELECT</td></tr><tr><td>DEPENDENT SUBQUERY</td><td>子查询中的第一个 SELECT，取决于外面的查询，即子查询依赖于外层查询的结果</td></tr></tbody></table><h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><table><thead><tr><th>取值</th><th>含义</th></tr></thead><tbody><tr><td>system</td><td>表中只有一条数据，这个类型是特殊的 <code>const</code> 类型</td></tr><tr><td>const</td><td>针对主键或唯一索引的等值查询扫描，最多只返回一行数据。const 查询速度非常快，因为它仅仅读取一次即可</td></tr><tr><td>eq_ref</td><td>此类型通常出现在多表的 join 查询，表示对于前表的每一个结果，都只能匹配到后表的一行结果，并且查询的比较操作通常是 <code>=</code>，查询效率较高</td></tr><tr><td>ref</td><td>此类型通常出现在多表的 join 查询，针对于非唯一或非主键索引，或者是使用了最左前缀规则索引的查询</td></tr><tr><td>range</td><td>使用索引范围查询，通过索引字段范围获取表中部分数据记录。这个类型通常出现在 =, &lt;&gt;, &gt;, &gt;=, &lt;, &lt;=, IS NULL, &lt;=&gt;, BETWEEN, IN() 操作中（当 <code>type</code> 是 <code>range</code> 时, 那么 EXPLAIN 输出的 <code>ref</code> 字段为 NULL，并且 <code>key_len</code> 字段是此次查询中使用到的索引的最长的那个）</td></tr><tr><td>index</td><td>全索引扫描(full index scan)，和 ALL 类型类似，只不过 ALL 类型是全表扫描，而 index 类型则仅仅扫描所有的索引，而不扫描数据</td></tr><tr><td>all</td><td>全表扫描, 这个类型的查询是性能最差的查询之一</td></tr></tbody></table><p>效率比较：all&lt; index &lt; range&lt; ref &lt; eq_ref &lt; const &lt; system</p><h3 id="key-len"><a href="#key-len" class="headerlink" title="key_len"></a>key_len</h3><p>表示查询优化器使用了索引的字节数。这个字段可以评估组合索引是否完全被使用，或只有最左部分字段被使用到，key_len 的计算规则如下：</p><ul><li>字符串<ul><li>char(n)：n 字节长度</li><li>varchar(n)：如果是 utf8 编码, 则是 3 *n + 2字节; 如果是 utf8mb4 编码, 则是 4* n + 2 字节.</li></ul></li><li>数值类型:<ul><li>TINYINT：1字节</li><li>SMALLINT：2字节</li><li>MEDIUMINT：3字节</li><li>INT：4字节</li><li>BIGINT：8字节</li></ul></li><li>时间类型<ul><li>DATE：3字节</li><li>TIMESTAMP：4字节</li><li>DATETIME：8字节</li></ul></li><li>字段属性：NULL 属性占用一个字节，如果一个字段是 NOT NULL 的，则没有此属性。</li></ul><h3 id="rows"><a href="#rows" class="headerlink" title="rows"></a>rows</h3><p>MySQL 查询优化器根据统计信息估算 SQL 要查找到结果集需要扫描读取的数据行数。这个值非常直观显示 SQL 的效率好坏，原则上 rows 越少越好。</p><p><strong>Extra</strong></p><table><thead><tr><th>取值</th><th>含义</th></tr></thead><tbody><tr><td>Using index</td><td>查询在索引树中就可查找所需数据, 不用扫描表数据文件</td></tr><tr><td>Using index condition</td><td>使用索引下推，延迟回表，且减少了需要回表的结果集</td></tr><tr><td>Using temporary</td><td>查询有使用临时表，一般出现于排序，分组和多表 join 的情况，查询效率不高</td></tr><tr><td>Using filesort</td><td>MySQL 需额外的排序操作，不能通过索引顺序达到排序效果。数量小时使用内存排序，数量大时使用磁盘排序</td></tr><tr><td>Using where</td><td>在存储引擎层检索出记录后，在server利用where条件进行过滤，并返回给客户端</td></tr></tbody></table><p>Read More:</p><blockquote><p><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL 性能优化神器 Explain 使用分析</a></p><p><a href="http://weikeqin.com/2020/02/05/mysql-explain/" target="_blank" rel="noopener">mysql explain 详解</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;通常我们在优化Mysql语句时会使用explain关键字，它是MySQL 提供的对 SELECT 语句进行分析并输出 SELECT 执行的详细信息的命令，其输出结果如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/2021-2-20T121509.png&quot; alt
+      
+    
+    </summary>
+    
+      <category term="Mysql" scheme="http://runnerliu.github.io/categories/Mysql/"/>
+    
+    
+      <category term="Mysql" scheme="http://runnerliu.github.io/tags/Mysql/"/>
+    
+      <category term="explain" scheme="http://runnerliu.github.io/tags/explain/"/>
+    
+  </entry>
   
   <entry>
     <title>GO垃圾回收机制</title>
@@ -524,33 +552,6 @@
       
         &lt;p&gt;实时web功能需要为每个用户提供一个多数时间被闲置的长连接，在传统的同步 web 服务器中，这意味着要为每个用户提供一个线程，当然每个线程的开销都是很昂贵的。&lt;/p&gt;
 &lt;p&gt;为了尽量减少并发连接造成的开销，Tornado 使用了一种单线程事件循环的方式。这就意味着所有的应用
-      
-    
-    </summary>
-    
-      <category term="Tornado" scheme="http://runnerliu.github.io/categories/Tornado/"/>
-    
-    
-      <category term="Tornado" scheme="http://runnerliu.github.io/tags/Tornado/"/>
-    
-      <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Tornado5.0.2翻译文档 - 介绍</title>
-    <link href="http://runnerliu.github.io/2018/06/10/tornado502-introduction/"/>
-    <id>http://runnerliu.github.io/2018/06/10/tornado502-introduction/</id>
-    <published>2018-06-10T12:48:11.000Z</published>
-    <updated>2020-11-15T02:24:39.482Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="http://www.tornadoweb.org/" target="_blank" rel="noopener">Tornado</a> 是一个 Python web 框架和异步网络库，起初由 <a href="http://friendfeed.com/" target="_blank" rel="noopener">FriendFeed</a> 开发。通过使用非阻塞网络 I/O，Tornado 可以支持上万级的连接，处理<a href="http://en.wikipedia.org/wiki/Push_technology#Long_polling" target="_blank" rel="noopener">长连接</a> <a href="http://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="noopener">WebSockets</a> 和其他需要与每个用户保持长久连接的应用。</p><p>Tornado 大体上可以被分为4个主要的部分：</p><ul><li>web 框架 - 包括创建 web 应用的 <a href><code>RequestHandler</code></a> 类，和其他支持类；</li><li>HTTP 客户端和服务端的实现(<a href><code>HTTPServer</code></a> 和 <a href><code>AsyncHTTPClient</code></a>)；</li><li>异步网络库(<a href><code>IOLoop</code></a> 和 <a href><code>IOStream</code></a>)，为 HTTP 组件提供构建模块，也可以用来实现其他协议；</li><li>协程库 (<a href><code>tornado.gen</code></a>) 允许异步代码写的更直接而不用链式回调的方式。</li></ul><p>Tornado web 框架和 HTTP server 一起为 <a href="http://www.python.org/dev/peps/pep-3333/" target="_blank" rel="noopener">WSGI</a> 提供了一个全栈式的选择，在 WSGI 容器 (<a href><code>WSGIAdapter</code></a>) 中使用 Tornado web 框架或者使用 Tornado HTTP server 作为一个其他 WSGI 框架(<a href><code>WSGIContainer</code></a>)的容器，这样的组合方式都是有局限性的。为了充分利用Tornado的特性，你需要一起使用 Tornado 的 web 框架和 HTTP server。</p><p>Read More:</p><blockquote><p><a href="http://www.tornadoweb.org/en/stable/guide/intro.html" target="_blank" rel="noopener">Introduction</a> </p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;http://www.tornadoweb.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Tornado&lt;/a&gt; 是一个 Python web 框架和异步网络库，起初由 &lt;a href=&quot;http://friendfeed.co
       
     
     </summary>

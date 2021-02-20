@@ -73,7 +73,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Mysql,explain,">
 
 
 
@@ -91,16 +91,20 @@
 
 
 
-<meta name="description" content="删繁就简 一心一意">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LiuYang&#39;s BLOG">
-<meta property="og:url" content="http://runnerliu.github.io/tags/事物隔离/index.html">
+<meta name="description" content="通常我们在优化Mysql语句时会使用explain关键字，它是MySQL 提供的对 SELECT 语句进行分析并输出 SELECT 执行的详细信息的命令，其输出结果如下图：  explain结果   字段 含义 说明     id SELECT 查询的标识符，每个 SELECT 都会自动分配一个唯一的标识符 id大的先执行，id相等由上到下执行   select_type SELECT 查询的类型">
+<meta name="keywords" content="Mysql,explain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql系列 - explain">
+<meta property="og:url" content="http://runnerliu.github.io/2021/02/20/mysql-explain/index.html">
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
-<meta property="og:description" content="删繁就简 一心一意">
+<meta property="og:description" content="通常我们在优化Mysql语句时会使用explain关键字，它是MySQL 提供的对 SELECT 语句进行分析并输出 SELECT 执行的详细信息的命令，其输出结果如下图：  explain结果   字段 含义 说明     id SELECT 查询的标识符，每个 SELECT 都会自动分配一个唯一的标识符 id大的先执行，id相等由上到下执行   select_type SELECT 查询的类型">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-2-20T121509.png">
+<meta property="og:updated_time" content="2021-02-20T04:48:29.807Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LiuYang&#39;s BLOG">
-<meta name="twitter:description" content="删繁就简 一心一意">
+<meta name="twitter:title" content="Mysql系列 - explain">
+<meta name="twitter:description" content="通常我们在优化Mysql语句时会使用explain关键字，它是MySQL 提供的对 SELECT 语句进行分析并输出 SELECT 执行的详细信息的命令，其输出结果如下图：  explain结果   字段 含义 说明     id SELECT 查询的标识符，每个 SELECT 都会自动分配一个唯一的标识符 id大的先执行，id相等由上到下执行   select_type SELECT 查询的类型">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2021-2-20T121509.png">
 
 
 
@@ -128,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/tags/事物隔离/">
+  <link rel="canonical" href="http://runnerliu.github.io/2021/02/20/mysql-explain/">
 
 
 
 
 
-  <title> 标签: 事物隔离 | LiuYang's BLOG </title>
+  <title> Mysql系列 - explain | LiuYang's BLOG </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -159,7 +163,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -295,44 +299,399 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2>
-        事物隔离
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2021/02/20/mysql-explain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mysql系列 - explain
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-20T12:04:15+08:00">
+                2021-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">Mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/02/20/mysql-explain/" class="leancloud_visitors" data-flag-title="Mysql系列 - explain">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>通常我们在优化Mysql语句时会使用explain关键字，它是MySQL 提供的对 SELECT 语句进行分析并输出 SELECT 执行的详细信息的命令，其输出结果如下图：</p>
+<p><img src="/images/2021-2-20T121509.png" alt="2021-2-20T121509.png"></p>
+<h3 id="explain结果"><a href="#explain结果" class="headerlink" title="explain结果"></a>explain结果</h3><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>SELECT 查询的标识符，每个 SELECT 都会自动分配一个唯一的标识符</td>
+<td>id大的先执行，id相等由上到下执行</td>
+</tr>
+<tr>
+<td>select_type</td>
+<td>SELECT 查询的类型</td>
+<td></td>
+</tr>
+<tr>
+<td>table</td>
+<td>查询的表名</td>
+<td></td>
+</tr>
+<tr>
+<td>partitions</td>
+<td>匹配的分区</td>
+<td>分库时使用</td>
+</tr>
+<tr>
+<td>type</td>
+<td>join 类型</td>
+<td></td>
+</tr>
+<tr>
+<td>possible_keys</td>
+<td>此次查询中可能选用的索引</td>
+<td></td>
+</tr>
+<tr>
+<td>key</td>
+<td>此次查询中确切使用到的索引</td>
+<td></td>
+</tr>
+<tr>
+<td>key_len</td>
+<td>实际选择的索引的长度</td>
+<td></td>
+</tr>
+<tr>
+<td>ref</td>
+<td>哪个字段或常数与 key 一起被使用</td>
+<td></td>
+</tr>
+<tr>
+<td>rows</td>
+<td>显示此查询共扫描了多少行，估计值</td>
+<td></td>
+</tr>
+<tr>
+<td>filtered</td>
+<td>表示此查询条件所过滤的数据的百分比</td>
+<td></td>
+</tr>
+<tr>
+<td>Extra</td>
+<td>额外的信息</td>
+</tr>
+</tbody>
+</table>
+<h3 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h3><table>
+<thead>
+<tr>
+<th>取值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIMPLE</td>
+<td>此查询不包含 UNION 查询或子查询</td>
+</tr>
+<tr>
+<td>PRIMARY</td>
+<td>此查询是最外层的查询</td>
+</tr>
+<tr>
+<td>UNION</td>
+<td>此查询是 UNION 的第二或随后的查询</td>
+</tr>
+<tr>
+<td>DEPENDENT UNION</td>
+<td>UNION 中的第二个或后面的查询语句，取决于外面的查询</td>
+</tr>
+<tr>
+<td>UNION RESULT</td>
+<td>UNION 的结果</td>
+</tr>
+<tr>
+<td>SUBQUERY</td>
+<td>子查询中的第一个 SELECT</td>
+</tr>
+<tr>
+<td>DEPENDENT SUBQUERY</td>
+<td>子查询中的第一个 SELECT，取决于外面的查询，即子查询依赖于外层查询的结果</td>
+</tr>
+</tbody>
+</table>
+<h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><table>
+<thead>
+<tr>
+<th>取值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>system</td>
+<td>表中只有一条数据，这个类型是特殊的 <code>const</code> 类型</td>
+</tr>
+<tr>
+<td>const</td>
+<td>针对主键或唯一索引的等值查询扫描，最多只返回一行数据。const 查询速度非常快，因为它仅仅读取一次即可</td>
+</tr>
+<tr>
+<td>eq_ref</td>
+<td>此类型通常出现在多表的 join 查询，表示对于前表的每一个结果，都只能匹配到后表的一行结果，并且查询的比较操作通常是 <code>=</code>，查询效率较高</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>此类型通常出现在多表的 join 查询，针对于非唯一或非主键索引，或者是使用了最左前缀规则索引的查询</td>
+</tr>
+<tr>
+<td>range</td>
+<td>使用索引范围查询，通过索引字段范围获取表中部分数据记录。这个类型通常出现在 =, &lt;&gt;, &gt;, &gt;=, &lt;, &lt;=, IS NULL, &lt;=&gt;, BETWEEN, IN() 操作中（当 <code>type</code> 是 <code>range</code> 时, 那么 EXPLAIN 输出的 <code>ref</code> 字段为 NULL，并且 <code>key_len</code> 字段是此次查询中使用到的索引的最长的那个）</td>
+</tr>
+<tr>
+<td>index</td>
+<td>全索引扫描(full index scan)，和 ALL 类型类似，只不过 ALL 类型是全表扫描，而 index 类型则仅仅扫描所有的索引，而不扫描数据</td>
+</tr>
+<tr>
+<td>all</td>
+<td>全表扫描, 这个类型的查询是性能最差的查询之一</td>
+</tr>
+</tbody>
+</table>
+<p>效率比较：all&lt; index &lt; range&lt; ref &lt; eq_ref &lt; const &lt; system</p>
+<h3 id="key-len"><a href="#key-len" class="headerlink" title="key_len"></a>key_len</h3><p>表示查询优化器使用了索引的字节数。这个字段可以评估组合索引是否完全被使用，或只有最左部分字段被使用到，key_len 的计算规则如下：</p>
+<ul>
+<li>字符串<ul>
+<li>char(n)：n 字节长度</li>
+<li>varchar(n)：如果是 utf8 编码, 则是 3 *n + 2字节; 如果是 utf8mb4 编码, 则是 4* n + 2 字节.</li>
+</ul>
+</li>
+<li>数值类型:<ul>
+<li>TINYINT：1字节</li>
+<li>SMALLINT：2字节</li>
+<li>MEDIUMINT：3字节</li>
+<li>INT：4字节</li>
+<li>BIGINT：8字节</li>
+</ul>
+</li>
+<li>时间类型<ul>
+<li>DATE：3字节</li>
+<li>TIMESTAMP：4字节</li>
+<li>DATETIME：8字节</li>
+</ul>
+</li>
+<li>字段属性：NULL 属性占用一个字节，如果一个字段是 NOT NULL 的，则没有此属性。</li>
+</ul>
+<h3 id="rows"><a href="#rows" class="headerlink" title="rows"></a>rows</h3><p>MySQL 查询优化器根据统计信息估算 SQL 要查找到结果集需要扫描读取的数据行数。这个值非常直观显示 SQL 的效率好坏，原则上 rows 越少越好。</p>
+<p><strong>Extra</strong></p>
+<table>
+<thead>
+<tr>
+<th>取值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Using index</td>
+<td>查询在索引树中就可查找所需数据, 不用扫描表数据文件</td>
+</tr>
+<tr>
+<td>Using index condition</td>
+<td>使用索引下推，延迟回表，且减少了需要回表的结果集</td>
+</tr>
+<tr>
+<td>Using temporary</td>
+<td>查询有使用临时表，一般出现于排序，分组和多表 join 的情况，查询效率不高</td>
+</tr>
+<tr>
+<td>Using filesort</td>
+<td>MySQL 需额外的排序操作，不能通过索引顺序达到排序效果。数量小时使用内存排序，数量大时使用磁盘排序</td>
+</tr>
+<tr>
+<td>Using where</td>
+<td>在存储引擎层检索出记录后，在server利用where条件进行过滤，并返回给客户端</td>
+</tr>
+</tbody>
+</table>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://segmentfault.com/a/1190000008131735" target="_blank" rel="noopener">MySQL 性能优化神器 Explain 使用分析</a></p>
+<p><a href="http://weikeqin.com/2020/02/05/mysql-explain/" target="_blank" rel="noopener">mysql explain 详解</a></p>
+</blockquote>
 
-      <h1 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2017/08/28/mysqltransaction/" itemprop="url">
-              
-                <span itemprop="name">数据库事物及其隔离级别</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-08-28T19:52:05+08:00" content="2017-08-28">
-          08-28
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+          
+            <a href="/tags/explain/" rel="tag"># explain</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/19/gogc/" rel="next" title="GO垃圾回收机制">
+                <i class="fa fa-chevron-left"></i> GO垃圾回收机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -340,6 +699,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
 
         </div>
         
@@ -359,8 +724,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
           <p class="site-author-name" itemprop="name">william</p>
@@ -373,7 +747,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-count">83</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -384,7 +758,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -395,7 +769,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">126</span>
+                <span class="site-state-item-count">128</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -470,6 +844,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#explain结果"><span class="nav-number">1.</span> <span class="nav-text">explain结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-type"><span class="nav-number">2.</span> <span class="nav-text">select_type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">3.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key-len"><span class="nav-number">4.</span> <span class="nav-text">key_len</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rows"><span class="nav-number">5.</span> <span class="nav-text">rows</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -597,6 +987,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
