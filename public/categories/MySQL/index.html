@@ -94,7 +94,7 @@
 <meta name="description" content="删繁就简 一心一意">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LiuYang&#39;s BLOG">
-<meta property="og:url" content="http://runnerliu.github.io/categories/Mysql/index.html">
+<meta property="og:url" content="http://runnerliu.github.io/categories/MySQL/index.html">
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="删繁就简 一心一意">
 <meta property="og:locale" content="zh-Hans">
@@ -128,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://runnerliu.github.io/categories/Mysql/">
+  <link rel="canonical" href="http://runnerliu.github.io/categories/MySQL/">
 
 
 
 
 
-  <title> 分类: Mysql | LiuYang's BLOG </title>
+  <title> 分类: MySQL | LiuYang's BLOG </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -298,7 +298,7 @@
   <section id="posts" class="posts-collapse">
     <div class="collection-title">
       <h2>
-        Mysql
+        MySQL
         <small>分类</small>
       </h2>
     </div>
@@ -311,17 +311,43 @@
 
       <h1 class="post-title">
         
-            <a class="post-title-link" href="/2021/02/20/mysql-explain/" itemprop="url">
+            <a class="post-title-link" href="/2017/07/15/myisaminnodb/" itemprop="url">
               
-                <span itemprop="name">Mysql系列 - explain</span>
+                <span itemprop="name">MySQL系列 - InnoDB与MyISAM</span>
               
             </a>
         
       </h1>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2021-02-20T12:04:15+08:00" content="2021-02-20">
-          02-20
+        <time class="post-time" itemprop="dateCreated" datetime="2017-07-15T19:29:44+08:00" content="2017-07-15">
+          07-15
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2017/07/15/uniqueprimarykey/" itemprop="url">
+              
+                <span itemprop="name">MySQL系列 - UNIQUE KEY与PRIMARY KEY</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2017-07-15T17:30:51+08:00" content="2017-07-15">
+          07-15
         </time>
       </div>
 
@@ -374,7 +400,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">83</span>
+                <span class="site-state-item-count">84</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -396,7 +422,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">128</span>
+                <span class="site-state-item-count">129</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -866,40 +892,6 @@
               success: function(newcounter) {
                 var $element = $(document.getElementById(url));
                 $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
-    });
-  </script>
-
-
-
-  
-
-  
-
-  
-
-</body>
-</html>
-nd('.leancloud-visitors-count').text(newcounter.get('time'));
               },
               error: function(newcounter, error) {
                 console.log('Failed to create');
