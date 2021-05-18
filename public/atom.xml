@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2021-05-18T14:19:42.425Z</updated>
+  <updated>2021-05-18T14:42:13.173Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RocketMQ如何处理消息丢失</title>
+    <link href="http://runnerliu.github.io/2021/05/18/rocketmq-msglost/"/>
+    <id>http://runnerliu.github.io/2021/05/18/rocketmq-msglost/</id>
+    <published>2021-05-18T14:28:36.000Z</published>
+    <updated>2021-05-18T14:42:13.173Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="消息的发送过程"><a href="#消息的发送过程" class="headerlink" title="消息的发送过程"></a>消息的发送过程</h4><p><img src="/images/2021-5-18T223009.png" alt="2021-5-18T223009.png"></p><ul><li><p>生产阶段：Producer 新建消息，然后通过网络将消息投递给 MQ Broker</p></li><li><p>存储阶段：消息将会存储在 Broker 端磁盘中</p></li><li><p>消费阶段：Consumer 将会从 Broker 拉取消息</p></li></ul><p>以上任一阶段都可能会丢失消息，我们只要找到这三个阶段丢失消息原因，采用合理的办法避免丢失，就可以彻底解决消息丢失的问题。</p><h4 id="生产阶段"><a href="#生产阶段" class="headerlink" title="生产阶段"></a>生产阶段</h4><p>生产者（Producer） 通过网络发送消息给 Broker，当 Broker 收到之后，将会返回确认响应信息给 Producer。所以生产者只要接收到返回的确认响应，就代表消息在生产阶段未丢失。</p><h5 id="同步发送"><a href="#同步发送" class="headerlink" title="同步发送"></a>同步发送</h5><p>有三种Send方法，同步发送、异步发送、单向发送。我们可以采取同步发送的方式进行发送消息，发消息的时候会同步阻塞等待broker返回的结果，如果没成功，则不会收到SendResult，这种是最可靠的。其次是异步发送，在回调方法里可以得知是否发送成功。单向发送是最不靠谱的一种发送方式，我们无法保证消息真正可达。</p><h5 id="失败重试"><a href="#失败重试" class="headerlink" title="失败重试"></a>失败重试</h5><p>发送消息如果失败或者超时了，则会自动重试。默认是重试三次，可以根据API进行更改，比如改为10次：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">producer.setRetryTimesWhenSendFailed(10);</span><br></pre></td></tr></table></figure><h4 id="存储阶段"><a href="#存储阶段" class="headerlink" title="存储阶段"></a>存储阶段</h4><p>MQ持久化消息分为两种：同步刷盘和异步刷盘。</p><h5 id="同步刷盘"><a href="#同步刷盘" class="headerlink" title="同步刷盘"></a>同步刷盘</h5><p>默认情况是异步刷盘，Broker收到消息后会先存到Cache里然后立马通知Producer成功，然后Broker启动异步线程的去持久化到磁盘中，但是Broker还没持久化到磁盘就宕机的话，消息就丢失了。同步刷盘的话是收到消息存到Cache后并不会通知Producer说消息已经OK了，而是会等到持久化到磁盘中后才会通知Producer说消息完事了。这也保障了消息不会丢失，但是性能不如异步高。看业务场景取舍。</p><h5 id="主从同步复制"><a href="#主从同步复制" class="headerlink" title="主从同步复制"></a>主从同步复制</h5><p>即使Broker设置了同步刷盘策略，但是Broker刷完盘后磁盘坏了，这会导致盘上的消息全TM丢了。但是如果即使是1主1从了，但是Master刷完盘后还没来得及同步给Slave就磁盘坏了，也会导致消息丢失。所以我们还可以配置不仅是等Master刷完盘就通知Producer，而是等Master和Slave都刷完盘后才去通知Producer说消息OK了。</p><h4 id="消费阶段"><a href="#消费阶段" class="headerlink" title="消费阶段"></a>消费阶段</h4><p>消费者从 broker 拉取消息，然后执行相应的业务逻辑。一旦执行成功，将会返回 <code>ConsumeConcurrentlyStatus.CONSUME_SUCCESS</code> 状态给 Broker。如果 Broker 未收到消费确认响应或收到其他状态，消费者下次还会再次拉取到该条消息，进行重试。这样的方式有效避免了消费者消费过程发生异常，或者消息在网络传输中丢失的情况。</p><p>Read More:</p><blockquote><p><a href="https://www.cnblogs.com/goodAndyxublog/p/12563813.html" target="_blank" rel="noopener">面试官再问我如何保证 RocketMQ 不丢失消息,这回我笑了！</a></p><p><a href="https://blog.csdn.net/weixin_39601088/article/details/111343167" target="_blank" rel="noopener">udp怎么保证不丢包_从入门到入土（三）RocketMQ 怎么保证的消息不丢失？</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;消息的发送过程&quot;&gt;&lt;a href=&quot;#消息的发送过程&quot; class=&quot;headerlink&quot; title=&quot;消息的发送过程&quot;&gt;&lt;/a&gt;消息的发送过程&lt;/h4&gt;&lt;p&gt;&lt;img src=&quot;/images/2021-5-18T223009.png&quot; alt=&quot;2021-
+      
+    
+    </summary>
+    
+      <category term="MQ" scheme="http://runnerliu.github.io/categories/MQ/"/>
+    
+    
+      <category term="RocketMQ" scheme="http://runnerliu.github.io/tags/RocketMQ/"/>
+    
+      <category term="MQ" scheme="http://runnerliu.github.io/tags/MQ/"/>
+    
+  </entry>
   
   <entry>
     <title>Websocket与Socket的区别</title>
@@ -150,9 +177,9 @@
       <category term="GO" scheme="http://runnerliu.github.io/categories/GO/"/>
     
     
-      <category term="垃圾回收" scheme="http://runnerliu.github.io/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
-    
       <category term="GC" scheme="http://runnerliu.github.io/tags/GC/"/>
+    
+      <category term="垃圾回收" scheme="http://runnerliu.github.io/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
     
       <category term="golang" scheme="http://runnerliu.github.io/tags/golang/"/>
     
@@ -179,11 +206,11 @@
       <category term="WebSocket" scheme="http://runnerliu.github.io/categories/WebSocket/"/>
     
     
+      <category term="WebSocket" scheme="http://runnerliu.github.io/tags/WebSocket/"/>
+    
       <category term="WS" scheme="http://runnerliu.github.io/tags/WS/"/>
     
       <category term="WSS" scheme="http://runnerliu.github.io/tags/WSS/"/>
-    
-      <category term="WebSocket" scheme="http://runnerliu.github.io/tags/WebSocket/"/>
     
   </entry>
   
@@ -532,35 +559,6 @@
       <category term="Linux/Unix" scheme="http://runnerliu.github.io/tags/Linux-Unix/"/>
     
       <category term="Python3" scheme="http://runnerliu.github.io/tags/Python3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Tornado5.0.2翻译文档 - Queue示例:一个并发网络爬虫</title>
-    <link href="http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/"/>
-    <id>http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/</id>
-    <published>2018-06-18T06:59:43.000Z</published>
-    <updated>2020-11-15T02:24:39.481Z</updated>
-    
-    <content type="html"><![CDATA[<p>Tornado的 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#module-tornado.queues" target="_blank" rel="noopener"><code>tornado.queues</code></a> 模块实现了异步生产者/消费者模式的协程，类似于通过Python 标准库的 <a href="https://docs.python.org/3.4/library/queue.html#module-queue" target="_blank" rel="noopener"><code>queue</code></a> 实现线程模式。</p><p>一个yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.get" target="_blank" rel="noopener"><code>Queue.get</code></a> 的协程直到队列中有值的时候才会暂停。如果队列设置了最大长度，yields <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="noopener"><code>Queue.put</code></a> 的协程直到队列中有空间才会暂停。</p><p>一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue" target="_blank" rel="noopener"><code>Queue</code></a> 从0开始对未完成的任务进行计数， <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.put" target="_blank" rel="noopener"><code>put</code></a> 加计数； <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 减少计数。</p><p>这里的网络爬虫的例子，队列开始的时候只包含 base_url。当一个 worker 抓取到一个页面它会解析链接并把它添加到队列中，然后调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 减少计数一次。最后，当一个 worker 抓取到的页面 URL 都是之前抓取到过的并且队列中没有任务了。于是 worker 调用 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.task_done" target="_blank" rel="noopener"><code>task_done</code></a> 把计数减到0。等待 <a href="http://tornado-zh.readthedocs.io/zh/latest/queues.html#tornado.queues.Queue.join" target="_blank" rel="noopener"><code>join</code></a> 的主协程取消暂停并且完成。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">from datetime import timedelta</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    from HTMLParser import HTMLParser</span><br><span class="line">    from urlparse import urljoin, urldefrag</span><br><span class="line">except ImportError:</span><br><span class="line">    from html.parser import HTMLParser</span><br><span class="line">    from urllib.parse import urljoin, urldefrag</span><br><span class="line"></span><br><span class="line">from tornado import httpclient, gen, ioloop, queues</span><br><span class="line"></span><br><span class="line">base_url = &apos;http://www.tornadoweb.org/en/stable/&apos;</span><br><span class="line">concurrency = 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@gen.coroutine</span><br><span class="line">def get_links_from_url(url):</span><br><span class="line">    &quot;&quot;&quot;Download the page at `url` and parse it for links.</span><br><span class="line"></span><br><span class="line">    Returned links have had the fragment after `#` removed, and have been made</span><br><span class="line">    absolute so, e.g. the URL &apos;gen.html#tornado.gen.coroutine&apos; becomes</span><br><span class="line">    &apos;http://www.tornadoweb.org/en/stable/gen.html&apos;.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    try:</span><br><span class="line">        response = yield httpclient.AsyncHTTPClient().fetch(url)</span><br><span class="line">        print(&apos;fetched %s&apos; % url)</span><br><span class="line"></span><br><span class="line">        html = response.body if isinstance(response.body, str) \</span><br><span class="line">            else response.body.decode(errors=&apos;ignore&apos;)</span><br><span class="line">        urls = [urljoin(url, remove_fragment(new_url))</span><br><span class="line">                for new_url in get_links(html)]</span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(&apos;Exception: %s %s&apos; % (e, url))</span><br><span class="line">        raise gen.Return([])</span><br><span class="line"></span><br><span class="line">    raise gen.Return(urls)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def remove_fragment(url):</span><br><span class="line">    pure_url, frag = urldefrag(url)</span><br><span class="line">    return pure_url</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def get_links(html):</span><br><span class="line">    class URLSeeker(HTMLParser):</span><br><span class="line">        def __init__(self):</span><br><span class="line">            HTMLParser.__init__(self)</span><br><span class="line">            self.urls = []</span><br><span class="line"></span><br><span class="line">        def handle_starttag(self, tag, attrs):</span><br><span class="line">            href = dict(attrs).get(&apos;href&apos;)</span><br><span class="line">            if href and tag == &apos;a&apos;:</span><br><span class="line">                self.urls.append(href)</span><br><span class="line"></span><br><span class="line">    url_seeker = URLSeeker()</span><br><span class="line">    url_seeker.feed(html)</span><br><span class="line">    return url_seeker.urls</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@gen.coroutine</span><br><span class="line">def main():</span><br><span class="line">    q = queues.Queue()</span><br><span class="line">    start = time.time()</span><br><span class="line">    fetching, fetched = set(), set()</span><br><span class="line"></span><br><span class="line">    @gen.coroutine</span><br><span class="line">    def fetch_url():</span><br><span class="line">        current_url = yield q.get()</span><br><span class="line">        try:</span><br><span class="line">            if current_url in fetching:</span><br><span class="line">                return</span><br><span class="line"></span><br><span class="line">            print(&apos;fetching %s&apos; % current_url)</span><br><span class="line">            fetching.add(current_url)</span><br><span class="line">            urls = yield get_links_from_url(current_url)</span><br><span class="line">            fetched.add(current_url)</span><br><span class="line"></span><br><span class="line">            for new_url in urls:</span><br><span class="line">                # Only follow links beneath the base URL</span><br><span class="line">                if new_url.startswith(base_url):</span><br><span class="line">                    yield q.put(new_url)</span><br><span class="line"></span><br><span class="line">        finally:</span><br><span class="line">            q.task_done()</span><br><span class="line"></span><br><span class="line">    @gen.coroutine</span><br><span class="line">    def worker():</span><br><span class="line">        while True:</span><br><span class="line">            yield fetch_url()</span><br><span class="line"></span><br><span class="line">    q.put(base_url)</span><br><span class="line"></span><br><span class="line">    # Start workers, then wait for the work queue to be empty.</span><br><span class="line">    for _ in range(concurrency):</span><br><span class="line">        worker()</span><br><span class="line">    yield q.join(timeout=timedelta(seconds=300))</span><br><span class="line">    assert fetching == fetched</span><br><span class="line">    print(&apos;Done in %d seconds, fetched %s URLs.&apos; % (</span><br><span class="line">        time.time() - start, len(fetched)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line">    io_loop = ioloop.IOLoop.current()</span><br><span class="line">    io_loop.run_sync(main)</span><br></pre></td></tr></table></figure><p>Read More:</p><blockquote><p><a href="http://www.tornadoweb.org/en/stable/guide/queues.html" target="_blank" rel="noopener"><code>Queue</code> example - a concurrent web spider</a> </p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Tornado的 &lt;a href=&quot;http://tornado-zh.readthedocs.io/zh/latest/queues.html#module-tornado.queues&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;&lt;code&gt;torn
-      
-    
-    </summary>
-    
-      <category term="Tornado" scheme="http://runnerliu.github.io/categories/Tornado/"/>
-    
-    
-      <category term="Tornado" scheme="http://runnerliu.github.io/tags/Tornado/"/>
-    
-      <category term="翻译文档" scheme="http://runnerliu.github.io/tags/%E7%BF%BB%E8%AF%91%E6%96%87%E6%A1%A3/"/>
-    
-      <category term="并发网络爬虫" scheme="http://runnerliu.github.io/tags/%E5%B9%B6%E5%8F%91%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/"/>
     
   </entry>
   
