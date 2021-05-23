@@ -1,5 +1,5 @@
 ---
-title: Linux命令-jq
+title: Linux命令 - jq
 date: 2020-11-12 19:31:04
 tags:
  - Linux

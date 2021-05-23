@@ -94,16 +94,16 @@
 <meta name="description" content="前言进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：  高并发情境下数据库的数据重复写入问题  数据的重复写入实际上就是对共享资源的竞争操作，导致数据出现不一致，给线上业务带来影响。解决这种问题，最直接的思路是在数据库层面寻求解决方案，借助数据库的锁机制，或者在业务上通过数据库语句的限">
 <meta name="keywords" content="数据库,分布式锁,redis,zookeeper">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分布式锁">
+<meta property="og:title" content="Redis系列 - 分布式锁">
 <meta property="og:url" content="http://runnerliu.github.io/2018/05/06/distlock/index.html">
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="前言进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：  高并发情境下数据库的数据重复写入问题  数据的重复写入实际上就是对共享资源的竞争操作，导致数据出现不一致，给线上业务带来影响。解决这种问题，最直接的思路是在数据库层面寻求解决方案，借助数据库的锁机制，或者在业务上通过数据库语句的限">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-05-06T184140.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2018-05-06T190223.png">
-<meta property="og:updated_time" content="2020-11-15T02:24:39.465Z">
+<meta property="og:updated_time" content="2021-05-23T13:19:17.298Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分布式锁">
+<meta name="twitter:title" content="Redis系列 - 分布式锁">
 <meta name="twitter:description" content="前言进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：  高并发情境下数据库的数据重复写入问题  数据的重复写入实际上就是对共享资源的竞争操作，导致数据出现不一致，给线上业务带来影响。解决这种问题，最直接的思路是在数据库层面寻求解决方案，借助数据库的锁机制，或者在业务上通过数据库语句的限">
 <meta name="twitter:image" content="http://runnerliu.github.io/images/2018-05-06T184140.png">
 
@@ -139,7 +139,7 @@
 
 
 
-  <title> 分布式锁 | LiuYang's BLOG </title>
+  <title> Redis系列 - 分布式锁 | LiuYang's BLOG </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -331,7 +331,7 @@
             
             
               
-                分布式锁
+                Redis系列 - 分布式锁
               
             
           </h1>
@@ -386,7 +386,7 @@
 
           
           
-             <span id="/2018/05/06/distlock/" class="leancloud_visitors" data-flag-title="分布式锁">
+             <span id="/2018/05/06/distlock/" class="leancloud_visitors" data-flag-title="Redis系列 - 分布式锁">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>

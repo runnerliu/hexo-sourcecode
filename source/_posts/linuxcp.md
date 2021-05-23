@@ -1,5 +1,5 @@
 ---
-title: Linux命令-cp
+title: Linux命令 - cp
 date: 2018-01-04 22:11:57
 tags:
  - Linux

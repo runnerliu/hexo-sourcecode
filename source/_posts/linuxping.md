@@ -1,5 +1,5 @@
 ---
-title: Linux命令-ping
+title: Linux命令 - ping
 date: 2018-01-02 22:45:06
 tags:
  - Linux

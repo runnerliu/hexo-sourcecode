@@ -1,5 +1,5 @@
 ---
-title: 浅析Python的垃圾回收机制
+title: Python系列 - 浅析Python的垃圾回收机制
 date: 2017-07-16 14:33:22
 tags:
  - Python

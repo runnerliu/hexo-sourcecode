@@ -1,5 +1,5 @@
 ---
-title: Linux命令-cd
+title: Linux命令 - cd
 date: 2018-04-15 07:48:17
 tags:
  - 命令

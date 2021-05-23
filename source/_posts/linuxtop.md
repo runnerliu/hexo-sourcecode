@@ -1,5 +1,5 @@
 ---
-title: Linux命令-top
+title: Linux命令 - top
 date: 2017-06-07 09:29:20
 tags:
  - Linux

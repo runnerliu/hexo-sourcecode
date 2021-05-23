@@ -1,5 +1,5 @@
 ---
-title: Mysql的锁
+title: Mysql系列 - 锁
 date: 2021-05-23 14:28:06
 tags:
  - Mysql

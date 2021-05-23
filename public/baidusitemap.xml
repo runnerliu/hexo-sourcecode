@@ -1,11 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://runnerliu.github.io/2021/05/23/mysql-huibiao/</loc>
+    <loc>http://runnerliu.github.io/2020/11/29/roadmap-2020/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/16/pythongc/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2017/06/07/linuxtop/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/01/04/linuxtar/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/01/02/linuxps/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/01/02/linuxping/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/01/02/linuxnetstat/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/01/04/linuxln/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/04/15/linuxls/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2020/11/12/linuxjq/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/02/linuxcrontab/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/01/04/linuxcp/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/04/15/linuxcd/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/15/jsmjiomj/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2021/02/19/gogc/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2020/10/26/go-series-0/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2018/05/06/distlock/</loc>
     <lastmod>2021-05-23</lastmod>
   </url>
   <url>
     <loc>http://runnerliu.github.io/2021/05/23/mysql-lock/</loc>
+    <lastmod>2021-05-23</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2021/05/23/mysql-huibiao/</loc>
     <lastmod>2021-05-23</lastmod>
   </url>
   <url>
@@ -41,16 +109,8 @@
     <lastmod>2021-02-20</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2021/02/19/gogc/</loc>
-    <lastmod>2021-02-19</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2021/02/18/wsandwss/</loc>
     <lastmod>2021-02-18</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2020/11/29/roadmap-2020/</loc>
-    <lastmod>2020-12-19</lastmod>
   </url>
   <url>
     <loc>http://runnerliu.github.io/2018/06/03/tornado502_start/</loc>
@@ -75,10 +135,6 @@
   <url>
     <loc>http://runnerliu.github.io/2020/11/18/python-lib-celery/</loc>
     <lastmod>2020-11-22</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2020/11/12/linuxjq/</loc>
-    <lastmod>2020-11-15</lastmod>
   </url>
   <url>
     <loc>http://runnerliu.github.io/2020/11/11/python-lib-watchdog/</loc>
@@ -153,10 +209,6 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/07/16/pythongc/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2018/01/02/pythoncontextmanager/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
@@ -209,47 +261,7 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2018/01/04/linuxtar/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2017/06/07/linuxtop/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/01/02/linuxps/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/01/02/linuxping/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/04/15/linuxls/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/01/02/linuxnetstat/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/01/04/linuxcp/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/01/04/linuxln/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/02/linuxcrontab/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2020/10/27/linux-centos-sys-time/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/04/15/linuxcd/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
@@ -277,10 +289,6 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/07/15/jsmjiomj/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2018/04/30/kafkasave/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
@@ -301,10 +309,6 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2020/10/26/go-series-0/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2017/10/09/gitcommand/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
@@ -322,10 +326,6 @@
   </url>
   <url>
     <loc>http://runnerliu.github.io/2018/05/27/datatables1/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/05/06/distlock/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>

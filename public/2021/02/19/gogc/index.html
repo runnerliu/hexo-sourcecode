@@ -94,7 +94,7 @@
 <meta name="description" content="在此之前，我们介绍过 浅析Python的垃圾回收机制 和 PHP新的垃圾回收机制 ，有兴趣的话可以参考阅读，今天我们来聊聊golang是如何进行垃圾回收的。我们知道，目前各语言进行垃圾回收的方法有很多，如引用计数、标记清除、分代回收、三色标记等，各种方式都有其特点，GO语言在发展过程中， 其GC算法也是不断改进的。 GO的GC里程碑v1.3以前：STWgolang的垃圾回收算法都非常简陋，其性能也">
 <meta name="keywords" content="垃圾回收,GC,golang">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GO垃圾回收机制">
+<meta property="og:title" content="GO系列 - 垃圾回收机制">
 <meta property="og:url" content="http://runnerliu.github.io/2021/02/19/gogc/index.html">
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="在此之前，我们介绍过 浅析Python的垃圾回收机制 和 PHP新的垃圾回收机制 ，有兴趣的话可以参考阅读，今天我们来聊聊golang是如何进行垃圾回收的。我们知道，目前各语言进行垃圾回收的方法有很多，如引用计数、标记清除、分代回收、三色标记等，各种方式都有其特点，GO语言在发展过程中， 其GC算法也是不断改进的。 GO的GC里程碑v1.3以前：STWgolang的垃圾回收算法都非常简陋，其性能也">
@@ -108,9 +108,9 @@
 <meta property="og:image" content="http://runnerliu.github.io/images/2021-2-19T160403.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2021-2-19T160457.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2021-2-19T162340.png">
-<meta property="og:updated_time" content="2021-02-19T08:28:51.784Z">
+<meta property="og:updated_time" content="2021-05-23T13:19:43.591Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GO垃圾回收机制">
+<meta name="twitter:title" content="GO系列 - 垃圾回收机制">
 <meta name="twitter:description" content="在此之前，我们介绍过 浅析Python的垃圾回收机制 和 PHP新的垃圾回收机制 ，有兴趣的话可以参考阅读，今天我们来聊聊golang是如何进行垃圾回收的。我们知道，目前各语言进行垃圾回收的方法有很多，如引用计数、标记清除、分代回收、三色标记等，各种方式都有其特点，GO语言在发展过程中， 其GC算法也是不断改进的。 GO的GC里程碑v1.3以前：STWgolang的垃圾回收算法都非常简陋，其性能也">
 <meta name="twitter:image" content="http://runnerliu.github.io/images/2021-2-19T154834.png">
 
@@ -146,7 +146,7 @@
 
 
 
-  <title> GO垃圾回收机制 | LiuYang's BLOG </title>
+  <title> GO系列 - 垃圾回收机制 | LiuYang's BLOG </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -338,7 +338,7 @@
             
             
               
-                GO垃圾回收机制
+                GO系列 - 垃圾回收机制
               
             
           </h1>
@@ -393,7 +393,7 @@
 
           
           
-             <span id="/2021/02/19/gogc/" class="leancloud_visitors" data-flag-title="GO垃圾回收机制">
+             <span id="/2021/02/19/gogc/" class="leancloud_visitors" data-flag-title="GO系列 - 垃圾回收机制">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>

@@ -1,5 +1,5 @@
 ---
-title: Linux命令-ln
+title: Linux命令 - ln
 date: 2018-01-04 22:14:10
 tags:
  - Linux

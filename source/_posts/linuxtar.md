@@ -1,5 +1,5 @@
 ---
-title: Linux命令-tar
+title: Linux命令 - tar
 date: 2018-01-04 22:15:40
 tags:
  - Linux

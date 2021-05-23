@@ -1,5 +1,5 @@
 ---
-title: Linux命令-ps
+title: Linux命令 - ps
 date: 2018-01-02 22:38:35
 tags:
  - Linux
