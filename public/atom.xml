@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2021-05-18T14:42:13.173Z</updated>
+  <updated>2021-05-23T07:42:28.083Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mysql的锁</title>
+    <link href="http://runnerliu.github.io/2021/05/23/mysql-lock/"/>
+    <id>http://runnerliu.github.io/2021/05/23/mysql-lock/</id>
+    <published>2021-05-23T06:28:06.000Z</published>
+    <updated>2021-05-23T07:42:28.083Z</updated>
+    
+    <content type="html"><![CDATA[<p>我们都知道事务的ACID性质（参考<a href="https://runnerliu.github.io/2017/08/28/mysqltransaction/">Mysql系列 - 事务</a>），数据库为了维护这些性质，尤其是一致性(C)和隔离性(I)，一般使用加锁这种方式，同时数据库又是个高并发的应用，同一时间会有大量的并发访问，如果加锁过度，会极大的降低并发处理能力。所以对于加锁的处理，可以说就是数据库对于事务处理的精髓所在。</p><h4 id="一次封锁or两段锁"><a href="#一次封锁or两段锁" class="headerlink" title="一次封锁or两段锁"></a>一次封锁or两段锁</h4><p>因为有大量的并发访问，为了预防死锁，一般应用中推荐使用一次封锁法，就是在方法的开始阶段，已经预先知道会用到哪些数据，然后全部锁住，在方法运行之后，再全部解锁。这种方式可以有效的避免循环死锁，但在数据库中却不适用，因为在事务开始阶段，数据库并不知道会用到哪些数据。</p><p>数据库遵循的是两段锁协议，将事务分成两个阶段，加锁阶段和解锁阶段（所以叫两段锁）：</p><ul><li>加锁阶段：在该阶段可以进行加锁操作。在对任何数据进行读操作之前要申请并获得S锁（共享锁，其它事务可以继续加共享锁，但不能加排它锁），在进行写操作之前要申请并获得X锁（排它锁，其它事务不能再获得任何锁）。加锁不成功，则事务进入等待状态，直到加锁成功才继续执行。</li><li>解锁阶段：当事务释放了一个封锁以后，事务进入解锁阶段，在该阶段只能进行解锁操作不能再进行加锁操作。</li></ul><p>两段锁虽然无法避免死锁，但是可以保证事务的并发调度是串行化（串行化很重要，尤其是在数据恢复和备份的时候）的。</p><h4 id="锁类型"><a href="#锁类型" class="headerlink" title="锁类型"></a>锁类型</h4><p>从锁定资源的角度来看，MySQL 中的锁分为：</p><ul><li>表级锁：对整张表加锁。开销小，加锁快，不会出现死锁，锁定粒度大，发生锁冲突的概率最高，并发度最低。适合以查询为主。</li><li>行级锁：对行记录加锁。开销大，加锁慢，会出现死锁，锁定粒度最小，发生锁冲突的概率最低，并发度也最高。适合于有大量按索引条件并发更新少量不同数据，同时又有并发查询的应用。</li><li>页面锁：开销和加锁时间界于表锁和行锁之间，会出现死锁，锁定粒度界于表锁和行锁之间，并发度一般</li></ul><h5 id="行级锁"><a href="#行级锁" class="headerlink" title="行级锁"></a>行级锁</h5><p>InnoDB加行锁时通过给索引上的索引项加锁来实现，这种行锁实现特点意味着，只有通过索引条件检索条件数据，InnoDB才使用行锁，否则InnoDB将使用表锁。</p><p>行锁的加锁算法：</p><ul><li>记录锁 Record Locks：对单个记录的索引项加锁，即使表没有建立索引，InnoDB也会创建一个隐藏的聚簇索引(隐藏的递增主键索引)，并使用此索引进行记录锁定。</li><li>间隙锁 Gap Locks：锁定一个范围，但不包含记录本身，间隙锁作用在索引记录之间的间隔，又或者作用在第一个索引之前，最后一个索引之后的间隙。</li><li>Next-key锁：Gap Lock+Record Lock，锁定一个范围，并且锁定记录本身。当查询的索引含有唯一属性时，InnoDB存储引擎会对Next-Key Lock 进行优化，将其降级为 Record Lock，即仅锁住索引本身，而不是范围。</li></ul><h5 id="意向共享锁"><a href="#意向共享锁" class="headerlink" title="意向共享锁"></a>意向共享锁</h5><p>一个事务给一个数据行加共享锁时，必须先获得表的意向共享锁</p><h5 id="共享锁"><a href="#共享锁" class="headerlink" title="共享锁"></a>共享锁</h5><p>共享锁又叫做读锁。 当用户要进行数据的读取时，对数据加上共享锁，共享锁可以同时加上多个。</p><p>加了共享锁后，该事务只能对数据进行读取而不能修改，并且其它事务只能加共享锁，不能加排他锁。</p><p>加锁方式：在执行语句后面加上 <code>lock in share mode</code> 就代表对某些资源加上共享锁了。</p><h5 id="意向排它锁"><a href="#意向排它锁" class="headerlink" title="意向排它锁"></a>意向排它锁</h5><p>一个事务给一个数据行加排他锁时，必须先获得表的意向排他锁</p><h5 id="排他锁"><a href="#排他锁" class="headerlink" title="排他锁"></a>排他锁</h5><p>排他锁又叫做写锁。 当用户要进行数据的写入时，对数据加上排他锁。排他锁只可以加一个，和其他的排他锁、共享锁都相斥。</p><p>事务对数据加上排他锁时，只允许此事务读取和修改此数据，并且其它事务不能对该数据加任何锁。</p><h5 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h5><p>悲观锁的实现，往往依靠数据库提供的锁机制（也只有数据库层提供的锁机制才能真正保证数据访问的排他性，否则，即使在本系统中实现了加锁机制，也无法保证外部系统不会修改数据）。</p><p>悲观锁认为数据随时会被修改，因此每次读取数据之前都会上锁，防止其它事务读取或修改数据（共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程），应用于数据更新比较频繁的场景。</p><p>悲观锁的实现方式：</p><ul><li>实现悲观锁时，我们必须先使用<code>set autocommit=0;</code>，关闭mysql的AutoCommit属性。因为我们查询出数据之后就要将该数据锁定，关闭自动提交后，我们需要手动开启事务。</li></ul><p>悲观锁的优点：</p><ul><li>悲观锁保证了数据处理时的安全性。</li></ul><p>悲观锁的缺点：</p><ul><li>加锁造成了开销增加，并且增加了死锁的机会。降低了并发性。</li></ul><h5 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h5><p>乐观锁不是数据库自带的，需要我们自己去实现。乐观锁是指操作数据库时（更新操作），想法很乐观，认为这次的操作不会导致冲突，在操作数据时，并不进行任何其他的特殊处理（也就是不加锁），而在进行更新后，再去判断是否有冲突，适用于读多写少的场景。</p><p>乐观锁的实现方式：</p><ul><li>版本号机制：加一个版本号或者时间戳字段，每次数据更新时同时更新这个字段。一般是在数据表中加上一个数据版本号version字段，表示数据被修改的次数，当数据被修改时，version值会加一。当线程A要更新数据值时，在读取数据的同时也会读取version值，在提交更新时，若刚才读取到的version值为当前数据库中的version值相等时才更新，否则重试更新操作，直到更新成功。</li><li>CAS算法：Compare And Swap（比较与交换），是一种有名的无锁算法。先读取想要更新的字段或者所有字段，更新的时候比较一下，只有字段没有变化才进行更新。一般情况下是一个自旋操作，即不断的重试。</li></ul><p>乐观锁的优点：</p><ul><li>乐观锁机制避免了长事务中的数据库加锁开销，大大提升了大并发量下的系统整体性能表现。</li></ul><p>乐观锁的缺点：</p><ul><li>ABA问题：如果一个变量V初次读取的时候是A值，并且在准备赋值的时候检查到它仍然是A值，那我们就能说明它的值没有被其他线程修改过了吗？很明显是不能的，因为在这段时间它的值可能被改为其他值，然后又改回A，那CAS操作就会误认为它从来没有被修改过。这个问题被称为CAS操作的 “ABA”问题。</li><li>循环时间长开销大：自旋CAS（也就是不成功就一直循环执行直到成功）如果长时间不成功，会给CPU带来非常大的执行开销。</li></ul><h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h4><p>死锁是指两个或两个以上事务在执行过程中因争抢锁资源而造成的互相等待（形成环路）的现象。<strong>表级锁不会产生死锁</strong>，所以解决死锁主要还是针对于最常用的InnoDB。</p><p>死锁的解决：</p><ul><li><p>查出阻塞的进程，将其kill掉，将资源释放</p></li><li><p>设置锁的超时时间：InnoDB 行锁的等待时间，单位秒。可在会话级别设置，RDS 实例该参数的默认值为 50s。生产环境不推荐使用过大的 <code>innodb_lock_wait_timeout</code> 参数值该参数支持在会话级别修改，方便应用在会话级别单独设置某些特殊操作的行锁等待超时时</p></li><li><p>如果不同程序会并发存取多个表，尽量约定以相同的顺序访问表，可以大大降低死锁机会</p></li><li><p>在同一个事务中，尽可能做到一次锁定所需要的所有资源，减少死锁产生概率</p></li><li><p>对于非常容易产生死锁的业务部分，可以尝试使用升级锁定颗粒度，通过表级锁定来减少死锁产生的概率，<strong>不推荐</strong></p></li></ul><p>Read More:</p><p>Read More:</p><blockquote><p><a href="https://tech.meituan.com/2014/08/20/innodb-lock.html" target="_blank" rel="noopener">Innodb中的事务隔离级别和锁的关系</a></p><p><a href="https://www.jianshu.com/p/4f2311f38040" target="_blank" rel="noopener">深入理解MySQL数据库各种锁（总结）</a></p><p><a href="https://segmentfault.com/a/1190000022839728" target="_blank" rel="noopener">面试官：小伙子，给我说一下mysql 乐观锁和悲观锁吧</a></p><p><a href="https://zhuanlan.zhihu.com/p/29150809" target="_blank" rel="noopener">MySQL锁总结</a></p><p><a href="https://learnku.com/articles/39212?order_by=vote_count&amp;" target="_blank" rel="noopener">一张图彻底搞懂 MySQL 的锁机制</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;我们都知道事务的ACID性质（参考&lt;a href=&quot;https://runnerliu.github.io/2017/08/28/mysqltransaction/&quot;&gt;Mysql系列 - 事务&lt;/a&gt;），数据库为了维护这些性质，尤其是一致性(C)和隔离性(I)，一般使用加锁
+      
+    
+    </summary>
+    
+      <category term="Mysql" scheme="http://runnerliu.github.io/categories/Mysql/"/>
+    
+    
+      <category term="Mysql" scheme="http://runnerliu.github.io/tags/Mysql/"/>
+    
+      <category term="Lock" scheme="http://runnerliu.github.io/tags/Lock/"/>
+    
+  </entry>
   
   <entry>
     <title>RocketMQ如何处理消息丢失</title>
@@ -177,9 +204,9 @@
       <category term="GO" scheme="http://runnerliu.github.io/categories/GO/"/>
     
     
-      <category term="GC" scheme="http://runnerliu.github.io/tags/GC/"/>
-    
       <category term="垃圾回收" scheme="http://runnerliu.github.io/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/"/>
+    
+      <category term="GC" scheme="http://runnerliu.github.io/tags/GC/"/>
     
       <category term="golang" scheme="http://runnerliu.github.io/tags/golang/"/>
     
@@ -449,11 +476,11 @@
       <category term="Linux" scheme="http://runnerliu.github.io/categories/Linux/"/>
     
     
-      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
-    
       <category term="CentOS" scheme="http://runnerliu.github.io/tags/CentOS/"/>
     
       <category term="系统时间" scheme="http://runnerliu.github.io/tags/%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4/"/>
+    
+      <category term="Linux" scheme="http://runnerliu.github.io/tags/Linux/"/>
     
   </entry>
   
@@ -532,33 +559,6 @@
     
     
       <category term="HTTP" scheme="http://runnerliu.github.io/tags/HTTP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CentOS编译安装Python3</title>
-    <link href="http://runnerliu.github.io/2018/06/26/centosinstallpython3/"/>
-    <id>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</id>
-    <published>2018-06-26T14:25:22.000Z</published>
-    <updated>2020-11-15T02:24:39.464Z</updated>
-    
-    <content type="html"><![CDATA[<p>Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题。如果需要使用最新的 Python3 那么我们可以编译安装源码包到独立目录，这和系统默认环境之间是没有任何影响的，Python3 和 Python2 两个环境并存即可。</p><p>首先去 Python 官网下载 Python3 的源码包，<a href="https://www.python.org/" target="_blank" rel="noopener">传送门</a> </p><p>进去之后点击导航栏的 Downloads，也可以鼠标放到 Downloads 上弹出菜单选择 Source code，表示源码包，这里选择最新版本 3.6.5，当然下面也有很多其他历史版本，点进去之后页面下方可以看到下载链接，包括源码包、Mac OSX 安装包、Windows 安装包等。Linux 系统可以直接使用以下命令：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz</span><br></pre></td></tr></table></figure><p>接下来，如果是全新的 Linux 系统，可能需要安装一些 Python 的依赖，如 openssl、readline等模块。需要的依赖主要如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">yum -y install zlib zlib-devel</span><br><span class="line">yum -y install bzip2 bzip2-devel</span><br><span class="line">yum -y install ncurses ncurses-devel</span><br><span class="line">yum -y install readline readline-devel</span><br><span class="line">yum -y install openssl openssl-devel</span><br><span class="line">yum -y install openssl-static</span><br><span class="line">yum -y install xz lzma xz-devel</span><br><span class="line">yum -y install sqlite sqlite-devel</span><br><span class="line">yum -y install gdbm gdbm-devel</span><br><span class="line">yum -y install tk tk-devel</span><br></pre></td></tr></table></figure><p>如果不是全新的 Linux 系统，可以查看是否安装了以上依赖：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum list installed | grep zlib</span><br><span class="line">yum list installed | grep zlib-devel</span><br><span class="line">yum list installed | grep bzip2</span><br><span class="line">yum list installed | grep bzip2-devel</span><br><span class="line">......</span><br></pre></td></tr></table></figure><p>解压文件：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf Python-3.6.5.tgz</span><br></pre></td></tr></table></figure><p>进入目录：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd Python-3.6.5/</span><br></pre></td></tr></table></figure><p>配置编译：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/python3.6.5 --enable-shared CFLAGS=-fPIC</span><br></pre></td></tr></table></figure><p>因为上面依赖包是用 yum 安装而不是自己编译的，所以都是安装在系统默认目录下，因此各种选项不用加默认即可生效。<code>--enable-shared</code> 和 <code>-fPIC</code> 之后可以将 Python3 的动态链接库编译出来，默认情况编译完 lib 下面只有 Python3.xm.a 这样的文件，python本身可以正常使用，但是如果编译第三方库需要python 接口的比如 caffe 等，则会报错；所以这里建议按照上面的方式配置。</p><p>然后编译并安装：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure><p>整个过程大约5分钟，安装成功之后，安装目录就在 <code>/usr/local/python3.6.5/</code> 。</p><p>一般为了系统环境的干净，不需要将 python3、pip3 加入到系统环境变量中，使用全路径运行 Python 文件或安装第三方库即可，如：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/python3.6.5/bin/python3.6 xxx.py</span><br><span class="line">/usr/local/python3.6.5/bin/pip3.6 install twisted</span><br></pre></td></tr></table></figure><p>但是一般在开发机上时，加入环境变量会更加方便，建立软连接如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/python3.6.5/bin/python3.6 /usr/bin/python36</span><br><span class="line">ln -s /usr/python3.6.5/bin/pip3 /usr/bin/pip3</span><br></pre></td></tr></table></figure><p>然后可以直接使用软连接运行 Python 文件或安装第三方库：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python36 xxx.py</span><br><span class="line">pip3 install twisted</span><br></pre></td></tr></table></figure><p>如上在 CentOS 上安装 Python3 就完成了，安装其他版本的 Python 解释器同理。</p><p>Read More:</p><blockquote><p><a href="https://www.cnblogs.com/freeweb/p/5181764.html" target="_blank" rel="noopener">Linux下编译安装python3</a></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Linux 下大部分系统默认自带 python2.x 的版本，最常见的是 python2.6 或 python2.7 版本，默认的python 被系统很多程序所依赖，比如 CentOS 下的 yum 就是 python2.x 写的，所以默认版本不要轻易删除，否则会有一些问题
-      
-    
-    </summary>
-    
-      <category term="Linux/Unix" scheme="http://runnerliu.github.io/categories/Linux-Unix/"/>
-    
-    
-      <category term="Linux/Unix" scheme="http://runnerliu.github.io/tags/Linux-Unix/"/>
-    
-      <category term="Python3" scheme="http://runnerliu.github.io/tags/Python3/"/>
     
   </entry>
   
