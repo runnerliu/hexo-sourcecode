@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2021-05-23T07:42:28.083Z</updated>
+  <updated>2021-05-23T08:22:19.573Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mysql回表查询和覆盖索引</title>
+    <link href="http://runnerliu.github.io/2021/05/23/mysql-huibiao/"/>
+    <id>http://runnerliu.github.io/2021/05/23/mysql-huibiao/</id>
+    <published>2021-05-23T08:07:13.000Z</published>
+    <updated>2021-05-23T08:22:19.573Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="回表查询"><a href="#回表查询" class="headerlink" title="回表查询"></a>回表查询</h4><p>通俗的讲就是，如果索引的列在 Select 所需获得的列中或者根据一次索引查询就能获得记录就不需要回表，如果 Select 所需获得列中有大量的非索引列，索引就需要到表中找到相应的列的信息，这就叫回表查询。</p><p>InnoDB聚集（聚簇）索引的叶子节点存储行记录，非叶子节点存储主键索引，因此， InnoDB必须要有且只有一个聚集索引：</p><p>（1）如果表定义了主键，则PK就是聚集索引；<br>（2）如果表没有定义主键，则第一个非空唯一索引（not NULL unique）列是聚集索引；<br>（3）否则，InnoDB会创建一个隐藏的row-id作为聚集索引；</p><h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>建表如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table user(</span><br><span class="line">    -&gt; id int(10) auto_increment,</span><br><span class="line">    -&gt; name varchar(30),</span><br><span class="line">    -&gt; age tinyint(4),</span><br><span class="line">    -&gt; primary key (id),</span><br><span class="line">    -&gt; index idx_age (age)</span><br><span class="line">    -&gt; )engine=innodb charset=utf8mb4;</span><br></pre></td></tr></table></figure><p>其中，id 字段是聚簇索引（主键索引），age 字段是普通索引（二级索引）</p><p>表中数据如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from user;</span><br><span class="line">+----+--------+------+</span><br><span class="line">| id | name  | age |</span><br><span class="line">+----+--------+------+</span><br><span class="line">| 1 | 张三  |  30 |</span><br><span class="line">| 2 | 李四  |  20 |</span><br><span class="line">| 3 | 王五  |  40 |</span><br><span class="line">| 4 | 刘八  |  10 |</span><br><span class="line">+----+--------+------+</span><br></pre></td></tr></table></figure><p>索引存储结构如下：</p><p>id是主键，聚簇索引结构如下</p><p><img src="/images/2021-5-23T161315.png" alt="2021-5-23T161315.png"></p><p>age是普通索引，非聚簇索引结构如下</p><p><img src="/images/2021-5-23T161415.png" alt="2021-5-23T161415.png"></p><p>如果查询条件为主键，则只需扫描一次B+树即可通过聚簇索引定位到要查找的行记录数据。如：<code>select * from user where id = 1</code></p><p><img src="/images/2021-5-23T161516.png" alt="2021-5-23T161516.png"></p><p>如果查询条件为普通索引（非聚簇索引），需要扫描两次B+树，第一次扫描通过普通索引定位到聚簇索引的值，然后第二次扫描通过聚簇索引的值定位到要查找的行记录数据。 如：<code>select * from user where age = 30</code></p><blockquote><p>先通过普通索引 age=30 定位到主键值 id=1</p><p>再通过聚集索引 id=1 定位到行记录数据</p></blockquote><p><img src="/images/2021-5-23T161626.png" alt="2021-5-23T161626.png"></p><p><img src="/images/2021-5-23T161710.png" alt="2021-5-23T161710.png"></p><h4 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h4><p>只需要在一棵索引树上就能获取SQL所需的所有列数据，无需回表，速度更快。</p><p>常见的方法是将被查询的字段建立到联合索引里去。</p><p>实现：<code>select id,age from user where age = 10</code></p><p>explain分析：因为age是普通索引，使用到了age索引，通过一次扫描B+树即可查询到相应的结果，这样就实现了覆盖索引</p><p><img src="/images/2021-5-23T161927.png" alt="2021-5-23T161927.png"></p><p>实现：<code>select id,age,name from user where age = 10</code></p><p>explain分析：age是普通索引，但name列不在索引树上，所以通过age索引在查询到id和age的值后，需要进行回表再查询name的值。此时的Extra列的NULL表示进行了回表查询</p><p><img src="/images/2021-5-23T162010.png" alt="2021-5-23T162010.png"></p><p>因此，为了实现索引覆盖，需要建组合索引 <code>idx_age_name(age,name)</code></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">drop index idx_age on user;</span><br><span class="line">create index idx_age_name on user(`age`,`name`);</span><br></pre></td></tr></table></figure><p>explain分析：此时字段age和name是组合索引idx_age_name，查询的字段id、age、name的值刚刚都在索引树上，只需扫描一次组合索引B+树即可，这就是实现了索引覆盖，此时的Extra字段为Using index表示使用了索引覆盖。</p><p><img src="/images/2021-5-23T162101.png" alt="2021-5-23T162101.png"></p><p>Read More:</p><blockquote><p><a href="https://juejin.cn/post/6844904062329028621" target="_blank" rel="noopener">MySQL 的覆盖索引与回表</a></p><p><a href="https://www.jianshu.com/p/d0d3de6832b9" target="_blank" rel="noopener">回表与覆盖索引，索引下推</a></p><p><a href="https://blog.csdn.net/CPLASF_/article/details/108799381" target="_blank" rel="noopener">mysql-回表查询是什么</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;回表查询&quot;&gt;&lt;a href=&quot;#回表查询&quot; class=&quot;headerlink&quot; title=&quot;回表查询&quot;&gt;&lt;/a&gt;回表查询&lt;/h4&gt;&lt;p&gt;通俗的讲就是，如果索引的列在 Select 所需获得的列中或者根据一次索引查询就能获得记录就不需要回表，如果 Select 
+      
+    
+    </summary>
+    
+      <category term="Mysql" scheme="http://runnerliu.github.io/categories/Mysql/"/>
+    
+    
+      <category term="Mysql" scheme="http://runnerliu.github.io/tags/Mysql/"/>
+    
+  </entry>
   
   <entry>
     <title>Mysql的锁</title>
@@ -534,31 +559,6 @@
     
     
       <category term="GO" scheme="http://runnerliu.github.io/tags/GO/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HTTP1.0、HTTP1.1、HTTP2.0的区别</title>
-    <link href="http://runnerliu.github.io/2020/10/25/tcpdiff/"/>
-    <id>http://runnerliu.github.io/2020/10/25/tcpdiff/</id>
-    <published>2020-10-25T06:52:48.000Z</published>
-    <updated>2020-11-15T02:24:39.480Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="HTTP发展史"><a href="#HTTP发展史" class="headerlink" title="HTTP发展史"></a>HTTP发展史</h3><p><img src="/images/2020-10-25T150500.png" alt="2020-10-25T150500.png"></p><h3 id="HTTP的优化"><a href="#HTTP的优化" class="headerlink" title="HTTP的优化"></a>HTTP的优化</h3><p>影响一个HTTP网络请求的因素主要有两个：带宽和延迟。</p><p><strong>带宽</strong></p><p>现在的网络基础建设已使得带宽得到极大的提升，在影响网速的因素中，带宽所占比重越来越少。</p><p><strong>延迟</strong></p><p>浏览器阻塞：浏览器会因为一些原因阻塞请求。浏览器对于同一个域名，同时只能有 4 个连接（这个根据浏览器内核不同可能会有所差异），超过浏览器最大连接数限制，后续请求就会被阻塞。</p><p>DNS 解析：浏览器需要知道目标服务器的 IP 才能建立连接。此过程为DNS解析，可参考<a href="https://runnerliu.github.io/2017/06/22/urlrequestprocess/">从输入 URL 到页面展示到底发生了什么</a>，这个通常可以利用DNS缓存结果来达到减少这个时间的目的。</p><p>建立连接：HTTP 是基于 TCP 协议的，浏览器最快也要在第三次握手时才能携带 HTTP 请求报文，达到真正的建立连接，但是这些连接无法复用会导致每次请求都经历三次握手和慢启动。三次握手在高延迟的场景下影响较明显，慢启动则对文件类大请求影响较大。</p><h3 id="HTTP1-0、HTTP1-1"><a href="#HTTP1-0、HTTP1-1" class="headerlink" title="HTTP1.0、HTTP1.1"></a>HTTP1.0、HTTP1.1</h3><p>HTTP1.0最早在网页中使用是在1996年，那个时候只是使用一些较为简单的网页上和网络请求上，而HTTP1.1则在1999年才开始广泛应用于现在的各大浏览器网络请求中，同时HTTP1.1也是当前使用最为广泛的HTTP协议。 主要区别体现在：</p><p><strong>缓存处理</strong></p><p>在HTTP1.0中主要使用header里的If-Modified-Since、Expires来做为缓存判断的标准，HTTP1.1则引入了更多的缓存控制策略例如Entity tag、If-Unmodified-Since、If-Match、If-None-Match等更多可供选择的缓存头来控制缓存策略。</p><p><strong>带宽优化及网络连接</strong></p><p>HTTP1.0中，存在一些浪费带宽的现象，例如客户端只是需要某个对象的一部分，而服务器却将整个对象送过来了，并且不支持断点续传功能，HTTP1.1则在请求头引入了range头域，它允许只请求资源的某个部分，即返回码是206（Partial Content），这样就方便了开发者自由的选择以便于充分利用带宽和连接。</p><p><strong>错误通知的管理</strong></p><p>在HTTP1.1中新增了24个错误状态响应码，如409（Conflict）表示请求的资源与资源的当前状态发生冲突、410（Gone）表示服务器上的某个资源被永久性的删除。</p><p><strong>Host头处理</strong></p><p>在HTTP1.0中认为每台服务器都绑定一个唯一的IP地址，因此，请求消息中的URL并没有传递主机名（hostname）。但随着虚拟主机技术的发展，在一台物理服务器上可以存在多个虚拟主机（Multi-homed Web Servers），并且它们共享一个IP地址。HTTP1.1的请求消息和响应消息都应支持Host头域，且请求消息中如果没有Host头域会报告一个错误（400 Bad Request）。</p><p><strong>长连接</strong></p><p>HTTP 1.1支持长连接（PersistentConnection）和请求的流水线（Pipelining）处理，在一个TCP连接上可以传送多个HTTP请求和响应，减少了建立和关闭连接的消耗和延迟，在HTTP1.1中默认开启Connection: keep-alive，一定程度上弥补了HTTP1.0每次请求都要创建连接的缺点。</p><h3 id="HTTPS、HTTP的区别"><a href="#HTTPS、HTTP的区别" class="headerlink" title="HTTPS、HTTP的区别"></a>HTTPS、HTTP的区别</h3><ul><li>HTTPS协议需要到CA申请证书，一般免费证书很少，需要交费</li><li>HTTP协议运行在TCP之上，所有传输的内容都是明文，HTTPS运行在SSL/TLS之上，SSL/TLS运行在TCP之上，所有传输的内容都经过加密的</li><li>HTTP和HTTPS使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443</li><li>HTTPS可以有效的防止运营商劫持，解决了防劫持的一个大问题</li></ul><p><img src="/images/2020-10-25T152300.png" alt="2020-10-25T152300.png"></p><h3 id="说说SPDY"><a href="#说说SPDY" class="headerlink" title="说说SPDY"></a>说说SPDY</h3><p>其实 SPDY 并不是新的一种协议，而是在 HTTP 之前做了一层会话层。</p><p><img src="/images/2020-10-25T152800.png" alt="2020-10-25T152800.png"></p><p>SPDY是一个由 Google 主导的研究项目发明的HTTP替代协议。SPDY位于HTTP之下、TCP/SSL之上，这样可以轻松兼容老版本的HTTP协议，同时可以使用已有的SSL功能。SPDY优化了HTTP1.X的请求延迟，解决了HTTP1.X的安全性，具体如下：</p><p><strong>降低延迟</strong></p><p>针对HTTP高延迟的问题，SPDY优雅的采取了多路复用（multiplexing）。多路复用通过多个请求stream共享一个tcp连接的方式，解决了HOL blocking的问题，降低了延迟同时提高了带宽的利用率。</p><p><strong>请求优先级</strong></p><p>多路复用带来一个新的问题是，在连接共享的基础之上有可能会导致关键请求被阻塞。SPDY允许给每个request设置优先级，这样重要的请求就会优先得到响应。比如浏览器加载首页，首页的html内容应该优先展示，之后才是各种静态资源文件，脚本文件等加载，这样可以保证用户能第一时间看到网页内容。</p><p><strong>header压缩</strong></p><p>前面提到HTTP1.x的header很多时候都是重复多余的。选择合适的压缩算法可以减小包的大小和数量。</p><p><strong>传输协议</strong></p><p>基于HTTPS的加密协议传输，大大提高了传输数据的可靠性。</p><p><strong>服务端推送</strong></p><p>采用了SPDY的网页，例如我的网页有一个sytle.css的请求，在客户端收到sytle.css数据的同时，服务端会将sytle.js的文件推送给客户端，当客户端再次尝试获取sytle.js时就可以直接从缓存中获取到，不用再发请求了。</p><h3 id="HTTP2-0"><a href="#HTTP2-0" class="headerlink" title="HTTP2.0"></a>HTTP2.0</h3><p>HTTP2.0是基于SPDY设计的，但与SPDY 仍有不同的地方，如下：</p><ul><li>HTTP2.0 支持明文 HTTP 传输，而 SPDY 强制使用 HTTPS</li><li>HTTP2.0 消息头的压缩算法采用 HPACK，而非 SPDY 采用的 DEFLATE</li></ul><h4 id="HTTP2-0的新特性"><a href="#HTTP2-0的新特性" class="headerlink" title="HTTP2.0的新特性"></a>HTTP2.0的新特性</h4><h5 id="二进制分帧"><a href="#二进制分帧" class="headerlink" title="二进制分帧"></a>二进制分帧</h5><p>HTTP1.x的解析是基于文本。基于文本协议的格式解析存在天然缺陷，文本的表现形式有多样性，要做到健壮性考虑的场景必然很多，二进制则不同，只认0和1的组合。基于这种考虑HTTP2.0的协议解析决定采用二进制格式，实现方便且健壮。</p><p><img src="/images/2020-10-25T154700.png" alt="2020-10-25T154700.png"></p><p>在应用层与传输层之间增加一个二进制分帧层，以此达到在不改动 HTTP 的语义，HTTP 方法、状态码、URI 及首部字段的情况下，突破HTTP1.1 的性能限制，改进传输性能，实现低延迟和高吞吐量。在二进制分帧层上，HTTP2.0 会将所有传输的信息分割为更小的消息和帧，并对它们采用二进制格式的编码，其中 HTTP1.x 的首部信息会被封装到 Headers 帧，而我们的 request body 则封装到 Data 帧里面。</p><h5 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h5><p>即连接共享，即每一个request都是是用作连接共享机制的。一个request对应一个id，这样一个连接上可以有多个request，每个连接的request可以随机的混杂在一起，接收方可以根据request的 id将request再归属到各自不同的服务端请求里面。</p><p><img src="/images/2020-10-25T154800.png" alt="2020-10-25T154800.png"></p><h5 id="header压缩"><a href="#header压缩" class="headerlink" title="header压缩"></a>header压缩</h5><p>如上文中所言，对前面提到过HTTP1.x的header带有大量信息，而且每次都要重复发送，HTTP2.0使用encoder来减少需要传输的header大小，通讯双方各自cache一份header fields表，既避免了重复header的传输，又减小了需要传输的大小。</p><p><img src="/images/2020-10-25T154900.png" alt="2020-10-25T154900.png"></p><h5 id="服务端推送"><a href="#服务端推送" class="headerlink" title="服务端推送"></a>服务端推送</h5><p>同SPDY一样，HTTP2.0也具有server push功能。</p><p>客户端请求的过程：</p><p><img src="/images/2020-10-25T155200.png" alt="2020-10-25T155200.png"></p><p>服务端推送的过程：</p><p><img src="/images/2020-10-25T155300.png" alt="2020-10-25T155300.png"></p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul><li><p>HTTP1.0到HTTP1.1，是无连接到长连接的发展</p></li><li><p>HTTP1.x到HTTP2.0，是二进制分帧、多路复用的发展</p></li></ul><p>参考：</p><blockquote><p><a href="https://www.jianshu.com/p/be29d679cbff" target="_blank" rel="noopener">HTTP1.0、HTTP1.1和HTTP2.0的区别</a></p><p><a href="https://juejin.im/post/6844903824390537230" target="_blank" rel="noopener">HTTP1.0，HTTP1.1，HTTPS和HTTP2.0的区别</a></p><p><a href="https://juejin.im/post/6844903712113360903" target="_blank" rel="noopener">HTTP 的前世今生：一次性搞懂 HTTP、HTTPS、SPDY、HTTP2</a></p><p><a href="https://zh.wikipedia.org/wiki/HTTP/2" target="_blank" rel="noopener">HTTP/2</a></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;HTTP发展史&quot;&gt;&lt;a href=&quot;#HTTP发展史&quot; class=&quot;headerlink&quot; title=&quot;HTTP发展史&quot;&gt;&lt;/a&gt;HTTP发展史&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/images/2020-10-25T150500.png&quot; alt=&quot;2020
-      
-    
-    </summary>
-    
-      <category term="HTTP" scheme="http://runnerliu.github.io/categories/HTTP/"/>
-    
-    
-      <category term="HTTP" scheme="http://runnerliu.github.io/tags/HTTP/"/>
     
   </entry>
   
