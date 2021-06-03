@@ -3,9 +3,9 @@ title: librdkafka的安装和使用
 date: 2018-01-04 22:17:29
 tags:
  - librdkafka
- - kafka
+ - Kafka
 categories:
- - kafka
+ - Kafka
 ---
 
 [kafka](https://kafka.apache.org/) 是一种高吞吐量的分布式发布订阅消息系统。现在它已被 [多家不同类型的公司](https://cwiki.apache.org/confluence/display/KAFKA/Powered+By) 作为多种类型的数据管道和消息系统使用。Python对kafka的操作库主要有 [pykafka](https://github.com/Parsely/pykafka) 、[confluent-kafka-python](https://github.com/confluentinc/confluent-kafka-python) 、[librdkafka](https://github.com/edenhill/librdkafka) ，pykafka是Python内置的kafka操作模块，纯Python编写，提供 [simpleconsumer](http://pykafka.readthedocs.io/en/latest/api/simpleconsumer.html) 、[balancedconsumer](http://pykafka.readthedocs.io/en/latest/api/balancedconsumer.html) 两种消费方式。

@@ -1710,11 +1710,11 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>Mysql</category>
+        <category>MySQL</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
         <tag>explain</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -1791,10 +1791,10 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>Mysql</category>
+        <category>MySQL</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -2380,7 +2380,7 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>requests</category>
+        <category>Python库</category>
       </categories>
       <tags>
         <tag>requests</tag>
@@ -3524,11 +3524,11 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>消息队列</category>
+        <category>Kafka</category>
       </categories>
       <tags>
-        <tag>kafka</tag>
         <tag>文件存储</tag>
+        <tag>Kafka</tag>
       </tags>
   </entry>
   <entry>
@@ -3712,11 +3712,11 @@
 <p>理论上，使用了C库的读取，其性能应该有很大提升才对，但是测试表明性能提升并不到，这个问题还有待探讨。</p>
 ]]></content>
       <categories>
-        <category>kafka</category>
+        <category>Kafka</category>
       </categories>
       <tags>
-        <tag>kafka</tag>
         <tag>librdkafka</tag>
+        <tag>Kafka</tag>
       </tags>
   </entry>
   <entry>
@@ -4402,10 +4402,10 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>Mysql</category>
+        <category>MySQL</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
+        <tag>MySQL</tag>
         <tag>索引</tag>
       </tags>
   </entry>
@@ -4942,10 +4942,10 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>数据库</category>
+        <category>MySQL</category>
       </categories>
       <tags>
-        <tag>数据库</tag>
+        <tag>MySQL</tag>
         <tag>事务</tag>
         <tag>事务隔离</tag>
       </tags>
@@ -5092,10 +5092,10 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>Mysql</category>
+        <category>MySQL</category>
       </categories>
       <tags>
-        <tag>Mysql</tag>
+        <tag>MySQL</tag>
         <tag>Lock</tag>
       </tags>
   </entry>

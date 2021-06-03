@@ -2,10 +2,10 @@
 title: Mysql系列 - 锁
 date: 2021-05-23 14:28:06
 tags:
- - Mysql
+ - MySQL
  - Lock
 categories:
- - Mysql
+ - MySQL
 ---
 
 我们都知道事务的ACID性质（参考[Mysql系列 - 事务](https://runnerliu.github.io/2017/08/28/mysqltransaction/)），数据库为了维护这些性质，尤其是一致性(C)和隔离性(I)，一般使用加锁这种方式，同时数据库又是个高并发的应用，同一时间会有大量的并发访问，如果加锁过度，会极大的降低并发处理能力。所以对于加锁的处理，可以说就是数据库对于事务处理的精髓所在。

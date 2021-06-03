@@ -2,10 +2,10 @@
 title: Kafka文件存储机制
 date: 2018-04-30 20:05:02
 tags:
- - kafka
+ - Kafka
  - 文件存储
 categories:
- - 消息队列
+ - Kafka
 ---
 
 ### Kafka

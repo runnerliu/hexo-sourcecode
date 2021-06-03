@@ -2,9 +2,9 @@
 title: Mysql系列 - 回表查询和覆盖索引
 date: 2021-05-23 16:07:13
 tags:
- - Mysql
+ - MySQL
 categories:
- - Mysql
+ - MySQL
 ---
 
 #### 回表查询

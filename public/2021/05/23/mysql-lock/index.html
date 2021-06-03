@@ -73,7 +73,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="Mysql,Lock,">
+  <meta name="keywords" content="MySQL,Lock,">
 
 
 
@@ -92,14 +92,14 @@
 
 
 <meta name="description" content="我们都知道事务的ACID性质（参考Mysql系列 - 事务），数据库为了维护这些性质，尤其是一致性(C)和隔离性(I)，一般使用加锁这种方式，同时数据库又是个高并发的应用，同一时间会有大量的并发访问，如果加锁过度，会极大的降低并发处理能力。所以对于加锁的处理，可以说就是数据库对于事务处理的精髓所在。 一次封锁or两段锁因为有大量的并发访问，为了预防死锁，一般应用中推荐使用一次封锁法，就是在方法的开">
-<meta name="keywords" content="Mysql,Lock">
+<meta name="keywords" content="MySQL,Lock">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql系列 - 锁">
 <meta property="og:url" content="http://runnerliu.github.io/2021/05/23/mysql-lock/index.html">
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="我们都知道事务的ACID性质（参考Mysql系列 - 事务），数据库为了维护这些性质，尤其是一致性(C)和隔离性(I)，一般使用加锁这种方式，同时数据库又是个高并发的应用，同一时间会有大量的并发访问，如果加锁过度，会极大的降低并发处理能力。所以对于加锁的处理，可以说就是数据库对于事务处理的精髓所在。 一次封锁or两段锁因为有大量的并发访问，为了预防死锁，一般应用中推荐使用一次封锁法，就是在方法的开">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-05-23T13:18:16.324Z">
+<meta property="og:updated_time" content="2021-06-03T01:40:34.303Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql系列 - 锁">
 <meta name="twitter:description" content="我们都知道事务的ACID性质（参考Mysql系列 - 事务），数据库为了维护这些性质，尤其是一致性(C)和隔离性(I)，一般使用加锁这种方式，同时数据库又是个高并发的应用，同一时间会有大量的并发访问，如果加锁过度，会极大的降低并发处理能力。所以对于加锁的处理，可以说就是数据库对于事务处理的精髓所在。 一次封锁or两段锁因为有大量的并发访问，为了预防死锁，一般应用中推荐使用一次封锁法，就是在方法的开">
@@ -366,8 +366,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mysql/" itemprop="url" rel="index">
-                    <span itemprop="name">Mysql</span>
+                  <a href="/categories/MySQL/" itemprop="url" rel="index">
+                    <span itemprop="name">MySQL</span>
                   </a>
                 </span>
 
@@ -521,7 +521,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
           
             <a href="/tags/Lock/" rel="tag"># Lock</a>
           
@@ -631,7 +631,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -642,7 +642,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">140</span>
+                <span class="site-state-item-count">141</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

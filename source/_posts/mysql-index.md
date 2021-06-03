@@ -2,10 +2,10 @@
 title: Mysql系列 - 索引
 date: 2021-02-20 16:54:14
 tags:
- - Mysql
+ - MySQL
  - 索引
 categories:
- - Mysql
+ - MySQL
 ---
 
 >  索引是存储引擎用于快速找到记录的一种数据结构

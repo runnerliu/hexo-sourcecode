@@ -2,10 +2,10 @@
 title: Mysql系列 - explain
 date: 2021-02-20 12:04:15
 tags:
- - Mysql
+ - MySQL
  - explain
 categories:
- - Mysql
+ - MySQL
 ---
 
 通常我们在优化Mysql语句时会使用explain关键字，它是MySQL 提供的对 SELECT 语句进行分析并输出 SELECT 执行的详细信息的命令，其输出结果如下图：
