@@ -6,7 +6,7 @@ tags:
  - 系统时间
  - Linux
 categories:
- - Linux
+ - Linux/Unix
 ---
 
 #### CentOS系统时间、时区查看

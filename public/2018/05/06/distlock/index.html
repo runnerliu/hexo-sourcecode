@@ -73,7 +73,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="数据库,分布式锁,redis,zookeeper,">
+  <meta name="keywords" content="分布式锁,数据库,redis,zookeeper,">
 
 
 
@@ -92,7 +92,7 @@
 
 
 <meta name="description" content="前言进入正题之前，先来说说问题的产生背景。目前绝大多数的业务都跑在高并发的情境下，而数据库（大多数是mysql）数据一致性的问题是不可避免的，笔者同样遇到了这种问题：  高并发情境下数据库的数据重复写入问题  数据的重复写入实际上就是对共享资源的竞争操作，导致数据出现不一致，给线上业务带来影响。解决这种问题，最直接的思路是在数据库层面寻求解决方案，借助数据库的锁机制，或者在业务上通过数据库语句的限">
-<meta name="keywords" content="数据库,分布式锁,redis,zookeeper">
+<meta name="keywords" content="分布式锁,数据库,redis,zookeeper">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis系列 - 分布式锁">
 <meta property="og:url" content="http://runnerliu.github.io/2018/05/06/distlock/index.html">
@@ -632,9 +632,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/数据库/" rel="tag"># 数据库</a>
-          
             <a href="/tags/分布式锁/" rel="tag"># 分布式锁</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
           
             <a href="/tags/redis/" rel="tag"># redis</a>
           
@@ -735,7 +735,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">90</span>
+                <span class="site-state-item-count">91</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -746,7 +746,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -757,7 +757,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">140</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
