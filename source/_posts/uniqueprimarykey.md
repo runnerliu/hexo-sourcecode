@@ -1,5 +1,5 @@
 ---
-title: MySQL系列 - UNIQUE KEY与PRIMARY KEY
+title: Mysql系列 - UNIQUE KEY与PRIMARY KEY
 date: 2017-07-15 17:30:51
 tags:
  - MySQL

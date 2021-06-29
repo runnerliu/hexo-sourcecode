@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://runnerliu.github.io/2021/06/29/go-datatype/</loc>
+    <lastmod>2021-06-29</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2020/10/26/go-series-0/</loc>
+    <lastmod>2021-06-29</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</loc>
+    <lastmod>2021-06-29</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2017/07/15/myisaminnodb/</loc>
+    <lastmod>2021-06-29</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2021/06/29/mysql-datatype/</loc>
+    <lastmod>2021-06-29</lastmod>
+  </url>
+  <url>
     <loc>http://runnerliu.github.io/2021/06/21/io-multiplexing/</loc>
     <lastmod>2021-06-21</lastmod>
   </url>
@@ -105,10 +125,6 @@
     <lastmod>2021-05-23</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2020/10/26/go-series-0/</loc>
-    <lastmod>2021-05-23</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2018/05/06/distlock/</loc>
     <lastmod>2021-05-23</lastmod>
   </url>
@@ -123,14 +139,6 @@
   <url>
     <loc>http://runnerliu.github.io/2021/05/15/websocket-socketio/</loc>
     <lastmod>2021-05-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2017/07/15/uniqueprimarykey/</loc>
-    <lastmod>2021-02-20</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2017/07/15/myisaminnodb/</loc>
-    <lastmod>2021-02-20</lastmod>
   </url>
   <url>
     <loc>http://runnerliu.github.io/2021/02/18/wsandwss/</loc>
@@ -165,11 +173,11 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/07/20/zsfzsybtb/</loc>
+    <loc>http://runnerliu.github.io/2018/01/02/windowskillprocess/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2018/01/02/windowskillprocess/</loc>
+    <loc>http://runnerliu.github.io/2017/07/20/zsfzsybtb/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
@@ -189,11 +197,11 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2018/06/10/tornado502-asnon/</loc>
+    <loc>http://runnerliu.github.io/2017/07/15/threadsubprocess/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/07/15/threadsubprocess/</loc>
+    <loc>http://runnerliu.github.io/2018/06/10/tornado502-asnon/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
@@ -217,11 +225,11 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/06/07/sharesession/</loc>
+    <loc>http://runnerliu.github.io/2017/08/27/singleinstancepython/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/08/27/singleinstancepython/</loc>
+    <loc>http://runnerliu.github.io/2017/06/07/sharesession/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
@@ -293,15 +301,11 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/04/06/josephring/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2017/04/04/httpstatecode/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/04/01/hexogithub/</loc>
+    <loc>http://runnerliu.github.io/2017/04/06/josephring/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
@@ -309,19 +313,23 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/04/01/heyliuxiaoyang/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2018/05/13/httppostmethod/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/04/01/hexoNexT/</loc>
+    <loc>http://runnerliu.github.io/2017/04/01/hexogithub/</loc>
+    <lastmod>2020-11-15</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/01/heyliuxiaoyang/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
     <loc>http://runnerliu.github.io/2017/10/09/gitcommand/</loc>
+    <lastmod>2020-11-15</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2017/04/01/hexoNexT/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
@@ -341,6 +349,10 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
+    <loc>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</loc>
+    <lastmod>2020-11-15</lastmod>
+  </url>
+  <url>
     <loc>http://runnerliu.github.io/2017/06/21/bdphp1/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
@@ -349,15 +361,11 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</loc>
+    <loc>http://runnerliu.github.io/2017/04/18/apachevirtualhost/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
     <loc>http://runnerliu.github.io/2017/04/02/aboutHexo/</loc>
-    <lastmod>2020-11-15</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2017/04/18/apachevirtualhost/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
