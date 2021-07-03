@@ -4,6 +4,7 @@ date: 2017-08-27 12:43:23
 tags:
  - 设计模式
  - 单例模式
+ - Python
 categories:
  - 设计模式
 ---
@@ -43,11 +44,12 @@ class Singleton(object):
     # __new__负责创建新的实例并返回新的实例，__init__负责新创建实例的初始化工作无返回
     
     def __new__(cls, *args, **kwargs):  
-        if cls.__instance is None:
-            cls._instance = super(Singleton, cls).__new__(cls, *args, **kwargs)
+        if cls._instance is None:
+            cls._instance = object.__new__(cls, *args, **kwargs)
         return cls._instance
-    
-    pass
+        
+class MyClass(Singleton):
+	pass
 ```
 
 创建实例时把所有实例的`__dict__`指向同一个字典，这样它们具有相同的属性和方法：
@@ -59,8 +61,6 @@ class Singleton(object):
         ob = super(Singleton, cls).__new__(cls, *args, **kw)
         ob.__dict__ = cls._state
         return ob
-    
-    pass
 ```
 
 Python的装饰器方式，每次执行类中方法时，都会先执行装饰器方法，获取类实例：
@@ -76,8 +76,29 @@ def singleton(cls, *args, **kw):
 
 @singleton
 class MyClass:
-  ...
+	pass
 ```
+
+使用`metaclass`：
+
+```
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+#Python2
+class MyClass(BaseClass):
+    __metaclass__ = Singleton
+
+#Python3
+class MyClass(metaclass=Singleton):
+    pass
+```
+
+使用模块引入的方式，可以将类单独定义在一个模块中，因为在python中，一个模块只能被导入一次，所以类似一个单例。
 
 以上都是非线程安全的方法，一般我们在使用时已经足够。但是在多线程程序中，可能出现多个线程同时访问造成单例失败，我们可以引入锁机制来解决这个问题。
 
@@ -100,8 +121,6 @@ class Singleton(object):
             cls._instance = super(Singleton, cls).__new__(cls)
         cls.lock.release()
         return cls._instance
-    
-    pass
 ```
 
 方式二：
@@ -132,8 +151,6 @@ class Singleton(object):
 
     def __init__(self):
         pass
-        
-    pass
 ```
 
 ### 设计模式的分类
