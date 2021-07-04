@@ -101,7 +101,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://runnerliu.github.io/images/2017-7-15%20160518.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2017-7-15%20160641.png">
-<meta property="og:updated_time" content="2021-05-23T13:19:58.186Z">
+<meta property="og:updated_time" content="2021-07-04T02:42:41.255Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python系列 - 计算密集型任务和I&#x2F;O密集型任务">
 <meta name="twitter:description" content="I/O密集型任务 VS 计算密集型任务所谓 I/O 密集型任务，是指磁盘 I/O、网络 I/O 占主要的任务，计算量很小。比如请求网页、读写文件等。当然我们在Python中可以利用 sleep 达到 I/O 密集型任务的目的。 所谓计算密集型任务，是指 CPU 计算占主要的任务，CPU 一直处于满负荷状态。比如在一个很大的列表中查找元素（当然这不合理），复杂的加减乘除等。 多线程 VS 多进程Py">
@@ -443,8 +443,8 @@
 <p>结果如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">========== 直接执行IO密集型任务 ==========</span><br><span class="line">结束： 10.041141033172607 </span><br><span class="line">========== 多线程执行IO密集型任务 ==========</span><br><span class="line">结束： 5.073023557662964 </span><br><span class="line">========== 多进程执行IO密集型任务 ==========</span><br><span class="line">结束： 1.1165637969970703 </span><br><span class="line"></span><br><span class="line">========== 直接执行计算密集型任务 ==========</span><br><span class="line">结束： 36.41951608657837 </span><br><span class="line">========== 多线程执行计算密集型任务 ==========</span><br><span class="line">结束： 47.48710823059082 </span><br><span class="line">========== 多进程执行计算密集型任务 ==========</span><br><span class="line">结束： 0.82016921043396</span><br></pre></td></tr></table></figure>
 <p>在执行计算密集型任务时，多进程的方式明显比多线程更好。</p>
+<p>Read More:</p>
 <blockquote>
-<p>参考文章：</p>
 <p><a href="https://zhuanlan.zhihu.com/p/24283040" target="_blank" rel="noopener">Python进阶：聊聊IO密集型任务、计算密集型任务，以及多线程、多进程</a>  <a href="http://blog.chinaunix.net/uid-12014716-id-5691776.html" target="_blank" rel="noopener">为什么在python里推荐使用多进程而不是多线程？–转同事的一篇文章</a>  <a href="https://zhuanlan.zhihu.com/p/20167077?columnSlug=auxten" target="_blank" rel="noopener">Python编程（二）：Python进程、线程那点事儿</a>  </p>
 </blockquote>
 
@@ -577,7 +577,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -588,7 +588,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -599,7 +599,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

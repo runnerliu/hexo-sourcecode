@@ -617,6 +617,6 @@ return $instance->$method($args[0], $args[1]);
 
 
 
-> 参考文章：
->
+Read More:
+
 > [Laravel 服务容器实例教程 —— 深入理解控制反转（IoC）和依赖注入（DI）](http://laravelacademy.org/post/769.html/comment-page-5#comment-17821)  [Laravel 从 1 行代码开始，带你系统性的理解 Laravel Service Container 的核心概念](http://www.tuicool.com/articles/jy6RviE)

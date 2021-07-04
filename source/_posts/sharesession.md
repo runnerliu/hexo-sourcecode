@@ -60,8 +60,6 @@ OK，头脑中我们已经构思了这样的解决方案，不过进入深入开
 
 
 
+Read More:
 
-
-> 参考文章：
->
 > [如何在多台web服务器上共享session？](http://blog.csdn.net/lamp_yang_3533/article/details/51984201)  [多服务器之间Session共享](http://www.cnblogs.com/imhaiyang/articles/4949459.html)  [如何解决 cluster 中应用中 session 共享问题？都有那些方案，各有什么优缺点？](https://www.zhihu.com/question/19651970/answer/12534778)

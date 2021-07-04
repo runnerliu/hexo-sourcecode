@@ -61,10 +61,8 @@ Intel 的 X86 架构的 CPU 提供了 0 到 3 四个特权级，数字越小，�
 
 
 
+Read More:
 
-
-> 参考文章：
->
 > [内核态(Kernel Mode)与用户态(User Mode)](http://www.cnblogs.com/zemliu/p/3695503.html)
 >
 > [Linux探秘之用户态与内核态](http://www.cnblogs.com/bakari/p/5520860.html)

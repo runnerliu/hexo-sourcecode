@@ -176,6 +176,7 @@ class MainHandler(tornado.web.RequestHandler):
 关于更高级的异步示例，请查看[聊天示例应用程序](https://github.com/tornadoweb/tornado/tree/stable/demos/chat)，该应用程序使用长轮询实现了一个AJAX聊天室。使用长轮询的用户可能希望覆盖`on_connection_close()`，以便在客户端关闭连接后进行清理(但请参阅该方法的文档字符串以了解注意事项)。
 
 
+
 Read More:
 
 > [Structure of a Tornado web application](https://www.tornadoweb.org/en/stable/guide/structure.html)

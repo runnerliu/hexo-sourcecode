@@ -337,6 +337,6 @@ self::foo()；这个 self:: 是在 B 中使用的，所以 self:: 等价于 B:: 
 
 
 
-> 参考文章：
->
+Read More:
+
 > [PHP中this,self,parent的区别](http://www.cnblogs.com/myjavawork/articles/1793664.html)  [Final 关键字](http://php.net/manual/zh/language.oop5.final.php)   [后期静态绑定](http://php.net/manual/zh/language.oop5.late-static-bindings.php)  [PHP中的self、static、parent关键字](http://blog.csdn.net/koastal/article/details/52166246)

@@ -316,6 +316,6 @@ $b = "new string";		//a，b，c:(refcount=3, is_ref=1)="new string"
 
 
 
-> 参考文章：
->
+Read More:
+
 > [引用计数基本知识](http://php.net/manual/zh/features.gc.refcounting-basics.php)  [变量的内部存储：引用和计数](http://blog.csdn.net/phpkernel/article/details/5732784)  

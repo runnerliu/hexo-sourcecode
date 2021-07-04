@@ -29,8 +29,6 @@ categories:
 
 
 
+Read More:
 
-
-> 参考文章：
->
 > [子进程和线程的区别](http://blog.csdn.net/wangkehuai/article/details/7089323)

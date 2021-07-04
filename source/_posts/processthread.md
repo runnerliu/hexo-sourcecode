@@ -174,14 +174,6 @@ categories:
 
 
 
+Read More:
 
-
-**最后给初学者推荐一篇文章，[进程与线程的一个简单解释](http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html)**
-
-
-
-
-
-> 参考文章：
->
 > [操作系统](http://baike.baidu.com/link?url=4fOde2n_NRgpRtqZoalXZ06Aayt58wQqHh2mObGpB1VMjxqC9mh9KOYyUUJYgxNYFn99uBslB2vi1FsJixsNVak3o9wzgXQp7mQXBYevW1NStO1VyvH8o4r0oLHJiQ9p)  [计算机组成](http://baike.baidu.com/link?url=vJj7GOmk5b7mmXDQ_2lqqrMiW9dQij-XKGOP3KpEW835yuIqIAsKbfalfXoBIVqSNQcUn0pEnsJ9rQTuf4AbFVvU-9T0weTo116bFk5B-3s0J8WEyIlut5Sc3kD6y8CnMgK6m5VSOy6DtlgHzynDLK)  [线程](http://baike.baidu.com/link?url=aVTgdRi8naSwdGTY_CWy9hFsphNKF7y7-CU3sANapR1ymm3M-tMMLF7Wu7JgHu_cVsHIVzzBLzu_ZfPNvPxV0dn1nH1Dr_QxEty0lhr1Zz3#6)  [进程](http://baike.baidu.com/link?url=F9FJKdccMHkGhOdEAFbGUyqttk1lf6zz5y2jjrgtacsMeHLeu38Uewn4asIvKyT46rxz2NpMm6Ha5CkzEQXgh2Fc1tlKYY7_qlXCm-W93a3)  [线程和进程的区别是什么？](https://www.zhihu.com/question/25532384/answer/81152571)  [进程间8种通信方式详解](http://blog.csdn.net/violet_echo_0908/article/details/51201278)  [程序、任务、进程和线程的联系与区别 ](http://blog.163.com/magicc_love/blog/static/185853662201111810300646/)  [操作系统专题——进程与线程的区别](http://blog.csdn.net/cowena/article/details/47132675)  [进程与线程的一个简单解释](http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html)

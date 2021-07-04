@@ -99,7 +99,7 @@
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="最近一直在看网络编程中同步异步、阻塞与非阻塞方面的东西，发现网上各种说法解释不一，而且有些解释不透彻，感觉解释人自己都没明白。于是在知乎上找到了能让人豁然开朗的答案，如下。 阻塞 与 非阻塞 、同步 与 异步不能简单的从字面理解，提供一个从分布式系统角度的回答。 同步与异步同步和异步关注的是消息通信机制。 所谓同步，就是在发出一个调用时，在没有得到结果之前，该调用就不返回。但是一旦调用返回，就得到">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-15T02:24:39.484Z">
+<meta property="og:updated_time" content="2021-07-04T02:48:46.160Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阻塞|非阻塞 - 异步|同步">
 <meta name="twitter:description" content="最近一直在看网络编程中同步异步、阻塞与非阻塞方面的东西，发现网上各种说法解释不一，而且有些解释不透彻，感觉解释人自己都没明白。于是在知乎上找到了能让人豁然开朗的答案，如下。 阻塞 与 非阻塞 、同步 与 异步不能简单的从字面理解，提供一个从分布式系统角度的回答。 同步与异步同步和异步关注的是消息通信机制。 所谓同步，就是在发出一个调用时，在没有得到结果之前，该调用就不返回。但是一旦调用返回，就得到">
@@ -421,9 +421,9 @@
 <h3 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h3><p>阻塞和非阻塞关注的是程序在等待调用结果（消息，返回值）时的状态。</p>
 <p>阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。非阻塞调用指在不能立刻得到结果之前，该调用不会阻塞当前线程。</p>
 <p>还是上面的例子，你打电话问书店老板有没有《分布式系统》这本书，你如果是阻塞式调用，你会一直把自己“挂起”，直到得到这本书有没有的结果，如果是非阻塞式调用，你不管老板有没有告诉你，你自己先一边去玩了， 当然你也要偶尔过几分钟check一下老板有没有返回结果。在这里阻塞与非阻塞与是否同步异步无关。跟老板通过什么方式回答你结果无关。</p>
+<p>Read More:</p>
 <blockquote>
-<p>参考文章：</p>
-<p>作者：严肃<br>链接：<a href="https://www.zhihu.com/question/19732473/answer/20851256" target="_blank" rel="noopener">https://www.zhihu.com/question/19732473/answer/20851256</a><br>来源：知乎</p>
+<p><a href="https://www.zhihu.com/question/19732473/answer/20851256" target="_blank" rel="noopener">怎样理解阻塞非阻塞与同步异步的区别？</a></p>
 </blockquote>
 
       
@@ -557,7 +557,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -568,7 +568,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -579,7 +579,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

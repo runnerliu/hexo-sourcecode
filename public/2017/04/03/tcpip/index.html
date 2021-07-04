@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20145434.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20145924.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2017-4-3%20150129.png">
-<meta property="og:updated_time" content="2020-11-15T02:24:39.480Z">
+<meta property="og:updated_time" content="2021-07-04T02:47:22.212Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP&#x2F;IP协议入门篇">
 <meta name="twitter:description" content="写这篇文章的主要动机是，自己在做项目的时候用到了网络编程的内容，然后自己简单学习了一下TCP/IP的东西，属于很基础的那种，在实习面试中，面试官也是问到了这块内容，但是自己理解比较浅，所以回答的也不是很好。想着系统的学习一下网络编程中TCP/IP协议这块，本篇作为入门，简单介绍一下TCP/IP协议。 名词解释TCP/IP：Transmission Control Protocol/Internet">
@@ -617,8 +617,8 @@
 <p>传输途中如果出现了丢包，UDO也不负责重发。甚至当出现包的到达顺序乱掉时也没有纠正的功能。如果需要这些细节控制，那么不得不交给由采用UDO的应用程序去处理。换句话说，UDP将部分控制转移到应用程序去处理，自己却只提供作为传输层协议的最基本功能。</p>
 <p><strong>TCP补充</strong></p>
 <p>TCP充分实现了数据传输时各种控制功能，可以进行丢包的重发控制，还可以对次序乱掉的分包进行顺序控制。而这些在UDP中都没有。此外，TCP作为一种面向有连接的协议，只有在确认通信对端存在时才会发送数据，从而可以控制通信流量的浪费。TCP通过检验和、序列号、确认应答、重发控制、连接管理以及窗口控制等机制实现可靠性传输。</p>
+<p>Read More:</p>
 <blockquote>
-<p>参考：</p>
 <p><a href="http://blog.csdn.net/li_ning_/article/details/52117463" target="_blank" rel="noopener">TCP和UDP的最完整的区别</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/22516664" target="_blank" rel="noopener">计算机网络入门基础篇</a></p>
 <p><a href="http://baike.baidu.com/link?url=XlOHwI18XnbZTaGjg2WLtpmrwq2IsMVyoEggNVDOW6jaU-3qOLaoLleiSan-SBod0GTS8cAyOz99BAplna-wd3khoGaLvNPcniIX0dMGkg_oS2JsNmLR74DqcVoS5TgS#3" target="_blank" rel="noopener">TCP/IP协议</a></p>
@@ -754,7 +754,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -765,7 +765,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -776,7 +776,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

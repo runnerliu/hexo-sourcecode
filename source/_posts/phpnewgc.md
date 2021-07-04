@@ -165,6 +165,6 @@ time php -dzend.enable_gc=1 -dmemory_limit=-1 -n example2.php
 
 
 
-> 参考文章：
->
+Read More:
+
 > [PHP新的垃圾回收机制:Zend GC详解](http://blog.csdn.net/phpkernel/article/details/5734743)  [回收周期(Collecting Cycles)](http://php.net/manual/zh/features.gc.collecting-cycles.php)

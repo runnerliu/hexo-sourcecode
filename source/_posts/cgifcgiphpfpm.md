@@ -84,9 +84,7 @@ FastCGI 的主要优点是把动态语言和 HTTP Server 分离开来，所以 N
 
 
 
+Read More:
 
-
-> 参考文章：
->
 > [PHP-FastCGI详解](http://www.cnblogs.com/JohnABC/p/3529786.html)   [搞不清FastCgi与PHP-fpm之间是个什么样的关系](https://segmentfault.com/q/1010000000256516)  [关于CGI 和 PHP-FPM需要弄清的](http://www.cleey.com/blog/single/id/848.html)  [理解CGI、FCGI、php-cgi、php-fpm的概念](http://blog.csdn.net/fan2012huan/article/details/53020064)  [Nginx-->进阶-->原理-->Nginx+php+fastcgi的原理与关系](http://www.cnblogs.com/mangguoxiansheng/p/5967745.html)  [Nginx+Php-fpm运行原理详解](https://segmentfault.com/a/1190000007322358) 
 

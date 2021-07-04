@@ -191,6 +191,6 @@ if __name__ == '__main__':
 
 
 
-> 参考文章：
->
+Read More:
+
 > [Python进阶：聊聊IO密集型任务、计算密集型任务，以及多线程、多进程](https://zhuanlan.zhihu.com/p/24283040)  [为什么在python里推荐使用多进程而不是多线程？--转同事的一篇文章](http://blog.chinaunix.net/uid-12014716-id-5691776.html)  [Python编程（二）：Python进程、线程那点事儿](https://zhuanlan.zhihu.com/p/20167077?columnSlug=auxten)  

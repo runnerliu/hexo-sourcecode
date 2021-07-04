@@ -178,8 +178,6 @@ JS 的执行机制就可以看做是一个主线程加上一个任务队列(task
 
 
 
+Read More:
 
-
-> 参考文章：
->
 > [从输入URL到浏览器显示页面发生了什么](http://www.cnblogs.com/kongxy/p/4615226.html)  [从输入 URL 到页面展示到底发生了什么](https://www.feehi.com/view/5880)  [百度面试题：从输入url到显示网页，后台发生了什么？](http://www.cnblogs.com/rollenholt/archive/2012/03/23/2414345.html)  [从输入URL到页面加载发生了什么?](http://www.cnblogs.com/engeng/articles/5943382.html)  [HTTP 响应头信息](http://www.runoob.com/http/http-header-fields.html)  

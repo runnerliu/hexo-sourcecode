@@ -230,6 +230,8 @@ deploy:
 ```
 
 
-> 参考博客：  
-> [手把手教你用Hexo+Github 搭建属于自己的博客](http://blog.csdn.net/gdutxiaoxu/article/details/53576018)   
+
+Read More:
+
+> [手把手教你用Hexo+Github 搭建属于自己的博客](http://blog.csdn.net/gdutxiaoxu/article/details/53576018) 
 > [Git ssh 配置及使用](http://blog.csdn.net/gdutxiaoxu/article/details/53573399)

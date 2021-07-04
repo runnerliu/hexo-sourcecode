@@ -99,7 +99,7 @@
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下： 12session.save_handler = filessession.save_path = &amp;quot;N;/path&amp;quot; 第一个配置项是指定使用 files(文件形式) 存储session数据。 第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-15T02:24:39.479Z">
+<meta property="og:updated_time" content="2021-07-04T02:47:00.509Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="跨服务器Session共享">
 <meta name="twitter:description" content="默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下： 12session.save_handler = filessession.save_path = &amp;quot;N;/path&amp;quot; 第一个配置项是指定使用 files(文件形式) 存储session数据。 第二个参数指定保存的路径。N 表示生成多少级目录(不放到一个目录下，分散到多个磁">
@@ -428,8 +428,8 @@
 <h4 id="基于-NFS-的-Session-共享"><a href="#基于-NFS-的-Session-共享" class="headerlink" title="基于 NFS 的 Session 共享"></a>基于 NFS 的 Session 共享</h4><p>这种方法和使用数据库类似，采用一台公共的 NFS 服务器做共享服务器，所有的 web服务器都把 session 数据写到共享存储介质上，也都要来这台服务器获取 session 数据，通过这样的方式来实现 session 数据的共享。这个方案实现最为简单，无需做过多的二次开发，仅需将共享目录服务器 mount 到各频道服务器的本地 session 目录即可，缺点是 NFS 依托于复杂的安全机制和文件系统，因此并发效率不高，尤其对于 session 这类高并发读写的小文件，会由于共享目录服务器的 io-wait过高，最终拖累前端 web 应用程序的执行效率。</p>
 <h4 id="基于缓存数据库的-Session-共享"><a href="#基于缓存数据库的-Session-共享" class="headerlink" title="基于缓存数据库的 Session 共享"></a>基于缓存数据库的 Session 共享</h4><p>这种方式可能是目前互联网中比较流行的一种用法。所有 web服务器都把 session 写入到 MemCache/Redis ，也都从MemCache/Redis 来获取。MemCache/Redis 本身就是一个分布式缓存，便于扩展。网络开销较小，几乎没有IO。性能也更好。缺点，受制于 MemCache/Redis 的容量，如果用户量突然增多， cache 由于容量的限制会将一些数据挤出缓存，另外 MemCache/Redis 故障或重启 session 会完全丢失掉。</p>
 <h4 id="利用组播实现-Session-共享"><a href="#利用组播实现-Session-共享" class="headerlink" title="利用组播实现 Session 共享"></a>利用组播实现 Session 共享</h4><p>通过组播的方式进行集群间的共享，比如 tomcat 目前就具备这样的功能，优点是 web 容器自身支持，配置简单，适合小型网站。缺点是当一台机器的上的 session 变更后会将变更的数据以组播的形式分发给集群间的所有节点，对网络和所有的web 容器都是存在开销。集群越大浪费越严重。不能做到线性的扩展。</p>
+<p>Read More:</p>
 <blockquote>
-<p>参考文章：</p>
 <p><a href="http://blog.csdn.net/lamp_yang_3533/article/details/51984201" target="_blank" rel="noopener">如何在多台web服务器上共享session？</a>  <a href="http://www.cnblogs.com/imhaiyang/articles/4949459.html" target="_blank" rel="noopener">多服务器之间Session共享</a>  <a href="https://www.zhihu.com/question/19651970/answer/12534778" target="_blank" rel="noopener">如何解决 cluster 中应用中 session 共享问题？都有那些方案，各有什么优缺点？</a></p>
 </blockquote>
 
@@ -562,7 +562,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -573,7 +573,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -584,7 +584,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

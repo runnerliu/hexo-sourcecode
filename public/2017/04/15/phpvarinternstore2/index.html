@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://runnerliu.github.io/images/2017-4-15%20135507.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2017-4-15%20135755.png">
 <meta property="og:image" content="http://runnerliu.github.io/images/2017-4-15%20140001.png">
-<meta property="og:updated_time" content="2020-11-15T02:24:39.477Z">
+<meta property="og:updated_time" content="2021-07-04T02:45:48.280Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP内核探索：变量的内部存储（引用和计数）">
 <meta name="twitter:description" content="在  PHP内核探索：变量的内部存储（值和类型）  中介绍了PHP变量在引擎中是如何存储以及PHP如何实现其弱类型功能的。本文将从引用和计数的角度继续介绍变量的内部存储。 引用计数基本知识每个php变量存在一个叫”zval”的变量容器中。一个zval变量容器，除了包含变量的类型和值，还包括两个字节的额外信息。第一个是”is_ref”(此字段在5.3.2版本中是is_ref__gc)，是个bool值">
@@ -503,8 +503,8 @@
 <p>此过程大致如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$a = &quot;Hello world&quot;;		//a：(refcount=1, is_ref=0)=&quot;Hello world&quot;</span><br><span class="line">$c = &amp;$a;			//a，c:(refcount=2, is_ref=1)=&quot;hello world&quot;</span><br><span class="line">$b = &amp;$a;			//a，b，c:(refcount=3, is_ref=1)=&quot;hello world&quot;</span><br><span class="line">$b = &quot;new string&quot;;		//a，b，c:(refcount=3, is_ref=1)=&quot;new string&quot;</span><br></pre></td></tr></table></figure>
 <p>我们发现，如果都是引用赋值的话，PHP是不会进行分离的，这种情况与上述情况2还是有区别的。</p>
+<p>Read More:</p>
 <blockquote>
-<p>参考文章：</p>
 <p><a href="http://php.net/manual/zh/features.gc.refcounting-basics.php" target="_blank" rel="noopener">引用计数基本知识</a>  <a href="http://blog.csdn.net/phpkernel/article/details/5732784" target="_blank" rel="noopener">变量的内部存储：引用和计数</a>  </p>
 </blockquote>
 
@@ -635,7 +635,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -646,7 +646,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -657,7 +657,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

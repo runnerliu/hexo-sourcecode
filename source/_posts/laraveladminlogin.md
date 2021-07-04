@@ -673,6 +673,6 @@ class LoginController extends Controller
 
 
 
-> 参考文章：
->
+Read More:
+
 > [Laravel 5.3 不同用户表登录认证](http://www.fullstack.pub/doc/1)

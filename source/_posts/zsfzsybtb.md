@@ -34,8 +34,6 @@ categories:
 
 
 
-> 参考文章：
->
-> 作者：严肃
-> 链接：https://www.zhihu.com/question/19732473/answer/20851256
-> 来源：知乎
+Read More:
+
+> [怎样理解阻塞非阻塞与同步异步的区别？](https://www.zhihu.com/question/19732473/answer/20851256)

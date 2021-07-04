@@ -282,6 +282,6 @@ public function redirectPath()
 
 
 
-> 参考文章：
->
+Read More:
+
 > [Laravel 5.3 用户验证源码探究 （一） 路由与注册](http://blog.csdn.net/realghost/article/details/52558962)  [Laravel 5.3 多用户表登录实现](http://laravelacademy.org/post/5925.html)

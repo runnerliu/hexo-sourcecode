@@ -99,7 +99,7 @@
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="在翻看  PHP手册  的时候，看到了  垃圾回收机制  ，介绍了PHP 5.3新的垃圾回收机制（GC）的特点，里面涉及到了PHP变量内部存储的知识，如果你想对PHP变量存储结构有一个了解或想对PHP变量加深理解的话，本文是适合你的，比较深入的去看源代码吧。 PHP是一种弱类型的脚本语言，弱类型不表示PHP的变量没有类型区分，PHP变量有8种原始类型。 四种标量类型：  Boolean（布尔型）">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-15T02:24:39.476Z">
+<meta property="og:updated_time" content="2021-07-04T02:45:40.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP内核探索：变量的内部存储（值和类型）">
 <meta name="twitter:description" content="在翻看  PHP手册  的时候，看到了  垃圾回收机制  ，介绍了PHP 5.3新的垃圾回收机制（GC）的特点，里面涉及到了PHP变量内部存储的知识，如果你想对PHP变量存储结构有一个了解或想对PHP变量加深理解的话，本文是适合你的，比较深入的去看源代码吧。 PHP是一种弱类型的脚本语言，弱类型不表示PHP的变量没有类型区分，PHP变量有8种原始类型。 四种标量类型：  Boolean（布尔型）">
@@ -461,8 +461,8 @@
 <p>查看_zend_executor_globals结构（这个结构在PHP的执行器保存一些执行相关的上下文信息）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct _zend_executor_globals &#123;</span><br><span class="line">     ....</span><br><span class="line">    HashTable *active_symbol_table;	/*活动符号表*/</span><br><span class="line">    HashTable symbol_table;     	/*全局符号表*/</span><br><span class="line"> </span><br><span class="line">    HashTable included_files;   </span><br><span class="line"> </span><br><span class="line">    jmp_buf *bailout;</span><br><span class="line">    int error_reporting;</span><br><span class="line">     .....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>以上只是对PHP变量内部存储的简单介绍，如果想深入了解，建议研究PHP的源码。</p>
+<p>Read More:</p>
 <blockquote>
-<p>参考文章：</p>
 <p><a href="http://blog.csdn.net/wenzhou1219/article/details/16832067" target="_blank" rel="noopener">深入PHP变量存储结构</a>  <a href="http://blog.csdn.net/phpkernel/article/details/5718003" target="_blank" rel="noopener">变量的内部存储：值和类型</a></p>
 </blockquote>
 
@@ -584,7 +584,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -595,7 +595,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -606,7 +606,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -77,10 +77,8 @@ Python 将内存分为了3 代，分别为年轻代(第0代)、中年代(第1代
 
 
 
+Read More:
 
-
-> 参考文章：
->
 > [Python垃圾回收机制](http://hbprotoss.github.io/posts/pythonla-ji-hui-shou-ji-zhi.html)  
 >
 > [Python中的垃圾回收机制](http://developer.51cto.com/art/201706/542251.htm)  

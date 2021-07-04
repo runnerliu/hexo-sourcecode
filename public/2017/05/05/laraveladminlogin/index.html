@@ -99,7 +99,7 @@
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="简介Laravel 5.3 的 Auth 认证在 5.2 的基础上又有一些改变，本文说明如何在 Laravel 5.3 下做不同用户表的登录认证。 Auth 认证原理简述Laravel 的认证是使用 guard 与 provider 配合完成， guard 负责认证的业务逻辑，认证信息的服务端保存等； provider 负责提供认证信息的持久化数据提供。请求提交给 guard， guard 从 p">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-15T02:24:39.469Z">
+<meta property="og:updated_time" content="2021-07-04T02:42:54.339Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel学习笔记-Laravel5.3后台用户认证">
 <meta name="twitter:description" content="简介Laravel 5.3 的 Auth 认证在 5.2 的基础上又有一些改变，本文说明如何在 Laravel 5.3 下做不同用户表的登录认证。 Auth 认证原理简述Laravel 的认证是使用 guard 与 provider 配合完成， guard 负责认证的业务逻辑，认证信息的服务端保存等； provider 负责提供认证信息的持久化数据提供。请求提交给 guard， guard 从 p">
@@ -530,8 +530,8 @@
 <p>改掉，在文件的前面别忘了加上 use 语句</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">use App\Extensions\AuthenticatesLogout;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">class LoginController extends Controller</span><br><span class="line">&#123;</span><br><span class="line">    use AuthenticatesUsers, AuthenticatesLogout &#123;</span><br><span class="line">        AuthenticatesLogout::logout insteadof AuthenticatesUsers;</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>到这里，就完成了整个不同用户表登录认证的过程。</p>
+<p>Read More:</p>
 <blockquote>
-<p>参考文章：</p>
 <p><a href="http://www.fullstack.pub/doc/1" target="_blank" rel="noopener">Laravel 5.3 不同用户表登录认证</a></p>
 </blockquote>
 
@@ -662,7 +662,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -673,7 +673,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -684,7 +684,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

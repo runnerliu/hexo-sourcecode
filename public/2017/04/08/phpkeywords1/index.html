@@ -99,7 +99,7 @@
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="最近在看PHP手册，看到类和对象的时候，有一个“后期静态绑定”的内容，self，static，parent这几个关键字弄的我云里雾里，索性查了一些资料，看看self，final，static，this，parent这些关键字到底是什么意思。 官方文档解释：后期静态绑定  自 PHP 5.3.0 起，PHP 增加了一个叫做后期静态绑定的功能，用于在继承范围内引用静态调用的类。 准确说，后期静态绑定工">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-15T02:24:39.475Z">
+<meta property="og:updated_time" content="2021-07-04T02:45:15.540Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP关键字之self,final,static,this,parent">
 <meta name="twitter:description" content="最近在看PHP手册，看到类和对象的时候，有一个“后期静态绑定”的内容，self，static，parent这几个关键字弄的我云里雾里，索性查了一些资料，看看self，final，static，this，parent这些关键字到底是什么意思。 官方文档解释：后期静态绑定  自 PHP 5.3.0 起，PHP 增加了一个叫做后期静态绑定的功能，用于在继承范围内引用静态调用的类。 准确说，后期静态绑定工">
@@ -460,8 +460,8 @@
 <p>A::foo()；这个语句是可以在任何地方执行的，它表示使用A去调用静态方法 foo() 得到“A”。 </p>
 <p>parent::foo()；C 的 parent 是 B ， B 的parent是A，回溯找到了A 的 foo 方法；static::who()；语句中的 static:: 调用的方法会被子类覆盖，所以优先调用 C 的 who() 方法，如果 C 的 who 方法不存在会调用 B 的 who 方法，如果 B 的 who 方法不存在会调用 A 的 who 方法。所以，输出结果是”C”。</p>
 <p>self::foo()；这个 self:: 是在 B 中使用的，所以 self:: 等价于 B:: ，但是 B 没有实现 foo() 方法，B 又继承自 A，所以我们实际上调用了 A::foo() 这个方法。foo() 方法使用了static::who() 语句，导致我们又调用了 C 的 who 函数。</p>
+<p>Read More:</p>
 <blockquote>
-<p>参考文章：</p>
 <p><a href="http://www.cnblogs.com/myjavawork/articles/1793664.html" target="_blank" rel="noopener">PHP中this,self,parent的区别</a>  <a href="http://php.net/manual/zh/language.oop5.final.php" target="_blank" rel="noopener">Final 关键字</a>   <a href="http://php.net/manual/zh/language.oop5.late-static-bindings.php" target="_blank" rel="noopener">后期静态绑定</a>  <a href="http://blog.csdn.net/koastal/article/details/52166246" target="_blank" rel="noopener">PHP中的self、static、parent关键字</a></p>
 </blockquote>
 
@@ -600,7 +600,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -611,7 +611,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -622,7 +622,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

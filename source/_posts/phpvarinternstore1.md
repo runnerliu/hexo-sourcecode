@@ -147,7 +147,7 @@ struct _zend_executor_globals {
 
 
 
-> 参考文章：
->
+Read More:
+
 > [深入PHP变量存储结构](http://blog.csdn.net/wenzhou1219/article/details/16832067)  [变量的内部存储：值和类型](http://blog.csdn.net/phpkernel/article/details/5718003)
 

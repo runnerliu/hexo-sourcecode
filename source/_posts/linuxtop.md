@@ -174,7 +174,7 @@ top 使用格式
 
 
 
-> 参考文章：
->
+Read More:
+
 > [Linux系统中的load average](http://www.cnblogs.com/kaituorensheng/p/3602805.html)  [linux 平均负载 load average 的含义](http://www.cnblogs.com/ghj1976/p/5611220.html)  [linux的top命令参数详解](http://www.cnblogs.com/ggjucheng/archive/2012/01/08/2316399.html)  [Linux top命令](http://www.runoob.com/linux/linux-comm-top.html)
 

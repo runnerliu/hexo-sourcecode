@@ -99,7 +99,7 @@
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
 <meta property="og:description" content="Gevent是一个并发网络库。它的协程是基于greenlet的，并基于libev实现快速事件循环（Linux上是epoll，FreeBSD上是kqueue，Mac OS X上是select）。有了Gevent，协程的使用将无比简单，你根本无须像greenlet一样显式的切换，每当一个协程阻塞时，程序将自动调度，Gevent处理了所有的底层细节。让我们看个例子来感受下吧。 1234567891011">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-29T11:34:32.253Z">
+<meta property="og:updated_time" content="2021-07-04T02:46:22.479Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python库-gevent">
 <meta name="twitter:description" content="Gevent是一个并发网络库。它的协程是基于greenlet的，并基于libev实现快速事件循环（Linux上是epoll，FreeBSD上是kqueue，Mac OS X上是select）。有了Gevent，协程的使用将无比简单，你根本无须像greenlet一样显式的切换，每当一个协程阻塞时，程序将自动调度，Gevent处理了所有的底层细节。让我们看个例子来感受下吧。 1234567891011">
@@ -457,9 +457,9 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">from</span> gevent.local <span class="keyword">import</span> local</span><br><span class="line"></span><br><span class="line">data = local()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">()</span>:</span></span><br><span class="line">    data.x = <span class="number">1</span></span><br><span class="line">    print(data.x)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        print(data.x)</span><br><span class="line">    <span class="keyword">except</span> AttributeError:</span><br><span class="line">        print(<span class="string">'x is not visible'</span>)</span><br><span class="line"></span><br><span class="line">gevent.joinall([</span><br><span class="line">    gevent.spawn(f1),</span><br><span class="line">    gevent.spawn(f2)</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
 <p>通过将变量存放在<code>local</code>对象中，即可将其的作用域限制在当前协程内，当其他协程要访问该变量时，就会抛出异常。不同协程间可以有重名的本地变量，而且互相不影响。因为协程本地变量的实现，就是将其存放在以的<code>greenlet.getcurrent()</code>的返回为键值的私有的命名空间内。</p>
 <p>Read More:</p>
-<ol>
-<li><a href="http://www.bjhee.com/gevent.html" target="_blank" rel="noopener">基于协程的Python网络库gevent介绍</a> </li>
-</ol>
+<blockquote>
+<p><a href="http://www.bjhee.com/gevent.html" target="_blank" rel="noopener">基于协程的Python网络库gevent介绍</a> </p>
+</blockquote>
 
       
     </div>
@@ -586,7 +586,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">101</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -597,7 +597,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -608,7 +608,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">143</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

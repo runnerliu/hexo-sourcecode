@@ -415,8 +415,6 @@ public function JiShu($sort_array, $pos) {
 
 
 
+Read More:
 
-
-> 参考文章：
->
 > [排序算法总结](http://www.runoob.com/w3cnote/sort-algorithm-summary.html)  [八大排序算法](http://blog.csdn.net/hguisu/article/details/7776068)  [九大排序算法再总结](http://blog.csdn.net/xiazdong/article/details/8462393)  [稳定排序和不稳定排序](http://www.cnblogs.com/codingmylife/archive/2012/10/21/2732980.html)  [基数排序](http://baike.baidu.com/link?url=jd48mIg-3sWzLsPo9c5TgY2BjZGzlDn8SR5c6Zp_SF0feCIUUI6rZw5ITJVAezCshxLCBXFF5QFCaeixlW8oQe9siEyEj2PX2ciyZ5DQsmPEFmzH5_j86ISkUy6XiGJ6#1)  [排序八 基数排序](http://www.cnblogs.com/jingmoxukong/p/4311237.html) 

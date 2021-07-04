@@ -181,6 +181,6 @@ class 类名 extends 父类名 implements 接口一，接口二，……接口n{
 
 
 
-> 参考文章：
->
+Read More:
+
 > [PHP的抽象类和接口](http://www.cnblogs.com/ncong/p/3901173.html)  [PHP的抽象类、接口的区别和选择](http://blog.csdn.net/fanteathy/article/details/7309966)  [PHP高级——抽象类与接口的区别](http://www.cnblogs.com/picaso/archive/2012/10/05/2711865.html) 

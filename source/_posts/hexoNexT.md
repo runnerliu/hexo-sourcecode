@@ -212,6 +212,7 @@ sitemap:
 
 
 
-> 参考博客：  
-> [Hexo博客添加站内搜索](http://www.ezlippi.com/blog/2017/02/hexo-search.html)  
+Read More:
+
+> [Hexo博客添加站内搜索](http://www.ezlippi.com/blog/2017/02/hexo-search.html) 
 > [记录Hexo+Github免费搭建个人博客](https://superbsco.coding.me/2017/01/13/new-article/)
