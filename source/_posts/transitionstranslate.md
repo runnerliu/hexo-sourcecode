@@ -1,5 +1,5 @@
 ---
-title: Transitions-Python状态机库
+title: Python库-Transitions
 date: 2017-05-26 21:12:18
 tags:
  - Transitions

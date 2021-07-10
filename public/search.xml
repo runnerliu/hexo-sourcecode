@@ -4,6 +4,180 @@
   
     
     <entry>
+      <title><![CDATA[Python functools系列 - lru_cache]]></title>
+      <url>http://runnerliu.github.io/2021/07/10/py-functools-cache/</url>
+      <content type="html"><![CDATA[<p>缓存在实际开发工作中的应用是非常常见的，比如内存缓存、redis缓存、本地文件缓存等，其主要的目的是方便数据的下一次访问，减少应用程序重复计算的次数和资源消耗，缓存是一种典型的空间换时间的方案。那么我们就来看看在开发Python程序时，functools提供的 <a href="https://docs.python.org/zh-cn/3/library/functools.html" target="_blank" rel="noopener">cache</a> 装饰器是如何工作的。</p>
+<h3 id="从一个小例子开始"><a href="#从一个小例子开始" class="headerlink" title="从一个小例子开始"></a>从一个小例子开始</h3><p>首先我们看一下阶乘的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">def factorial(n):</span><br><span class="line">    print(&apos;compute: &#123;&#125;&apos;.format(n))</span><br><span class="line">    return n * factorial(n - 1) if n else 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = factorial(5)</span><br><span class="line">print(a)</span><br><span class="line">b = factorial(10)</span><br><span class="line">print(b)</span><br><span class="line"></span><br><span class="line">compute: 5</span><br><span class="line">compute: 4</span><br><span class="line">compute: 3</span><br><span class="line">compute: 2</span><br><span class="line">compute: 1</span><br><span class="line">compute: 0</span><br><span class="line">120</span><br><span class="line">compute: 10</span><br><span class="line">compute: 9</span><br><span class="line">compute: 8</span><br><span class="line">compute: 7</span><br><span class="line">compute: 6</span><br><span class="line">compute: 5</span><br><span class="line">compute: 4</span><br><span class="line">compute: 3</span><br><span class="line">compute: 2</span><br><span class="line">compute: 1</span><br><span class="line">compute: 0</span><br><span class="line">3628800</span><br></pre></td></tr></table></figure>
+<p>我们分别计算了 <code>5！</code> 和 <code>10！</code> ，从程序的运行输出看，在计算 <code>10!</code> 时，把 <code>5!</code> 重复计算了一遍，在计算阶乘数字较小的情况下是没问题的，但是当阶乘数非常大时，重复的计算会占用CPU很多资源，而这些重复的计算完全是没必要的，那我们会想到实现一个缓存，将计算过的数据存起来，当下次请求时直接返回。</p>
+<h3 id="实现一个缓存"><a href="#实现一个缓存" class="headerlink" title="实现一个缓存"></a>实现一个缓存</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class MyCache(object):</span><br><span class="line"></span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.cache = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    def get_cache(self, key) -&gt; object:</span><br><span class="line">        return self.cache.get(key, None)</span><br><span class="line"></span><br><span class="line">    def set_cache(self, key, value) -&gt; bool:</span><br><span class="line">        if key not in self.cache:</span><br><span class="line">            self.cache[key] = value</span><br><span class="line">        return True</span><br><span class="line"></span><br><span class="line">    def is_in_cache(self, key: str) -&gt; bool:</span><br><span class="line">        return key in self.cache</span><br><span class="line"></span><br><span class="line">    def get_all_cache(self) -&gt; dict:</span><br><span class="line">        return self.cache</span><br><span class="line"></span><br><span class="line">def factorial(n: int, cache: MyCache):</span><br><span class="line">    print(&apos;compute: &#123;&#125;&apos;.format(n))</span><br><span class="line">    if cache.is_in_cache(n):</span><br><span class="line">        print(&apos;hit cache: &#123;&#125;&apos;.format(n))</span><br><span class="line">        return cache.get_cache(n)</span><br><span class="line">    tmp = n * factorial(n - 1, cache) if n else 1</span><br><span class="line">    cache.set_cache(n, tmp)</span><br><span class="line">    return tmp</span><br><span class="line"></span><br><span class="line">cache = MyCache()</span><br><span class="line">a = factorial(5, cache)</span><br><span class="line">print(a)</span><br><span class="line">b = factorial(10, cache)</span><br><span class="line">print(b)</span><br><span class="line">c = factorial(4, cache)</span><br><span class="line">print(c)</span><br><span class="line">print(cache.get_all_cache())</span><br></pre></td></tr></table></figure>
+<p>我们简单实现了一个缓存类，使用了 <code>dict</code> 数据类型，存储了中间的计算结果，我们看下输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">compute: 5</span><br><span class="line">compute: 4</span><br><span class="line">compute: 3</span><br><span class="line">compute: 2</span><br><span class="line">compute: 1</span><br><span class="line">compute: 0</span><br><span class="line">120</span><br><span class="line">compute: 10</span><br><span class="line">compute: 9</span><br><span class="line">compute: 8</span><br><span class="line">compute: 7</span><br><span class="line">compute: 6</span><br><span class="line">compute: 5</span><br><span class="line">hit cache: 5</span><br><span class="line">3628800</span><br><span class="line">compute: 4</span><br><span class="line">hit cache: 4</span><br><span class="line">24</span><br><span class="line">&#123;0: 1, 1: 1, 2: 2, 3: 6, 4: 24, 5: 120, 6: 720, 7: 5040, 8: 40320, 9: 362880, 10: 3628800&#125;</span><br></pre></td></tr></table></figure>
+<p> 从输出能看出，<code>5!</code> 和 <code>4!</code> 都命中了缓存，直接拿到了结果，这就节省了CPU的计算资源，当然，如果数据量很小，就没有必要使用缓存了。</p>
+<h3 id="functools中的lru-cache"><a href="#functools中的lru-cache" class="headerlink" title="functools中的lru_cache"></a>functools中的lru_cache</h3><p>从3.2版本开始，Python的functools模块提供了 <code>lru_cache</code> 函数，用于缓存计算的中间结果，函数定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@functools.lru_cache(user_function)</span><br><span class="line">@functools.lru_cache(maxsize=128, typed=False)</span><br></pre></td></tr></table></figure>
+<p>一个为函数提供缓存功能的装饰器，缓存 <code>maxsize</code> 传入参数，在下次以相同参数调用时直接返回上一次的结果。用以节约高开销或I/O函数的调用时间。由于使用了字典存储缓存，所以该函数的固定参数和关键字参数必须是可哈希的。</p>
+<p>不同模式的参数可能被视为不同从而产生多个缓存项，例如, f(a=1, b=2) 和 f(b=2, a=1) 因其参数顺序不同，可能会被缓存两次。</p>
+<p>如果指定了 <code>user_function</code>，它必须是一个可调用对象。 这允许 <code>lru_cache</code> 装饰器被直接应用于一个用户自定义函数，<code>maxsize</code> 默认值为128。</p>
+<p>我们使用这个装饰器重写一下上边的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from functools import lru_cache</span><br><span class="line"></span><br><span class="line">@lru_cache(None)</span><br><span class="line">def factorial(n: int):</span><br><span class="line">    return n * factorial(n - 1) if n else 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = factorial(5)</span><br><span class="line">print(a)</span><br><span class="line">b = factorial(10)</span><br><span class="line">print(b)</span><br><span class="line">c = factorial(4)</span><br><span class="line">print(c)</span><br><span class="line"></span><br><span class="line">print(factorial.cache_info())</span><br><span class="line"></span><br><span class="line">120</span><br><span class="line">3628800</span><br><span class="line">24</span><br><span class="line">CacheInfo(hits=2, misses=11, maxsize=None, currsize=11)</span><br></pre></td></tr></table></figure>
+<p>从输出可以看到，<code>hits=2</code> 表示命中了2次缓存。</p>
+<p>那我们就来看下这个装饰器的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">def lru_cache(maxsize=128, typed=False):</span><br><span class="line">    &quot;&quot;&quot;Least-recently-used cache decorator.</span><br><span class="line"></span><br><span class="line">    If *maxsize* is set to None, the LRU features are disabled and the cache</span><br><span class="line">    can grow without bound.</span><br><span class="line"></span><br><span class="line">    If *typed* is True, arguments of different types will be cached separately.</span><br><span class="line">    For example, f(3.0) and f(3) will be treated as distinct calls with</span><br><span class="line">    distinct results.</span><br><span class="line"></span><br><span class="line">    Arguments to the cached function must be hashable.</span><br><span class="line"></span><br><span class="line">    View the cache statistics named tuple (hits, misses, maxsize, currsize)</span><br><span class="line">    with f.cache_info().  Clear the cache and statistics with f.cache_clear().</span><br><span class="line">    Access the underlying function with f.__wrapped__.</span><br><span class="line"></span><br><span class="line">    See:  http://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)</span><br><span class="line"></span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    # Users should only access the lru_cache through its public API:</span><br><span class="line">    #       cache_info, cache_clear, and f.__wrapped__</span><br><span class="line">    # The internals of the lru_cache are encapsulated for thread safety and</span><br><span class="line">    # to allow the implementation to change (including a possible C version).</span><br><span class="line"></span><br><span class="line">    # Early detection of an erroneous call to @lru_cache without any arguments</span><br><span class="line">    # resulting in the inner function being passed to maxsize instead of an</span><br><span class="line">    # integer or None.  Negative maxsize is treated as 0.</span><br><span class="line">    if isinstance(maxsize, int):</span><br><span class="line">        if maxsize &lt; 0:</span><br><span class="line">            maxsize = 0</span><br><span class="line">    elif maxsize is not None:</span><br><span class="line">        raise TypeError(&apos;Expected maxsize to be an integer or None&apos;)</span><br><span class="line"></span><br><span class="line">    def decorating_function(user_function):</span><br><span class="line">        wrapper = _lru_cache_wrapper(user_function, maxsize, typed, _CacheInfo)</span><br><span class="line">        return update_wrapper(wrapper, user_function)</span><br><span class="line"></span><br><span class="line">    return decorating_function</span><br></pre></td></tr></table></figure>
+<p>如果 <code>maxsize</code> 设为 <code>None</code>，LRU 特性将被禁用且缓存可无限增长。</p>
+<p>如果 <code>typed</code> 设置为true，不同类型的函数参数将被分别缓存。例如， <code>f(3)</code> 和 <code>f(3.0)</code> 将被视为不同而分别缓存。</p>
+<p>被装饰的函数带有一个 <code>cache_info()</code> 函数。当调用 <code>cache_info()</code> 函数时，返回一个具名元组，包含命中次数 <code>hits</code>，未命中次数 <code>misses</code> ，最大缓存数量 <code>maxsize</code> 和 当前缓存大小 <code>currsize</code>。在多线程环境中，命中数与未命中数是不完全准确的。</p>
+<p>该装饰器也提供了一个用于清理/使缓存失效的函数 <code>cache_clear()</code> 。</p>
+<p>原始的未经装饰的函数可以通过 <code>__wrapped__</code> 属性访问。它可以用于检查、绕过缓存，或使用不同的缓存再次装饰原始函数。</p>
+<p><a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU" target="_blank" rel="noopener">LRU（最久未使用算法）缓存</a>) 在最近的调用是即将到来的调用的最佳预测值时性能最好（例如，新闻服务器上最热门文章倾向于每天更改）。 缓存的大小限制可确保缓存不会在长期运行进程如网站服务器上无限制地增长。</p>
+<p>下面我们再看下 <code>_lru_cache_wrapper</code> 的具体实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">def _lru_cache_wrapper(user_function, maxsize, typed, _CacheInfo):</span><br><span class="line">    # Constants shared by all lru cache instances:</span><br><span class="line">    sentinel = object()          # unique object used to signal cache misses</span><br><span class="line">    make_key = _make_key         # build a key from the function arguments</span><br><span class="line">    PREV, NEXT, KEY, RESULT = 0, 1, 2, 3   # names for the link fields</span><br><span class="line"></span><br><span class="line">    cache = &#123;&#125;</span><br><span class="line">    hits = misses = 0</span><br><span class="line">    full = False</span><br><span class="line">    cache_get = cache.get    # bound method to lookup a key or return None</span><br><span class="line">    cache_len = cache.__len__  # get cache size without calling len()</span><br><span class="line">    lock = RLock()           # because linkedlist updates aren&apos;t threadsafe</span><br><span class="line">    root = []                # root of the circular doubly linked list</span><br><span class="line">    root[:] = [root, root, None, None]     # initialize by pointing to self</span><br><span class="line"></span><br><span class="line">    if maxsize == 0:</span><br><span class="line"></span><br><span class="line">        def wrapper(*args, **kwds):</span><br><span class="line">            # No caching -- just a statistics update</span><br><span class="line">            nonlocal misses</span><br><span class="line">            misses += 1</span><br><span class="line">            result = user_function(*args, **kwds)</span><br><span class="line">            return result</span><br><span class="line"></span><br><span class="line">    elif maxsize is None:</span><br><span class="line"></span><br><span class="line">        def wrapper(*args, **kwds):</span><br><span class="line">            # Simple caching without ordering or size limit</span><br><span class="line">            nonlocal hits, misses</span><br><span class="line">            key = make_key(args, kwds, typed)</span><br><span class="line">            result = cache_get(key, sentinel)</span><br><span class="line">            if result is not sentinel:</span><br><span class="line">                hits += 1</span><br><span class="line">                return result</span><br><span class="line">            misses += 1</span><br><span class="line">            result = user_function(*args, **kwds)</span><br><span class="line">            cache[key] = result</span><br><span class="line">            return result</span><br><span class="line"></span><br><span class="line">    else:</span><br><span class="line"></span><br><span class="line">        def wrapper(*args, **kwds):</span><br><span class="line">            # Size limited caching that tracks accesses by recency</span><br><span class="line">            nonlocal root, hits, misses, full</span><br><span class="line">            key = make_key(args, kwds, typed)</span><br><span class="line">            with lock:</span><br><span class="line">                link = cache_get(key)</span><br><span class="line">                if link is not None:</span><br><span class="line">                    # Move the link to the front of the circular queue</span><br><span class="line">                    link_prev, link_next, _key, result = link</span><br><span class="line">                    link_prev[NEXT] = link_next</span><br><span class="line">                    link_next[PREV] = link_prev</span><br><span class="line">                    last = root[PREV]</span><br><span class="line">                    last[NEXT] = root[PREV] = link</span><br><span class="line">                    link[PREV] = last</span><br><span class="line">                    link[NEXT] = root</span><br><span class="line">                    hits += 1</span><br><span class="line">                    return result</span><br><span class="line">                misses += 1</span><br><span class="line">            result = user_function(*args, **kwds)</span><br><span class="line">            with lock:</span><br><span class="line">                if key in cache:</span><br><span class="line">                    # Getting here means that this same key was added to the</span><br><span class="line">                    # cache while the lock was released.  Since the link</span><br><span class="line">                    # update is already done, we need only return the</span><br><span class="line">                    # computed result and update the count of misses.</span><br><span class="line">                    pass</span><br><span class="line">                elif full:</span><br><span class="line">                    # Use the old root to store the new key and result.</span><br><span class="line">                    oldroot = root</span><br><span class="line">                    oldroot[KEY] = key</span><br><span class="line">                    oldroot[RESULT] = result</span><br><span class="line">                    # Empty the oldest link and make it the new root.</span><br><span class="line">                    # Keep a reference to the old key and old result to</span><br><span class="line">                    # prevent their ref counts from going to zero during the</span><br><span class="line">                    # update. That will prevent potentially arbitrary object</span><br><span class="line">                    # clean-up code (i.e. __del__) from running while we&apos;re</span><br><span class="line">                    # still adjusting the links.</span><br><span class="line">                    root = oldroot[NEXT]</span><br><span class="line">                    oldkey = root[KEY]</span><br><span class="line">                    oldresult = root[RESULT]</span><br><span class="line">                    root[KEY] = root[RESULT] = None</span><br><span class="line">                    # Now update the cache dictionary.</span><br><span class="line">                    del cache[oldkey]</span><br><span class="line">                    # Save the potentially reentrant cache[key] assignment</span><br><span class="line">                    # for last, after the root and links have been put in</span><br><span class="line">                    # a consistent state.</span><br><span class="line">                    cache[key] = oldroot</span><br><span class="line">                else:</span><br><span class="line">                    # Put result in a new link at the front of the queue.</span><br><span class="line">                    last = root[PREV]</span><br><span class="line">                    link = [last, root, key, result]</span><br><span class="line">                    last[NEXT] = root[PREV] = cache[key] = link</span><br><span class="line">                    # Use the cache_len bound method instead of the len() function</span><br><span class="line">                    # which could potentially be wrapped in an lru_cache itself.</span><br><span class="line">                    full = (cache_len() &gt;= maxsize)</span><br><span class="line">            return result</span><br><span class="line"></span><br><span class="line">    def cache_info():</span><br><span class="line">        &quot;&quot;&quot;Report cache statistics&quot;&quot;&quot;</span><br><span class="line">        with lock:</span><br><span class="line">            return _CacheInfo(hits, misses, maxsize, cache_len())</span><br><span class="line"></span><br><span class="line">    def cache_clear():</span><br><span class="line">        &quot;&quot;&quot;Clear the cache and cache statistics&quot;&quot;&quot;</span><br><span class="line">        nonlocal hits, misses, full</span><br><span class="line">        with lock:</span><br><span class="line">            cache.clear()</span><br><span class="line">            root[:] = [root, root, None, None]</span><br><span class="line">            hits = misses = 0</span><br><span class="line">            full = False</span><br><span class="line"></span><br><span class="line">    wrapper.cache_info = cache_info</span><br><span class="line">    wrapper.cache_clear = cache_clear</span><br><span class="line">    return wrapper</span><br></pre></td></tr></table></figure>
+<p>函数根据 <code>maxsize</code> 不同，定义不同的 <code>wrapper</code>。</p>
+<ul>
+<li><code>maxsize == 0</code>，其实也就是没有缓存，那么每次函数调用都不会命中，并且没有命中的次数 <code>misses</code> 加 1。</li>
+<li><code>maxsize is None</code>，不限制缓存大小，如果函数调用不命中，将没有命中次数 <code>misses</code> 加 1，否则将命中次数 <code>hits</code> 加 1。</li>
+<li>限制缓存的大小，那么需要根据 LRU 算法来更新 <code>cache</code><ul>
+<li>如果缓存命中 key，那么将命中节点移到双向循环链表的结尾，<code>hits += 1</code> ，并且返回结果。<strong>这里通过字典加双向循环链表的组合数据结构，实现了用 O(1) 的时间复杂度删除给定的节点。</strong></li>
+<li>如果没有命中，并且缓存满了，那么需要将最久没有使用的节点（root 的下一个节点）删除，并且将新的节点添加到链表结尾。在实现中有一个优化，直接将当前的 root 的 key 和 result 替换成新的值，将 root 的下一个节点置为新的 root，这样得到的双向循环链表结构跟删除 root 的下一个节点并且将新节点加到链表结尾是一样的，但是避免了删除和添加节点的操作</li>
+<li>如果没有命中，并且缓存没满，那么直接将新节点添加到双向循环链表的开头</li>
+</ul>
+</li>
+</ul>
+<p>最后给 <code>wrapper</code> 添加两个属性函数 <code>cache_info</code> 和 <code>cache_clear</code>，<code>cache_info</code> 显示当前缓存的命中情况的统计数据，<code>cache_clear</code> 用于清空缓存。</p>
+<p>最后需要说明的是，<strong>对于有多个关键字参数的函数，如果两次调用函数关键字参数传入的顺序不同，会被认为是不同的调用，不会命中缓存。另外，被 lru_cache 装饰的函数不能包含可变类型参数如 list，因为它们不支持 hash。</strong></p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://docs.python.org/zh-cn/3/library/functools.html" target="_blank" rel="noopener">functools — 高阶函数和可调用对象上的操作</a></p>
+<p><a href="https://www.cnblogs.com/zikcheng/p/14322577.html" target="_blank" rel="noopener">Python 中 lru_cache 的使用和实现</a></p>
+</blockquote>
+]]></content>
+      
+        <categories>
+            
+            <category> Python </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> Python </tag>
+            
+            <tag> functools </tag>
+            
+            <tag> lru_cache </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[HTTPS的加密原理]]></title>
+      <url>http://runnerliu.github.io/2021/07/04/https/</url>
+      <content type="html"><![CDATA[<h3 id="为什么需要加密？"><a href="#为什么需要加密？" class="headerlink" title="为什么需要加密？"></a>为什么需要加密？</h3><p>因为HTTP的内容是明文传输的，明文数据会经过中间代理服务器、路由器、WIFI热点、通信服务运营商等多个物理节点，如果信息在传输过程中被劫持，传输的内容就完全暴露了。劫持者还可以篡改传输的信息且不被双方察觉，这就是<code>中间人攻击</code>。所以我们才需要对信息进行加密。最容易理解的就是<code>对称加密</code> 。</p>
+<h3 id="什么是对称加密？"><a href="#什么是对称加密？" class="headerlink" title="什么是对称加密？"></a>什么是对称加密？</h3><p>简单说就是有一个密钥，它可以加密一段信息，也可以对加密后的信息进行解密，和我们日常生活中用的钥匙作用差不多。</p>
+<p><img src="/images/2021-7-4182803.png" alt="2021-7-4182803.png"></p>
+<h3 id="用对称加密可行吗？"><a href="#用对称加密可行吗？" class="headerlink" title="用对称加密可行吗？"></a>用对称加密可行吗？</h3><p><strong>如果通信双方都各自持有同一个密钥，且没有别人知道，这两方的通信安全当然是可以被保证的（除非密钥被破解）。</strong></p>
+<p>然而最大的问题就是<strong>这个密钥怎么让传输的双方知晓，同时不被别人知道</strong>。如果由服务器生成一个密钥并传输给浏览器，那在这个传输过程中密钥被别人劫持到手了怎么办？之后他就能用密钥解开双方传输的任何内容了，所以这么做当然不行。</p>
+<p>换种思路？试想一下，如果浏览器内部就预存了网站A的密钥，且可以确保除了浏览器和网站A，不会有任何外人知道该密钥，那理论上用对称加密是可以的，这样浏览器只要预存好世界上所有HTTPS网站的密钥就行了！这么做显然不现实。<br>怎么办？所以我们就需要<code>非对称加密</code> 。</p>
+<h3 id="什么是非对称加密？"><a href="#什么是非对称加密？" class="headerlink" title="什么是非对称加密？"></a>什么是非对称加密？</h3><p>简单说就是有两把密钥，通常一把叫做公钥、一把叫私钥，用公钥加密的内容必须用私钥才能解开，同样，私钥加密的内容只有公钥能解开。</p>
+<p><img src="/images/2021-7-4182912.png" alt="2021-7-4182912.png"></p>
+<h3 id="用非对称加密可行吗？"><a href="#用非对称加密可行吗？" class="headerlink" title="用非对称加密可行吗？"></a>用非对称加密可行吗？</h3><p>鉴于非对称加密的机制，我们可能会有这种思路：服务器先把公钥以明文方式传输给浏览器，之后浏览器向服务器传数据前都先用这个公钥加密好再传，这条数据的安全似乎可以保障了！<strong>因为只有服务器有相应的私钥能解开公钥加密的数据</strong>。</p>
+<p>然而反过来<strong>由服务器到浏览器的这条路怎么保障安全？</strong>如果服务器用它的私钥加密数据传给浏览器，那么浏览器用公钥可以解密它，而这个公钥是一开始通过明文传输给浏览器的，若这个公钥被中间人劫持到了，那他也能用该公钥解密服务器传来的信息了。所以<strong>目前似乎只能保证由浏览器向服务器传输数据的安全性</strong>（其实仍有漏洞，下文会说），那利用这点你能想到什么解决方案吗？</p>
+<h3 id="改良的非对称加密方案，似乎可以？"><a href="#改良的非对称加密方案，似乎可以？" class="headerlink" title="改良的非对称加密方案，似乎可以？"></a>改良的非对称加密方案，似乎可以？</h3><p>我们已经理解通过一组公钥私钥，可以保证单个方向传输的安全性，那用两组公钥私钥，是否就能保证双向传输都安全了？请看下面的过程：</p>
+<ol>
+<li>某网站服务器拥有公钥A与对应的私钥A’；浏览器拥有公钥B与对应的私钥B’。</li>
+<li>浏览器把公钥B明文传输给服务器。</li>
+<li>服务器把公钥A明文给传输浏览器。</li>
+<li>之后浏览器向服务器传输的内容都用公钥A加密，服务器收到后用私钥A’解密。由于只有服务器拥有私钥A’，所以能保证这条数据的安全。</li>
+<li>同理，服务器向浏览器传输的内容都用公钥B加密，浏览器收到后用私钥B’解密。同上也可以保证这条数据的安全。</li>
+</ol>
+<p>的确可以！抛开这里面仍有的漏洞不谈（下文会讲），HTTPS的加密却没使用这种方案，为什么？很重要的原因是非对称加密算法非常耗时，而对称加密快很多。那我们能不能运用非对称加密的特性解决前面提到的对称加密的漏洞？</p>
+<h3 id="非对称加密-对称加密？"><a href="#非对称加密-对称加密？" class="headerlink" title="非对称加密+对称加密？"></a>非对称加密+对称加密？</h3><p>既然非对称加密耗时，那非对称加密+对称加密结合可以吗？而且得尽量减少非对称加密的次数。当然是可以的，且非对称加密、解密各只需用一次即可。<br>请看一下这个过程：</p>
+<ol>
+<li>某网站拥有用于非对称加密的公钥A、私钥A’。</li>
+<li>浏览器向网站服务器请求，服务器把公钥A明文给传输浏览器。</li>
+<li>浏览器随机生成一个用于对称加密的密钥X，用公钥A加密后传给服务器。</li>
+<li>服务器拿到后用私钥A’解密得到密钥X。</li>
+<li>这样双方就都拥有密钥X了，且别人无法知道它。之后双方所有数据都通过密钥X加密解密即可。</li>
+</ol>
+<p>完美！HTTPS基本就是采用了这种方案。完美？还是有漏洞的。</p>
+<h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h3><p><img src="/images/2021-7-4183232.png" alt="2021-7-4183232.png"></p>
+<p>如果在数据传输过程中，中间人劫持到了数据，此时他的确无法得到浏览器生成的密钥X，这个密钥本身被公钥A加密了，只有服务器才有私钥A’解开它，然而中间人却完全不需要拿到私钥A’就能干坏事了。请看：</p>
+<ol>
+<li>某网站有用于非对称加密的公钥A、私钥A’。</li>
+<li>浏览器向网站服务器请求，服务器把公钥A明文给传输浏览器。</li>
+<li><strong>中间人劫持到公钥A，保存下来，把数据包中的公钥A替换成自己伪造的公钥B（它当然也拥有公钥B对应的私钥B’）</strong>。</li>
+<li>浏览器生成一个用于对称加密的密钥X，用<strong>公钥B</strong>（浏览器无法得知公钥被替换了）加密后传给服务器。</li>
+<li><strong>中间人劫持后用私钥B’解密得到密钥X，再用公钥A加密后传给服务器</strong>。</li>
+<li>服务器拿到后用私钥A’解密得到密钥X。</li>
+</ol>
+<p>这样在双方都不会发现异常的情况下，中间人通过一套“狸猫换太子”的操作，掉包了服务器传来的公钥，进而得到了密钥X。<strong>根本原因是浏览器无法确认收到的公钥是不是网站自己的，</strong>因为公钥本身是明文传输的，难道还得对公钥的传输进行加密？这似乎变成鸡生蛋、蛋生鸡的问题了。解法是什么？</p>
+<h3 id="如何证明浏览器收到的公钥一定是该网站的公钥？"><a href="#如何证明浏览器收到的公钥一定是该网站的公钥？" class="headerlink" title="如何证明浏览器收到的公钥一定是该网站的公钥？"></a>如何证明浏览器收到的公钥一定是该网站的公钥？</h3><p>其实所有证明的源头都是一条或多条不证自明的“公理”（可以回想一下数学上公理），由它推导出一切。比如现实生活中，若想证明某身份证号一定是小明的，可以看他身份证，而身份证是由政府作证的，这里的“公理”就是“政府机构可信”，这也是社会正常运作的前提。</p>
+<p>那能不能类似地有个机构充当互联网世界的“公理”呢？让它作为一切证明的源头，给网站颁发一个“身份证”？</p>
+<p>它就是<strong>CA机构</strong>，它是如今互联网世界正常运作的前提，而CA机构颁发的“身份证”就是<strong>数字证书</strong>。</p>
+<h3 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h3><p><img src="/images/2021-7-4183437.png" alt="2021-7-4183437.png"></p>
+<p>网站在使用HTTPS前，需要向<strong>CA机构</strong>申领一份<strong>数字证书</strong>，数字证书里含有证书持有者信息、公钥信息等。服务器把证书传输给浏览器，浏览器从证书里获取公钥就行了，证书就如身份证，证明“该公钥对应该网站”。而这里又有一个显而易见的问题，“<strong>证书本身的传输过程中，如何防止被篡改”</strong>？即如何证明证书本身的真实性？身份证运用了一些防伪技术，而数字证书怎么防伪呢？解决这个问题我们就接近胜利了！</p>
+<h3 id="如何放防止数字证书被篡改？"><a href="#如何放防止数字证书被篡改？" class="headerlink" title="如何放防止数字证书被篡改？"></a>如何放防止数字证书被篡改？</h3><p>我们把证书原本的内容生成一份“签名”，比对证书内容和签名是否一致就能判别是否被篡改。这就是数字证书的“防伪技术”，这里的“签名”就叫<code>数字签名</code>：</p>
+<h4 id="数字签名"><a href="#数字签名" class="headerlink" title="数字签名"></a>数字签名</h4><p>这部分内容建议看下图并结合后面的文字理解，图中左侧是数字签名的制作过程，右侧是验证过程：</p>
+<p><img src="/images/2021-7-4183542.png" alt="2021-7-4183542.png"></p>
+<p>数字签名的制作过程：</p>
+<ol>
+<li>CA机构拥有非对称加密的私钥和公钥。</li>
+<li>CA机构对证书明文数据T进行hash。</li>
+<li>对hash后的值用私钥加密，得到数字签名S。</li>
+</ol>
+<p>明文和数字签名共同组成了数字证书，这样一份数字证书就可以颁发给网站了。<br>那浏览器拿到服务器传来的数字证书后，如何验证它是不是真的？（有没有被篡改、掉包）</p>
+<p>浏览器验证过程：</p>
+<ol>
+<li>拿到证书，得到明文T，签名S。</li>
+<li>用CA机构的公钥对S解密（由于是浏览器信任的机构，所以浏览器保有它的公钥。详情见下文），得到S’。</li>
+<li>用证书里指明的hash算法对明文T进行hash得到T’。</li>
+<li>显然通过以上步骤，T’应当等于S‘，除非明文或签名被篡改。所以此时比较S’是否等于T’，等于则表明证书可信。</li>
+</ol>
+<p>为何么这样可以保证证书可信呢？我们来仔细想一下。</p>
+<h4 id="中间人有可能篡改该证书吗？"><a href="#中间人有可能篡改该证书吗？" class="headerlink" title="中间人有可能篡改该证书吗？"></a>中间人有可能篡改该证书吗？</h4><p>假设中间人篡改了证书的原文，由于他没有CA机构的私钥，所以无法得到此时加密后签名，无法相应地篡改签名。浏览器收到该证书后会发现原文和签名解密后的值不一致，则说明证书已被篡改，证书不可信，从而终止向服务器传输信息，防止信息泄露给中间人。</p>
+<p>既然不可能篡改，那整个证书被掉包呢？</p>
+<h4 id="中间人有可能把证书掉包吗？"><a href="#中间人有可能把证书掉包吗？" class="headerlink" title="中间人有可能把证书掉包吗？"></a>中间人有可能把证书掉包吗？</h4><p>假设有另一个网站B也拿到了CA机构认证的证书，它想劫持网站A的信息。于是它成为中间人拦截到了A传给浏览器的证书，然后替换成自己的证书，传给浏览器，之后浏览器就会错误地拿到B的证书里的公钥了，这确实会导致上文“中间人攻击”那里提到的漏洞？</p>
+<p>其实这并不会发生，因为证书里包含了网站A的信息，包括域名，浏览器把证书里的域名与自己请求的域名比对一下就知道有没有被掉包了。</p>
+<h4 id="为什么制作数字签名时需要hash一次？"><a href="#为什么制作数字签名时需要hash一次？" class="headerlink" title="为什么制作数字签名时需要hash一次？"></a>为什么制作数字签名时需要hash一次？</h4><p>我初识HTTPS的时候就有这个疑问，因为似乎那里的hash有点多余，把hash过程去掉也能保证证书没有被篡改。</p>
+<p>最显然的是性能问题，前面我们已经说了非对称加密效率较差，证书信息一般较长，比较耗时。而hash后得到的是固定长度的信息（比如用md5算法hash后可以得到固定的128位的值），这样加解密就快很多。</p>
+<p>当然也有安全上的原因，这部分内容相对深一些，感兴趣的可以看这篇解答：<a href="https://link.zhihu.com/?target=https%3A//link.juejin.im/%3Ftarget%3Dhttps%3A%2F%2Fcrypto.stackexchange.com%2Fa%2F12780" target="_blank" rel="noopener">crypto.stackexchange.com/a/12780</a></p>
+<h4 id="怎么证明CA机构的公钥是可信的？"><a href="#怎么证明CA机构的公钥是可信的？" class="headerlink" title="怎么证明CA机构的公钥是可信的？"></a>怎么证明CA机构的公钥是可信的？</h4><p>你们可能会发现上文中说到CA机构的公钥，我几乎一笔带过，“浏览器保有它的公钥”，这是个什么保有法？怎么证明这个公钥是否可信？</p>
+<p>让我们回想一下数字证书到底是干啥的？没错，为了证明某公钥是可信的，即“该公钥是否对应该网站”，那CA机构的公钥是否也可以用数字证书来证明？没错，操作系统、浏览器本身会预装一些它们信任的根证书，如果其中会有CA机构的根证书，这样就可以拿到它对应的可信公钥了。</p>
+<p>实际上证书之间的认证也可以不止一层，可以A信任B，B信任C，以此类推，我们把它叫做<code>信任链</code>或<code>数字证书链</code>。也就是一连串的数字证书，由根证书为起点，透过层层信任，使终端实体证书的持有者可以获得转授的信任，以证明身份。</p>
+<p>另外，不知你们是否遇到过网站访问不了、提示需安装证书的情况？这里安装的就是根证书。说明浏览器不认给这个网站颁发证书的机构，那么你就得手动下载安装该机构的根证书（风险自己承担）。安装后，你就有了它的公钥，就可以用它验证服务器发来的证书是否可信了。</p>
+<p><img src="/images/2021-7-4212126.png" alt="2021-7-4212126.png"></p>
+<h3 id="每次进行HTTPS请求时都必须在SSL-TLS层进行握手传输密钥吗？"><a href="#每次进行HTTPS请求时都必须在SSL-TLS层进行握手传输密钥吗？" class="headerlink" title="每次进行HTTPS请求时都必须在SSL/TLS层进行握手传输密钥吗？"></a><strong>每次进行HTTPS请求时都</strong>必须在SSL/TLS层进行握手传输密钥吗？</h3><p>这也是我当时的困惑之一，显然每次请求都经历一次密钥传输过程非常耗时，那怎么达到只传输一次呢？</p>
+<p>服务器会为每个浏览器（或客户端软件）维护一个session ID，在TLS握手阶段传给浏览器，浏览器生成好密钥传给服务器后，服务器会把该密钥存到相应的session ID下，之后浏览器每次请求都会携带session ID，服务器会根据session ID找到相应的密钥并进行解密加密操作，这样就不必要每次重新制作、传输密钥了！</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>可以看下这张图，梳理一下整个流程（SSL、TLS握手有一些区别，不同版本间也有区别，不过大致过程就是这样）：</p>
+<p><img src="/images/2021-7-4212218.png" alt="2021-7-4212218.png"></p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/43789231" target="_blank" rel="noopener">彻底搞懂HTTPS的加密原理</a></p>
+</blockquote>
+]]></content>
+      
+        <categories>
+            
+            <category> HTTPS </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> HTTPS </tag>
+            
+            <tag> 加密 </tag>
+            
+            <tag> 密钥协商 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[秒杀系统设计08 - 准备Plan B：如何设计兜底方案?]]></title>
       <url>http://runnerliu.github.io/2021/07/04/miaosha08/</url>
       <content type="html"><![CDATA[<p>这是《如何设计一个秒杀系统》专栏的最后一篇文章，前面我们一起看了很多极致的优化思路，以及架构的优化方案。但是很遗憾，现实中总难免会发生一些这样或者那样的意外，而这些看似不经意的意外，却可能带来非常严重的后果。</p>
@@ -5642,9 +5816,9 @@
         
         <tags>
             
-            <tag> Python </tag>
-            
             <tag> 垃圾回收 </tag>
+            
+            <tag> Python </tag>
             
         </tags>
         
@@ -6838,7 +7012,7 @@
     </entry>
     
     <entry>
-      <title><![CDATA[Transitions-Python状态机库]]></title>
+      <title><![CDATA[Python库-Transitions]]></title>
       <url>http://runnerliu.github.io/2017/05/26/transitionstranslate/</url>
       <content type="html"><![CDATA[<p>由于项目需要，使用到了Python的状态机库 <a href="https://github.com/tyarkoni/transitions" target="_blank" rel="noopener">Transitions</a> ，但GitHub上是英文文档，使用过后觉得还不错，遂手工翻译一下，加深理解，水平有限，如有翻译不当之处请Email (<a href="mailto:kevin920902@gmail.com" target="_blank" rel="noopener">kevin920902@gmail.com</a>) 我。</p>
 <h2 id="Transitions"><a href="#Transitions" class="headerlink" title="Transitions"></a>Transitions</h2><p>Python 实现的轻量级、面向对象状态机，兼容Python 2.7+ 和 Python 3.0+。</p>
@@ -9327,9 +9501,9 @@
             
             <tag> Hexo </tag>
             
-            <tag> NexT </tag>
-            
             <tag> 主题 </tag>
+            
+            <tag> NexT </tag>
             
         </tags>
         

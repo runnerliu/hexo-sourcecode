@@ -1,0 +1,1129 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Python,functools,lru_cache,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="LiuYang's BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="缓存在实际开发工作中的应用是非常常见的，比如内存缓存、redis缓存、本地文件缓存等，其主要的目的是方便数据的下一次访问，减少应用程序重复计算的次数和资源消耗，缓存是一种典型的空间换时间的方案。那么我们就来看看在开发Python程序时，functools提供的 cache 装饰器是如何工作的。 从一个小例子开始首先我们看一下阶乘的实现： 123456789101112131415161718192">
+<meta name="keywords" content="Python,functools,lru_cache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python functools系列 - lru_cache">
+<meta property="og:url" content="http://runnerliu.github.io/2021/07/10/py-functools-cache/index.html">
+<meta property="og:site_name" content="LiuYang&#39;s BLOG">
+<meta property="og:description" content="缓存在实际开发工作中的应用是非常常见的，比如内存缓存、redis缓存、本地文件缓存等，其主要的目的是方便数据的下一次访问，减少应用程序重复计算的次数和资源消耗，缓存是一种典型的空间换时间的方案。那么我们就来看看在开发Python程序时，functools提供的 cache 装饰器是如何工作的。 从一个小例子开始首先我们看一下阶乘的实现： 123456789101112131415161718192">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-07-10T12:42:14.983Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python functools系列 - lru_cache">
+<meta name="twitter:description" content="缓存在实际开发工作中的应用是非常常见的，比如内存缓存、redis缓存、本地文件缓存等，其主要的目的是方便数据的下一次访问，减少应用程序重复计算的次数和资源消耗，缓存是一种典型的空间换时间的方案。那么我们就来看看在开发Python程序时，functools提供的 cache 装饰器是如何工作的。 从一个小例子开始首先我们看一下阶乘的实现： 123456789101112131415161718192">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2021/07/10/py-functools-cache/">
+
+
+
+
+
+  <title> Python functools系列 - lru_cache | LiuYang's BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LiuYang's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2021/07/10/py-functools-cache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Python functools系列 - lru_cache
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-10T17:47:40+08:00">
+                2021-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/07/10/py-functools-cache/" class="leancloud_visitors" data-flag-title="Python functools系列 - lru_cache">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>缓存在实际开发工作中的应用是非常常见的，比如内存缓存、redis缓存、本地文件缓存等，其主要的目的是方便数据的下一次访问，减少应用程序重复计算的次数和资源消耗，缓存是一种典型的空间换时间的方案。那么我们就来看看在开发Python程序时，functools提供的 <a href="https://docs.python.org/zh-cn/3/library/functools.html" target="_blank" rel="noopener">cache</a> 装饰器是如何工作的。</p>
+<h3 id="从一个小例子开始"><a href="#从一个小例子开始" class="headerlink" title="从一个小例子开始"></a>从一个小例子开始</h3><p>首先我们看一下阶乘的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">def factorial(n):</span><br><span class="line">    print(&apos;compute: &#123;&#125;&apos;.format(n))</span><br><span class="line">    return n * factorial(n - 1) if n else 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = factorial(5)</span><br><span class="line">print(a)</span><br><span class="line">b = factorial(10)</span><br><span class="line">print(b)</span><br><span class="line"></span><br><span class="line">compute: 5</span><br><span class="line">compute: 4</span><br><span class="line">compute: 3</span><br><span class="line">compute: 2</span><br><span class="line">compute: 1</span><br><span class="line">compute: 0</span><br><span class="line">120</span><br><span class="line">compute: 10</span><br><span class="line">compute: 9</span><br><span class="line">compute: 8</span><br><span class="line">compute: 7</span><br><span class="line">compute: 6</span><br><span class="line">compute: 5</span><br><span class="line">compute: 4</span><br><span class="line">compute: 3</span><br><span class="line">compute: 2</span><br><span class="line">compute: 1</span><br><span class="line">compute: 0</span><br><span class="line">3628800</span><br></pre></td></tr></table></figure>
+<p>我们分别计算了 <code>5！</code> 和 <code>10！</code> ，从程序的运行输出看，在计算 <code>10!</code> 时，把 <code>5!</code> 重复计算了一遍，在计算阶乘数字较小的情况下是没问题的，但是当阶乘数非常大时，重复的计算会占用CPU很多资源，而这些重复的计算完全是没必要的，那我们会想到实现一个缓存，将计算过的数据存起来，当下次请求时直接返回。</p>
+<h3 id="实现一个缓存"><a href="#实现一个缓存" class="headerlink" title="实现一个缓存"></a>实现一个缓存</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class MyCache(object):</span><br><span class="line"></span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.cache = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    def get_cache(self, key) -&gt; object:</span><br><span class="line">        return self.cache.get(key, None)</span><br><span class="line"></span><br><span class="line">    def set_cache(self, key, value) -&gt; bool:</span><br><span class="line">        if key not in self.cache:</span><br><span class="line">            self.cache[key] = value</span><br><span class="line">        return True</span><br><span class="line"></span><br><span class="line">    def is_in_cache(self, key: str) -&gt; bool:</span><br><span class="line">        return key in self.cache</span><br><span class="line"></span><br><span class="line">    def get_all_cache(self) -&gt; dict:</span><br><span class="line">        return self.cache</span><br><span class="line"></span><br><span class="line">def factorial(n: int, cache: MyCache):</span><br><span class="line">    print(&apos;compute: &#123;&#125;&apos;.format(n))</span><br><span class="line">    if cache.is_in_cache(n):</span><br><span class="line">        print(&apos;hit cache: &#123;&#125;&apos;.format(n))</span><br><span class="line">        return cache.get_cache(n)</span><br><span class="line">    tmp = n * factorial(n - 1, cache) if n else 1</span><br><span class="line">    cache.set_cache(n, tmp)</span><br><span class="line">    return tmp</span><br><span class="line"></span><br><span class="line">cache = MyCache()</span><br><span class="line">a = factorial(5, cache)</span><br><span class="line">print(a)</span><br><span class="line">b = factorial(10, cache)</span><br><span class="line">print(b)</span><br><span class="line">c = factorial(4, cache)</span><br><span class="line">print(c)</span><br><span class="line">print(cache.get_all_cache())</span><br></pre></td></tr></table></figure>
+<p>我们简单实现了一个缓存类，使用了 <code>dict</code> 数据类型，存储了中间的计算结果，我们看下输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">compute: 5</span><br><span class="line">compute: 4</span><br><span class="line">compute: 3</span><br><span class="line">compute: 2</span><br><span class="line">compute: 1</span><br><span class="line">compute: 0</span><br><span class="line">120</span><br><span class="line">compute: 10</span><br><span class="line">compute: 9</span><br><span class="line">compute: 8</span><br><span class="line">compute: 7</span><br><span class="line">compute: 6</span><br><span class="line">compute: 5</span><br><span class="line">hit cache: 5</span><br><span class="line">3628800</span><br><span class="line">compute: 4</span><br><span class="line">hit cache: 4</span><br><span class="line">24</span><br><span class="line">&#123;0: 1, 1: 1, 2: 2, 3: 6, 4: 24, 5: 120, 6: 720, 7: 5040, 8: 40320, 9: 362880, 10: 3628800&#125;</span><br></pre></td></tr></table></figure>
+<p> 从输出能看出，<code>5!</code> 和 <code>4!</code> 都命中了缓存，直接拿到了结果，这就节省了CPU的计算资源，当然，如果数据量很小，就没有必要使用缓存了。</p>
+<h3 id="functools中的lru-cache"><a href="#functools中的lru-cache" class="headerlink" title="functools中的lru_cache"></a>functools中的lru_cache</h3><p>从3.2版本开始，Python的functools模块提供了 <code>lru_cache</code> 函数，用于缓存计算的中间结果，函数定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@functools.lru_cache(user_function)</span><br><span class="line">@functools.lru_cache(maxsize=128, typed=False)</span><br></pre></td></tr></table></figure>
+<p>一个为函数提供缓存功能的装饰器，缓存 <code>maxsize</code> 传入参数，在下次以相同参数调用时直接返回上一次的结果。用以节约高开销或I/O函数的调用时间。由于使用了字典存储缓存，所以该函数的固定参数和关键字参数必须是可哈希的。</p>
+<p>不同模式的参数可能被视为不同从而产生多个缓存项，例如, f(a=1, b=2) 和 f(b=2, a=1) 因其参数顺序不同，可能会被缓存两次。</p>
+<p>如果指定了 <code>user_function</code>，它必须是一个可调用对象。 这允许 <code>lru_cache</code> 装饰器被直接应用于一个用户自定义函数，<code>maxsize</code> 默认值为128。</p>
+<p>我们使用这个装饰器重写一下上边的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from functools import lru_cache</span><br><span class="line"></span><br><span class="line">@lru_cache(None)</span><br><span class="line">def factorial(n: int):</span><br><span class="line">    return n * factorial(n - 1) if n else 1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">a = factorial(5)</span><br><span class="line">print(a)</span><br><span class="line">b = factorial(10)</span><br><span class="line">print(b)</span><br><span class="line">c = factorial(4)</span><br><span class="line">print(c)</span><br><span class="line"></span><br><span class="line">print(factorial.cache_info())</span><br><span class="line"></span><br><span class="line">120</span><br><span class="line">3628800</span><br><span class="line">24</span><br><span class="line">CacheInfo(hits=2, misses=11, maxsize=None, currsize=11)</span><br></pre></td></tr></table></figure>
+<p>从输出可以看到，<code>hits=2</code> 表示命中了2次缓存。</p>
+<p>那我们就来看下这个装饰器的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">def lru_cache(maxsize=128, typed=False):</span><br><span class="line">    &quot;&quot;&quot;Least-recently-used cache decorator.</span><br><span class="line"></span><br><span class="line">    If *maxsize* is set to None, the LRU features are disabled and the cache</span><br><span class="line">    can grow without bound.</span><br><span class="line"></span><br><span class="line">    If *typed* is True, arguments of different types will be cached separately.</span><br><span class="line">    For example, f(3.0) and f(3) will be treated as distinct calls with</span><br><span class="line">    distinct results.</span><br><span class="line"></span><br><span class="line">    Arguments to the cached function must be hashable.</span><br><span class="line"></span><br><span class="line">    View the cache statistics named tuple (hits, misses, maxsize, currsize)</span><br><span class="line">    with f.cache_info().  Clear the cache and statistics with f.cache_clear().</span><br><span class="line">    Access the underlying function with f.__wrapped__.</span><br><span class="line"></span><br><span class="line">    See:  http://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)</span><br><span class="line"></span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    # Users should only access the lru_cache through its public API:</span><br><span class="line">    #       cache_info, cache_clear, and f.__wrapped__</span><br><span class="line">    # The internals of the lru_cache are encapsulated for thread safety and</span><br><span class="line">    # to allow the implementation to change (including a possible C version).</span><br><span class="line"></span><br><span class="line">    # Early detection of an erroneous call to @lru_cache without any arguments</span><br><span class="line">    # resulting in the inner function being passed to maxsize instead of an</span><br><span class="line">    # integer or None.  Negative maxsize is treated as 0.</span><br><span class="line">    if isinstance(maxsize, int):</span><br><span class="line">        if maxsize &lt; 0:</span><br><span class="line">            maxsize = 0</span><br><span class="line">    elif maxsize is not None:</span><br><span class="line">        raise TypeError(&apos;Expected maxsize to be an integer or None&apos;)</span><br><span class="line"></span><br><span class="line">    def decorating_function(user_function):</span><br><span class="line">        wrapper = _lru_cache_wrapper(user_function, maxsize, typed, _CacheInfo)</span><br><span class="line">        return update_wrapper(wrapper, user_function)</span><br><span class="line"></span><br><span class="line">    return decorating_function</span><br></pre></td></tr></table></figure>
+<p>如果 <code>maxsize</code> 设为 <code>None</code>，LRU 特性将被禁用且缓存可无限增长。</p>
+<p>如果 <code>typed</code> 设置为true，不同类型的函数参数将被分别缓存。例如， <code>f(3)</code> 和 <code>f(3.0)</code> 将被视为不同而分别缓存。</p>
+<p>被装饰的函数带有一个 <code>cache_info()</code> 函数。当调用 <code>cache_info()</code> 函数时，返回一个具名元组，包含命中次数 <code>hits</code>，未命中次数 <code>misses</code> ，最大缓存数量 <code>maxsize</code> 和 当前缓存大小 <code>currsize</code>。在多线程环境中，命中数与未命中数是不完全准确的。</p>
+<p>该装饰器也提供了一个用于清理/使缓存失效的函数 <code>cache_clear()</code> 。</p>
+<p>原始的未经装饰的函数可以通过 <code>__wrapped__</code> 属性访问。它可以用于检查、绕过缓存，或使用不同的缓存再次装饰原始函数。</p>
+<p><a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU" target="_blank" rel="noopener">LRU（最久未使用算法）缓存</a>) 在最近的调用是即将到来的调用的最佳预测值时性能最好（例如，新闻服务器上最热门文章倾向于每天更改）。 缓存的大小限制可确保缓存不会在长期运行进程如网站服务器上无限制地增长。</p>
+<p>下面我们再看下 <code>_lru_cache_wrapper</code> 的具体实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">def _lru_cache_wrapper(user_function, maxsize, typed, _CacheInfo):</span><br><span class="line">    # Constants shared by all lru cache instances:</span><br><span class="line">    sentinel = object()          # unique object used to signal cache misses</span><br><span class="line">    make_key = _make_key         # build a key from the function arguments</span><br><span class="line">    PREV, NEXT, KEY, RESULT = 0, 1, 2, 3   # names for the link fields</span><br><span class="line"></span><br><span class="line">    cache = &#123;&#125;</span><br><span class="line">    hits = misses = 0</span><br><span class="line">    full = False</span><br><span class="line">    cache_get = cache.get    # bound method to lookup a key or return None</span><br><span class="line">    cache_len = cache.__len__  # get cache size without calling len()</span><br><span class="line">    lock = RLock()           # because linkedlist updates aren&apos;t threadsafe</span><br><span class="line">    root = []                # root of the circular doubly linked list</span><br><span class="line">    root[:] = [root, root, None, None]     # initialize by pointing to self</span><br><span class="line"></span><br><span class="line">    if maxsize == 0:</span><br><span class="line"></span><br><span class="line">        def wrapper(*args, **kwds):</span><br><span class="line">            # No caching -- just a statistics update</span><br><span class="line">            nonlocal misses</span><br><span class="line">            misses += 1</span><br><span class="line">            result = user_function(*args, **kwds)</span><br><span class="line">            return result</span><br><span class="line"></span><br><span class="line">    elif maxsize is None:</span><br><span class="line"></span><br><span class="line">        def wrapper(*args, **kwds):</span><br><span class="line">            # Simple caching without ordering or size limit</span><br><span class="line">            nonlocal hits, misses</span><br><span class="line">            key = make_key(args, kwds, typed)</span><br><span class="line">            result = cache_get(key, sentinel)</span><br><span class="line">            if result is not sentinel:</span><br><span class="line">                hits += 1</span><br><span class="line">                return result</span><br><span class="line">            misses += 1</span><br><span class="line">            result = user_function(*args, **kwds)</span><br><span class="line">            cache[key] = result</span><br><span class="line">            return result</span><br><span class="line"></span><br><span class="line">    else:</span><br><span class="line"></span><br><span class="line">        def wrapper(*args, **kwds):</span><br><span class="line">            # Size limited caching that tracks accesses by recency</span><br><span class="line">            nonlocal root, hits, misses, full</span><br><span class="line">            key = make_key(args, kwds, typed)</span><br><span class="line">            with lock:</span><br><span class="line">                link = cache_get(key)</span><br><span class="line">                if link is not None:</span><br><span class="line">                    # Move the link to the front of the circular queue</span><br><span class="line">                    link_prev, link_next, _key, result = link</span><br><span class="line">                    link_prev[NEXT] = link_next</span><br><span class="line">                    link_next[PREV] = link_prev</span><br><span class="line">                    last = root[PREV]</span><br><span class="line">                    last[NEXT] = root[PREV] = link</span><br><span class="line">                    link[PREV] = last</span><br><span class="line">                    link[NEXT] = root</span><br><span class="line">                    hits += 1</span><br><span class="line">                    return result</span><br><span class="line">                misses += 1</span><br><span class="line">            result = user_function(*args, **kwds)</span><br><span class="line">            with lock:</span><br><span class="line">                if key in cache:</span><br><span class="line">                    # Getting here means that this same key was added to the</span><br><span class="line">                    # cache while the lock was released.  Since the link</span><br><span class="line">                    # update is already done, we need only return the</span><br><span class="line">                    # computed result and update the count of misses.</span><br><span class="line">                    pass</span><br><span class="line">                elif full:</span><br><span class="line">                    # Use the old root to store the new key and result.</span><br><span class="line">                    oldroot = root</span><br><span class="line">                    oldroot[KEY] = key</span><br><span class="line">                    oldroot[RESULT] = result</span><br><span class="line">                    # Empty the oldest link and make it the new root.</span><br><span class="line">                    # Keep a reference to the old key and old result to</span><br><span class="line">                    # prevent their ref counts from going to zero during the</span><br><span class="line">                    # update. That will prevent potentially arbitrary object</span><br><span class="line">                    # clean-up code (i.e. __del__) from running while we&apos;re</span><br><span class="line">                    # still adjusting the links.</span><br><span class="line">                    root = oldroot[NEXT]</span><br><span class="line">                    oldkey = root[KEY]</span><br><span class="line">                    oldresult = root[RESULT]</span><br><span class="line">                    root[KEY] = root[RESULT] = None</span><br><span class="line">                    # Now update the cache dictionary.</span><br><span class="line">                    del cache[oldkey]</span><br><span class="line">                    # Save the potentially reentrant cache[key] assignment</span><br><span class="line">                    # for last, after the root and links have been put in</span><br><span class="line">                    # a consistent state.</span><br><span class="line">                    cache[key] = oldroot</span><br><span class="line">                else:</span><br><span class="line">                    # Put result in a new link at the front of the queue.</span><br><span class="line">                    last = root[PREV]</span><br><span class="line">                    link = [last, root, key, result]</span><br><span class="line">                    last[NEXT] = root[PREV] = cache[key] = link</span><br><span class="line">                    # Use the cache_len bound method instead of the len() function</span><br><span class="line">                    # which could potentially be wrapped in an lru_cache itself.</span><br><span class="line">                    full = (cache_len() &gt;= maxsize)</span><br><span class="line">            return result</span><br><span class="line"></span><br><span class="line">    def cache_info():</span><br><span class="line">        &quot;&quot;&quot;Report cache statistics&quot;&quot;&quot;</span><br><span class="line">        with lock:</span><br><span class="line">            return _CacheInfo(hits, misses, maxsize, cache_len())</span><br><span class="line"></span><br><span class="line">    def cache_clear():</span><br><span class="line">        &quot;&quot;&quot;Clear the cache and cache statistics&quot;&quot;&quot;</span><br><span class="line">        nonlocal hits, misses, full</span><br><span class="line">        with lock:</span><br><span class="line">            cache.clear()</span><br><span class="line">            root[:] = [root, root, None, None]</span><br><span class="line">            hits = misses = 0</span><br><span class="line">            full = False</span><br><span class="line"></span><br><span class="line">    wrapper.cache_info = cache_info</span><br><span class="line">    wrapper.cache_clear = cache_clear</span><br><span class="line">    return wrapper</span><br></pre></td></tr></table></figure>
+<p>函数根据 <code>maxsize</code> 不同，定义不同的 <code>wrapper</code>。</p>
+<ul>
+<li><code>maxsize == 0</code>，其实也就是没有缓存，那么每次函数调用都不会命中，并且没有命中的次数 <code>misses</code> 加 1。</li>
+<li><code>maxsize is None</code>，不限制缓存大小，如果函数调用不命中，将没有命中次数 <code>misses</code> 加 1，否则将命中次数 <code>hits</code> 加 1。</li>
+<li>限制缓存的大小，那么需要根据 LRU 算法来更新 <code>cache</code><ul>
+<li>如果缓存命中 key，那么将命中节点移到双向循环链表的结尾，<code>hits += 1</code> ，并且返回结果。<strong>这里通过字典加双向循环链表的组合数据结构，实现了用 O(1) 的时间复杂度删除给定的节点。</strong></li>
+<li>如果没有命中，并且缓存满了，那么需要将最久没有使用的节点（root 的下一个节点）删除，并且将新的节点添加到链表结尾。在实现中有一个优化，直接将当前的 root 的 key 和 result 替换成新的值，将 root 的下一个节点置为新的 root，这样得到的双向循环链表结构跟删除 root 的下一个节点并且将新节点加到链表结尾是一样的，但是避免了删除和添加节点的操作</li>
+<li>如果没有命中，并且缓存没满，那么直接将新节点添加到双向循环链表的开头</li>
+</ul>
+</li>
+</ul>
+<p>最后给 <code>wrapper</code> 添加两个属性函数 <code>cache_info</code> 和 <code>cache_clear</code>，<code>cache_info</code> 显示当前缓存的命中情况的统计数据，<code>cache_clear</code> 用于清空缓存。</p>
+<p>最后需要说明的是，<strong>对于有多个关键字参数的函数，如果两次调用函数关键字参数传入的顺序不同，会被认为是不同的调用，不会命中缓存。另外，被 lru_cache 装饰的函数不能包含可变类型参数如 list，因为它们不支持 hash。</strong></p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://docs.python.org/zh-cn/3/library/functools.html" target="_blank" rel="noopener">functools — 高阶函数和可调用对象上的操作</a></p>
+<p><a href="https://www.cnblogs.com/zikcheng/p/14322577.html" target="_blank" rel="noopener">Python 中 lru_cache 的使用和实现</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/functools/" rel="tag"># functools</a>
+          
+            <a href="/tags/lru-cache/" rel="tag"># lru_cache</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/07/04/https/" rel="next" title="HTTPS的加密原理">
+                <i class="fa fa-chevron-left"></i> HTTPS的加密原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
+          <p class="site-author-name" itemprop="name">william</p>
+           
+              <p class="site-description motion-element" itemprop="description">删繁就简 一心一意</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">148</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#从一个小例子开始"><span class="nav-number">1.</span> <span class="nav-text">从一个小例子开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现一个缓存"><span class="nav-number">2.</span> <span class="nav-text">实现一个缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#functools中的lru-cache"><span class="nav-number">3.</span> <span class="nav-text">functools中的lru_cache</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">william</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
