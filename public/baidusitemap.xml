@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://runnerliu.github.io/2018/06/10/requests-session/</loc>
+    <lastmod>2021-07-11</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2021/06/21/io-multiplexing/</loc>
+    <lastmod>2021-07-11</lastmod>
+  </url>
+  <url>
     <loc>http://runnerliu.github.io/2021/07/10/py-functools-cache/</loc>
     <lastmod>2021-07-10</lastmod>
   </url>
@@ -197,16 +205,8 @@
     <lastmod>2021-06-29</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2021/06/21/io-multiplexing/</loc>
-    <lastmod>2021-06-21</lastmod>
-  </url>
-  <url>
     <loc>http://runnerliu.github.io/2020/10/27/linux-centos-sys-time/</loc>
     <lastmod>2021-06-21</lastmod>
-  </url>
-  <url>
-    <loc>http://runnerliu.github.io/2018/06/10/requests-session/</loc>
-    <lastmod>2021-06-03</lastmod>
   </url>
   <url>
     <loc>http://runnerliu.github.io/2018/01/04/librdkafkainstallanduse/</loc>

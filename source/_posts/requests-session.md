@@ -6,7 +6,7 @@ tags:
  - session
  - 会话对象
 categories:
- - Python库
+ - Python
 ---
 
 ### 问题背景

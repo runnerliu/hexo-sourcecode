@@ -5,7 +5,7 @@ tags:
  - Linux
  - IO多路复用
 categories:
- - Linux
+ - Linux/Unix
 ---
 
 ### 什么是IO多路复用
