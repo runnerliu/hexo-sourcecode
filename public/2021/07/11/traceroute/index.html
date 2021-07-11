@@ -1,0 +1,1159 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Linux/Unix,traceroute,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="LiuYang's BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="现实世界中的网络是由无数的计算机和路由器组成的一张的大网，应用的数据包在发送到服务器之前都要经过层层的路由转发。而 traceroute 是一种常规的网络分析工具，用来定位到目标主机之间的所有路由器。 安装traceroute若未安装该命令，需执行以下命令进行安装 1yum install -y traceroute 测试一下 1234567891011[root@test ~]# tracero">
+<meta name="keywords" content="Linux&#x2F;Unix,traceroute">
+<meta property="og:type" content="article">
+<meta property="og:title" content="traceroute的实现原理">
+<meta property="og:url" content="http://runnerliu.github.io/2021/07/11/traceroute/index.html">
+<meta property="og:site_name" content="LiuYang&#39;s BLOG">
+<meta property="og:description" content="现实世界中的网络是由无数的计算机和路由器组成的一张的大网，应用的数据包在发送到服务器之前都要经过层层的路由转发。而 traceroute 是一种常规的网络分析工具，用来定位到目标主机之间的所有路由器。 安装traceroute若未安装该命令，需执行以下命令进行安装 1yum install -y traceroute 测试一下 1234567891011[root@test ~]# tracero">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11150908.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11151008.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11151040.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11151114.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11151153.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11151446.png">
+<meta property="og:updated_time" content="2021-07-11T07:36:03.172Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="traceroute的实现原理">
+<meta name="twitter:description" content="现实世界中的网络是由无数的计算机和路由器组成的一张的大网，应用的数据包在发送到服务器之前都要经过层层的路由转发。而 traceroute 是一种常规的网络分析工具，用来定位到目标主机之间的所有路由器。 安装traceroute若未安装该命令，需执行以下命令进行安装 1yum install -y traceroute 测试一下 1234567891011[root@test ~]# tracero">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2021-7-11150908.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2021/07/11/traceroute/">
+
+
+
+
+
+  <title> traceroute的实现原理 | LiuYang's BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LiuYang's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2021/07/11/traceroute/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                traceroute的实现原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-11T14:57:00+08:00">
+                2021-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/07/11/traceroute/" class="leancloud_visitors" data-flag-title="traceroute的实现原理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>现实世界中的网络是由无数的计算机和路由器组成的一张的大网，应用的数据包在发送到服务器之前都要经过层层的路由转发。而 <code>traceroute</code> 是一种常规的网络分析工具，用来定位到目标主机之间的所有路由器。</p>
+<h3 id="安装traceroute"><a href="#安装traceroute" class="headerlink" title="安装traceroute"></a>安装traceroute</h3><p>若未安装该命令，需执行以下命令进行安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y traceroute</span><br></pre></td></tr></table></figure>
+<p>测试一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@test ~]# traceroute www.iqiyi.com</span><br><span class="line">traceroute to www.iqiyi.com (124.192.145.92), 30 hops max, 60 byte packets</span><br><span class="line"> 1  gateway (10.16.191.254)  14.099 ms  14.475 ms  14.773 ms</span><br><span class="line"> 2  172.27.33.82 (172.27.33.82)  0.366 ms  0.399 ms  0.409 ms</span><br><span class="line"> 3  10.16.156.15 (10.16.156.15)  0.109 ms 10.16.156.16 (10.16.156.16)  0.106 ms  0.110 ms</span><br><span class="line"> 4  172.16.20.30 (172.16.20.30)  2.039 ms  2.061 ms 172.16.20.46 (172.16.20.46)  1.950 ms</span><br><span class="line"> 5  * * *</span><br><span class="line"> 6  * * *</span><br><span class="line"> 7  * * *</span><br><span class="line"> 8  * * *</span><br><span class="line"> 9  *^C</span><br></pre></td></tr></table></figure>
+<p>从结果中看到，<code>www.iqiyi.com</code> 解析的ip地址为 <code>124.192.145.92</code> ，最多经过30跳，发送的数据包为60字节，每一行都有三个时间，是探测数据包向每个网关发送三个数据包后，网关响应后返回的时间。</p>
+<p>traceroute参数如下</p>
+<ul>
+<li>-d: 使用Socket层级的排错功能</li>
+<li>-f&lt;存活数值&gt;: 设置第一个检测数据包的存活数值TTL的大小</li>
+<li>-F: 设置勿离断位</li>
+<li>-g&lt;网关&gt;: 设置来源路由网关，最多可设置8个</li>
+<li>-i&lt;网络界面&gt;: 使用指定的网络界面送出数据包</li>
+<li>-I: 使用ICMP回应取代UDP资料信息</li>
+<li>-m&lt;存活数值&gt;: 设置检测数据包的最大存活数值TTL的大小</li>
+<li>-n: 直接使用IP地址而非主机名称</li>
+<li>-p&lt;通信端口&gt;: 设置UDP传输协议的通信端口</li>
+<li>-r: 忽略普通的Routing Table，直接将数据包送到远端主机上</li>
+<li>-s&lt;来源地址&gt;: 设置本地主机送出数据包的IP地址</li>
+<li>-t&lt;服务类型&gt;: 设置检测数据包的TOS数值</li>
+<li>-v: 详细显示指令的执行过程</li>
+<li>-w&lt;超时秒数&gt;: 设置等待远端主机回报的时间</li>
+<li>-x: 开启或关闭数据包的正确性检验</li>
+</ul>
+<h3 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h3><p>在介绍traceroute的原理之前，需要了解几个技术名词</p>
+<h4 id="IP协议"><a href="#IP协议" class="headerlink" title="IP协议"></a>IP协议</h4><p>IP协议是TCP/IP协议族中最核心的部分，它的作用是在两台主机之间传输数据，所有上层协议的数据（HTTP、TCP、UDP等）都会被封装在一个个的IP数据包中被发送到网络上。</p>
+<h4 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h4><p> ICMP全称为<a href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E6%8E%A7%E5%88%B6%E6%B6%88%E6%81%AF%E5%8D%8F%E8%AE%AE" target="_blank" rel="noopener">互联网控制报文协议</a>，它常用于传递错误信息，ICMP协议是IP层的一部分，它的报文也是通过IP数据包来传输的。</p>
+<h4 id="TTL"><a href="#TTL" class="headerlink" title="TTL"></a>TTL</h4><p> TTL（time-to-live）是IP数据包中的一个字段，它指定了数据包最多能经过几次路由器。从我们源主机发出去的数据包在到达目的主机的路上要经过许多个路由器的转发，在发送数据包的时候源主机会设置一个TTL的值，每经过一个路由器TTL就会被减去一，当TTL为0的时候该数据包会被直接丢弃（不再继续转发），并发送一个超时ICMP报文给源主机。</p>
+<h3 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h3><h4 id="基于UDP的实现"><a href="#基于UDP的实现" class="headerlink" title="基于UDP的实现"></a>基于UDP的实现</h4><p>在基于UDP的实现中，客户端发送的数据包是通过UDP协议来传输的，使用了一个大于30000的端口号，服务器在收到这个数据包的时候会返回一个<strong>端口不可达</strong>的ICMP错误信息，客户端通过判断收到的错误信息是TTL超时还是端口不可达来判断数据包是否到达目标主机，具体的流程如图：</p>
+<p><img src="/images/2021-7-11150908.png" alt="2021-7-11150908.png"></p>
+<ul>
+<li><p>客户端发送一个TTL为1，端口号大于30000的UDP数据包，到达第一站路由器之后TTL被减去1，返回了一个超时的ICMP数据包，客户端得到第一跳路由器的地址</p>
+</li>
+<li><p>客户端发送一个TTL为2的数据包，在第二跳的路由器节点处超时，得到第二跳路由器的地址</p>
+</li>
+<li><p>客户端发送一个TTL为3的数据包，数据包成功到达目标主机，返回一个<strong>端口不可达</strong>错误，traceroute结束</p>
+</li>
+</ul>
+<p>Linux和macOS系统自带了一个<code>traceroute</code>指令，可以结合Wireshark抓包来看看它的实现原理。首先对百度的域名进行traceroute：<code>traceroute www.baidu.com</code>，每一跳默认发送三个数据包，我们会看到下面这样的输出：</p>
+<p><img src="/images/2021-7-11151008.png" alt="2021-7-11151008.png"></p>
+<p>对该域名的IP：<code>115.239.210.27</code>进行traceroute，此时Wireshark抓包的结果如下：</p>
+<p><img src="/images/2021-7-11151040.png" alt="2021-7-11151040.png"></p>
+<p>注意看红框处的内容，跟第一张图对比，可以看到<code>traceroute</code>程序首先通过UDP协议向目标地址115.239.210.27发送了一个<strong>TTL为1</strong>的数据包，然后在第一个路由器中TTL超时，返回一个错误类型为<code>Time-to-live exceeded</code>的ICMP数据包，此时我们通过该数据包的源地址可知第一站路由器的地址为<code>10.242.0.1</code>。之后只需要不停增加TTL的值就能得到每一跳的地址了。</p>
+<p>然而一直跑下去会发现，traceroute并不能到达目的地，当TTL增加到一定大小之后就一直拿不到返回的数据包了：</p>
+<p><img src="/images/2021-7-11151114.png" alt="2021-7-11151114.png"></p>
+<p>其实这个时候数据包已经到达目标服务器了，但是因为安全问题大部分的应用服务器都不提供UDP服务（或者被防火墙挡掉），所以我们拿不到服务器的任何返回，程序就理所当然的认为还没有结束，一直尝试增加数据包的TTL。</p>
+<p>目前在网上找到许多开源iOS traceroute实现大多都是基于UDP的方案，实际用起来并不能达到想要的效果，所以我们需要采用另一种方案来实现。</p>
+<h4 id="基于ICMP的实现"><a href="#基于ICMP的实现" class="headerlink" title="基于ICMP的实现"></a>基于ICMP的实现</h4><p>上述方案失败的原因是由于服务器对于UDP数据包的处理，所以在这一种实现中我们不使用UDP协议，而是直接发送一个<strong>ICMP回显请求（echo request）</strong>数据包，服务器在收到回显请求的时候会向客户端发送一个<strong>ICMP回显应答（echo reply）</strong>数据包，在这之后的流程还是跟第一种方案一样。这样就避免了我们的traceroute数据包被服务器的防火墙策略墙掉。</p>
+<p>采用这种方案的实现流程如下：</p>
+<p><img src="/images/2021-7-11151153.png" alt="2021-7-11151153.png"></p>
+<ul>
+<li><p>客户端发送一个TTL为1的<strong>ICMP请求回显</strong>数据包，在第一跳的时候超时并返回一个ICMP超时数据包，得到第一跳的地址。</p>
+</li>
+<li><p>客户端发送一个TTL为2的ICMP请求回显数据包，得到第二跳的地址。</p>
+</li>
+<li><p>客户端发送一个TTL为3的ICMP请求回显数据包，到达目标主机，目标主机返回一个<strong>ICMP回显应答</strong>，traceroute结束。</p>
+</li>
+</ul>
+<p>可以看出与第一种实现相比，区别主要在发送的数据包类型以及对于结束的判断上，大体的流程还是一致的。</p>
+<p><strong>需要注意的是</strong>，并不是所有网关都会如实返回 ICMP 超时报文。出于安全性考虑，大多数防火墙以及启用了防火墙功能的路由器缺省配置为不返回各种 ICMP 报文，其余路由器或交换机也可被管理员主动修改配置变为不返回 ICMP 报文。因此 Traceroute 程序不一定能拿全所有的沿途网关地址。所以，当某个 TTL 值的数据包得不到响应时，并不能停止这一追踪过程，程序仍然会把 TTL 递增而发出下一个数据包。一直达到默认或用参数指定的追踪限制（maximum_hops）才结束追踪。</p>
+<p>依据上述原理，利用了 UDP 数据包的 Traceroute 程序在数据包到达真正的目的主机时，就可能因为该主机没有提供 UDP 服务而简单将数据包抛弃，并不返回任何信息。为了解决这个问题，Traceroute 故意使用了一个大于 30000 的端口号，因 UDP 协议规定端口号必须小于 30000，所以目标主机收到数据包后唯一能做的事就是返回一个“端口不可达”的 ICMP 报文，于是主叫方就将端口不可达报文当作跟踪结束的标志。</p>
+<p>在Windows系统中也有traceroute程序，它的名字叫做<code>tracert</code>，<code>tracert</code>就是用采用这种方法来实现的。</p>
+<p><img src="/images/2021-7-11151446.png" alt="2021-7-11151446.png"></p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E6%8E%A7%E5%88%B6%E6%B6%88%E6%81%AF%E5%8D%8F%E8%AE%AE" target="_blank" rel="noopener">互联网控制消息协议</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/Traceroute" target="_blank" rel="noopener">Traceroute</a></p>
+<p><a href="https://www.jianshu.com/p/75a5822d0eec" target="_blank" rel="noopener">Traceroute（路由追踪）的原理及实现</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux-Unix/" rel="tag"># Linux/Unix</a>
+          
+            <a href="/tags/traceroute/" rel="tag"># traceroute</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/07/10/py-functools-cache/" rel="next" title="Python functools系列 - lru_cache">
+                <i class="fa fa-chevron-left"></i> Python functools系列 - lru_cache
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
+          <p class="site-author-name" itemprop="name">william</p>
+           
+              <p class="site-description motion-element" itemprop="description">删繁就简 一心一意</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">149</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装traceroute"><span class="nav-number">1.</span> <span class="nav-text">安装traceroute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#名词解释"><span class="nav-number">2.</span> <span class="nav-text">名词解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP协议"><span class="nav-number">2.1.</span> <span class="nav-text">IP协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ICMP"><span class="nav-number">2.2.</span> <span class="nav-text">ICMP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TTL"><span class="nav-number">2.3.</span> <span class="nav-text">TTL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现方案"><span class="nav-number">3.</span> <span class="nav-text">实现方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于UDP的实现"><span class="nav-number">3.1.</span> <span class="nav-text">基于UDP的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于ICMP的实现"><span class="nav-number">3.2.</span> <span class="nav-text">基于ICMP的实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">william</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
