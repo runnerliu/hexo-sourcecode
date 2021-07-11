@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://runnerliu.github.io/"/>
-  <updated>2021-07-11T07:36:03.172Z</updated>
+  <updated>2021-07-11T09:30:20.771Z</updated>
   <id>http://runnerliu.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis系列 - 过期策略和淘汰策略</title>
+    <link href="http://runnerliu.github.io/2021/07/11/redis-gq-ttcl/"/>
+    <id>http://runnerliu.github.io/2021/07/11/redis-gq-ttcl/</id>
+    <published>2021-07-11T07:42:01.000Z</published>
+    <updated>2021-07-11T09:30:20.771Z</updated>
+    
+    <content type="html"><![CDATA[<p>提到内存管理，我们就需要考虑Redis的内存过期策略和内存淘汰机制。该文章便从这两方面入手，分享一些在Redis内存方面相关的基础知识。</p><h3 id="内存过期策略"><a href="#内存过期策略" class="headerlink" title="内存过期策略"></a>内存过期策略</h3><p>内存过期策略主要的作用就是，在缓存过期之后，能够及时的将失效的缓存从内存中删除，以减少内存的无效暂用，达到释放内存的目的。Redis内存过期策略分为三类，定时策略、惰性策略和定期策略。</p><h4 id="定时策略"><a href="#定时策略" class="headerlink" title="定时策略"></a>定时策略</h4><p>含义：在设置key的过期时间的同时，为该key创建一个定时器，让定时器在key的过期时间来临时，对key进行删除。</p><p>优点：保证内存被尽快释放，减少无效的缓存暂用内存。</p><p>缺点：若过期key很多，删除这些key会占用很多的CPU时间，在CPU时间紧张的情况下，CPU不能把所有的时间用来做要紧的事儿，还需要去花时间删除这些key。定时器的创建耗时，若为每一个设置过期时间的key创建一个定时器（将会有大量的定时器产生），性能影响严重。一般来说，是不会选择该策略模式。</p><h4 id="惰性策略"><a href="#惰性策略" class="headerlink" title="惰性策略"></a>惰性策略</h4><p>含义：key过期的时候不删除，每次从数据库获取key的时候去检查是否过期，若过期，则删除，返回null。</p><p>优点：删除操作只发生在从数据库取出key的时候发生，而且只删除当前key，所以对CPU时间的占用是比较少的，而且此时的删除是已经到了非做不可的地步（如果此时还不删除的话，我们就会获取到了已经过期的key了）。</p><p>缺点：若大量的key在超出超时时间后，很久一段时间内，都没有被获取过，此时的无效缓存是永久暂用在内存中的，那么可能发生内存泄露（无用的垃圾占用了大量的内存）。</p><h4 id="定期策略"><a href="#定期策略" class="headerlink" title="定期策略"></a>定期策略</h4><p>含义：每隔一段时间对设置了缓存时间的key进行检测，如果可以已经失效，则从内存中删除，如果未失效，则不作任何处理。</p><p>优点：通过限制删除操作的时长和频率，来减少删除操作对CPU时间的占用–处理”定时删除”的缺点。</p><p>缺点：在内存友好方面，不如”定时删除”，因为是随机遍历一些key，因此存在部分key过期，但遍历key时，没有被遍历到，过期的key仍在内存中。在CPU时间友好方面，不如”惰性删除”，定期删除也会暂用CPU性能消耗。</p><p>难点：合理设置删除操作的执行时长（每次删除执行多长时间）和执行频率（每隔多长时间做一次删除）（这个要根据服务器运行情况来定了）。</p><p><strong>注意</strong>：该方式不是去遍历所有的key，而是随机抽取一些key做过期检测。</p><h4 id="过期策略对持久化存储的影响"><a href="#过期策略对持久化存储的影响" class="headerlink" title="过期策略对持久化存储的影响"></a>过期策略对持久化存储的影响</h4><p>持久化存储，指的是将内存的缓存永久存在磁盘中。也就是说我们的AOF和RDB持久化存储方式。因为该两种方式，将内存中的数据写入磁盘，这时候就需要考虑到我们过期的缓存是否会被写入到磁盘中？如果写入磁盘又是怎么处理的？</p><h5 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h5><ul><li><p>持久化key之前，会检查是否过期，过期的key不进入RDB文件。</p></li><li><p>数据载入数据库之前，会对key先进行过期检查，如果过期，不导入数据库（主库情况）。</p></li></ul><h5 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h5><ul><li><p>当key过期后，还没有被删除，此时进行执行持久化操作（该key是不会进入AOF文件的，因为没有发生修改命令）。</p></li><li><p>当key过期后，在发生删除操作时，程序会向AOF文件追加一条del命令（在将来的以AOF文件恢复数据的时候该过期的键就会被删掉）。</p></li></ul><blockquote><p>因为AOF方式，向存储文件追加的是Redis的操作命令，而不是具体的数据，然而RDB确是存储的安全的二进制内容。</p></blockquote><ul><li>重写时，会先判断key是否过期，已过期的key不会重写到AOF文件。</li></ul><blockquote><p>即使在重写时，不验证是否过期，然而追加了del命令，测试无效的key同样会被删除。判断的情况是为了防止没有加入del命令的key。</p></blockquote><p>Redis中主要使用 定期删除 + 惰性删除 两种数据过期清除策略：</p><ul><li>定期删除：redis默认每隔100ms就随机抽取一些设置了过期时间的key，检查其是否过期，如果有过期就删除。注意这里是随机抽取的。为什么要随机呢？你想一想假如 redis 存了几十万个 key ，每隔100ms就遍历所有的设置过期时间的 key 的话，就会给 CPU 带来很大的负载</li><li>惰性删除：定期删除可能导致很多过期的key 到了时间并没有被删除掉。这时就要使用到惰性删除。在你获取某个key的时候，redis会检查一下，这个key如果设置了过期时间并且过期了，是的话就删除。</li></ul><p>定期删除+惰性删除存在的问题：</p><ul><li>如果某个key过期后，定期删除没删除成功，然后也没再次去请求key，也就是说惰性删除也没生效。这时，如果大量过期的key堆积在内存中，redis的内存会越来越高，导致redis的内存块耗尽。那么就应该采用内存淘汰机制。</li></ul><h3 id="内存淘汰机制"><a href="#内存淘汰机制" class="headerlink" title="内存淘汰机制"></a>内存淘汰机制</h3><p>内存淘汰机制针对是内存不足的情况下的一种Redis处理机制。例如，当前的Redis存储已经超过内存限制了，然而我们的业务还在继续往Redis里面追加缓存内容，这时候Redis的淘汰机制就起到作用了。</p><h4 id="淘汰机制分类"><a href="#淘汰机制分类" class="headerlink" title="淘汰机制分类"></a>淘汰机制分类</h4><p>根据redis.conf的配置文件中，我们可以得出，主要分为如下六种淘汰机制。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">volatile-lru：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，移除最近最少使用的key。</span><br><span class="line">allkeys-lru：当内存不足以容纳新写入数据时，在键空间中，移除最近最少使用的key（这个是最常用的）。</span><br><span class="line">volatile-lfu：当内存不足以容纳新写入数据时，在过期密集的键中，使用LFU算法进行删除key。</span><br><span class="line">allkeys-lfu：当内存不足以容纳新写入数据时，使用LFU算法移除所有的key。</span><br><span class="line">volatile-random：当内存不足以容纳新写入数据时，在设置了过期的键中，随机删除一个key。</span><br><span class="line">allkeys-random：当内存不足以容纳新写入数据时，随机删除一个或者多个key。</span><br><span class="line">volatile-ttl：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，有更早过期时间的key优先移除。</span><br><span class="line">noeviction：当内存不足以容纳新写入数据时，新写入操作会报错。</span><br></pre></td></tr></table></figure><p>通常情况下推荐优先使用 allkeys-lru 策略。这样可以充分利用 LRU 这一经典缓存算法的优势，把最近最常访问的数据留在缓存中，提升应用的访问性能。</p><p>如果你的业务数据中有明显的冷热数据区分，建议使用 allkeys-lru 策略。</p><p>如果业务应用中的数据访问频率相差不大，没有明显的冷热数据区分，建议使用 allkeys-random 策略，随机选择淘汰的数据就行。</p><p>如果没有设置过期时间的键值对，那么 volatile-lru，volatile-lfu，volatile-random 和 volatile-ttl 策略的行为, 和 noeviction 基本上一致。</p><p>Read More:</p><blockquote><p><a href="https://segmentfault.com/a/1190000023060522" target="_blank" rel="noopener">Redis的过期策略和内存淘汰策略最全总结与分析</a></p><p><a href="https://blog.csdn.net/a745233700/article/details/85413179" target="_blank" rel="noopener">Redis的数据过期清除策略 与 内存淘汰策略</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;提到内存管理，我们就需要考虑Redis的内存过期策略和内存淘汰机制。该文章便从这两方面入手，分享一些在Redis内存方面相关的基础知识。&lt;/p&gt;
+&lt;h3 id=&quot;内存过期策略&quot;&gt;&lt;a href=&quot;#内存过期策略&quot; class=&quot;headerlink&quot; title=&quot;内存过期
+      
+    
+    </summary>
+    
+      <category term="Redis" scheme="http://runnerliu.github.io/categories/Redis/"/>
+    
+    
+      <category term="Redis" scheme="http://runnerliu.github.io/tags/Redis/"/>
+    
+      <category term="过期策略" scheme="http://runnerliu.github.io/tags/%E8%BF%87%E6%9C%9F%E7%AD%96%E7%95%A5/"/>
+    
+      <category term="淘汰策略" scheme="http://runnerliu.github.io/tags/%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>traceroute的实现原理</title>
@@ -556,33 +586,6 @@
       <category term="WebSocket" scheme="http://runnerliu.github.io/tags/WebSocket/"/>
     
       <category term="Socket" scheme="http://runnerliu.github.io/tags/Socket/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>聊聊WebSocket与Socket.IO</title>
-    <link href="http://runnerliu.github.io/2021/05/15/websocket-socketio/"/>
-    <id>http://runnerliu.github.io/2021/05/15/websocket-socketio/</id>
-    <published>2021-05-15T05:16:30.000Z</published>
-    <updated>2021-05-15T09:41:43.405Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="什么是WebSocket"><a href="#什么是WebSocket" class="headerlink" title="什么是WebSocket"></a>什么是WebSocket</h4><p><a href="https://zh.wikipedia.org/wiki/WebSocket" target="_blank" rel="noopener">WebSocket</a> 是与HTTP不同的一种网络传输协议，是HTML5新增加的一种通信协议，目前流行的浏览器都支持该协议，例如 Chrome，Safrie，Firefox，Opera，IE等等。WebSocket的产生背景主要是为了方便客户端与服务器之间的双向通信，是一种全双工的数据通信机制。</p><h4 id="早期客户端与服务端通信方式"><a href="#早期客户端与服务端通信方式" class="headerlink" title="早期客户端与服务端通信方式"></a>早期客户端与服务端通信方式</h4><h5 id="Polling（短轮询）"><a href="#Polling（短轮询）" class="headerlink" title="Polling（短轮询）"></a>Polling（短轮询）</h5><p><img src="/images/2021-5-15T171622.png" alt="2021-5-15T171622.png"></p><p>这种方式下，Client 每隔一段时间都会向 Server 发送 HTTP 请求，服务器收到请求后，将最新的数据发回给 Client。一开始必须通过提交表单的形式，这样的后果就是传输很多冗余的数据，浪费了带宽。后来 Ajax 出现，减少了传输数据量。</p><p>如图所示，在 Client 向 Server 发送一个请求活动结束后，Server 中的数据发生了改变，所以 Client 向 Server 发送的第二次请求中，Server 会将最新的数据返回给 Client。</p><p>但这种方式也存在弊端。比如在某个时间段 Server 没有更新数据，但 Client 仍然每隔一段时间发送请求来询问，所以这段时间内的询问都是无效的，这样浪费了网络带宽。将发送请求的间隔时间加大会缓解这种浪费，但如果 Server 更新数据很快时，这样又不能满足数据的实时性。</p><h5 id="Comet"><a href="#Comet" class="headerlink" title="Comet"></a>Comet</h5><p>鉴于（短）轮询的弊端，一种基于 HTTP 长连接的 “服务器推” 的技术产生了，这种技术被命名为 Comet。其与（短）轮询主要区别就是，在轮询方式下，要想取得数据，必须首先发送请求，在实时性要求较高的情况下，只能增加向 Server 请求的频率；而 Comet 则不同，Client 与 Server 端保持一个长连接，只有数据发生改变时，Server 才主动将数据推送给 Client。Comet 又可以被细分为两种实现方式，一种是长轮询机制，一种是流技术。</p><h6 id="Long-Polling（长轮询）"><a href="#Long-Polling（长轮询）" class="headerlink" title="Long-Polling（长轮询）"></a>Long-Polling（长轮询）</h6><p><img src="/images/2021-5-15T171920.png" alt="2021-5-15T171920.png"></p><p>Client 向 Server 发出请求，Server 接收到请求后，Server 并不一定立即发送回应给 Client，而是看数据是否更新，如果数据已经更新了的话，那就立即将数据返回给 Client；但如果数据没有更新，那就把这个请求保持住，等待有新的数据到来时，才将数据返回给 Client。</p><p>当然了，如果 Server 的数据长时间没有更新，一段时间后，请求便会超时，Client 收到超时信息后，再立即发送一个新的请求给 Server。</p><p>如图所示，在长轮询机制下，Client 向 Server 发送了请求后，Server会等数据更新完才会将数据返回，而不是像（短）轮询一样不管数据有没有更新然后立即返回。</p><p>这种方式也有弊端。当 Server 向 Client 发送数据后，必须等待下一次请求才能将新的数据发送出去，这样 Client 接收到新数据的间隔最短时间便是 2 * RTT（往返时间），这样便无法应对 server 端数据更新频率较快的情况。</p><h6 id="HTTP-Streaming"><a href="#HTTP-Streaming" class="headerlink" title="HTTP Streaming"></a>HTTP Streaming</h6><p><img src="/images/2021-5-15T172057.png" alt="2021-5-15T172057.png"></p><p>流技术基于 Iframe。Iframe 是 HTML 标记，这个标记的 src 属性会保持对指定 Server 的长连接请求，Server 就可以不断地向 Client 返回数据。</p><p>可以看出，流技术与长轮询的区别是长轮询本质上还是一种轮询方式，只不过连接的时间有所增加，想要向 Server 获取新的数据，Client 只能一遍遍的发送请求；而流技术是一直保持连接，不需要 Client 请求，当数据发生改变时，Server 自动的将数据发送给 Client。</p><p>如图所示，Client 与 Server 建立连接之后，便不会断开。当数据发生变化，Server 便将数据发送给 Client。</p><p>但这种方式有一个明显的不足之处，网页会一直显示未加载完成的状态，虽然我没有强迫症，但这点还是难以忍受。</p><h4 id="WebSocket-原理"><a href="#WebSocket-原理" class="headerlink" title="WebSocket 原理"></a>WebSocket 原理</h4><p>写到现在，大家会发现，前人推出那么多的解决方案，想要解决的唯一的问题便是怎么让 Server 将最新的数据以最快的速度发送给 Client。但 HTTP 是个懒惰的协议，Server 只有收到请求才会做出回应，否则什么事都不干。因此，为了彻底解决这个 Server 主动向 Client 发送数据的问题，WebSocket应运而生。<strong>WebSocket 是一个全新的、独立的协议，基于 TCP 协议，与 HTTP 协议兼容却不会融入 HTTP 协议，仅仅作为 HTML5 的一部分</strong>。</p><p><img src="/images/2021-5-15T172947.png" alt="2021-5-15T172947.png"></p><p>那 WebSocket 与 HTTP 什么关系呢？简单来说，WebSocket 是一种协议，是一种与 HTTP 同等的网络协议，两者都是应用层协议，都基于 TCP 协议。但是 WebSocket 是一种双向通信协议，在建立连接之后，WebSocket 的 Server 与 Client 都能主动向对方发送或接收数据。同时，WebSocket 在建立连接时需要借助 HTTP 协议，连接建立好了之后 Client 与 Server 之间的双向通信就与 HTTP 无关了。</p><p><img src="/images/2021-5-15T172730.png" alt="2021-5-15T172730.png"></p><p>相比于传统 HTTP 的每次“请求-应答”都要 Client 与 Server 建立连接的模式，WebSocket 是一种长连接的模式。一旦 WebSocket 连接建立后，除非 Client 或者 Server 中有一端主动断开连接，否则每次数据传输之前都不需要 HTTP 那样请求数据。从上面的图可以看出，Client 第一次需要与 Server 建立连接，当 Server 确认连接之后，两者便一直处于连接状态。直到一方断开连接，WebSocket 连接才断开。</p><h4 id="WebSocket的优势"><a href="#WebSocket的优势" class="headerlink" title="WebSocket的优势"></a>WebSocket的优势</h4><ul><li>较少的控制开销。在连接创建后，服务器和客户端之间交换数据时，用于协议控制的数据包头部相对较小。在不包含扩展的情况下，对于服务器到客户端的内容，此头部大小只有2至10字节（和数据包长度有关）；对于客户端到服务器的内容，此头部还需要加上额外的4字节的掩码。相对于HTTP请求每次都要携带完整的头部，此项开销显著减少了。</li><li>更强的实时性。由于协议是全双工的，所以服务器可以随时主动给客户端下发数据。相对于HTTP请求需要等待客户端发起请求服务端才能响应，延迟明显更少；即使是和Comet等类似的长轮询比较，其也能在短时间内更多次地传递数据。</li><li>保持连接状态。与HTTP不同的是，Websocket需要先创建连接，这就使得其成为一种有状态的协议，之后通信时可以省略部分状态信息。而HTTP请求可能需要在每个请求都携带状态信息（如身份认证等）。</li><li>更好的二进制支持。Websocket定义了二进制帧，相对HTTP，可以更轻松地处理二进制内容。</li><li>可以支持扩展。Websocket定义了扩展，用户可以扩展协议、实现部分自定义的子协议。如部分浏览器支持压缩等。</li><li>更好的压缩效果。相对于HTTP压缩，Websocket在适当的扩展支持下，可以沿用之前内容的上下文，在传递类似的数据时，可以显著地提高压缩率。</li></ul><h4 id="什么是Socket-IO"><a href="#什么是Socket-IO" class="headerlink" title="什么是Socket.IO"></a>什么是Socket.IO</h4><p><a href="https://zh.wikipedia.org/wiki/Socket.IO" target="_blank" rel="noopener">Socket.IO</a> 是一个封装了 Websocket、基于 Node 的 JavaScript 框架，包含 Client 的 JavaScript 和 Server 的 Node。其屏蔽了所有底层细节，让顶层调用非常简单。其不仅支持 WebSocket，还支持许多种轮询机制以及其他实时通信方式，并封装了通用的接口。这些方式包含 Adobe Flash Socket、Ajax 长轮询、Ajax multipart streaming 、持久 Iframe、JSONP 轮询等。换句话说，当 Socket.IO 检测到当前环境不支持 WebSocket 时，能够自动地选择最佳的方式来实现网络的实时通信。</p><p>Read More:</p><blockquote><p><a href="https://zhuanlan.zhihu.com/p/23467317" target="_blank" rel="noopener">WebSocket 与 Socket.IO</a></p><p><a href="https://www.jianshu.com/p/144b997e57b4" target="_blank" rel="noopener">（一）websocket和socket.io介绍</a></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;什么是WebSocket&quot;&gt;&lt;a href=&quot;#什么是WebSocket&quot; class=&quot;headerlink&quot; title=&quot;什么是WebSocket&quot;&gt;&lt;/a&gt;什么是WebSocket&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://zh.wikipedia.
-      
-    
-    </summary>
-    
-      <category term="WebSocket" scheme="http://runnerliu.github.io/categories/WebSocket/"/>
-    
-    
-      <category term="WebSocket" scheme="http://runnerliu.github.io/tags/WebSocket/"/>
-    
-      <category term="Socket.IO" scheme="http://runnerliu.github.io/tags/Socket-IO/"/>
     
   </entry>
   
