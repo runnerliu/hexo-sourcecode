@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://runnerliu.github.io/2021/07/11/redis-chijiuhua/</loc>
+    
+    <lastmod>2021-07-11T12:08:31.289Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2021/07/11/redis-mssync/</loc>
+    
+    <lastmod>2021-07-11T11:25:55.670Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2021/07/11/redis-msswitch/</loc>
+    
+    <lastmod>2021-07-11T11:25:18.387Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://runnerliu.github.io/2021/07/11/redis-gq-ttcl/</loc>
     
     <lastmod>2021-07-11T09:30:20.771Z</lastmod>
@@ -618,14 +639,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/</loc>
+    <loc>http://runnerliu.github.io/2018/05/13/sqlalchemybug1/</loc>
     
     <lastmod>2020-11-15T02:24:39.480Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/05/13/sqlalchemybug1/</loc>
+    <loc>http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/</loc>
     
     <lastmod>2020-11-15T02:24:39.480Z</lastmod>
     
@@ -688,14 +709,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/05/13/httppostmethod/</loc>
+    <loc>http://runnerliu.github.io/2017/04/01/heyliuxiaoyang/</loc>
     
     <lastmod>2020-11-15T02:24:39.467Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/01/heyliuxiaoyang/</loc>
+    <loc>http://runnerliu.github.io/2018/05/13/httppostmethod/</loc>
     
     <lastmod>2020-11-15T02:24:39.467Z</lastmod>
     
@@ -723,14 +744,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</loc>
+    <loc>http://runnerliu.github.io/2017/06/21/bdphp1/</loc>
     
     <lastmod>2020-11-15T02:24:39.464Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/06/21/bdphp1/</loc>
+    <loc>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</loc>
     
     <lastmod>2020-11-15T02:24:39.464Z</lastmod>
     

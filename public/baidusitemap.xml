@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://runnerliu.github.io/2021/07/11/redis-chijiuhua/</loc>
+    <lastmod>2021-07-11</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2021/07/11/redis-mssync/</loc>
+    <lastmod>2021-07-11</lastmod>
+  </url>
+  <url>
+    <loc>http://runnerliu.github.io/2021/07/11/redis-msswitch/</loc>
+    <lastmod>2021-07-11</lastmod>
+  </url>
+  <url>
     <loc>http://runnerliu.github.io/2021/07/11/redis-gq-ttcl/</loc>
     <lastmod>2021-07-11</lastmod>
   </url>
@@ -341,11 +353,11 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/</loc>
+    <loc>http://runnerliu.github.io/2018/05/13/sqlalchemybug1/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2018/05/13/sqlalchemybug1/</loc>
+    <loc>http://runnerliu.github.io/2017/10/11/sublimetext3rightclick/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
@@ -381,11 +393,11 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2018/05/13/httppostmethod/</loc>
+    <loc>http://runnerliu.github.io/2017/04/01/heyliuxiaoyang/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/04/01/heyliuxiaoyang/</loc>
+    <loc>http://runnerliu.github.io/2018/05/13/httppostmethod/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
@@ -401,11 +413,11 @@
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</loc>
+    <loc>http://runnerliu.github.io/2017/06/21/bdphp1/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>
-    <loc>http://runnerliu.github.io/2017/06/21/bdphp1/</loc>
+    <loc>http://runnerliu.github.io/2018/06/26/centosinstallpython3/</loc>
     <lastmod>2020-11-15</lastmod>
   </url>
   <url>

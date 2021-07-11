@@ -1,0 +1,1219 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="google63cd143b1fbb3ff4.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Redis,持久化,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="LiuYang's BLOG" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Redis作为一个内存数据库，数据是以内存为载体存储的，那么一旦Redis服务器进程退出，服务器中的数据也会消失。为了解决这个问题，Redis提供了持久化机制，也就是把内存中的数据保存到磁盘当中，避免数据意外丢失。 Redis提供了两种持久化方案：RDB持久化和AOF持久化，一个是快照的方式，一个是类似日志追加的方式。 RDB持久化RDB持久化是通过快照的方式，即在指定的时间间隔内将内存中的数据集">
+<meta name="keywords" content="Redis,持久化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis系列 - 数据持久化">
+<meta property="og:url" content="http://runnerliu.github.io/2021/07/11/redis-chijiuhua/index.html">
+<meta property="og:site_name" content="LiuYang&#39;s BLOG">
+<meta property="og:description" content="Redis作为一个内存数据库，数据是以内存为载体存储的，那么一旦Redis服务器进程退出，服务器中的数据也会消失。为了解决这个问题，Redis提供了持久化机制，也就是把内存中的数据保存到磁盘当中，避免数据意外丢失。 Redis提供了两种持久化方案：RDB持久化和AOF持久化，一个是快照的方式，一个是类似日志追加的方式。 RDB持久化RDB持久化是通过快照的方式，即在指定的时间间隔内将内存中的数据集">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11193104.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11193557.png">
+<meta property="og:updated_time" content="2021-07-11T12:08:31.289Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis系列 - 数据持久化">
+<meta name="twitter:description" content="Redis作为一个内存数据库，数据是以内存为载体存储的，那么一旦Redis服务器进程退出，服务器中的数据也会消失。为了解决这个问题，Redis提供了持久化机制，也就是把内存中的数据保存到磁盘当中，避免数据意外丢失。 Redis提供了两种持久化方案：RDB持久化和AOF持久化，一个是快照的方式，一个是类似日志追加的方式。 RDB持久化RDB持久化是通过快照的方式，即在指定的时间间隔内将内存中的数据集">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2021-7-11193104.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://runnerliu.github.io/2021/07/11/redis-chijiuhua/">
+
+
+
+
+
+  <title> Redis系列 - 数据持久化 | LiuYang's BLOG </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">LiuYang's BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">On the way to become a Software Architect</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://runnerliu.github.io/2021/07/11/redis-chijiuhua/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="william">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LiuYang's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis系列 - 数据持久化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-07-11T19:24:26+08:00">
+                2021-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/07/11/redis-chijiuhua/" class="leancloud_visitors" data-flag-title="Redis系列 - 数据持久化">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Redis作为一个<strong>内存</strong>数据库，数据是以内存为载体存储的，那么一旦Redis服务器进程退出，服务器中的数据也会消失。为了解决这个问题，Redis提供了持久化机制，也就是把内存中的数据保存到磁盘当中，避免数据意外丢失。</p>
+<p>Redis提供了两种持久化方案：<strong>RDB持久化</strong>和<strong>AOF持久化</strong>，一个是快照的方式，一个是类似日志追加的方式。</p>
+<h3 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h3><p>RDB持久化是通过<strong>快照</strong>的方式，即在指定的时间间隔内将内存中的数据集快照写入磁盘。在创建快照之后，用户可以备份该快照，可以将快照复制到其他服务器以创建相同数据的服务器副本，或者在重启服务器后恢复数据。<strong>RDB是Redis默认的持久化方式</strong>。</p>
+<h4 id="快照持久化"><a href="#快照持久化" class="headerlink" title="快照持久化"></a>快照持久化</h4><p>RDB持久化会生成RDB文件，该文件是一个<strong>压缩</strong>过的<strong>二进制文件</strong>，可以通过该文件还原快照时的数据库状态，即生成该RDB文件时的服务器数据。RDB文件默认为当前工作目录下的<code>dump.rdb</code>，可以根据配置文件中的<code>dbfilename</code>和<code>dir</code>设置RDB的文件名和文件位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 设置 dump 的文件名</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># 工作目录</span><br><span class="line"># 例如上面的 dbfilename 只指定了文件名，</span><br><span class="line"># 但是它会写入到这个目录下。这个配置项一定是个目录，而不能是文件名。</span><br><span class="line">dir ./</span><br></pre></td></tr></table></figure>
+<p><strong>触发快照的时机</strong></p>
+<ul>
+<li>执行<code>save</code>和<code>bgsave</code>命令；</li>
+<li>配置文件设置<code>save &lt;seconds&gt; &lt;changes&gt;</code>规则，自动间隔性执行<code>bgsave</code>命令；</li>
+<li>主从复制时，从库全量复制同步主库数据，主库会执行<code>bgsave</code>；</li>
+<li>执行<code>flushall</code>命令清空服务器数据；</li>
+<li>执行<code>shutdown</code>命令关闭Redis时，会执行<code>save</code>命令。</li>
+</ul>
+<h4 id="save和bgsave命令"><a href="#save和bgsave命令" class="headerlink" title="save和bgsave命令"></a>save和bgsave命令</h4><p>执行<code>save</code>和<code>bgsave</code>命令，可以手动触发快照，生成RDB文件，两者的区别如下：</p>
+<ul>
+<li>使用<code>save</code>命令会阻塞Redis服务器进程，服务器进程在RDB文件创建完成之前是不能处理任何的命令请求</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; save</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+<ul>
+<li>而使用<code>bgsave</code>命令不同的是，<code>basave</code>命令会<code>fork</code>一个子进程，然后该子进程会负责创建RDB文件，而服务器进程会继续处理命令请求</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; bgsave</span><br><span class="line">Background saving started</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>fork()</code>是由操作系统提供的函数，作用是创建当前进程的一个副本作为子进程，<code>fork</code>一个子进程，子进程会把数据集先写入临时文件，写入成功之后，再替换之前的RDB文件，用二进制压缩存储，这样可以保证RDB文件始终存储的是完整的持久化内容。</p>
+</blockquote>
+<p><img src="/images/2021-7-11193104.png" alt="2021-7-11193104.png"></p>
+<h4 id="自动间隔触发"><a href="#自动间隔触发" class="headerlink" title="自动间隔触发"></a>自动间隔触发</h4><p>在配置文件中设置<code>save &lt;seconds&gt; &lt;changes&gt;</code>规则，可以自动间隔性执行<code>bgsave</code>命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">################################ SNAPSHOTTING  ################################</span><br><span class="line">#</span><br><span class="line"># Save the DB on disk:</span><br><span class="line">#</span><br><span class="line">#   save &lt;seconds&gt; &lt;changes&gt;</span><br><span class="line">#</span><br><span class="line">#   Will save the DB if both the given number of seconds and the given</span><br><span class="line">#   number of write operations against the DB occurred.</span><br><span class="line">#</span><br><span class="line">#   In the example below the behaviour will be to save:</span><br><span class="line">#   after 900 sec (15 min) if at least 1 key changed</span><br><span class="line">#   after 300 sec (5 min) if at least 10 keys changed</span><br><span class="line">#   after 60 sec if at least 10000 keys changed</span><br><span class="line">#</span><br><span class="line">#   Note: you can disable saving completely by commenting out all &quot;save&quot; lines.</span><br><span class="line">#</span><br><span class="line">#   It is also possible to remove all the previously configured save</span><br><span class="line">#   points by adding a save directive with a single empty string argument</span><br><span class="line">#   like in the following example:</span><br><span class="line">#</span><br><span class="line">#   save &quot;&quot;</span><br><span class="line"></span><br><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60 10000</span><br></pre></td></tr></table></figure>
+<p><code>save &lt;seconds&gt; &lt;changes&gt;</code>表示在seconds秒内，至少有changes次变化，就会自动触发<code>gbsave</code>命令：</p>
+<ul>
+<li><code>save 900 1</code>  当时间到900秒时，如果至少有1个key发生变化，就会自动触发<code>bgsave</code>命令创建快照；</li>
+<li><code>save 300 10</code>  当时间到300秒时，如果至少有10个key发生变化，就会自动触发<code>bgsave</code>命令创建快照；</li>
+<li><code>save 60 10000</code>    当时间到60秒时，如果至少有10000个key发生变化，就会自动触发<code>bgsave</code>命令创建快照。</li>
+</ul>
+<h3 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h3><p>除了RDB持久化，Redis还提供了AOF（Append Only File）持久化功能，AOF持久化会把被执行的写命令写到AOF文件的末尾，记录数据的变化。<strong>默认情况下，Redis是没有开启AOF持久化的</strong>，开启后，每执行一条更改Redis数据的命令，都会把该命令追加到AOF文件中，这是会降低Redis的性能，但大部分情况下这个影响是能够接受的，另外使用较快的硬盘可以提高AOF的性能。</p>
+<p>可以通过配置<code>redis.conf</code>文件开启AOF持久化，关于AOF的配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># appendonly参数开启AOF持久化</span><br><span class="line">appendonly no</span><br><span class="line"></span><br><span class="line"># AOF持久化的文件名，默认是appendonly.aof</span><br><span class="line">appendfilename &quot;appendonly.aof&quot;</span><br><span class="line"></span><br><span class="line"># AOF文件的保存位置和RDB文件的位置相同，都是通过dir参数设置的</span><br><span class="line">dir ./</span><br><span class="line"></span><br><span class="line"># 同步策略</span><br><span class="line"># appendfsync always</span><br><span class="line">appendfsync everysec</span><br><span class="line"># appendfsync no</span><br><span class="line"></span><br><span class="line"># aof重写期间是否同步</span><br><span class="line">no-appendfsync-on-rewrite no</span><br><span class="line"></span><br><span class="line"># 重写触发配置</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br><span class="line"></span><br><span class="line"># 加载aof出错如何处理</span><br><span class="line">aof-load-truncated yes</span><br><span class="line"></span><br><span class="line"># 文件重写策略</span><br><span class="line">aof-rewrite-incremental-fsync yes</span><br></pre></td></tr></table></figure>
+<h4 id="AOF的实现"><a href="#AOF的实现" class="headerlink" title="AOF的实现"></a>AOF的实现</h4><p>AOF需要记录Redis的每个写命令，步骤为：命令追加（append）、文件写入（write）和文件同步（sync）。</p>
+<h5 id="命令追加-append"><a href="#命令追加-append" class="headerlink" title="命令追加(append)"></a>命令追加(append)</h5><p>开启AOF持久化功能后，服务器每执行一个写命令，都会把该命令以协议格式先追加到<code>aof_buf</code>缓存区的末尾，而不是直接写入文件，避免每次有命令都直接写入硬盘，减少硬盘IO次数。</p>
+<h5 id="文件写入-write-和文件同步-sync"><a href="#文件写入-write-和文件同步-sync" class="headerlink" title="文件写入(write)和文件同步(sync)"></a>文件写入(write)和文件同步(sync)</h5><p>对于何时把<code>aof_buf</code>缓冲区的内容写入保存在AOF文件中，Redis提供了多种策略：</p>
+<ul>
+<li><code>appendfsync always</code>：将<code>aof_buf</code>缓冲区的所有内容写入并同步到AOF文件，每个写命令同步写入磁盘；</li>
+<li><code>appendfsync everysec</code>：将<code>aof_buf</code>缓存区的内容写入AOF文件，每秒同步一次，该操作由一个线程专门负责；</li>
+<li><code>appendfsync no</code>：将<code>aof_buf</code>缓存区的内容写入AOF文件，什么时候同步由操作系统来决定。</li>
+</ul>
+<p><code>appendfsync</code>选项的默认配置为<code>everysec</code>，即每秒执行一次同步。</p>
+<p>关于AOF的同步策略是涉及到操作系统的<code>write</code>函数和<code>fsync</code>函数的，在《Redis设计与实现》中是这样说明的：</p>
+<blockquote>
+<p>为了提高文件写入效率，在现代操作系统中，当用户调用<code>write</code>函数，将一些数据写入文件时，操作系统通常会将数据暂存到一个内存缓冲区里，当缓冲区的空间被填满或超过了指定时限后，才真正将缓冲区的数据写入到磁盘里。</p>
+<p>这样的操作虽然提高了效率，但也为数据写入带来了安全问题：如果计算机停机，内存缓冲区中的数据会丢失。为此，系统提供了<code>fsync</code>、<code>fdatasync</code>同步函数，可以强制操作系统立刻将缓冲区中的数据写入到硬盘里，从而确保写入数据的安全性。</p>
+</blockquote>
+<p>从上面的介绍我们知道，我们写入的数据，操作系统并不一定会马上同步到磁盘，所以Redis才提供了<code>appendfsync</code>的选项配置。当该选项时为<code>always</code>时，数据安全性是最高的，但是会对磁盘进行大量的写入，Redis处理命令的速度会受到磁盘性能的限制；<code>appendfsync everysec</code>选项则兼顾了数据安全和写入性能，以每秒一次的频率同步AOF文件，即便出现系统崩溃，最多只会丢失一秒内产生的数据；如果是<code>appendfsync no</code>选项，Redis不会对AOF文件执行同步操作，而是有操作系统决定何时同步，不会对Redis的性能带来影响，但假如系统崩溃，可能会丢失不定数量的数据。</p>
+<h4 id="AOF重写-rewrite"><a href="#AOF重写-rewrite" class="headerlink" title="AOF重写(rewrite)"></a>AOF重写(rewrite)</h4><p>在了解AOF重写之前，我们先来看看AOF文件中存储的内容是啥，先执行两个写操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set s1 hello</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set s2 world</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+<p>然后我们打开<code>appendonly.aof</code>文件，可以看到如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">*3</span><br><span class="line">$3</span><br><span class="line">set</span><br><span class="line">$2</span><br><span class="line">s1</span><br><span class="line">$5</span><br><span class="line">hello</span><br><span class="line">*3</span><br><span class="line">$3</span><br><span class="line">set</span><br><span class="line">$2</span><br><span class="line">s2</span><br><span class="line">$5</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>该命令格式为Redis的序列化协议（RESP）。<code>*3</code>代表这个命令有三个参数，<code>$3</code>表示该参数长度为3</p>
+</blockquote>
+<p>看了上面的AOP文件的内容，我们应该能想象，随着时间的推移，Redis执行的写命令会越来越多，AOF文件也会越来越大，过大的AOF文件可能会对Redis服务器造成影响，如果使用AOF文件来进行数据还原所需时间也会越长。</p>
+<p>时间长了，AOF文件中通常会有一些冗余命令，比如：过期数据的命令、无效的命令（重复设置、删除）、多个命令可合并为一个命令（批处理命令）。所以AOF文件是有精简压缩的空间的。</p>
+<p>AOF重写的目的就是减小AOF文件的体积，不过值得注意的是：<strong>AOF文件重写并不需要对现有的AOF文件进行任何读取、分享和写入操作，而是通过读取服务器当前的数据库状态来实现的</strong>。</p>
+<p>文件重写可分为手动触发和自动触发，手动触发执行<code>bgrewriteaof</code>命令，该命令的执行跟<code>bgsave</code>触发快照时类似的，都是先<code>fork</code>一个子进程做具体的工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; bgrewriteaof</span><br><span class="line">Background append only file rewriting started</span><br></pre></td></tr></table></figure>
+<p>自动触发会根据<code>auto-aof-rewrite-percentage</code>和<code>auto-aof-rewrite-min-size 64mb</code>配置来自动执行<code>bgrewriteaof</code>命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 表示当AOF文件的体积大于64MB，且AOF文件的体积比上一次重写后的体积大了一倍（100%）时，会执行`bgrewriteaof`命令</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br></pre></td></tr></table></figure>
+<p>下面看一下执行<code>bgrewriteaof</code>命令，重写的流程：</p>
+<p><img src="/images/2021-7-11193557.png" alt="2021-7-11193557.png"></p>
+<ul>
+<li><p>重写会有大量的写入操作，所以服务器进程会<code>fork</code>一个子进程来创建一个新的AOF文件；</p>
+</li>
+<li><p>在重写期间，服务器进程继续处理命令请求，如果有写入的命令，追加到<code>aof_buf</code>的同时，还会追加到<code>aof_rewrite_buf</code>AOF重写缓冲区；</p>
+</li>
+<li><p>当子进程完成重写之后，会给父进程一个信号，然后父进程会把AOF重写缓冲区的内容写进新的AOF临时文件中，再对新的AOF文件改名完成替换，这样可以保证新的AOF文件与当前数据库数据的一致性。</p>
+</li>
+</ul>
+<p>我们来看下AOF重写的具体过程，考虑这样一个情况， 如果服务器对键 <code>list</code> 执行了以下四条命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RPUSH list 1 2 3 4      // [1, 2, 3, 4]</span><br><span class="line">RPOP list               // [1, 2, 3]</span><br><span class="line">LPOP list               // [2, 3]</span><br><span class="line">LPUSH list 1            // [1, 2, 3]</span><br></pre></td></tr></table></figure>
+<p>那么当前列表键 <code>list</code> 在数据库中的值就为 <code>[1, 2, 3]</code> 。</p>
+<p>如果我们要保存这个列表的当前状态， 并且尽量减少所使用的命令数， 那么最简单的方式不是去 AOF 文件上分析前面执行的四条命令， 而是直接读取 <code>list</code> 键在数据库的当前值， 然后用一条 <code>RPUSH 1 2 3</code> 命令来代替前面的四条命令。</p>
+<p>再考虑这样一个例子， 如果服务器对集合键 <code>animal</code> 执行了以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SADD animal cat                 // &#123;cat&#125;</span><br><span class="line">SADD animal dog panda tiger     // &#123;cat, dog, panda, tiger&#125;</span><br><span class="line">SREM animal cat                 // &#123;dog, panda, tiger&#125;</span><br><span class="line">SADD animal cat lion            // &#123;cat, lion, dog, panda, tiger&#125;</span><br></pre></td></tr></table></figure>
+<p>那么使用一条 <code>SADD animal cat lion dog panda tiger</code> 命令， 就可以还原 <code>animal</code> 集合的状态， 这比之前的四条命令调用要大大减少。</p>
+<p>除了列表和集合之外， 字符串、有序集、哈希表等键也可以用类似的方法来保存状态， 并且保存这些状态所使用的命令数量， 比起之前建立这些键的状态所使用命令的数量要大大减少。</p>
+<p>根据键的类型， 使用适当的写入命令来重现键的当前值， 这就是 AOF 重写的实现原理。 整个重写过程可以用伪代码表示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">def AOF_REWRITE(tmp_tile_name):</span><br><span class="line">  f = create(tmp_tile_name)</span><br><span class="line">  # 遍历所有数据库</span><br><span class="line">  for db in redisServer.db:</span><br><span class="line">    # 如果数据库为空，那么跳过这个数据库</span><br><span class="line">    if db.is_empty(): continue</span><br><span class="line">    # 写入 SELECT 命令，用于切换数据库</span><br><span class="line">    f.write_command(&quot;SELECT &quot; + db.number)</span><br><span class="line">    # 遍历所有键</span><br><span class="line">    for key in db:</span><br><span class="line">      # 如果键带有过期时间，并且已经过期，那么跳过这个键</span><br><span class="line">      if key.have_expire_time() and key.is_expired(): continue</span><br><span class="line">      if key.type == String:</span><br><span class="line">        # 用 SET key value 命令来保存字符串键</span><br><span class="line">        value = get_value_from_string(key)</span><br><span class="line">        f.write_command(&quot;SET &quot; + key + value)</span><br><span class="line">      elif key.type == List:</span><br><span class="line">        # 用 RPUSH key item1 item2 ... itemN 命令来保存列表键</span><br><span class="line">        item1, item2, ..., itemN = get_item_from_list(key)</span><br><span class="line">        f.write_command(&quot;RPUSH &quot; + key + item1 + item2 + ... + itemN)</span><br><span class="line">      elif key.type == Set:</span><br><span class="line">        # 用 SADD key member1 member2 ... memberN 命令来保存集合键</span><br><span class="line">        member1, member2, ..., memberN = get_member_from_set(key)</span><br><span class="line">        f.write_command(&quot;SADD &quot; + key + member1 + member2 + ... + memberN)</span><br><span class="line">      elif key.type == Hash:</span><br><span class="line">        # 用 HMSET key field1 value1 field2 value2 ... fieldN valueN 命令来保存哈希键</span><br><span class="line">        field1, value1, field2, value2, ..., fieldN, valueN = get_field_and_value_from_hash(key)</span><br><span class="line">        f.write_command(&quot;HMSET &quot; + key + field1 + value1 + field2 + value2 + ... + fieldN + valueN)</span><br><span class="line">      elif key.type == SortedSet:</span><br><span class="line">        # 用 ZADD key score1 member1 score2 member2 ... scoreN memberN</span><br><span class="line">        # 命令来保存有序集键</span><br><span class="line">        score1, member1, score2, member2, ..., scoreN, memberN = get_score_and_member_from_sorted_set(key)</span><br><span class="line">        f.write_command(&quot;ZADD &quot; + key + score1 + member1 + score2 + member2 + ... + scoreN + memberN)</span><br><span class="line">      else:</span><br><span class="line">        raise_type_error()</span><br><span class="line">      # 如果键带有过期时间，那么用 EXPIREAT key time 命令来保存键的过期时间</span><br><span class="line">      if key.have_expire_time():</span><br><span class="line">        f.write_command(&quot;EXPIREAT &quot; + key + key.expire_time_in_unix_timestamp())</span><br><span class="line">    # 关闭文件</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+<h3 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h3><p>Redis4.0开始支持RDB和AOF的混合持久化（可以通过配置项 <code>aof-use-rdb-preamble</code> 开启）</p>
+<ul>
+<li>如果是redis进程挂掉，那么重启redis进程即可，直接基于AOF日志文件恢复数据；</li>
+<li>如果是redis进程所在机器挂掉，那么重启机器后，尝试重启redis进程，尝试直接基于AOF日志文件进行数据恢复，如果AOF文件破损，那么用<code>redis-check-aof fix</code>命令修复；</li>
+<li>如果没有AOF文件，会去加载RDB文件；</li>
+<li>如果redis当前最新的AOF和RDB文件出现了丢失/损坏，那么可以尝试基于该机器上当前的某个最新的RDB数据副本进行数据恢复。</li>
+</ul>
+<h3 id="RDB-vs-AOF"><a href="#RDB-vs-AOF" class="headerlink" title="RDB vs AOF"></a>RDB vs AOF</h3><p>上面介绍了RDB持久化和AOF持久化，那么来看一下他们各自的优缺点以及该如何选择持久化方案。</p>
+<h4 id="RDB和AOF优缺点"><a href="#RDB和AOF优缺点" class="headerlink" title="RDB和AOF优缺点"></a>RDB和AOF优缺点</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>RDB</th>
+<th>AOF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>优点</td>
+<td>1. RDB快照是一个压缩过的非常紧凑的文件，保存着某个时间点的数据集，适合做数据的备份，灾难恢复<br>2. 可以最大化Redis的性能，在保存RDB文件，服务器进程只需fork一个子进程来完成RDB文件的创建，父进程不需要做IO操作<br>3. 与AOF相比，恢复大数据集的时候会更快</td>
+<td>1. 数据更完整，安全性更高，秒级数据丢失（取决fsync策略，如果是everysec，最多丢失1秒的数据）<br>2. AOF文件是一个只进行追加的日志文件，且写入操作是以Redis协议的格式保存的，内容是可读的，适合误删紧急恢复</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>1. RDB的数据安全性是不如AOF的，保存整个数据集的过程是比繁重的，根据配置可能要几分钟才快照一次，如果服务器宕机，那么就可能丢失几分钟的数据<br>2. Redis数据集较大时，fork的子进程要完成快照会比较耗CPU、耗时</td>
+<td>1. 对于相同的数据集，AOF文件的体积要大于RDB文件，数据恢复也会比较慢<br>2. 根据所使用的 fsync 策略，AOF 的速度可能会慢于 RDB。 不过在一般情况下， 每秒 fsync 的性能依然非常高</td>
+</tr>
+</tbody>
+</table>
+<p>官网也给了比较详细的说明 -&gt; <a href="https://redis.io/topics/persistence" target="_blank" rel="noopener">Redis Persistence</a></p>
+<h4 id="如何选择RDB和AOF"><a href="#如何选择RDB和AOF" class="headerlink" title="如何选择RDB和AOF"></a>如何选择RDB和AOF</h4><ul>
+<li><p>如果是数据不那么敏感，且可以从其他地方重新生成补回的，那么可以关闭持久化；</p>
+</li>
+<li><p>如果是数据比较重要，不想再从其他地方获取，且可以承受数分钟的数据丢失，比如缓存等，那么可以只使用RDB；</p>
+</li>
+<li><p>如果是用做内存数据库，要使用Redis的持久化，建议是RDB和AOF都开启，或者定期执行<code>bgsave</code>做快照备份，RDB方式更适合做数据的备份，AOF可以保证数据的不丢失。</p>
+</li>
+</ul>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://juejin.cn/post/6844903939339452430" target="_blank" rel="noopener">Redis持久化机制：RDB和AOF</a></p>
+<p><a href="https://redis.io/topics/persistence" target="_blank" rel="noopener"> Redis Persistence</a></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+            <a href="/tags/持久化/" rel="tag"># 持久化</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/07/11/redis-mssync/" rel="next" title="Redis系列 - 主从同步">
+                <i class="fa fa-chevron-left"></i> Redis系列 - 主从同步
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/07/11/redis-msswitch/" rel="prev" title="Redis系列 - 主从切换">
+                Redis系列 - 主从切换 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTIyOS81Nzk2"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
+          <p class="site-author-name" itemprop="name">william</p>
+           
+              <p class="site-description motion-element" itemprop="description">删繁就简 一心一意</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">154</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/runnerliu" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/violetcoconut" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/liuxiaoyang" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-hand-o-right"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.ezlippi.com/" title="EZLippi-浮生志" target="_blank">EZLippi-浮生志</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB持久化"><span class="nav-number">1.</span> <span class="nav-text">RDB持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#快照持久化"><span class="nav-number">1.1.</span> <span class="nav-text">快照持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#save和bgsave命令"><span class="nav-number">1.2.</span> <span class="nav-text">save和bgsave命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动间隔触发"><span class="nav-number">1.3.</span> <span class="nav-text">自动间隔触发</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOF持久化"><span class="nav-number">2.</span> <span class="nav-text">AOF持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AOF的实现"><span class="nav-number">2.1.</span> <span class="nav-text">AOF的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#命令追加-append"><span class="nav-number">2.1.1.</span> <span class="nav-text">命令追加(append)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件写入-write-和文件同步-sync"><span class="nav-number">2.1.2.</span> <span class="nav-text">文件写入(write)和文件同步(sync)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOF重写-rewrite"><span class="nav-number">2.2.</span> <span class="nav-text">AOF重写(rewrite)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据恢复"><span class="nav-number">3.</span> <span class="nav-text">数据恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDB-vs-AOF"><span class="nav-number">4.</span> <span class="nav-text">RDB vs AOF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RDB和AOF优缺点"><span class="nav-number">4.1.</span> <span class="nav-text">RDB和AOF优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何选择RDB和AOF"><span class="nav-number">4.2.</span> <span class="nav-text">如何选择RDB和AOF</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">william</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("LqPMJve9iAUo8OUAJN0PL99B-gzGzoHsz", "NszposYPlqe9MV8XgiUmnGpt");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
