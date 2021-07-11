@@ -2,23 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://runnerliu.github.io/2021/07/11/redis-chijiuhua/</loc>
-    
-    <lastmod>2021-07-11T12:08:31.289Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://runnerliu.github.io/2021/07/11/redis-mssync/</loc>
     
-    <lastmod>2021-07-11T11:25:55.670Z</lastmod>
+    <lastmod>2021-07-11T12:53:23.373Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://runnerliu.github.io/2021/07/11/redis-msswitch/</loc>
     
-    <lastmod>2021-07-11T11:25:18.387Z</lastmod>
+    <lastmod>2021-07-11T12:21:58.493Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2021/07/11/redis-transactions/</loc>
+    
+    <lastmod>2021-07-11T12:19:01.301Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://runnerliu.github.io/2021/07/11/redis-chijiuhua/</loc>
+    
+    <lastmod>2021-07-11T12:08:31.289Z</lastmod>
     
   </url>
   
@@ -625,14 +632,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/06/10/tornado502-asnon/</loc>
+    <loc>http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/</loc>
     
     <lastmod>2020-11-15T02:24:39.481Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2018/06/18/tornado502-concurrentwebspider/</loc>
+    <loc>http://runnerliu.github.io/2018/06/10/tornado502-asnon/</loc>
     
     <lastmod>2020-11-15T02:24:39.481Z</lastmod>
     
@@ -667,14 +674,14 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/04/02/processscheduling/</loc>
+    <loc>http://runnerliu.github.io/2020/11/10/python-except-enum/</loc>
     
     <lastmod>2020-11-15T02:24:39.477Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2020/11/10/python-except-enum/</loc>
+    <loc>http://runnerliu.github.io/2017/04/02/processscheduling/</loc>
     
     <lastmod>2020-11-15T02:24:39.477Z</lastmod>
     
@@ -744,7 +751,7 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/06/21/bdphp1/</loc>
+    <loc>http://runnerliu.github.io/2017/06/21/bdphp2/</loc>
     
     <lastmod>2020-11-15T02:24:39.464Z</lastmod>
     
@@ -758,7 +765,7 @@
   </url>
   
   <url>
-    <loc>http://runnerliu.github.io/2017/06/21/bdphp2/</loc>
+    <loc>http://runnerliu.github.io/2017/06/21/bdphp1/</loc>
     
     <lastmod>2020-11-15T02:24:39.464Z</lastmod>
     

@@ -7,3 +7,7 @@ tags:
 categories:
  - Redis
 ---
+
+Read More:
+
+> [Redis Sentinel Documentation](https://redis.io/topics/sentinel)

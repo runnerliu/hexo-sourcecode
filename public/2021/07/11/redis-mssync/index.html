@@ -91,18 +91,23 @@
 
 
 
-<meta name="description" content="删繁就简 一心一意">
+<meta name="description" content="Redis的持久化功能在一定程度上保证了数据的安全性，即便是服务器宕机的情况下，也可以保证数据的丢失非常少。通常，为了避免服务的单点故障，会把数据复制到多个副本放在不同的服务器上，且这些拥有数据副本的服务器可以用于处理客户端的读请求，扩展整体的性能，一旦涉及到了分布式部署，就一定会考虑到数据一致性问题，今天我们来聊聊Redis的主从同步机制。 什么是主从同步我们可以通过slaveof &amp;lt;ho">
 <meta name="keywords" content="Redis,主从同步">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis系列 - 主从同步">
 <meta property="og:url" content="http://runnerliu.github.io/2021/07/11/redis-mssync/index.html">
 <meta property="og:site_name" content="LiuYang&#39;s BLOG">
-<meta property="og:description" content="删繁就简 一心一意">
+<meta property="og:description" content="Redis的持久化功能在一定程度上保证了数据的安全性，即便是服务器宕机的情况下，也可以保证数据的丢失非常少。通常，为了避免服务的单点故障，会把数据复制到多个副本放在不同的服务器上，且这些拥有数据副本的服务器可以用于处理客户端的读请求，扩展整体的性能，一旦涉及到了分布式部署，就一定会考虑到数据一致性问题，今天我们来聊聊Redis的主从同步机制。 什么是主从同步我们可以通过slaveof &amp;lt;ho">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-07-11T11:25:55.670Z">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11203022.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11203837.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11204016.png">
+<meta property="og:image" content="http://runnerliu.github.io/images/2021-7-11204041.png">
+<meta property="og:updated_time" content="2021-07-11T12:53:23.373Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis系列 - 主从同步">
-<meta name="twitter:description" content="删繁就简 一心一意">
+<meta name="twitter:description" content="Redis的持久化功能在一定程度上保证了数据的安全性，即便是服务器宕机的情况下，也可以保证数据的丢失非常少。通常，为了避免服务的单点故障，会把数据复制到多个副本放在不同的服务器上，且这些拥有数据副本的服务器可以用于处理客户端的读请求，扩展整体的性能，一旦涉及到了分布式部署，就一定会考虑到数据一致性问题，今天我们来聊聊Redis的主从同步机制。 什么是主从同步我们可以通过slaveof &amp;lt;ho">
+<meta name="twitter:image" content="http://runnerliu.github.io/images/2021-7-11203022.png">
 
 
 
@@ -412,7 +417,96 @@
       
 
       
-        
+        <p>Redis的持久化功能在一定程度上保证了数据的安全性，即便是服务器宕机的情况下，也可以保证数据的丢失非常少。通常，为了避免服务的单点故障，会把数据复制到多个副本放在不同的服务器上，且这些拥有数据副本的服务器可以用于处理客户端的读请求，扩展整体的性能，一旦涉及到了分布式部署，就一定会考虑到数据一致性问题，今天我们来聊聊Redis的主从同步机制。</p>
+<h3 id="什么是主从同步"><a href="#什么是主从同步" class="headerlink" title="什么是主从同步"></a>什么是主从同步</h3><p>我们可以通过<code>slaveof &lt;host&gt; &lt;port&gt;</code>命令，或者通过配置<code>slaveof</code>选项，来使当前的服务器（slave）复制指定服务器（master）的内容，被复制的服务器称为主服务器（master），对主服务器进行复制操作的为从服务器（slave）。</p>
+<p>主服务器master可以进行读写操作，当主服务器的数据发生变化，master会发出命令流来保持对salve的更新，而从服务器slave通常是只读的（可以通过<code>slave-read-only</code>指定），在主从复制模式下，即便master宕机了，slave是不能变为主服务器进行写操作的。</p>
+<p>一个master可以有多个slave，即一主多从；而slave也可以接受其他slave的连接，形成“主从链”层叠状结构（cascading-like structure），自 Redis 4.0 起，所有的sub-slave也会从master收到完全一样的复制流。如下图：</p>
+<p><img src="/images/2021-7-11203022.png" alt="2021-7-11203022.png"></p>
+<p>主从复制的优点：</p>
+<ul>
+<li>数据冗余，实现数据的热备份；</li>
+<li>故障恢复，避免单点故障带来的服务不可用；</li>
+<li>读写分离，负载均衡。主节点负载读写，从节点负责读，提高服务器并发量；</li>
+<li>高可用基础，是哨兵机制和集群实现的基础。</li>
+</ul>
+<h3 id="主从同步的配置"><a href="#主从同步的配置" class="headerlink" title="主从同步的配置"></a>主从同步的配置</h3><p>使用和配置主从复制是比较简单的，在从服务器slave的配置文件中设置<code>slaveof</code>选项，或者直接使用<code>slaveof &lt;masterip&gt; &lt;masterport&gt;</code>命令。</p>
+<p>这里我使用3台虚拟机来搭建一下，主服务器的ip为<code>192.168.249.20</code>，两个从服务器的ip分别为<code>192.168.249.21</code>和<code>192.168.249.21</code>，端口号都为<code>6379</code>，主服务器并不需要额外多配置什么，这里我们先把三台服务器的都需要改的地方列一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 设置为后台运行</span><br><span class="line">daemonize yes</span><br><span class="line"># 保存pid的文件，如果是在一台机器搭建主从，需要区分一下</span><br><span class="line">pidfile /var/run/redis_6379.pid</span><br><span class="line"># 绑定的主机地址，这里注释掉，开放ip连接</span><br><span class="line">#bind 127.0.0.1</span><br><span class="line"># 指定日志文件</span><br><span class="line">logfile &quot;6379.log&quot;</span><br></pre></td></tr></table></figure>
+<p>在从服务器中添加配置<code>slaveof &lt;masterport&gt; &lt;masterport&gt;</code>选项，在5.0版本中使用了<code>replicaof</code>代替了<code>slaveof</code>（<a href="https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fantirez%2Fredis%2Fissues%2F5335" target="_blank" rel="noopener">Changing Redis master-slave replication terms with something else</a>），<code>slaveof</code>还可以继续使用，不过建议使用<code>replicaof</code>。如果是使用命令行来复制的话，重启之后会无效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># replicaof &lt;masterip&gt; &lt;masterport&gt;</span><br><span class="line">replicaof 192.168.249.20 6379</span><br></pre></td></tr></table></figure>
+<p>配置好<code>redis.conf</code>之后，我们分别启动3台服务器，可以用户命令<code>info replication</code>查看复制信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">192.168.249.20:6379&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:master</span><br><span class="line">connected_slaves:2</span><br><span class="line">slave0:ip=192.168.249.22,port=6379,state=online,offset=700,lag=0</span><br><span class="line">slave1:ip=192.168.249.21,port=6379,state=online,offset=700,lag=0</span><br><span class="line">master_replid:b80a4720c0001efb62940f5ad6abaf9cdaf7a813</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:700</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:1</span><br><span class="line">repl_backlog_histlen:700</span><br><span class="line"></span><br><span class="line">192.168.249.21:6379&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:slave</span><br><span class="line">master_host:192.168.249.20</span><br><span class="line">master_port:6379</span><br><span class="line">master_link_status:up</span><br><span class="line">master_last_io_seconds_ago:3</span><br><span class="line">master_sync_in_progress:0</span><br><span class="line">slave_repl_offset:854</span><br><span class="line">slave_priority:100</span><br><span class="line">slave_read_only:1</span><br><span class="line">connected_slaves:0</span><br><span class="line">master_replid:b80a4720c0001efb62940f5ad6abaf9cdaf7a813</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:854</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:57</span><br><span class="line">repl_backlog_histlen:798</span><br><span class="line"></span><br><span class="line">192.168.249.22:6379&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:slave</span><br><span class="line">master_host:192.168.249.20</span><br><span class="line">master_port:6379</span><br><span class="line">master_link_status:up</span><br><span class="line">master_last_io_seconds_ago:6</span><br><span class="line">master_sync_in_progress:0</span><br><span class="line">slave_repl_offset:854</span><br><span class="line">slave_priority:100</span><br><span class="line">slave_read_only:1</span><br><span class="line">connected_slaves:0</span><br><span class="line">master_replid:b80a4720c0001efb62940f5ad6abaf9cdaf7a813</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:854</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:1</span><br><span class="line">repl_backlog_histlen:854</span><br></pre></td></tr></table></figure>
+<p>接下来我们可以在主服务器中写入数据，然后可以在其他的从服务器中读取数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">192.168.249.20:6379&gt; set test &apos;Hello World&apos;</span><br><span class="line">OK</span><br><span class="line">192.168.249.21:6379&gt; get test</span><br><span class="line">&quot;Hello World&quot;</span><br><span class="line">192.168.249.22:6379&gt; get test</span><br><span class="line">&quot;Hello World&quot;</span><br></pre></td></tr></table></figure>
+<p>然后我们试着在从服务器中写入数据，会提示不能在只读的从服务器中写入数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">192.168.249.21:6379&gt; set test2 hello</span><br><span class="line">(error) READONLY You can&apos;t write against a read only replica.</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果我们需要slave对master的复制进行验证，可以在master中配置<code>requirepass &lt;password&gt;</code>选项设置密码</p>
+<p>那么需要在从服务器中使用该密码，可以使用命令<code>config set masterauth &lt;password&gt;</code>，或者在配置文件中设置<code>masterauth &lt;password&gt;</code></p>
+</blockquote>
+<h3 id="主从同步的实现原理"><a href="#主从同步的实现原理" class="headerlink" title="主从同步的实现原理"></a>主从同步的实现原理</h3><p>Redis的主从复制过程大体上分3个阶段：<strong>建立连接</strong>、<strong>数据同步</strong>、<strong>命令传播</strong></p>
+<h4 id="建立连接"><a href="#建立连接" class="headerlink" title="建立连接"></a>建立连接</h4><p>这个阶段主要是从服务器发出<code>slaveof</code>命令之后，与主服务器如何建立连接，为数据同步做准备的过程。</p>
+<ul>
+<li>在<code>slaveof</code>命令执行之后，从服务器根据设置的master的ip地址和端口，创建连向主服务器的socket套接字连接，连接成功后，从服务器会为这个套接字关联一个专门的处理器，用于处理后续的复制工作；</li>
+<li>建立连接之后，从服务器会向主服务器发送<code>ping</code>命令，确认主服务器是否可用，以及当前是否可用接受处理命令。如果收到主服务器的<code>pong</code>回复说明是可用的，否则有可能是网络超时或主服务器阻塞，从服务器会断开连接发起重连；</li>
+<li>身份验证。如果主服务器设置了<code>requirepass</code>选项，那么从服务器必须配置<code>masterauth</code>选项，且保证密码一致才能通过验证；</li>
+<li>身份验证完成之后，从服务器会发送自己的监听端口，主服务器会保存下来。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">192.168.249.20:6379&gt; info replication</span><br><span class="line">...</span><br><span class="line">slave0:ip=192.168.249.22,port=6379,state=online,offset=700,lag=0</span><br><span class="line">slave1:ip=192.168.249.21,port=6379,state=online,offset=700,lag=0</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h4 id="数据同步"><a href="#数据同步" class="headerlink" title="数据同步"></a>数据同步</h4><p>在主从服务器建立连接确认各自身份之后，就开始数据同步，从服务器向主服务器发送<code>PSYNC</code>命令，执行同步操作，并把自己的数据库状态更新至主服务器的数据库状态</p>
+<p>Redis的主从同步分为：<strong>完整重同步（full resynchronization）</strong>、<strong>部分重同步（partial resynchronization）</strong></p>
+<h5 id="完整重同步"><a href="#完整重同步" class="headerlink" title="完整重同步"></a>完整重同步</h5><p>有两种情况下是完整重同步：</p>
+<ul>
+<li>slave连接上master第一次复制的时候；</li>
+<li>如果当主从断线，重新连接复制的时候有可能是完整重同步。</li>
+</ul>
+<p>下面是完整重同步的步骤：</p>
+<p><img src="/images/2021-7-11203837.png" alt="2021-7-11203837.png"></p>
+<ul>
+<li><p>从服务器连接主服务器，发送SYNC命令；</p>
+</li>
+<li><p>主服务器接收到SYNC命名后，开始执行<code>bgsave</code>命令生成RDB文件并使用缓冲区记录此后执行的所有写命令；</p>
+</li>
+<li><p>主服务器<code>basave</code>执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令；</p>
+</li>
+<li><p>从服务器收到快照文件后丢弃所有旧数据，载入收到的快照；</p>
+</li>
+<li><p>主服务器快照发送完毕后开始向从服务器发送缓冲区中的写命令；</p>
+</li>
+<li><p>从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令。</p>
+</li>
+</ul>
+<h5 id="部分重同步"><a href="#部分重同步" class="headerlink" title="部分重同步"></a>部分重同步</h5><p>部分重同步是用于处理断线后重复制的情况，先介绍几个用于部分重同步的部分：</p>
+<ul>
+<li><p><code>runid</code>(replication ID)，主服务器运行id，Redis实例在启动时，随机生成一个长度40的唯一字符串来标识当前节点；</p>
+</li>
+<li><p><code>offset</code>，复制偏移量。主服务器和从服务器各自维护一个复制偏移量，记录传输的字节数。当主节点向从节点发送N个字节数据时，主节点的offset增加N，从节点收到主节点传来的N个字节数据时，从节点的offset增加N；</p>
+</li>
+<li><p><code>replication backlog buffer</code>，复制积压缓冲区。是一个固定长度的FIFO队列，大小由配置参数<code>repl-backlog-size</code>指定，默认大小1MB。需要注意的是该缓冲区由master维护并且有且只有一个，所有slave共享此缓冲区，其作用在于备份最近主库发送给从库的数据。</p>
+</li>
+</ul>
+<p>当slave连接到master，会执行<code>PSYNC &lt;runid&gt; &lt;offset&gt;</code>发送记录旧的master的<code>runid</code>（replication ID）和偏移量<code>offset</code>，这样master能够只发送slave所缺的增量部分。但是如果master的复制积压缓存区没有足够的命令记录，或者slave传的<code>runid</code>(replication ID)不对，就会进行<strong>完整重同步</strong>，即slave会获得一个完整的数据集副本。</p>
+<p><img src="/images/2021-7-11204016.png" alt="2021-7-11204016.png"></p>
+<p>PSYNC命令执行完整重同步和部分重同步的流程图：</p>
+<p><img src="/images/2021-7-11204041.png" alt="2021-7-11204041.png"></p>
+<h4 id="命令传播"><a href="#命令传播" class="headerlink" title="命令传播"></a>命令传播</h4><p>当完成数据同步之后，主从服务器的数据暂时达到一致状态，当主服务器执行了客户端的写命令之后，主从的数据便不再一致。为了能够使主从服务器的数据保持一致性，主服务器会对从服务器执行命令传播操作，即每执行一个写命令就会向从服务器发送同样的写命令。</p>
+<p>在命令传播阶段，从服务器会默认以每秒一次的频率向主服务器发送<strong>心跳检测</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REPLCONF ACK &lt;replication_offset&gt;</span><br></pre></td></tr></table></figure>
+<p>其中<code>replication_offset</code>是当前从服务器的复制偏移量，该命令的作用有三个：</p>
+<ul>
+<li>检测主从服务器的网络连接状态；</li>
+<li>辅助实现<code>min-slaves</code>选项；</li>
+<li>检测命令丢失。</li>
+</ul>
+<h5 id="延迟与不一致"><a href="#延迟与不一致" class="headerlink" title="延迟与不一致"></a>延迟与不一致</h5><p>需要注意的是，命令传播是异步的过程，即主节点发送写命令后并不会等待从节点的回复；因此实际上主从节点之间很难保持实时的一致性，延迟在所难免。数据不一致的程度，与主从节点之间的网络状况、主节点写命令的执行频率、以及主节点中的 <code>repl-disable-tcp-nodelay</code> 配置等有关。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">repl-disable-tcp-nodelay no; TCP会立马将主节点的数据发送给从节点，带宽增加但延迟变小</span><br><span class="line">repl-disable-tcp-nodelay yes; TCP会对包进行合并从而减少带宽，但发送的频率会降低，从节点数据延迟增加，一致性变差；具体发送频率与Linux内核的配置有关，默认配置为40ms</span><br></pre></td></tr></table></figure>
+<p>一般来说，只有当应用对Redis数据不一致的容忍度较高，且主从节点之间网络状况不好时，才会设置为yes，多数情况使用默认值no。</p>
+<p>Read More:</p>
+<blockquote>
+<p><a href="https://juejin.cn/post/6844903943764443149" target="_blank" rel="noopener">Redis主从复制的配置和实现原理</a></p>
+<p><a href="https://www.cnblogs.com/kismetv/p/9236731.html" target="_blank" rel="noopener">深入学习Redis（3）：主从复制</a></p>
+</blockquote>
+
       
     </div>
 
@@ -517,8 +611,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="william">
           <p class="site-author-name" itemprop="name">william</p>
@@ -531,7 +634,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-count">109</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -553,7 +656,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">154</span>
+                <span class="site-state-item-count">155</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -628,6 +731,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是主从同步"><span class="nav-number">1.</span> <span class="nav-text">什么是主从同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从同步的配置"><span class="nav-number">2.</span> <span class="nav-text">主从同步的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从同步的实现原理"><span class="nav-number">3.</span> <span class="nav-text">主从同步的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立连接"><span class="nav-number">3.1.</span> <span class="nav-text">建立连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据同步"><span class="nav-number">3.2.</span> <span class="nav-text">数据同步</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#完整重同步"><span class="nav-number">3.2.1.</span> <span class="nav-text">完整重同步</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#部分重同步"><span class="nav-number">3.2.2.</span> <span class="nav-text">部分重同步</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令传播"><span class="nav-number">3.3.</span> <span class="nav-text">命令传播</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#延迟与不一致"><span class="nav-number">3.3.1.</span> <span class="nav-text">延迟与不一致</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
