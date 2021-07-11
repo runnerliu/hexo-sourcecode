@@ -6,7 +6,7 @@ tags:
  - 网络编程
  - HTTP
 categories:
- - 网络编程
+ - 网络相关
 ---
 
 默认情况下，PHP 的 session 文件是保存在磁盘文件中。在php.ini配置文件中的配置项如下：
